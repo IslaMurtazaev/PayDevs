@@ -5,6 +5,7 @@ lib
 pip-selfcheck.json
 share
 .idea/
+db.sqlite3
 
 
 
