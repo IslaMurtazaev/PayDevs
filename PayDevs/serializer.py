@@ -1,6 +1,6 @@
 import inspect
 
-from example_paydevs.exceptions import SerializerException, ExampleException, EntityDoesNotExistException
+from PayDevs.exceptions import SerializerException, PayDevsException, EntityDoesNotExistException
 
 
 class BaseSerializer(object):
@@ -45,7 +45,7 @@ class ListSerializer(BaseSerializer):
 
 
 class ExampleExceptionSerializer(BaseSerializer):
-    model = ExampleException
+    model = PayDevsException
     fields = ['source', 'code']
 
     @classmethod
