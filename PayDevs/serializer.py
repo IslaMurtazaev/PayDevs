@@ -45,7 +45,7 @@ class ListSerializer(BaseSerializer):
 
 
 class ExampleExceptionSerializer(BaseSerializer):
-    model = PayDevsException
+    model = None
     fields = ['source', 'code']
 
     @classmethod

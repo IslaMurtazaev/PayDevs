@@ -1,9 +1,12 @@
-from example_paydevs.exceptions import EntityDoesNotExistException, NoPermissionException, ExampleException
+from example_paydevs.exceptions import EntityDoesNotExistException, NoPermissionException, ExampleException, \
+    EntityIntegrityException, InvalidEntityException
 from example_paydevs.serializer import ExampleExceptionSerializer
 
 exception_status_code = {
     EntityDoesNotExistException: 404,
-    NoPermissionException: 403
+    NoPermissionException: 403,
+    EntityIntegrityException: 409,
+    InvalidEntityException: 422,
 }
 
 

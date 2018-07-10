@@ -6,7 +6,7 @@ pip-selfcheck.json
 share
 .idea/
 db.sqlite3
-
+__pycache__
 
 
 
