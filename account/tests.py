@@ -1,14 +1,15 @@
 from django.test import TestCase
+
+from account.entities import User
 from account.models import UserORM
 from account.validators import *
 from PayDevs.exceptions import InvalidEntityException
 
-#----------------PASSWORD VALIDATORS TESTS------------------------------------#
+
+# ----------------PASSWORD VALIDATORS TESTS------------------------------------#
 
 class MinimumLengthValidatorMethodTest(TestCase):
-
     def test_method_validate_type(self):
-
         with self.assertRaises(InvalidEntityException):
             MinimumLengthValidator().validate('passwor')
 
@@ -22,16 +23,13 @@ class MinimumLengthValidatorMethodTest(TestCase):
         self.assertIsNone(MinimumLengthValidator().validate('1234567890qwertyuioasdfghjklzxcvbnm'))
 
 
-
 class UserAttributeSimilarityValidatorMethodTest(TestCase):
-
     def setUp(self):
-        UserORM.objects.create(username="IslamIsTheBest", email="islam.muratazaev@gmail.com",\
-         password="islamisthebest")
-
+        UserORM.objects.create(username="IslamIsTheBest", email="islam.muratazaev@gmail.com", \
+                               password="islamisthebest")
 
     def test_method_validate_type(self):
-        islam = UserORM.objects.get(username="IslamIsTheBest") 
+        islam = UserORM.objects.get(username="IslamIsTheBest")
 
         with self.assertRaises(InvalidEntityException):
             UserAttributeSimilarityValidator().validate(password=islam.password, user=islam)
@@ -39,11 +37,8 @@ class UserAttributeSimilarityValidatorMethodTest(TestCase):
         self.assertIsNone(UserAttributeSimilarityValidator().validate(password='sizamopen', user=islam))
 
 
-
 class CommonPasswordValidatorMethodTest(TestCase):
-
     def test_method_validate_type(self):
-
         with self.assertRaises(InvalidEntityException):
             CommonPasswordValidator().validate('123456789')
 
@@ -60,11 +55,8 @@ class CommonPasswordValidatorMethodTest(TestCase):
         self.assertIsNone(CommonPasswordValidator().validate('02081999myBD'))
 
 
-
 class NumericPasswordValidatorMethodTest(TestCase):
-
     def test_method_validate_type(self):
-
         with self.assertRaises(InvalidEntityException):
             NumericPasswordValidator().validate('123456')
 
@@ -83,7 +75,53 @@ class NumericPasswordValidatorMethodTest(TestCase):
         self.assertIsNone(CommonPasswordValidator().validate('me'))
 
 
-#----------------EMAIL VALIDATORS TESTS-------------------------------------#
+# ----------------EMAIL VALIDATORS TESTS-------------------------------------#
+
+
+
+class EmailValidateMethodTest(TestCase):
+    def test_method_validate_type(self):
+        with self.assertRaises(InvalidEntityException):
+            EmailAtValidators().validate('exmaplemail.ru')
+
+        with self.assertRaises(InvalidEntityException):
+            EmailAtValidators().validate('@exmaplemail.ru')
+
+        with self.assertRaises(InvalidEntityException):
+            EmailAtValidators().validate('exmaple@mail@.ru')
+
+        with self.assertRaises(InvalidEntityException):
+            EmailAtValidators().validate('exmaplemail@.ru')
+
+        with self.assertRaises(InvalidEntityException):
+            EmailAtValidators().validate('exmaplemail.ru@')
+
+        with self.assertRaises(InvalidEntityException):
+            EmailAtValidators().validate('exmaplemail.@ru')
+
+        self.assertEqual(None, EmailAtValidators().validate('exmaple@mail.ru'))
+
+
+class EmailForbiddenEmailDomainsValidatorMetodTest(TestCase):
+    def test_method_validate_type(self):
+        self.assertEqual(None, EmailForbiddenEmailDomainsValidator().validate('exmaple@mail.ru'))
+        with self.assertRaises(InvalidEntityException):
+            EmailForbiddenEmailDomainsValidator().validate('exmaple@027168.com')
+
+        with self.assertRaises(InvalidEntityException):
+            EmailForbiddenEmailDomainsValidator().validate('exmaple@0-mail.com')
+
+        with self.assertRaises(InvalidEntityException):
+            EmailForbiddenEmailDomainsValidator().validate('exmaple@0x00.name')
+
+        with self.assertRaises(InvalidEntityException):
+            EmailForbiddenEmailDomainsValidator().validate('exmaple@shitaway.ga')
+
+        with self.assertRaises(InvalidEntityException):
+            EmailForbiddenEmailDomainsValidator().validate('exmaple@zzz.com')
+
+
+
 
 
 
@@ -113,11 +151,12 @@ class EmailValidateMethodTest(TestCase):
         self.assertEqual(None, EmailAtValidators().validate('exmaple@mail.ru'))
 
 
-class EmailForbiddenEmailDomainsValidatorMetodTest(TestCase):
+class EmailForbiddenEmailDomainsValidatorMethodTest(TestCase):
 
 
     def test_method_validate_type(self):
         self.assertEqual(None, EmailForbiddenEmailDomainsValidator().validate('exmaple@mail.ru'))
+        self.assertEqual(None, EmailForbiddenEmailDomainsValidator().validate('exmapl@gmail.com'))
         with self.assertRaises(InvalidEntityException):
             EmailForbiddenEmailDomainsValidator().validate('exmaple@027168.com')
 
@@ -133,3 +172,103 @@ class EmailForbiddenEmailDomainsValidatorMetodTest(TestCase):
 
         with self.assertRaises(InvalidEntityException):
             EmailForbiddenEmailDomainsValidator().validate('exmaple@zzz.com')
+
+
+
+class ValidatorFunctionsTest(TestCase):
+
+    def setUp(self):
+        self.user = User(username='TestMyTest', email='test@mail.ru')
+
+
+    def test_function_hashed_password(self):
+        hashed = hashed_password('password', user=self.user).decode()
+        self.assertTrue(check_password('password', hashed))
+        with self.assertRaises(InvalidEntityException):
+            hashed_password('pass').decode()
+        with self.assertRaises(InvalidEntityException):
+            hashed_password('123456789').decode()
+        with self.assertRaises(InvalidEntityException):
+            hashed_password('test@mail.ru', user=self.user).decode()
+        with self.assertRaises(InvalidEntityException):
+            hashed_password('TestMyTest', user=self.user).decode()
+
+    def test_function_check_password(self):
+        password = 'secret_password'
+        hashed = hashed_password(password).decode()
+        self.assertTrue(check_password(password, hashed))
+
+    def test_function_validate_password_exception_source_code(self):
+        try:
+            hashed_password('passw', user=self.user).decode()
+        except InvalidEntityException as e:
+            self.assertEqual(e.source, 'validate')
+            self.assertEqual(e.code, 'not_allowed')
+
+    def test_function_validate_password_minimum_length(self):
+        try:
+            hashed_password('passw', user=self.user).decode()
+        except InvalidEntityException as e:
+            self.assertRegex(str(e), 'Your password must contain at least 8 character.')
+
+    def test_function_validate_password_numeric(self):
+        try:
+            hashed_password('45345465156', user=self.user).decode()
+        except InvalidEntityException as e:
+            self.assertRegex(str(e), 'Your password consists of only digits.')
+
+    def test_function_validate_password_common(self):
+        try:
+            hashed_password('qwertyui', user=self.user).decode()
+        except InvalidEntityException as e:
+            self.assertRegex(str(e), 'Your password is a common sequence.')
+
+
+    def test_function_validate_password_user_attribute(self):
+        try:
+            hashed_password('TestMyTest', user=self.user).decode()
+        except InvalidEntityException as e:
+            self.assertRegex(str(e), 'Your password is too similar to your other fields.')
+
+        try:
+            hashed_password('test@mail.ru', user=self.user).decode()
+        except InvalidEntityException as e:
+            self.assertRegex(str(e), 'Your password is too similar to your other fields.')
+
+
+    def test_function_validate_username(self):
+        pass
+
+
+    def test_function_validate_email(self):
+        user = User(username='TestMyTest', email='test@mail.ru')
+        self.assertIsNone(validate_email('example@amil.ru', user=user))
+
+    def test_function_validate_email_except(self):
+        user = User(username='TestMyTest', email='test@mail.ru')
+        with self.assertRaises(InvalidEntityException):
+            validate_email('exampleamil.ru', user=user)
+
+        with self.assertRaises(InvalidEntityException):
+            validate_email('@exampleamil.ru', user=user)
+
+        with self.assertRaises(InvalidEntityException):
+            validate_email('exampleamil.ru@', user=user)
+
+        with self.assertRaises(InvalidEntityException):
+            validate_email('exampleamil@.ru', user=user)
+
+        with self.assertRaises(InvalidEntityException):
+            validate_email('exampleamil.@ru', user=user)
+
+
+    def test_function_validate(self):
+        try:
+            validate('123', self.user, get_password_validators())
+        except InvalidEntityException as e:
+            self.assertEqual(e.source, 'validate')
+
+        try:
+            validate('qweqwe', self.user, get_email_validators())
+        except InvalidEntityException as e:
+            self.assertEqual(e.source, 'validate')
