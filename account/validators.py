@@ -4,7 +4,6 @@ import bcrypt
 import re
 from difflib import SequenceMatcher
 
-
 from PayDevs import settings
 from PayDevs.exceptions import InvalidEntityException
 
@@ -12,8 +11,8 @@ from PayDevs.exceptions import InvalidEntityException
 # ------------------------------ PASSWORD ------------------------------ #
 
 
-def hashed_password(password):
-    validate_password(password)
+def hashed_password(password, user=None):
+    validate_password(password, user)
     password = password + settings.SECRET_KEY
     password = password.encode()
     return bcrypt.hashpw(password, salt=bcrypt.gensalt())
@@ -27,11 +26,11 @@ def check_password(password, hashed):
 
 
 def get_password_validators():
-    validators = [ 
-        MinimumLengthValidator(), 
+    validators = [
+        MinimumLengthValidator(),
         UserAttributeSimilarityValidator(),
-        CommonPasswordValidator(), 
-        NumericPasswordValidator() 
+        CommonPasswordValidator(),
+        NumericPasswordValidator()
     ]
 
     return validators
@@ -65,6 +64,8 @@ def validate_email(email, user=None):
     validate(email, user, get_email_validators())
 
 
+
+
 def validate(value, user=None, validators=None):
     errors = []
     for validator in validators:
@@ -73,7 +74,7 @@ def validate(value, user=None, validators=None):
         except Exception as error:
             errors.append(error)
     if errors:
-        raise InvalidEntityException(source='password', code='not_allowed', message=str(errors))
+        raise InvalidEntityException(source='validate', code='not_allowed', message=str(errors))
 
 
 # ------------------------- PASSWORD VALIDATORS --------------------------- #
@@ -89,7 +90,7 @@ class MinimumLengthValidator(object):
 
 
 class UserAttributeSimilarityValidator(object):
-    DEFAULT_USER_ATTRIBUTES = ('username', 'password', 'email', 'first_name','last_name')
+    DEFAULT_USER_ATTRIBUTES = ('username', 'password', 'email', 'first_name', 'last_name')
 
     def __init__(self, user_attrs=DEFAULT_USER_ATTRIBUTES, max_similarity=0.7):
         self.user_attrs = user_attrs
@@ -97,7 +98,7 @@ class UserAttributeSimilarityValidator(object):
 
     def validate(self, password, user=None):
         if not user:
-            return 
+            return
 
         for attr_name in self.user_attrs:
             value = getattr(user, attr_name, None)
@@ -107,38 +108,39 @@ class UserAttributeSimilarityValidator(object):
 
             value_parts = re.split(r'\W', value) + [value]
             for part in value_parts:
-                if SequenceMatcher(None, a=password.lower(), b=value.lower())\
-                 .quick_ratio() >= self.max_similarity:
-                    raise InvalidEntityException(source='password', code='not allowed',\
-                     message="Your password is too similar to your other fields.")
-        
+                if SequenceMatcher(None, a=password.lower(), b=value.lower()) \
+                        .quick_ratio() >= self.max_similarity:
+                    raise InvalidEntityException(source='password', code='not allowed', \
+                                                 message="Your password is too similar to your other fields.")
+
 
 class CommonPasswordValidator(object):
-    COMMON_SEQUENCES = ("123456789", "`1234567890-=", "~!@#$%^&*()_+",
-    "abcdefghijklmnopqrstuvwxyz",
-    "qwertyuiop[]\\asdfghjkl;\'zxcvbnm,./",
-    'qwertyuiop{}|asdfghjkl;"zxcvbnm<>?',
-    "qwertyuiopasdfghjklzxcvbnm",
-    "1qaz2wsx3edc4rfv5tgb6yhn7ujm8ik,9ol.0p;/-['=]\\",
-    "qazwsxedcrfvtgbyhnujmikolp",
-    "qwertzuiopü+asdfghjklöä#<yxcvbnm,.-",
-    "qwertzuiopü*asdfghjklöä'>yxcvbnm;:_",
-    "qaywsxedcrfvtgbzhnujmikolp")
-    
+    COMMON_SEQUENCES = ["123456789", "`1234567890-=", "~!@#$%^&*()_+",
+                        "abcdefghijklmnopqrstuvwxyz",
+                        "qwertyuiop[]\\asdfghjkl;\'zxcvbnm,./",
+                        'qwertyuiop{}|asdfghjkl;"zxcvbnm<>?',
+                        "qwertyuiopasdfghjklzxcvbnm",
+                        "1qaz2wsx3edc4rfv5tgb6yhn7ujm8ik,9ol.0p;/-['=]\\",
+                        "qazwsxedcrfvtgbyhnujmikolp",
+                        "qwertzuiopü+asdfghjklöä#<yxcvbnm,.-",
+                        "qwertzuiopü*asdfghjklöä'>yxcvbnm;:_",
+                        "qaywsxedcrfvtgbzhnujmikolp",
+                        'qwertyui']
+
     def __init__(self, common_sequences=COMMON_SEQUENCES):
         self.common_sequences = common_sequences
 
     def validate(self, password, user=None):
         if password in self.common_sequences:
-            raise InvalidEntityException(source='password', code='not allowed',\
-             message="Your password is a common sequence.")
+            raise InvalidEntityException(source='password', code='not allowed', \
+                                         message="Your password is a common sequence.")
 
 
 class NumericPasswordValidator(object):
     def validate(self, password, user=None):
         if password.isdigit():
-            raise InvalidEntityException(source='password', code='not allowed',\
-             message="Your password consists of only digits.")
+            raise InvalidEntityException(source='password', code='not allowed', \
+                                         message="Your password consists of only digits.")
 
 
 # ----------------------------------- user valid ------------------------------------#
@@ -156,7 +158,6 @@ class EmailAtValidators:
     def validate(self, email, user=None):
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
             raise InvalidEntityException(source='email', code='not_allowed', message="Invalid email address")
-
 
 
 class EmailForbiddenEmailDomainsValidator:
