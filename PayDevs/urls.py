@@ -1,4 +1,4 @@
-"""PayDevs URL Configuration
+"""example_paydevs URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.0/topics/http/urls/
@@ -16,6 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from account.factories import get_user_factories, get_user_all_factories, get_user_regist_factories, \
+    get_user_login_factories
+from PayDevs.views import ViewWrapper, index, login
+
 urlpatterns = [
+    path('create_user/', index),
+    path('login_user/', login),
     path('admin/', admin.site.urls),
+    path('users/all', ViewWrapper.as_view(view_factory=get_user_all_factories)),
+    path('users/create', ViewWrapper.as_view(view_factory=get_user_regist_factories), name='create_user'),
+    path('users/login', ViewWrapper.as_view(view_factory=get_user_login_factories), name='login_user'),
+    path('users/<slug:username>', ViewWrapper.as_view(view_factory=get_user_factories)),
+
 ]
