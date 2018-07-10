@@ -1,4 +1,6 @@
 import bcrypt
+import re
+from difflib import SequenceMatcher
 
 from PayDevs import settings
 from PayDevs.exceptions import InvalidEntityException
@@ -21,7 +23,13 @@ def check_password(password, hashed):
 
 
 def get_password_validators():
-    validators = [MinimumLengthValidator(), ]
+    validators = [ 
+        MinimumLengthValidator(), 
+        UserAttributeSimilarityValidator(),
+        CommonPasswordValidator(), 
+        NumericPasswordValidator() 
+    ]
+
     return validators
 
 
@@ -63,8 +71,7 @@ def validate(value, user=None, validators=None):
         raise InvalidEntityException(source='password', code='not_allowed', message=str(errors))
 
 
-# ----------------------------------- class valid ------------------------------------#
-
+# ------------------------- PASSWORD VALIDATORS --------------------------- #
 
 class MinimumLengthValidator(object):
     def __init__(self, min_len=8):
@@ -75,7 +82,57 @@ class MinimumLengthValidator(object):
             raise InvalidEntityException(source='password', code='not_allowed', message=
             "Your password must contain at least %d character." % self.min_len)
 
-# class
 
+class UserAttributeSimilarityValidator(object):
+    DEFAULT_USER_ATTRIBUTES = ('username', 'password', 'email', 'first_name','last_name')
+
+    def __init__(self, user_attrs=DEFAULT_USER_ATTRIBUTES, max_similarity=0.7):
+        self.user_attrs = user_attrs
+        self.max_similarity = max_similarity
+
+    def validate(self, password, user=None):
+        if not user:
+            return 
+
+        for attr_name in self.user_attrs:
+            value = getattr(user, attr_name, None)
+
+            if not value or not isinstance(value, str):
+                continue
+
+            value_parts = re.split(r'\W', value) + [value]
+            for part in value_parts:
+                if SequenceMatcher(None, a=password.lower(), b=value.lower())\
+                 .quick_ratio() >= self.max_similarity:
+                    raise InvalidEntityException(source='password', code='not allowed',\
+                     message="Your password is too similar to your other fields.")
+        
+
+class CommonPasswordValidator(object):
+    COMMON_SEQUENCES = ("0123456789", "`1234567890-=", "~!@#$%^&*()_+",
+    "abcdefghijklmnopqrstuvwxyz",
+    "qwertyuiop[]\\asdfghjkl;\'zxcvbnm,./",
+    'qwertyuiop{}|asdfghjkl;"zxcvbnm<>?',
+    "qwertyuiopasdfghjklzxcvbnm",
+    "1qaz2wsx3edc4rfv5tgb6yhn7ujm8ik,9ol.0p;/-['=]\\",
+    "qazwsxedcrfvtgbyhnujmikolp",
+    "qwertzuiopü+asdfghjklöä#<yxcvbnm,.-",
+    "qwertzuiopü*asdfghjklöä'>yxcvbnm;:_",
+    "qaywsxedcrfvtgbzhnujmikolp")
+    
+    def __init__(self, common_sequences=COMMON_SEQUENCES):
+        self.common_sequences = common_sequences
+
+    def validate(self, password, user=None):
+        if password in self.common_sequences:
+            raise InvalidEntityException(source='password', code='not allowed',\
+             message="Your password is a common sequence.")
+
+
+class NumericPasswordValidator(object):
+    def validate(self, password, user=None):
+        if password.isdigit():
+            raise InvalidEntityException(source='password', code='not allowed',\
+             message="Your password consists of only digits.")
 
 # ----------------------------------- user valid ------------------------------------#
