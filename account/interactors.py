@@ -1,5 +1,5 @@
 from account.entities import User
-from account.validators import check_password, validate_password, hashed_password
+from account.validators import check_password, validate_password, hashed_password, validate_email
 from PayDevs.exceptions import NoPermissionException
 from PayDevs.interactors import Interactor
 
@@ -32,7 +32,10 @@ class RegisterUserInteractor(Interactor):
     def set_params(self, username, email, password):
         self.username = username
         self.email = email
-        self.password = hashed_password(password).decode()
+        validate_email(email)
+        valid_user = User(username=self.username, email=self.email)
+        self.password = hashed_password(password, user=valid_user).decode()
+
         return self
 
     def execute(self, *args, **kwargs):
