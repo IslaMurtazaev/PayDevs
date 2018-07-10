@@ -1,7 +1,12 @@
+import json
+import os
+
 import bcrypt
+import re
 
 from PayDevs import settings
 from PayDevs.exceptions import InvalidEntityException
+
 
 # ------------------------------ PASSWORD ------------------------------ #
 
@@ -21,12 +26,14 @@ def check_password(password, hashed):
 
 
 def get_password_validators():
-    validators = [MinimumLengthValidator(), ]
+    validators = [MinimumLengthValidator(), UserAttributeSimilarityValidator(),
+                  NumericPasswordValidator(), CommonPasswordValidator()]
     return validators
 
 
 def validate_password(password, user=None):
     validate(password, user, get_password_validators())
+
 
 # ------------------------------ USERNAME ------------------------------ #
 
@@ -44,7 +51,7 @@ def validate_username(username, user=None):
 
 
 def get_email_validators():
-    validators = []  # email validators
+    validators = [EmailAtValidators(), EmailForbiddenEmailDomainsValidator()]  # email validators
     return validators
 
 
@@ -75,7 +82,46 @@ class MinimumLengthValidator(object):
             raise InvalidEntityException(source='password', code='not_allowed', message=
             "Your password must contain at least %d character." % self.min_len)
 
-# class
+
+class NumericPasswordValidator:
+    def validate(self, password, user=None):
+        pass
 
 
-# ----------------------------------- user valid ------------------------------------#
+class CommonPasswordValidator:
+    def validate(self, password, user=None):
+        pass
+
+
+class UserAttributeSimilarityValidator:
+    def validate(self, password, user=None):
+        pass
+
+
+        # ----------------------------------- user valid ------------------------------------#
+
+
+
+
+
+
+        # ------------------------------------ email valid -----------------------------------#
+
+
+
+class EmailAtValidators:
+    def validate(self, email, user=None):
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            raise InvalidEntityException(source='email', code='not_allowed', message="Invalid email address")
+
+
+
+class EmailForbiddenEmailDomainsValidator:
+    PATH_FORBIDDEN_EMAIL_DOMAINS = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                                'data/forbidden_email_domains.json')
+    with open(PATH_FORBIDDEN_EMAIL_DOMAINS) as f:
+        forbidden_email_domains = json.loads(f.read())
+
+    def validate(self, email, user=None):
+        if email.split('@')[-1] in self.forbidden_email_domains:
+            raise InvalidEntityException(source='email', code='not_allowed', message='Email not allowed')
