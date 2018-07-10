@@ -3,7 +3,7 @@ import bcrypt
 from PayDevs import settings
 from PayDevs.exceptions import InvalidEntityException
 
-
+# ------------------------------ PASSWORD ------------------------------ #
 
 
 def hashed_password(password):
@@ -21,16 +21,42 @@ def check_password(password, hashed):
 
 
 def get_password_validators():
-    validators = [MinimumLengthValidator(),]
+    validators = [MinimumLengthValidator(), ]
     return validators
 
 
 def validate_password(password, user=None):
+    validate(password, user, get_password_validators())
+
+# ------------------------------ USERNAME ------------------------------ #
+
+
+def get_username_validators():
+    validators = []  # Username validators
+    return validators
+
+
+def validate_username(username, user=None):
+    validate(username, user, get_username_validators())
+
+
+# ------------------------------ EMAIL ------------------------------ #
+
+
+def get_email_validators():
+    validators = []  # email validators
+    return validators
+
+
+def validate_email(email, user=None):
+    validate(email, user, get_email_validators())
+
+
+def validate(value, user=None, validators=None):
     errors = []
-    password_validators = get_password_validators()
-    for validator in password_validators:
+    for validator in validators:
         try:
-            validator.validate(password, user)
+            validator.validate(value, user)
         except Exception as error:
             errors.append(error)
     if errors:
@@ -47,17 +73,9 @@ class MinimumLengthValidator(object):
     def validate(self, password, user=None):
         if self.min_len > len(password):
             raise InvalidEntityException(source='password', code='not_allowed', message=
-                                                "Your password must contain at least %d character." % self.min_len)
-
-
-
-
-
+            "Your password must contain at least %d character." % self.min_len)
 
 # class
 
 
 # ----------------------------------- user valid ------------------------------------#
-
-
-
