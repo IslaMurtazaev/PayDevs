@@ -33,10 +33,10 @@ class UserRegisterView(object):
         self.get_user_interactor = get_user_interactor
 
     @serialize_exception
-    def post(self, request, *args, **kwargs):
-        username = request.POST['username']
-        email = request.POST['email']
-        password = request.POST['password']
+    def post(self, *args, **kwargs):
+        username = kwargs.get('username')
+        email = kwargs.get('email')
+        password = kwargs.get('password')
         user = self.get_user_interactor.set_params(username=username,
                                                    email=email, password=password).execute()
         body = UserSerializer.serializer(user)
@@ -49,9 +49,9 @@ class LoginUserView(object):
         self.get_user_interactor = get_user_interactor
 
     @serialize_exception
-    def post(self, request, *args, **kwargs):
-        username = request.POST['username']
-        password = request.POST['password']
+    def post(self, *args, **kwargs):
+        username = kwargs.get('username')
+        password = kwargs.get('password')
         user = self.get_user_interactor.set_params(username=username,
                                                    password=password).execute()
         body = UserSerializer.serializer(user)
