@@ -12,29 +12,29 @@ class UserRepoFactory(object):
 class GetUsersInteractorFactory(object):
     @staticmethod
     def get():
-        user_repo_factory = UserRepoFactory().get()
-        return GetUsersInteractor(user_repo_factory)
+        user_repo = UserRepoFactory().get()
+        return GetUsersInteractor(user_repo)
 
 
 class GetUsersAllInteractorFactory(object):
     @staticmethod
     def get():
-        user_repo_factory = UserRepoFactory().get()
-        return GetUsersAllInteractor(user_repo_factory)
+        user_repo = UserRepoFactory().get()
+        return GetUsersAllInteractor(user_repo)
 
 
 class LoginUserInreractorFactory(object):
     @staticmethod
     def get():
-        user_repo_factory = UserRepoFactory().get()
-        return LoginUserInteractor(user_repo_factory)
+        user_repo = UserRepoFactory().get()
+        return LoginUserInteractor(user_repo)
 
 
 class RegisterUserInteractorFactory(object):
     @staticmethod
     def get():
-        user_repo_factory = UserRepoFactory().get()
-        return RegisterUserInteractor(user_repo_factory)
+        user_repo = UserRepoFactory().get()
+        return RegisterUserInteractor(user_repo)
 
 
 def get_user_factories():

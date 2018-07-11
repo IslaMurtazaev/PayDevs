@@ -89,7 +89,7 @@ class MinimumLengthValidator(object):
     def validate(self, password, user=None):
         if self.min_len > len(password):
             raise InvalidEntityException(source='password', code='not_allowed', message=
-            "Your password must contain at least %d character." % self.min_len)
+            "Your password must contain at least %d character" % self.min_len)
 
 
 class UserAttributeSimilarityValidator(object):
@@ -114,7 +114,7 @@ class UserAttributeSimilarityValidator(object):
                 if SequenceMatcher(None, a=password.lower(), b=value.lower()) \
                         .quick_ratio() >= self.max_similarity:
                     raise InvalidEntityException(source='password', code='not allowed', \
-                                                 message="Your password is too similar to your other fields.")
+                                                 message="Your password is too similar to your other fields")
 
 
 class CommonPasswordValidator(object):
@@ -136,14 +136,14 @@ class CommonPasswordValidator(object):
     def validate(self, password, user=None):
         if password in self.common_sequences:
             raise InvalidEntityException(source='password', code='not allowed', \
-                                         message="Your password is a common sequence.")
+                                         message="Your password is a common sequence")
 
 
 class NumericPasswordValidator(object):
     def validate(self, password, user=None):
         if password.isdigit():
             raise InvalidEntityException(source='password', code='not allowed', \
-                                         message="Your password consists of only digits.")
+                                         message="Your password consists of only digits")
 
 
 # ----------------------------------- user valid ------------------------------------#
@@ -192,7 +192,7 @@ class UsernameRegex(object):
 
     def validate(self, username, user=None):
         if not re.match(self.username_regex, username):
-            raise InvalidEntityException(source='username', code='not_allowed', message='Username not allowed')
+            raise InvalidEntityException(source='username', code='not_allowed', message='Invalid username')
     
 
 
@@ -215,4 +215,4 @@ class EmailForbiddenEmailDomainsValidator:
 
     def validate(self, email, user=None):
         if email.split('@')[-1] in self.forbidden_email_domains:
-            raise InvalidEntityException(source='email', code='not_allowed', message='Email not allowed')
+            raise InvalidEntityException(source='email', code='not_allowed', message='Invalid email domain')
