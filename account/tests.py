@@ -272,3 +272,59 @@ class ValidatorFunctionsTest(TestCase):
             validate('qweqwe', self.user, get_email_validators())
         except InvalidEntityException as e:
             self.assertEqual(e.source, 'validate')
+
+
+class ForbiddenNamesValidatorMethodTest(TestCase):
+    def test_method_validate_type(self):
+
+        self.assertEqual(None, ForbiddenNamesValidator().validate('zhanzat'))
+        self.assertEqual(None, ForbiddenNamesValidator().validate('BrzinaRutina'))
+
+        with self.assertRaises(InvalidEntityException): 
+            ForbiddenNamesValidator().validate('insTagram')
+        with self.assertRaises(InvalidEntityException):
+            ForbiddenNamesValidator().validate('PROJECTS')
+        with self.assertRaises(InvalidEntityException):
+            ForbiddenNamesValidator().validate('alpha')
+
+class UsernameMinLengthValidatorMethodTest(TestCase):
+    def test_method_type(self):
+        self.assertEqual(None, UsernameMinLengthValidator().validate('Ali'))
+        self.assertEqual(None, UsernameMinLengthValidator().validate('Abrakadabra'))
+
+        with self.assertRaises(InvalidEntityException):
+            UsernameMinLengthValidator().validate('Po')
+
+
+        with self.assertRaises(InvalidEntityException):
+            UsernameMinLengthValidator().validate('a')
+
+
+class UsernameMaxLengthValidatorMethodTest(TestCase):
+    def test_method_type(self):
+        self.assertEqual(None, UsernameMaxLengthValidator().validate('zhanzat'))
+        self.assertEqual(None, UsernameMaxLengthValidator().validate('zhanzatbekzatduulatadiletboldukanusonbektaalaibeka'))
+
+        with self.assertRaises(InvalidEntityException):
+            UsernameMaxLengthValidator().validate('zhanzatbekzatduulatadiletboldukanusonbektaalaibekafhudlhfsjgyj')
+
+
+class UsernameRegexMethodValidator(TestCase):
+    def test_method_type(self):
+        self.assertEqual(None, UsernameRegex().validate('asfsg'))
+        self.assertEqual(None, UsernameRegex().validate('Asfsg'))
+        self.assertEqual(None, UsernameRegex().validate('zhanzat98'))
+        self.assertEqual(None, UsernameRegex().validate('zhanzat_mamytova'))
+        self.assertEqual(None, UsernameRegex().validate('Asfsg.sdfdgf'))
+
+        with self.assertRaises(InvalidEntityException):
+            UsernameRegex().validate('14355')
+
+        with self.assertRaises(InvalidEntityException):
+            UsernameRegex().validate('1zhanzat')
+
+        with self.assertRaises(InvalidEntityException):
+            UsernameRegex().validate('_zhanzat')
+
+        with  self.assertRaises(InvalidEntityException):
+            UsernameRegex().validate('zhanzat,bekzat')
