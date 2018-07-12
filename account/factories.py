@@ -1,4 +1,5 @@
-from account.interactors import GetUsersInteractor, GetUsersAllInteractor, RegisterUserInteractor, LoginUserInteractor
+from account.interactors import GetUsersInteractor, GetUsersAllInteractor, RegisterUserInteractor, LoginUserInteractor, \
+    AuthUserInteractor
 from account.repositories import UserRepo
 from account.views import UserView, UserAllView, UserRegisterView, LoginUserView
 
@@ -37,6 +38,13 @@ class RegisterUserInteractorFactory(object):
         return RegisterUserInteractor(user_repo_factory)
 
 
+class AuthUserInteractorFactory(object):
+
+    @staticmethod
+    def create():
+        return AuthUserInteractor()
+
+
 def get_user_factories():
     get_user_interactor = GetUsersInteractorFactory().get()
     return UserView(get_user_interactor)
@@ -50,7 +58,8 @@ def get_user_all_factories():
 
 def get_user_regist_factories():
     get_user_interactor = RegisterUserInteractorFactory().get()
-    return UserRegisterView(get_user_interactor)
+    get_auth_interactor = LoginUserInreractorFactory().get()
+    return UserRegisterView(get_user_interactor, get_auth_interactor)
 
 
 def get_user_login_factories():
