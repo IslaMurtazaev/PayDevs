@@ -2,6 +2,8 @@ from datetime import timedelta
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils import timezone
+
+from account.models import UserORM
 from project.models import HourPaymentModel, ProjectModel, WorkTime, TaskPayment, MonthPayment, WorkDay
 
 
@@ -10,7 +12,7 @@ from project.models import HourPaymentModel, ProjectModel, WorkTime, TaskPayment
 
 class HourPaymentMethodTest(TestCase):
     def setUp(self):
-        user = User(username="admin", password='qwert12345')
+        user = UserORM(username="admin", password='qwert12345')
         user.save()
         self.project = ProjectModel(name="My Firs Project", user=user, type_of_payment='H_P')
         self.project.save()
@@ -32,7 +34,7 @@ class HourPaymentMethodTest(TestCase):
 
 class TaskPaymentMethodTest(TestCase):
     def setUp(self):
-        user = User(username="admin", password='qwert12345')
+        user = UserORM(username="admin", password='qwert12345')
         user.save()
         self.project = ProjectModel(name="My Firs Project", user=user, type_of_payment='T_P')
         self.project.save()
@@ -49,7 +51,7 @@ class TaskPaymentMethodTest(TestCase):
 
 class MonthPaymentMethodTest(TestCase):
     def setUp(self):
-        user = User(username="admin", password='qwert12345')
+        user = UserORM(username="admin", password='qwert12345')
         user.save()
         self.project = ProjectModel(name="My Firs Project", user=user, type_of_payment='M_P')
         self.project.save()
@@ -69,7 +71,7 @@ class MonthPaymentMethodTest(TestCase):
 
 class ProjectMethodTest(TestCase):
     def setUp(self):
-        user = User(username="admin", password='qwert12345')
+        user = UserORM(username="admin", password='qwert12345')
         user.save()
         self.project_task = ProjectModel(name="My Project Task", user=user, type_of_payment='T_P')
         self.project_task.save()
