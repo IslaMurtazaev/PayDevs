@@ -37,3 +37,31 @@ class User(object):
     @property
     def password(self):
         return self._password
+
+
+
+class TokenUser(object):
+
+    def __init__(self, token=None, user_id=None):
+        self._token = token
+        self._user_id = user_id
+
+
+
+    @property
+    def token(self):
+        return self._token
+
+    @property
+    def user_id(self):
+        return self._user_id
+
+    def payload(self):
+        return {
+            'user_id': self.user_id,
+        }
+
+
+
+
+

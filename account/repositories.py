@@ -1,6 +1,5 @@
 from account.entities import User
 from account.models import UserORM
-from account.validators import hashed_password
 from PayDevs.exceptions import EntityDoesNotExistException, EntityIntegrityException
 from django.db.utils import IntegrityError
 

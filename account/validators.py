@@ -45,9 +45,9 @@ def validate_password(password, user=None):
 
 def get_username_validators():
     validators = [ForbiddenNamesValidator(),
-    UsernameMinLengthValidator(),
-    UsernameMaxLengthValidator(),
-    UsernameRegex()]  # Username validators
+                  UsernameMinLengthValidator(),
+                  UsernameMaxLengthValidator(),
+                  UsernameRegex()]  # Username validators
     return validators
 
 
@@ -65,8 +65,6 @@ def get_email_validators():
 
 def validate_email(email, user=None):
     validate(email, user, get_email_validators())
-
-
 
 
 def validate(value, user=None, validators=None):
@@ -149,52 +147,44 @@ class NumericPasswordValidator(object):
 # ----------------------------------- user valid ------------------------------------#
 
 class ForbiddenNamesValidator:
-
     forbidden_usernames_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-            'data/generic_forbidden_usernames.json')
+                                            'data/generic_forbidden_usernames.json')
 
     with open(forbidden_usernames_path) as f:
-        forbidden_usernames = json.loads(f.read())        
-       
+        forbidden_usernames = json.loads(f.read())
 
     def validate(self, username, user=None):
         if username.lower() in self.forbidden_usernames:
             raise InvalidEntityException(source='username', code='not_allowed', message='Username not allowed')
-       
-        
 
 
 class UsernameMinLengthValidator(object):
     def __init__(self, min_len=3):
-        self.min_len=min_len
+        self.min_len = min_len
 
     def validate(self, username, user=None):
         if len(username) < self.min_len:
             raise InvalidEntityException(source='username', code='not_allowed', message=
-                "Your username must contain at least %d character." % self.min_len)
-
+            "Your username must contain at least %d character." % self.min_len)
 
 
 class UsernameMaxLengthValidator(object):
     def __init__(self, max_len=50):
-        self.max_len=max_len
+        self.max_len = max_len
 
     def validate(self, username, user=None):
-        if len(username)>self.max_len:
+        if len(username) > self.max_len:
             raise InvalidEntityException(source='username', code='not_allowed', message=
-                "Your username is too long. Max allowed length is %d." % self.max_len)
-
+            "Your username is too long. Max allowed length is %d." % self.max_len)
 
 
 class UsernameRegex(object):
     def __init__(self):
-        self.username_regex ="[a-zA-Z][a-zA-Z-'_\\d\\. ]+[a-zA-Z'_\\d\\.]?$"
+        self.username_regex = "[a-zA-Z][a-zA-Z-'_\\d\\. ]+[a-zA-Z'_\\d\\.]?$"
 
     def validate(self, username, user=None):
         if not re.match(self.username_regex, username):
             raise InvalidEntityException(source='username', code='not_allowed', message='Username not allowed')
-    
-
 
 
 # ------------------------------------ email valid -----------------------------------#

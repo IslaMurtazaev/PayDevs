@@ -30,8 +30,8 @@ class UserAttributeSimilarityValidatorMethodTest(TestCase):
 
     def test_method_validate_type(self):
         islam = UserORM.objects.get(username="IslamIsTheBest")
-
         with self.assertRaises(InvalidEntityException):
+
             UserAttributeSimilarityValidator().validate(password=islam.password, user=islam)
 
         self.assertIsNone(UserAttributeSimilarityValidator().validate(password='sizamopen', user=islam))
@@ -241,7 +241,7 @@ class ForbiddenNamesValidatorMethodTest(TestCase):
         self.assertEqual(None, ForbiddenNamesValidator().validate('zhanzat'))
         self.assertEqual(None, ForbiddenNamesValidator().validate('BrzinaRutina'))
 
-        with self.assertRaises(InvalidEntityException): 
+        with self.assertRaises(InvalidEntityException):
             ForbiddenNamesValidator().validate('insTagram')
         with self.assertRaises(InvalidEntityException):
             ForbiddenNamesValidator().validate('PROJECTS')
@@ -289,4 +289,4 @@ class UsernameRegexMethodValidator(TestCase):
             UsernameRegex().validate('_zhanzat')
 
         with  self.assertRaises(InvalidEntityException):
-            UsernameRegex().validate('zhanzat,bekzat')
+            UsernameRegex().validate('zhanzat, bekzat')
