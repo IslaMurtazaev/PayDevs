@@ -26,5 +26,5 @@ def index(request):
 def login(request):
     return render(request, 'login.html')
 
-def get_project(request):
-    return render(request, 'get_project.html')
+def create_project(request):
+    return render(request, 'create_project.html')
