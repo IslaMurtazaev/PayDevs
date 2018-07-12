@@ -18,7 +18,8 @@ from django.urls import path
 
 from account.factories import get_user_factories, get_user_all_factories, get_user_regist_factories, \
     get_user_login_factories
-from PayDevs.views import ViewWrapper, index, login
+from project.factories import get_project_factory
+from PayDevs.views import ViewWrapper, index, login, create_project
 
 urlpatterns = [
     path('create_user/', index),
@@ -28,5 +29,7 @@ urlpatterns = [
     path('users/create', ViewWrapper.as_view(view_factory=get_user_regist_factories), name='create_user'),
     path('users/login', ViewWrapper.as_view(view_factory=get_user_login_factories), name='login_user'),
     path('users/<slug:username>', ViewWrapper.as_view(view_factory=get_user_factories)),
+    path('get_project/', get_project),
+    path('project/get', ViewWrapper.as_view(view_factory=get_project_factory)),
 
 ]

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create project</title>
+</head>
+<body>
+  <form action="{% url 'get_project' %}", method="post">
+      {% csrf_token %}
+  Title:<br>
+  <input type="text" name="title"><br>
+  Description:<br>
+  <input type="text" name="description"><br>
+  Type of payment:<br>
+
+  <input type="radio" name="type_of_payment" value="male"> Hour Payment<br>
+  <input type="radio" name="type_of_payment" value="female"> Month Payment<br>
+  <input type="radio" name="type_of_payment" value="other"> Task Payment<br>
+
+  <input type="submit" value="create">
+</form>
+</body>
+</html>
