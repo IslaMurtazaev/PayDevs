@@ -7,8 +7,8 @@ class ProjectView(object):
 		self.get_project_interactor=get_project_interactor
 
 	@serialize_exception
-	def get(self, title):
-		project = self.get_project_interactor.set_params(title=title).execute()
+	def get(self, title, **kwargs):
+		project = self.get_project_interactor.set_params(title=title, **kwargs).execute()
 		body = ProjectSerializer.serializer(project)
 		status = 200
 		return body, status
@@ -21,6 +21,6 @@ class ProjectAllView(object):
 	@serialize_exception
 	def get(self, title):
 		project = self.get_project_interactor.set_params(title=title).execute()
-		body = ProjectLilstSerializer.serializer(projects
+		body = ProjectListSerializer.serializer(projects)
 		status = 200
 		return body, status
