@@ -34,7 +34,7 @@ class ViewWrapper(View):
             return None
         token = auth_header.replace('Token ', '')
         logged_id = AuthUserInteractorFactory().create().set_params(token=token,
-                                                                    secket_key=settings.SECRET_KEY).execute()
+                                                                    secret_key=settings.SECRET_KEY).execute()
         return logged_id
 
 
