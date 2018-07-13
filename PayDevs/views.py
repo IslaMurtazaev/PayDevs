@@ -41,7 +41,8 @@ class ViewWrapper(View):
 def index(request):
     return render(request, 'index.html')
 
-
-
 def login(request):
     return render(request, 'login.html')
+
+def create_project(request):
+    return render(request, 'create_project.html')

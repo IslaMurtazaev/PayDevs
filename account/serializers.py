@@ -10,3 +10,7 @@ class UserSerializer(BaseSerializer):
 class UserListSerializer(ListSerializer):
     model = User
     fields = ['id', 'username', 'email']
+
+
+
+
