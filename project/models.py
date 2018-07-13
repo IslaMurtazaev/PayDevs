@@ -26,11 +26,20 @@ class ProjectORM(models.Model):
 
 
 
+
 class HourPaymentORM(models.Model):
     project = models.ForeignKey(ProjectORM, on_delete=models.CASCADE)
     rate = models.FloatField(default=0)
     start_rout_date = models.DateTimeField(default=timezone.now)
     end_rout_date = models.DateTimeField(null=True)
+
+
+class WorkTimeORM(models.Model):
+    hour_payment = models.ForeignKey(HourPaymentORM, on_delete=models.CASCADE)
+    start_work = models.DateTimeField(default=timezone.now)
+    end_work = models.DateTimeField(null=True)
+    paid = models.BooleanField(default=False)
+
 
     # def total(self):
     #     work_times = self.worktime_set.filter(start_work__gte=self.start_rout_date, start_work__lte=self.end_rout_date)
@@ -49,10 +58,6 @@ class HourPaymentORM(models.Model):
     #     return result
 
 
-# class WorkTimeORM(models.Model):
-#     rate = models.ForeignKey(HourPaymentORM, on_delete=None)
-#     start_work = models.DateTimeField(default=timezone.now())
-#     end_work = models.DateTimeField(default=timezone.now() + timedelta(days=30))
 
 #     def is_completed(self):
 #         if timezone.now() >= self.end_work:
@@ -72,12 +77,13 @@ class HourPaymentORM(models.Model):
 
 
 
-class TaskPaymentORM(models.Model):
+class WorkTaskORM(models.Model):
     project = models.ForeignKey(ProjectORM, on_delete=models.CASCADE)
     title = models.CharField(max_length=500)
     description = models.TextField(null=True)
     price = models.FloatField(default=0)
     completed = models.BooleanField(default=False)
+    paid = models.BooleanField(default=False)
 
 
 
@@ -89,18 +95,16 @@ def current_date():
 class MonthPaymentORM(models.Model):
     project = models.ForeignKey(ProjectORM, on_delete=models.CASCADE)
     rate = models.FloatField(default=0)
-    day = models.DateField(default=current_date)
 
     # def total(self):
     #     worked_days = self.workday_set.filter(have_worked=True)
     #     count_worked_day = len([i for i in worked_days if i.is_completed()])
     #     return self.rate * count_worked_day
 
-
-# class WorkDay(models.Model):
-#     month_payment = models.ForeignKey(MonthPayment, on_delete=None)
-#     day = models.DateField(default=timezone.now().date())
-#     have_worked = models.BooleanField(default=False)
+class WorkDayORM(models.Model):
+    month_payment = models.ForeignKey(MonthPaymentORM, on_delete=models.CASCADE)
+    day = models.DateField(default=current_date)
+    paid = models.BooleanField(default=False)
 
 #     def is_completed(self):
 #         if self.day < timezone.now().date():
