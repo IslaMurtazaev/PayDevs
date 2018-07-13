@@ -32,6 +32,6 @@ urlpatterns = [
     path('users/<slug:username>', ViewWrapper.as_view(view_factory=get_user_factories)),
     
     path('create_project/', create_project),
-    path('project/create', ViewWrapper.as_view(view_factory=create_project_factory), name='create_project'),
+    path('project/create', csrf_exempt(ViewWrapper.as_view(view_factory=create_project_factory)), name='create_project'),
     path('project/<slug:title>', ViewWrapper.as_view(view_factory=get_project_factory), name='get_project'),
 ]

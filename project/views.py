@@ -12,7 +12,7 @@ class CreateProjectView(object):
 	def post(self, *args, **kwargs):
 		title = kwargs.get('title')
 		description = kwargs.get('description')
-		user = UserORM.objects.get(username=kwargs.get('owner'))
+		user = UserORM.objects.get(id=kwargs.get('user_id'))
 		type_of_payment = kwargs.get('type_of_payment')
 		project = self.create_project_interactor.set_params(title=title, description=description, user=user, type_of_payment=type_of_payment).execute()
 		body = ProjectSerializer.serializer(project)
