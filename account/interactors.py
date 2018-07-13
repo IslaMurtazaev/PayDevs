@@ -1,5 +1,5 @@
 from account.entities import User
-from PayDevs.exceptions import NoPermissionException
+from PayDevs.exceptions import NoPermissionException, NoLoggedException
 from PayDevs.interactors import Interactor
 
 
@@ -65,6 +65,8 @@ class GetUsersInteractor(Interactor):
         return self
 
     def execute(self, *args, **kwargs):
+        if self.id is None:
+            raise NoLoggedException()
         return self.user_repo.get_user(id=self.id)
 
 

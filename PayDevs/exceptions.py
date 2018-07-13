@@ -22,6 +22,11 @@ class EntityDoesNotExistException(PayDevsException):
         super().__init__(source='entity', code='not_fond', message='Entity not font')
 
 
+class NoLoggedException(PayDevsException):
+    def __init__(self):
+        super().__init__(source='authentication', code='required', message='Authentication required')
+
+
 
 class SerializerException(PayDevsException):
     def __init__(self, message):

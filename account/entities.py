@@ -27,7 +27,7 @@ class User(object):
 
     @property
     def is_active(self):
-        return self._is_staff
+        return self._is_active
 
 
     @property
