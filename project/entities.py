@@ -1,6 +1,7 @@
 class Project(object):
     
-    def __init__(self, id=None, title=None, description=None, start_date=None, end_date=None, user=None, type_of_payment=None, status=False):
+    def __init__(self, id=None, title=None, description=None, start_date=None, end_date=None,\
+                 user=None, type_of_payment=None, status=False):
         self._id = id
         self._title = title
         self._description = description
@@ -74,18 +75,52 @@ class HourPayment(object):
     @property
     def end_rout_date(self):
         return self._end_rout_date
+
+
+
+class WorkTime(object):
+
+    def __init__(self, id=None, hour_payment=None, start_work=None, end_work=None, paid=False):
+        self._id = id
+        self._hour_payment = hour_payment
+        self._start_work = start_work
+        self._end_work = end_work
+        self._paid = paid
         
 
+    @property
+    def id(self):
+        return self._id
 
-class TaskPayment(object):
+    @property
+    def hour_payment(self):
+        return self._hour_payment
 
-    def __init__(self, id=None, project=None, title=None, description=None, price=0, completed=False):
+    @property
+    def start_work(self):
+        return self._start_work
+
+    @property
+    def end_work(self):
+        return self._end_work
+    
+    @property
+    def paid(self):
+        return self._paid
+
+
+
+
+class WorkTask(object):
+
+    def __init__(self, id=None, project=None, title=None, description=None, price=0, completed=False, paid=False):
         self._id = id
         self._project = project
         self._title = title
         self._description = description
         self._price = price
         self._completed = completed
+        self._paid = paid
 
 
     @property
@@ -112,15 +147,19 @@ class TaskPayment(object):
     def completed(self):
         return self._completed
 
+    @property
+    def paid(self):
+        return self._paid
+
+
 
 
 class MonthPayment(object):
 
-    def __init__(self, id=None, project=None, rate=None, day=None):
+    def __init__(self, id=None, project=None, rate=None):
         self._id = id 
         self._project = project
         self._rate = rate
-        self._day = day
 
 
     @property
@@ -135,6 +174,29 @@ class MonthPayment(object):
     def rate(self):
         return self._rate
 
+
+
+class WorkedDay(object):
+
+    def __init__(self, id=None, month_payment=None, day=None, paid=False):
+        self._id = id 
+        self._month_payment = month_payment
+        self._day = day
+        self._paid = paid
+
+
+    @property
+    def id(self):
+        return self._id
+
+    @property
+    def month_payment(self):
+        return self._month_payment
+
     @property
     def day(self):
         return self._day
+
+    @property
+    def paid(self):
+        return self._paid

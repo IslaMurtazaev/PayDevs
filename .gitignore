@@ -2,6 +2,7 @@ PayDevs/settings.py
 PayDevs/__pycache__
 account/migrations
 project/migrations
+.vscode/
 my_local.py
 bin
 include
