@@ -34,8 +34,8 @@ class ProjectORM(models.Model):
 class HourPaymentORM(models.Model):
     project = models.ForeignKey(ProjectORM, on_delete=models.CASCADE)
     rate = models.FloatField(default=0)
-    start_rout_date = models.DateTimeField(default=timezone.now)
-    end_rout_date = models.DateTimeField(null=True)
+    # start_rout_date = models.DateTimeField(default=timezone.now)
+    # end_rout_date = models.DateTimeField(null=True)
 
 
 class WorkTimeORM(models.Model):

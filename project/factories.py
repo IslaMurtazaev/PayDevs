@@ -1,7 +1,11 @@
-from project.views import ProjectView, CreateProjectView, AllProjectsView
-from project.repositories import ProjectRepo
-from project.interactors import GetProjectInteractor, CreateProjectInteractor, GetAllProjectsInteractor
+from project.repositories import ProjectRepo, WorkTaskRepo
+from project.views import ProjectView, CreateProjectView, AllProjectsView, TotalView, CreateTaskView
+from project.interactors import GetProjectInteractor, CreateProjectInteractor, GetAllProjectsInteractor, \
+                                 GetTotalInteractor, CreateTaskInteractor
+                                 
 
+
+#------------------------ Project ---------------------------------------------#
 
 class ProjectRepoFactory(object):
     @staticmethod
@@ -49,3 +53,37 @@ class GetAllProjectsInteractorFactory(object):
 def get_all_projects_factory():
     get_all_projects_interactor = GetAllProjectsInteractorFactory.get()
     return AllProjectsView(get_all_projects_interactor)
+
+
+
+
+class GetTotalInteractorFactory(object):
+    @staticmethod
+    def get():
+        project_repo = ProjectRepoFactory.get()
+        return GetTotalInteractor(project_repo)
+
+
+def get_total_factory():
+    get_total_interactor = GetTotalInteractorFactory.get()
+    return TotalView(get_total_interactor)
+
+
+#--------------------------- Work Task ----------------------------------------#
+
+class WorkTaskRepoFactory(object):
+    @staticmethod
+    def get():
+        return WorkTaskRepo()
+
+
+class CreateTaskInteractorFactory(object):
+    @staticmethod
+    def get():
+        work_task_repo = WorkTaskRepoFactory.get()
+        return CreateTaskInteractor(work_task_repo)
+
+
+def create_task_factory():
+    create_task_interactor = CreateTaskInteractorFactory.get()
+    return CreateTaskView(create_task_interactor)
