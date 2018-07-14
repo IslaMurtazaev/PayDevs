@@ -5,19 +5,21 @@ from PayDevs.exceptions import EntityDoesNotExistException, InvalidEntityExcepti
 
 class ProjectRepo(object):
     
-    def get_project(self, id=None, title=None):
+    def get_project(self, user, id=None, title=None):
         try:
             if id:
-                db_project = ProjectORM.objects.get(id=id)
+                db_project = ProjectORM.objects.get(id=id, user=user)
             else:
-                db_project = ProjectORM.objects.get(title=title)
+                db_project = ProjectORM.objects.get(title=title, user=user)
         except ProjectORM.DoesNotExist:
             raise EntityDoesNotExistException
 
         return self._decode_db_project(db_project)
 
 
-    def create_project(self, title, description, user, type_of_payment):
+
+    def create_project(self, user, title=None, description=None , type_of_payment=None):
+        print(title, description, user, type_of_payment)
         try:
             db_project = ProjectORM(title=title, description=description, user=user,\
                                     type_of_payment=type_of_payment)
@@ -27,6 +29,17 @@ class ProjectRepo(object):
                                           message="Unable to create such project")
 
         return self._decode_db_project(db_project)
+
+
+
+    def get_all_projects(self, user):
+        try:
+            db_projects = ProjectORM.objects.filter(user=user)
+        except ProjectORM.DoesNotExist:
+            raise EntityDoesNotExistException
+        else:
+            projects = [self._decode_db_project(db_project) for db_project in db_projects]
+            return projects
         
 
         

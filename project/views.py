@@ -28,19 +28,21 @@ class ProjectView(object):
 	@serialize_exception
 	def get(self, *args, **kwargs):
 		title = kwargs.get('title')
-		project = self.get_project_interactor.set_params(title=title).execute()
+		user = UserORM.objects.get(id=kwargs.get('user_id'))
+		project = self.get_project_interactor.set_params(user=user, title=title).execute()
 		body = ProjectSerializer.serializer(project)
 		status = 200
 		return body, status
 
 
-class ProjectAllView(object):
+class AllProjectsView(object):
 	def __init__(self, get_project_interactor):
 		self.get_project_interactor=get_project_interactor
 
 	@serialize_exception
-	def get(self, title):
-		projects = self.get_project_interactor.set_params(title=title).execute()
+	def get(self, *args, **kwargs):
+		user = UserORM.objects.get(id=kwargs.get('user_id'))
+		projects = self.get_project_interactor.set_params(user).execute()
 		body = ProjectListSerializer.serializer(projects)
 		status = 200
 		return body, status

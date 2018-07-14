@@ -25,6 +25,10 @@ class ProjectORM(models.Model):
     status = models.BooleanField(default=True)
 
 
+    def __str__(self):
+        return self.title
+
+
 
 
 class HourPaymentORM(models.Model):
@@ -84,6 +88,10 @@ class WorkTaskORM(models.Model):
     price = models.FloatField(default=0)
     completed = models.BooleanField(default=False)
     paid = models.BooleanField(default=False)
+
+
+    def __str__(self):
+        return self.title    
 
 
 
