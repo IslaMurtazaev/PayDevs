@@ -1,11 +1,42 @@
-# from datetime import timedelta
-# from django.contrib.auth.models import User
-# from django.test import TestCase
-# from django.utils import timezone
-# from project.models import HourPaymentModel, ProjectModel, WorkTime, TaskPayment, MonthPayment, WorkDay
+from django.test import TestCase
+from datetime import timedelta
+from django.utils import timezone
+from django.contrib.auth.models import User
+from account.models import UserORM
+from project.models import ProjectORM, HourPaymentORM, WorkTimeORM, WorkTaskORM, MonthPaymentORM, WorkDayORM
+from project.repositories import ProjectRepo, WorkTaskRepo
 
 
 
+
+
+class TaskPaymentMethodTest(TestCase):
+    def setUp(self):
+        self.user = UserORM(username="admin", password='qwert12345')
+        self.user.save()
+        self.project = ProjectORM(title="My Firs Project", user=self.user, type_of_payment='T_P')
+        self.project.save()
+
+
+    def test_method_get_total(self):
+        for i in range(10):
+            worked_task = WorkTaskORM(title='My Task number %s' % i, price=10 * (i + 1), completed=True, project=self.project)
+            worked_task.save()
+
+        total = ProjectRepo().get_total(user=self.user, title="My Firs Project")
+
+        self.assertEqual(type(total), float)
+        self.assertEqual(total, 550)
+
+
+    def test_method_get_total_paid(self):
+        worked_task = WorkTaskORM(title='My Task number %s' % 100, price=100000, completed=True, paid=True, project=self.project)
+        worked_task.save()
+
+        total = ProjectRepo().get_total(user=self.user, title="My Firs Project")
+
+        self.assertEqual(type(total), int)
+        self.assertEqual(total, 0)
 
 
 # class HourPaymentMethodTest(TestCase):
@@ -27,24 +58,6 @@
 #         self.assertEqual(type(self.hour_pay.total()), float)
 #         self.assertEqual(self.hour_pay.total(), 100.0)
 
-
-
-
-# class TaskPaymentMethodTest(TestCase):
-#     def setUp(self):
-#         user = User(username="admin", password='qwert12345')
-#         user.save()
-#         self.project = ProjectModel(name="My Firs Project", user=user, type_of_payment='T_P')
-#         self.project.save()
-
-
-#     def test_method_total(self):
-#         for i in range(10):
-#             hour_pay = TaskPayment(name='My Task number %s' % i, cost=10 * (i + 1), status=True, project=self.project)
-#             hour_pay.save()
-
-#         self.assertEqual(type(self.project.total()), float)
-#         self.assertEqual(self.project.total(), 550)
 
 
 # class MonthPaymentMethodTest(TestCase):

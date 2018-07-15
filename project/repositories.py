@@ -50,9 +50,28 @@ class ProjectRepo(object):
             db_project = ProjectORM.objects.get(user=user, title=title)
         except ProjectORM.DoesNotExist:
             raise EntityDoesNotExistException
-        else:
-            raise NotImplementedError
         
+        if (db_project.type_of_payment.lower() == 'h_p'):
+            raise NotImplementedError
+        elif (db_project.type_of_payment.lower() == 'm_p'):
+            raise NotImplementedError
+        else:
+            return self._get_tasks_total(db_project)
+
+
+    
+    def _get_tasks_total(self, db_project):
+        try:
+            tasks = db_project.worktaskorm_set.all()
+            total = 0
+            for task in tasks:
+                if (task.completed and not task.paid):
+                    total += task.price
+        except:
+            raise InvalidEntityException(source='repositories', code='could not sum total',\
+                                          message="'%s' task attribute is invalid" % task.title)
+        return total        
+    
 
         
     def _decode_db_project(self, db_project):
