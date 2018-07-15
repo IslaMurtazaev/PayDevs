@@ -85,3 +85,16 @@ class CreateTaskInteractor(Interactor):
 
     def execute(self):
         return self.work_task_repo.create_work_task(self.project, self.title, self.description, self.price)
+
+
+
+class GetAllTasksInteractor(Interactor):
+    def __init__(self, work_task_repo):
+        self.work_task_repo = work_task_repo
+
+    def set_params(self, project):
+        self.project=project
+        return self
+
+    def execute(self):
+        return self.work_task_repo.get_all_tasks(self.project)

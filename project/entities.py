@@ -52,8 +52,8 @@ class HourPayment(object):
         self._id = id
         self._project = project
         self._rate = rate
-        self._start_rout_date = start_rout_date
-        self._end_rout_date = end_rout_date
+        # self._start_rout_date = start_rout_date
+        # self._end_rout_date = end_rout_date
 
 
     @property
@@ -68,13 +68,13 @@ class HourPayment(object):
     def rate(self):
         return self._rate
 
-    @property
-    def start_rout_date(self):
-        return self._start_rout_date
+    # @property
+    # def start_rout_date(self):
+    #     return self._start_rout_date
     
-    @property
-    def end_rout_date(self):
-        return self._end_rout_date
+    # @property
+    # def end_rout_date(self):
+    #     return self._end_rout_date
 
 
 

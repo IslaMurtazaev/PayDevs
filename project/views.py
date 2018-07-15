@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from project.serializers import ProjectSerializer, ProjectListSerializer, WorkTaskSerializer
+from project.serializers import ProjectSerializer, ProjectListSerializer, WorkTaskSerializer, WorkTaskListSerializer
 from PayDevs.decorators import serialize_exception
 from account.models import UserORM
 from project.models import ProjectORM
@@ -92,4 +92,20 @@ class CreateTaskView(object):
 															description=description, price=price).execute()
 		body = WorkTaskSerializer.serializer(work_task)
 		status = 201
+		return body, status
+
+
+
+class GetAllTasksView(object):
+	def __init__(self, get_all_tasks_interactor):
+		self.get_all_tasks_interactor = get_all_tasks_interactor
+
+	@serialize_exception
+	def get(self, *args, **kwargs):
+		user = UserORM.objects.get(id=kwargs.get('user_id'))
+		project = ProjectORM.objects.get(user=user, id=kwargs.get('project_id'))
+		work_tasks = self.get_all_tasks_interactor.set_params(project=project).execute()
+
+		body = WorkTaskListSerializer.serializer(work_tasks)
+		status = 200
 		return body, status

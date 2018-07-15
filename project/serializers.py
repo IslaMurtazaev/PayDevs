@@ -15,3 +15,8 @@ class ProjectListSerializer(ListSerializer):
 class WorkTaskSerializer(BaseSerializer):
     model = WorkTask
     fields = ['id', 'project', 'title', 'description', 'price', 'completed', 'paid']
+
+
+class WorkTaskListSerializer(ListSerializer):
+    model = WorkTask
+    fields = ['id', 'project', 'title', 'description', 'price', 'completed', 'paid']

@@ -3,7 +3,7 @@ from project.models import ProjectORM, HourPaymentORM, MonthPaymentORM, WorkTask
 from PayDevs.exceptions import EntityDoesNotExistException, InvalidEntityException
 
 
-#------------------------Project---------------------------------------------#
+#------------------------ Project --------------------------------------------#
 
 class ProjectRepo(object):
     
@@ -77,8 +77,7 @@ class ProjectRepo(object):
             MonthPaymentORM(project=db_project, rate=rate).save()
     
 
-#---------------------------Work Task-----------------------------------------#
-
+#-------------------------- Work Task ----------------------------------------#
 
 class WorkTaskRepo(object):
 
@@ -91,6 +90,18 @@ class WorkTaskRepo(object):
                                           message="Unable to create such task")
         else:
             return self._decode_db_work_task(db_work_task)
+
+
+
+    def get_all_tasks(self, project):
+        try:
+            db_work_tasks = project.worktaskorm_set.all()
+        except:
+            raise InvalidEntityException(source='repositories', code='could not find',\
+                                          message="Unable to find tasks in specified project")
+        else:
+            return [self._decode_db_work_task(db_task) for db_task in db_work_tasks]
+
 
 
     def _decode_db_work_task(self, db_work_task):
