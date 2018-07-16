@@ -15,7 +15,7 @@ class ViewWrapper(View):
     def get(self, request, *args, **kwargs):
         kwargs.update(request.POST.dict())
         logged_user_id = self.auth_get_user(request)
-        kwargs.update({'user_id': logged_user_id}) 
+        kwargs.update({'user_id': logged_user_id})
         kwargs.update({'project_id': request.META.get('HTTP_PROJECT')})
         body, status = self.view_factory().get(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
@@ -24,10 +24,11 @@ class ViewWrapper(View):
         kwargs.update(request.POST.dict())
         kwargs.update({'secret_key': settings.SECRET_KEY})
         logged_user_id = self.auth_get_user(request)
-        kwargs.update({'user_id': logged_user_id}) 
-        kwargs.update({'project_id': request.META.get('HTTP_PROJECT')})       
+        kwargs.update({'user_id': logged_user_id})
+        kwargs.update({'project_id': request.META.get('HTTP_PROJECT')})
         body, status = self.view_factory().post(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
+
 
 
     def auth_get_user(self, request):

@@ -6,7 +6,7 @@ from PayDevs.exceptions import EntityDoesNotExistException, InvalidEntityExcepti
 #------------------------ Project --------------------------------------------#
 
 class ProjectRepo(object):
-    
+
     def get_project(self, user, id=None, title=None):
         try:
             if id:
@@ -22,13 +22,13 @@ class ProjectRepo(object):
 
     def create_project(self, user, title, description, type_of_payment, rate):
         try:
-            db_project = ProjectORM(title=title, description=description, user=user,\
+            db_project = ProjectORM(title=title, description=description, user=user,
                                     type_of_payment=type_of_payment)
             db_project.save()
             self._set_rate(db_project, type_of_payment, rate)
         except:
-            raise InvalidEntityException(source='repositories', code='could not save',\
-                                          message="Unable to create such project")
+            raise InvalidEntityException(source='repositories', code='could not save',
+                                         message="Unable to create such project")
 
         return self._decode_db_project(db_project)
 
@@ -45,12 +45,27 @@ class ProjectRepo(object):
 
 
 
+    def update_project(self, user, project_id, new_attrs):
+        try:
+            db_project = user.projectorm_set.get(id=project_id)
+            print(new_attrs)
+            for key in new_attrs.keys():
+                if new_attrs[key] is not None:
+                    db_project.__dict__[key] = new_attrs[key]
+            db_project.save()
+        except ProjectORM.DoesNotExist:
+            raise InvalidEntityException(source='repositories', code='not allowed',
+                                         message="Unable to update project with provided attrs")
+        return self._decode_db_project(db_project)
+
+
+
     def get_total(self, user, title):
         try:
             db_project = ProjectORM.objects.get(user=user, title=title)
         except ProjectORM.DoesNotExist:
             raise EntityDoesNotExistException
-        
+
         if (db_project.type_of_payment.lower() == 'h_p'):
             raise NotImplementedError
         elif (db_project.type_of_payment.lower() == 'm_p'):
@@ -59,7 +74,7 @@ class ProjectRepo(object):
             return self._get_tasks_total(db_project)
 
 
-    
+
     def _get_tasks_total(self, db_project):
         try:
             tasks = db_project.worktaskorm_set.all()
@@ -68,12 +83,12 @@ class ProjectRepo(object):
                 if (task.completed and not task.paid):
                     total += task.price
         except:
-            raise InvalidEntityException(source='repositories', code='could not sum total',\
-                                          message="'%s' task attribute is invalid" % task.title)
-        return total        
-    
+            raise InvalidEntityException(source='repositories', code='could not sum total',
+                                         message="'%s' task attribute is invalid" % task.title)
+        return total
 
-        
+
+
     def _decode_db_project(self, db_project):
         fileds = {
             'id': db_project.id,
@@ -94,7 +109,7 @@ class ProjectRepo(object):
             HourPaymentORM(project=db_project, rate=rate).save()
         elif (db_project.type_of_payment.lower() == 'm_p'):
             MonthPaymentORM(project=db_project, rate=rate).save()
-    
+
 
 #-------------------------- Work Task ----------------------------------------#
 
@@ -105,8 +120,8 @@ class WorkTaskRepo(object):
             db_work_task = WorkTaskORM(project=project, title=title, description=description, price=price)
             db_work_task.save()
         except:
-            raise InvalidEntityException(source='repositories', code='could not save',\
-                                          message="Unable to create such task")
+            raise InvalidEntityException(source='repositories', code='could not save',
+                                         message="Unable to create such task")
         else:
             return self._decode_db_work_task(db_work_task)
 
@@ -116,8 +131,8 @@ class WorkTaskRepo(object):
         try:
             db_work_tasks = project.worktaskorm_set.all()
         except:
-            raise InvalidEntityException(source='repositories', code='could not find',\
-                                          message="Unable to find tasks in specified project")
+            raise InvalidEntityException(source='repositories', code='could not find',
+                                         message="Unable to find tasks in specified project")
         else:
             return [self._decode_db_work_task(db_task) for db_task in db_work_tasks]
 

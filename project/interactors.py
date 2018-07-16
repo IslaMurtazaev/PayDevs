@@ -1,5 +1,4 @@
 from PayDevs.interactors import Interactor
-from project.entities import Project
 
 
 #------------------------ Project ---------------------------------------------#
@@ -33,8 +32,8 @@ class CreateProjectInteractor(Interactor):
         return self
     
     def execute(self):
-        return self.project_repo.create_project(self.user, self.title, self.description,\
-                                                 self.type_of_payment, self.rate)
+        return self.project_repo.create_project(user=self.user, title=self.title, description=self.description,
+                                                type_of_payment=self.type_of_payment, rate=self.rate)
 
 
 
@@ -50,6 +49,23 @@ class GetAllProjectsInteractor(Interactor):
     def execute(self):
         return self.project_repo.get_all_projects(self.user)
 
+
+
+
+class UpdateProjectInteractor(Interactor):
+
+    def __init__(self, project_repo):
+        self.project_repo = project_repo
+
+    def set_params(self, user, project_id, project_new_attrs, *args, **kwargs):
+        self.user = user
+        self.project_id = project_id
+        self.project_new_attrs = project_new_attrs
+        return self
+
+    def execute(self):
+        return self.project_repo.update_project(user=self.user, project_id=self.project_id,
+                                                new_attrs=self.project_new_attrs)
 
 
 
@@ -93,7 +109,7 @@ class GetAllTasksInteractor(Interactor):
         self.work_task_repo = work_task_repo
 
     def set_params(self, project):
-        self.project=project
+        self.project = project
         return self
 
     def execute(self):
