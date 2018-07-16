@@ -1,3 +1,4 @@
+from account.models import UserORM
 from project.entities import Project, WorkTask
 from project.models import ProjectORM, HourPaymentORM, MonthPaymentORM, WorkTaskORM
 from PayDevs.exceptions import EntityDoesNotExistException, InvalidEntityException
@@ -6,13 +7,15 @@ from PayDevs.exceptions import EntityDoesNotExistException, InvalidEntityExcepti
 #------------------------ Project --------------------------------------------#
 
 class ProjectRepo(object):
-    
-    def get_project(self, user, id=None, title=None):
+
+    def get_project(self, user_id, project_id=None, title=None):
         try:
-            if id:
-                db_project = user.projectorm_set.get(id=id)
+            db_user = UserORM.objects.get(id=user_id)
+
+            if project_id:
+                db_project = db_user.projectorm_set.get(id=project_id)
             else:
-                db_project = user.projectorm_set.get(title=title)
+                db_project = db_user.projectorm_set.get(title=title)
         except ProjectORM.DoesNotExist:
             raise EntityDoesNotExistException
 
@@ -20,23 +23,27 @@ class ProjectRepo(object):
 
 
 
-    def create_project(self, user, title, description, type_of_payment, rate):
+    def create_project(self, user_id, title, description, type_of_payment, rate):
         try:
-            db_project = ProjectORM(title=title, description=description, user=user,\
+            db_user = UserORM.objects.get(id=user_id)
+
+            db_project = ProjectORM(title=title, description=description, user=db_user,
                                     type_of_payment=type_of_payment)
             db_project.save()
-            self._set_rate(db_project, type_of_payment, rate)
+            self._set_rate(db_project, rate)
         except:
-            raise InvalidEntityException(source='repositories', code='could not save',\
-                                          message="Unable to create such project")
+            raise InvalidEntityException(source='repositories', code='could not save',
+                                         message="Unable to create such project")
 
         return self._decode_db_project(db_project)
 
 
 
-    def get_all_projects(self, user):
+    def get_all_projects(self, user_id):
         try:
-            db_projects = user.projectorm_set.all()
+            db_user = UserORM.objects.get(id=user_id)
+
+            db_projects = db_user.projectorm_set.all()
         except ProjectORM.DoesNotExist:
             raise EntityDoesNotExistException
         else:
@@ -45,12 +52,32 @@ class ProjectRepo(object):
 
 
 
-    def get_total(self, user, title):
+    def update_project(self, user_id, project_id, new_attrs):
         try:
-            db_project = ProjectORM.objects.get(user=user, title=title)
+            db_user = UserORM.objects.get(id=user_id)
+
+            db_project = db_user.projectorm_set.get(id=project_id)
+
+            for key in new_attrs.keys():
+                if new_attrs[key] is not None:
+                    db_project.__dict__[key] = new_attrs[key]
+
+            db_project.save()
+        except ProjectORM.DoesNotExist:
+            raise InvalidEntityException(source='repositories', code='not allowed',
+                                         message="Unable to update project with provided attrs")
+        return self._decode_db_project(db_project)
+
+
+
+    def get_total(self, user_id, project_id):
+        try:
+            db_user = UserORM.objects.get(id=user_id)
+
+            db_project = ProjectORM.objects.get(user=db_user, id=project_id)
         except ProjectORM.DoesNotExist:
             raise EntityDoesNotExistException
-        
+
         if (db_project.type_of_payment.lower() == 'h_p'):
             raise NotImplementedError
         elif (db_project.type_of_payment.lower() == 'm_p'):
@@ -59,7 +86,7 @@ class ProjectRepo(object):
             return self._get_tasks_total(db_project)
 
 
-    
+
     def _get_tasks_total(self, db_project):
         try:
             tasks = db_project.worktaskorm_set.all()
@@ -68,12 +95,12 @@ class ProjectRepo(object):
                 if (task.completed and not task.paid):
                     total += task.price
         except:
-            raise InvalidEntityException(source='repositories', code='could not sum total',\
-                                          message="'%s' task attribute is invalid" % task.title)
-        return total        
-    
+            raise InvalidEntityException(source='repositories', code='could not sum total',
+                                         message="'%s' task attribute is invalid" % task.title)
+        return total
 
-        
+
+
     def _decode_db_project(self, db_project):
         fileds = {
             'id': db_project.id,
@@ -89,35 +116,41 @@ class ProjectRepo(object):
         return Project(**fileds)
 
 
-    def _set_rate(self, db_project, type_of_payment, rate):
+    def _set_rate(self, db_project, rate):
         if (db_project.type_of_payment.lower() == 'h_p'):
             HourPaymentORM(project=db_project, rate=rate).save()
         elif (db_project.type_of_payment.lower() == 'm_p'):
             MonthPaymentORM(project=db_project, rate=rate).save()
-    
+
 
 #-------------------------- Work Task ----------------------------------------#
 
 class WorkTaskRepo(object):
 
-    def create_work_task(self, project, title, description, price):
+    def create_work_task(self, user_id, project_id, title, description, price):
         try:
-            db_work_task = WorkTaskORM(project=project, title=title, description=description, price=price)
+            db_user = UserORM.objects.get(id=user_id)
+            db_project = ProjectORM.objects.get(user=db_user, id=project_id)
+
+            db_work_task = WorkTaskORM(project=db_project, title=title, description=description, price=price)
             db_work_task.save()
         except:
-            raise InvalidEntityException(source='repositories', code='could not save',\
-                                          message="Unable to create such task")
+            raise InvalidEntityException(source='repositories', code='could not save',
+                                         message="Unable to create such task")
         else:
             return self._decode_db_work_task(db_work_task)
 
 
 
-    def get_all_tasks(self, project):
+    def get_all_tasks(self, user_id, project_id):
         try:
-            db_work_tasks = project.worktaskorm_set.all()
+            db_user = UserORM.objects.get(id=user_id)
+            db_project = ProjectORM.objects.get(id=project_id)
+
+            db_work_tasks = db_project.worktaskorm_set.all()
         except:
-            raise InvalidEntityException(source='repositories', code='could not find',\
-                                          message="Unable to find tasks in specified project")
+            raise InvalidEntityException(source='repositories', code='could not find',
+                                         message="Unable to find tasks in specified project")
         else:
             return [self._decode_db_work_task(db_task) for db_task in db_work_tasks]
 

@@ -1,5 +1,4 @@
 from PayDevs.interactors import Interactor
-from project.entities import Project
 
 
 #------------------------ Project ---------------------------------------------#
@@ -9,13 +8,14 @@ class GetProjectInteractor(Interactor):
     def __init__(self, project_repo):
         self.project_repo = project_repo
 
-    def set_params(self, user, title, *args, **kwargs):
-        self.user = user
+    def set_params(self, user_id, title, project_id, *args, **kwargs):
+        self.user_id = user_id
         self.title = title
+        self.project_id = project_id
         return self
 
     def execute(self):
-        return self.project_repo.get_project(user=self.user, title=self.title)
+        return self.project_repo.get_project(user_id=self.user_id, title=self.title, project_id=self.project_id)
 
 
 
@@ -24,8 +24,8 @@ class CreateProjectInteractor(Interactor):
     def __init__(self, project_repo):
         self.project_repo = project_repo
 
-    def set_params(self, user, title, description, type_of_payment, rate, *args, **kwargs):
-        self.user = user
+    def set_params(self, user_id, title, description, type_of_payment, rate, *args, **kwargs):
+        self.user_id = user_id
         self.title = title
         self.description = description
         self.type_of_payment = type_of_payment
@@ -33,8 +33,8 @@ class CreateProjectInteractor(Interactor):
         return self
     
     def execute(self):
-        return self.project_repo.create_project(self.user, self.title, self.description,\
-                                                 self.type_of_payment, self.rate)
+        return self.project_repo.create_project(user_id=self.user_id, title=self.title, description=self.description,
+                                                type_of_payment=self.type_of_payment, rate=self.rate)
 
 
 
@@ -43,13 +43,30 @@ class GetAllProjectsInteractor(Interactor):
     def __init__(self, project_repo):
         self.project_repo = project_repo
 
-    def set_params(self, user, *args, **kwargs):
-        self.user = user
+    def set_params(self, user_id, *args, **kwargs):
+        self.user_id = user_id
         return self
 
     def execute(self):
-        return self.project_repo.get_all_projects(self.user)
+        return self.project_repo.get_all_projects(self.user_id)
 
+
+
+
+class UpdateProjectInteractor(Interactor):
+
+    def __init__(self, project_repo):
+        self.project_repo = project_repo
+
+    def set_params(self, user_id, project_id, project_new_attrs, *args, **kwargs):
+        self.user_id = user_id
+        self.project_id = project_id
+        self.project_new_attrs = project_new_attrs
+        return self
+
+    def execute(self):
+        return self.project_repo.update_project(user_id=self.user_id, project_id=self.project_id,
+                                                new_attrs=self.project_new_attrs)
 
 
 
@@ -58,13 +75,13 @@ class GetTotalInteractor(Interactor):
     def __init__(self, project_repo):
         self.project_repo = project_repo
 
-    def set_params(self, user, title, *args, **kwargs):
-        self.user = user
-        self.title = title
+    def set_params(self, user_id, project_id, *args, **kwargs):
+        self.user_id = user_id
+        self.project_id = project_id
         return self
 
     def execute(self):
-        return self.project_repo.get_total(self.user, self.title)
+        return self.project_repo.get_total(self.user_id, self.project_id)
 
 
 
@@ -76,15 +93,17 @@ class CreateTaskInteractor(Interactor):
     def __init__(self, work_task_repo):
         self.work_task_repo = work_task_repo
 
-    def set_params(self, project, title, description, price, *args, **kwargs):
-        self.project = project
+    def set_params(self, user_id, project_id, title, description, price, *args, **kwargs):
+        self.user_id = user_id
+        self.project_id = project_id
         self.title = title
         self.description = description
         self.price = price
         return self
 
     def execute(self):
-        return self.work_task_repo.create_work_task(self.project, self.title, self.description, self.price)
+        return self.work_task_repo.create_work_task(user_id=self.user_id, project_id=self.project_id, title=self.title,
+                                                    description=self.description, price=self.price)
 
 
 
@@ -92,9 +111,10 @@ class GetAllTasksInteractor(Interactor):
     def __init__(self, work_task_repo):
         self.work_task_repo = work_task_repo
 
-    def set_params(self, project):
-        self.project=project
+    def set_params(self, user_id, project_id):
+        self.user_id = user_id
+        self.project_id = project_id
         return self
 
     def execute(self):
-        return self.work_task_repo.get_all_tasks(self.project)
+        return self.work_task_repo.get_all_tasks(user_id=self.user_id, project_id=self.project_id)
