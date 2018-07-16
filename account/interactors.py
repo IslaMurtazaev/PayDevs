@@ -47,7 +47,7 @@ class RegisterUserInteractor(Interactor):
         valid_user = User(username=self.username, email=self.email)
         self.validate_username.validate(username=self.username, user=valid_user)
         self.validate_email.validate(email=self.email, user=valid_user)
-        self.password = self.hashed_password.hashed(password=self.password, user=valid_user)
+        self.password = self.hashed_password(password=self.password, user=valid_user)
         new_user = self.user_repo.create_default_user(username=self.username)
         user_update = User(id=new_user.id, username=self.username, email=self.email, password=self.password,
                            is_active=True)
