@@ -1,10 +1,11 @@
 from django.test import TestCase
 from datetime import timedelta
 from django.utils import timezone
-from django.contrib.auth.models import User
 from account.models import UserORM
 from project.models import ProjectORM, HourPaymentORM, WorkTimeORM, WorkTaskORM, MonthPaymentORM, WorkDayORM
+from project.entities import Project
 from project.repositories import ProjectRepo, WorkTaskRepo
+from PayDevs.exceptions import *
 
 
 # -------------------------- Project_Tests ------------------------------------- #
@@ -12,15 +13,119 @@ from project.repositories import ProjectRepo, WorkTaskRepo
 class ProjectMethodTest(TestCase):
 
     def setUp(self):
-        user = UserORM(username="islam", password='sizam123')
-        user.save()
-        self.user_id = user.id
+        self.user = UserORM(username="islam", password='sizam123')
+        self.user.save()
+        self.project_repo = ProjectRepo()
 
-        self.project = ProjectORM(title="My Firs Project", user=user, type_of_payment='T_P')
+        self.project = ProjectORM(title="PayDevs", description="Time is Money", user=self.user, type_of_payment='T_P',
+                                  end_date=timezone.now() + timedelta(days=30), status=True)
         self.project.save()
-        self.project_id = self.project.id
 
 
+
+    def test_get_method(self):
+        project1 = self.project_repo.get(user_id=self.user.id, project_id=self.project.id)
+        project2 = self.project_repo.get(user_id=self.user.id, title=self.project.title)
+
+        self.assertIsNotNone(project1)
+
+        self.assertTrue(project1.__dict__ == project2.__dict__)
+
+        self.assertEqual(project1.title, "PayDevs")
+
+        self.assertEqual(project1.description, "Time is Money")
+
+        self.assertEqual(project1.type_of_payment, "T_P")
+
+        self.assertTrue(project1.status)
+
+        with self.assertRaises(NoPermissionException):
+            self.project_repo.get(user_id=self.user.id+1, project_id=self.project.id)
+
+        with self.assertRaises(EntityDoesNotExistException):
+            self.project_repo.get(user_id=self.user.id, project_id=self.project.id+1)
+
+
+
+    def test_create_method(self):
+        project1 = self.project_repo.create(self.user.id, "TestingTesting", "1..2..3..", "H_P", 12)
+
+        self.assertIsNotNone(project1)
+
+        self.assertEqual(project1.title, "TestingTesting")
+
+        self.assertEqual(project1.description, "1..2..3..")
+
+        self.assertTrue(project1.status)
+
+        with self.assertRaises(NoPermissionException):
+            self.project_repo.create(self.user.id+1, "TestingTesting", "1..2..3..", "H_P", 12)
+
+
+    def test_set_rate_private_methd(self):
+
+        project1 = self.project_repo.create(self.user.id, "TestingTesting", "1..2..3..", "H_P", 12)
+
+        self.assertEqual(HourPaymentORM.objects.get(project=project1.id).rate, 12)
+
+        # self.assertGreater(len(project1.hourpaymentorm_set.all()), 0)
+
+
+
+
+    def test_update_method(self):
+        new_attrs = {
+            'title': "PayDevs300",
+            'description': "Bla-bla-bla",
+            'type_of_payment': "M_P",
+            'status': False
+        }
+        self.project_repo.update(self.user.id, self.project.id, new_attrs)
+
+        updated_project = ProjectORM.objects.get(id=self.project.id)
+
+        self.assertEqual(updated_project.title, "PayDevs300")
+
+        self.assertEqual(updated_project.description, "Bla-bla-bla")
+
+        self.assertEqual(updated_project.type_of_payment, "M_P")
+
+        self.assertFalse(updated_project.status)
+
+
+        new_attrs_with_None = {
+            'title': "TimeTracker",
+            'description': 'new name sucks',
+            'type_of_payment': None,
+            'status': None
+        }
+        self.project_repo.update(self.user.id, self.project.id, new_attrs_with_None)
+
+        updated_project = ProjectORM.objects.get(id=self.project.id)
+
+        self.assertEqual(updated_project.title, "TimeTracker")
+
+        self.assertEqual(updated_project.description, "new name sucks")
+
+        self.assertEqual(updated_project.type_of_payment, "M_P")
+
+        self.assertFalse(updated_project.status)
+
+        with self.assertRaises(NoPermissionException):
+            self.project_repo.update(self.user.id+1, self.project.id, {})
+
+        with self.assertRaises(NoPermissionException):
+            self.project_repo.update(self.user.id, self.project.id+1, {})
+
+        with self.assertRaises(InvalidEntityException):
+            self.project_repo.update(self.user.id, self.project.id, {'not_existing_field': True})
+
+
+    def test_decode_private_method(self):
+
+        project_entity = self.project_repo._decode_db_project(self.project)
+
+        self.assertTrue(isinstance(project_entity, Project))
 
 
 # ------------------------ TaskWork_Tests -------------------------------------- #
@@ -37,7 +142,7 @@ class WorkTaskMethodTest(TestCase):
         self.project_id = self.project.id
 
 
-    def test_method_get_total(self):
+    def test_get_total_method(self):
         for i in range(10):
             worked_task = WorkTaskORM(title='My Task number %s' % i, price=10 * (i + 1), completed=True, project=self.project)
             worked_task.save()
@@ -48,7 +153,7 @@ class WorkTaskMethodTest(TestCase):
         self.assertEqual(total, 550)
 
 
-    def test_method_get_total_paid(self):
+    def test_get_total_paid_method(self):
         worked_task = WorkTaskORM(title='My Task number %s' % 100, price=100000, completed=True, paid=True, project=self.project)
         worked_task.save()
 

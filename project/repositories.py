@@ -54,7 +54,7 @@ class ProjectRepo(object):
         return projects
 
 
-
+    # TODO add 'rate' to update method
     def update(self, user_id, project_id, new_attrs):
         try:
             db_user = UserORM.objects.get(id=user_id)
@@ -62,7 +62,8 @@ class ProjectRepo(object):
 
             for key in new_attrs.keys():
                 if new_attrs[key] is not None:
-                    db_project.__dict__[key] = new_attrs[key]
+                    db_project.__getattribute__(key) # TODO add validator for this
+                    db_project.__setattr__(key, new_attrs[key])
 
             db_project.save()
 
@@ -110,6 +111,7 @@ class ProjectRepo(object):
 
 
     def _decode_db_project(self, db_project):
+        # TODO make decode transform fields without making them strings
         fileds = {
             'id': db_project.id,
             'user': str(db_project.user),
@@ -127,6 +129,7 @@ class ProjectRepo(object):
     def _set_rate(self, db_project, rate):
         if (db_project.type_of_payment.lower() == 'h_p'):
             HourPaymentORM(project=db_project, rate=rate).save()
+            print('enter')
         elif (db_project.type_of_payment.lower() == 'm_p'):
             MonthPaymentORM(project=db_project, rate=rate).save()
 
