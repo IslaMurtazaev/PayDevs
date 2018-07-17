@@ -70,6 +70,7 @@ class UpdateProjectView(object):
     def post(self, *args, **kwargs):
         project_new_attrs = {
             'title': kwargs.get('title'),
+            'description': kwargs.get('description'),
             'start_date': kwargs.get('start_date'),
             'end_date': kwargs.get('end_date'),
             'type_of_payment': kwargs.get('type_of_payment'),
@@ -141,6 +142,33 @@ class CreateTaskView(object):
                                                            description=description, price=price).execute()
         body = WorkTaskSerializer.serializer(task)
         status = 201
+        return body, status
+
+
+
+
+class UpdateTaskView(object):
+
+    def __init__(self, update_task_interactor):
+        self.update_task_interactor = update_task_interactor
+
+    @serialize_exception
+    def post(self, *args, **kwargs):
+        user_id = kwargs.get('user_id')
+        project_id = kwargs.get('project_id')
+        task_id = kwargs.get('task_id')
+        new_attrs = {
+            'title': kwargs.get('title'),
+            'description': kwargs.get('description'),
+            'price': kwargs.get('price'),
+            'completed': kwargs.get('completed'),
+            'paid': kwargs.get('paid')
+        }
+
+        modified_task = self.update_task_interactor.set_params(user_id=user_id, project_id=project_id, task_id=task_id,
+                                                               new_attrs=new_attrs).execute()
+        body = WorkTaskSerializer.serializer(modified_task)
+        status = 200
         return body, status
 
 
