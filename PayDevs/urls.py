@@ -28,6 +28,6 @@ urlpatterns = [
     path('users/all', ViewWrapper.as_view(view_factory=get_user_all_factories)),
     path('users/create', csrf_exempt(ViewWrapper.as_view(view_factory=get_user_regist_factories)), name='create_user'),
     path('users/login', csrf_exempt(ViewWrapper.as_view(view_factory=get_user_login_factories)), name='login_user'),
-    path('users/<slug:username>', ViewWrapper.as_view(view_factory=get_user_factories)),
+    path('users/', ViewWrapper.as_view(view_factory=get_user_factories), name='get_user'),
 
 ]
