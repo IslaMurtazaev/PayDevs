@@ -15,16 +15,18 @@ class ViewWrapper(View):
     def get(self, request, *args, **kwargs):
         kwargs.update(request.POST.dict())
         logged_user_id = self.auth_get_user(request)
-        kwargs.update({'user_id': logged_user_id, 'project_id': request.META.get('HTTP_PROJECT')})
+        kwargs.update({'user_id': logged_user_id, 'project_id': request.META.get('HTTP_PROJECT'),
+                       'task_id': request.META.get('HTTP_TASK')})
         body, status = self.view_factory().get(*args, **kwargs)
-        print(self.view_factory)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
     def post(self, request, *args, **kwargs):
         kwargs.update(request.POST.dict())
+        json_data = json.loads(str(request.body, encoding='utf-8'))
+        kwargs.update(json_data)
         kwargs.update({'secret_key': settings.SECRET_KEY})
         logged_user_id = self.auth_get_user(request)
-        kwargs.update({'user_id': logged_user_id, 'project_id': request.META.get('HTTP_PROJECT')})
+        kwargs.update({'user_id': logged_user_id})
         body, status = self.view_factory().post(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
@@ -40,11 +42,11 @@ class ViewWrapper(View):
         return logged_id
 
 
-def index(request):
-    return render(request, 'index.html')
-
-def login(request):
-    return render(request, 'login.html')
-
-def create_project(request):
-    return render(request, 'create_project.html')
+# def index(request):
+#     return render(request, 'index.html')
+#
+# def login(request):
+#     return render(request, 'login.html')
+#
+# def create_project(request):
+#     return render(request, 'create_project.html')

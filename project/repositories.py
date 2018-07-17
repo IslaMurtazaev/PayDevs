@@ -1,7 +1,7 @@
 from account.models import UserORM
 from project.entities import Project, WorkTask
 from project.models import ProjectORM, HourPaymentORM, MonthPaymentORM, WorkTaskORM
-from PayDevs.exceptions import EntityDoesNotExistException, InvalidEntityException
+from PayDevs.exceptions import EntityDoesNotExistException, InvalidEntityException, NoPermissionException
 
 
 #------------------------ Project --------------------------------------------#
@@ -16,7 +16,8 @@ class ProjectRepo(object):
                 db_project = db_user.projectorm_set.get(id=project_id)
             else:
                 db_project = db_user.projectorm_set.get(title=title)
-        except ProjectORM.DoesNotExist:
+
+        except (UserORM.DoesNotExist, ProjectORM.DoesNotExist):
             raise EntityDoesNotExistException
 
         return self._decode_db_project(db_project)
@@ -26,7 +27,10 @@ class ProjectRepo(object):
     def create_project(self, user_id, title, description, type_of_payment, rate):
         try:
             db_user = UserORM.objects.get(id=user_id)
+        except UserORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user id")
 
+        try:
             db_project = ProjectORM(title=title, description=description, user=db_user,
                                     type_of_payment=type_of_payment)
             db_project.save()
@@ -42,30 +46,33 @@ class ProjectRepo(object):
     def get_all_projects(self, user_id):
         try:
             db_user = UserORM.objects.get(id=user_id)
-
             db_projects = db_user.projectorm_set.all()
-        except ProjectORM.DoesNotExist:
-            raise EntityDoesNotExistException
-        else:
-            projects = [self._decode_db_project(db_project) for db_project in db_projects]
-            return projects
+        except (UserORM.DoesNotExist, ProjectORM.DoesNotExist):
+            raise NoPermissionException(message="Invalid user id")
+
+        projects = [self._decode_db_project(db_project) for db_project in db_projects]
+        return projects
 
 
 
     def update_project(self, user_id, project_id, new_attrs):
         try:
             db_user = UserORM.objects.get(id=user_id)
-
             db_project = db_user.projectorm_set.get(id=project_id)
+        except UserORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user id")
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid project id")
 
+        try:
             for key in new_attrs.keys():
                 if new_attrs[key] is not None:
                     db_project.__dict__[key] = new_attrs[key]
 
             db_project.save()
-        except ProjectORM.DoesNotExist:
+        except:
             raise InvalidEntityException(source='repositories', code='not allowed',
-                                         message="Unable to update project with provided attrs")
+                                         message="Unable to update project with provided attr "+ str(key))
         return self._decode_db_project(db_project)
 
 
@@ -73,10 +80,11 @@ class ProjectRepo(object):
     def get_total(self, user_id, project_id):
         try:
             db_user = UserORM.objects.get(id=user_id)
-
             db_project = ProjectORM.objects.get(user=db_user, id=project_id)
+        except UserORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user id")
         except ProjectORM.DoesNotExist:
-            raise EntityDoesNotExistException
+            raise NoPermissionException(message="Invalid project id")
 
         if (db_project.type_of_payment.lower() == 'h_p'):
             raise NotImplementedError
@@ -127,32 +135,87 @@ class ProjectRepo(object):
 
 class WorkTaskRepo(object):
 
-    def create_work_task(self, user_id, project_id, title, description, price):
+    def get(self, user_id, project_id, task_id, title):
         try:
             db_user = UserORM.objects.get(id=user_id)
             db_project = ProjectORM.objects.get(user=db_user, id=project_id)
+        except UserORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user id")
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid project id")
 
+        try:
+            if task_id:
+                db_work_task = WorkTaskORM.objects.get(project=db_project, id=task_id)
+            else:
+                db_work_task = WorkTaskORM.objects.get(project=db_project, title=title)
+        except WorkTaskORM.DoesNotExist:
+            raise EntityDoesNotExistException
+
+        return self._decode_db_work_task(db_work_task)
+
+
+
+    def create(self, user_id, project_id, title, description, price):
+        try:
+            db_user = UserORM.objects.get(id=user_id)
+            db_project = ProjectORM.objects.get(user=db_user, id=project_id)
+        except UserORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user id")
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid project id")
+
+        try:
             db_work_task = WorkTaskORM(project=db_project, title=title, description=description, price=price)
             db_work_task.save()
         except:
             raise InvalidEntityException(source='repositories', code='could not save',
                                          message="Unable to create such task")
-        else:
-            return self._decode_db_work_task(db_work_task)
+
+        return self._decode_db_work_task(db_work_task)
 
 
 
-    def get_all_tasks(self, user_id, project_id):
+    def update(self, user_id, project_id, task_id, new_attrs):
         try:
             db_user = UserORM.objects.get(id=user_id)
-            db_project = ProjectORM.objects.get(id=project_id)
+            db_project = ProjectORM.objects.get(user=db_user, id=project_id)
+            db_work_task = WorkTaskORM.objects.get(project=db_project, id=task_id)
+        except UserORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user id")
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid project id")
+        except WorkTaskORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid task id")
 
+        try:
+            for attr in new_attrs.keys():
+                if attr is not None:
+                    db_work_task.__dict__[attr] = new_attrs[attr]
+
+            db_work_task.save()
+        except:
+            raise InvalidEntityException(source='repositories', code='could not update',
+                                         message="'%s' attribute is invalid" % attr)
+
+        return self._decode_db_work_task(db_work_task)
+
+
+
+    def get_all(self, user_id, project_id):
+        try:
+            db_user = UserORM.objects.get(id=user_id)
+            db_project = ProjectORM.objects.get(user=db_user, id=project_id)
+        except (UserORM.DoesNotExist, ProjectORM.DoesNotExist):
+            raise NoPermissionException(message="Invalid user or project id")
+
+        try:
             db_work_tasks = db_project.worktaskorm_set.all()
         except:
             raise InvalidEntityException(source='repositories', code='could not find',
                                          message="Unable to find tasks in specified project")
-        else:
-            return [self._decode_db_work_task(db_task) for db_task in db_work_tasks]
+
+        return [self._decode_db_work_task(db_task) for db_task in db_work_tasks]
 
 
 

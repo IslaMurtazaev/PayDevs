@@ -87,6 +87,23 @@ class GetTotalInteractor(Interactor):
 
 #--------------------------- Work Task ----------------------------------------#
 
+class GetTaskInteractor(Interactor):
+
+    def __init__(self, work_task_repo):
+        self.work_task_repo = work_task_repo
+
+    def set_params(self, user_id, project_id, task_id, title):
+        self.user_id = user_id
+        self.project_id = project_id
+        self.task_id = task_id
+        self.title = title
+        return self
+
+    def execute(self):
+        return self.work_task_repo.get(user_id=self.user_id, project_id=self.project_id, task_id=self.task_id, title=self.title)
+
+
+
 
 class CreateTaskInteractor(Interactor):
 
@@ -102,12 +119,33 @@ class CreateTaskInteractor(Interactor):
         return self
 
     def execute(self):
-        return self.work_task_repo.create_work_task(user_id=self.user_id, project_id=self.project_id, title=self.title,
+        return self.work_task_repo.create(user_id=self.user_id, project_id=self.project_id, title=self.title,
                                                     description=self.description, price=self.price)
 
 
 
+
+
+class UpdateTaskInteractor(Interactor):
+
+    def __init__(self, work_task_repo):
+        self.work_task_repo = work_task_repo
+
+    def set_params(self, user_id, project_id, task_id, new_attrs):
+        self.user_id = user_id
+        self.project_id = project_id
+        self.task_id = task_id
+        self.new_attrs = new_attrs
+        return self
+
+    def execute(self):
+        return self.work_task_repo.update(user_id=self.user_id, project_id=self.project_id, task_id=self.task_id,
+                                          new_attrs=self.new_attrs)
+
+
+
 class GetAllTasksInteractor(Interactor):
+
     def __init__(self, work_task_repo):
         self.work_task_repo = work_task_repo
 
@@ -117,4 +155,4 @@ class GetAllTasksInteractor(Interactor):
         return self
 
     def execute(self):
-        return self.work_task_repo.get_all_tasks(user_id=self.user_id, project_id=self.project_id)
+        return self.work_task_repo.get_all(user_id=self.user_id, project_id=self.project_id)
