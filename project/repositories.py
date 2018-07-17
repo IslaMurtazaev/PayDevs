@@ -17,7 +17,9 @@ class ProjectRepo(object):
             else:
                 db_project = db_user.projectorm_set.get(title=title)
 
-        except (UserORM.DoesNotExist, ProjectORM.DoesNotExist):
+        except UserORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user id")
+        except ProjectORM.DoesNotExist:
             raise EntityDoesNotExistException
 
         return self._decode_db_project(db_project)
@@ -27,14 +29,12 @@ class ProjectRepo(object):
     def create(self, user_id, title, description, type_of_payment, rate):
         try:
             db_user = UserORM.objects.get(id=user_id)
-        except UserORM.DoesNotExist:
-            raise NoPermissionException(message="Invalid user id")
-
-        try:
             db_project = ProjectORM(title=title, description=description, user=db_user,
                                     type_of_payment=type_of_payment)
             db_project.save()
             self._set_rate(db_project, rate)
+        except UserORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user id")
         except:
             raise InvalidEntityException(source='repositories', code='could not save',
                                          message="Unable to create such project")
@@ -59,17 +59,17 @@ class ProjectRepo(object):
         try:
             db_user = UserORM.objects.get(id=user_id)
             db_project = db_user.projectorm_set.get(id=project_id)
-        except UserORM.DoesNotExist:
-            raise NoPermissionException(message="Invalid user id")
-        except ProjectORM.DoesNotExist:
-            raise NoPermissionException(message="Invalid project id")
 
-        try:
             for key in new_attrs.keys():
                 if new_attrs[key] is not None:
                     db_project.__dict__[key] = new_attrs[key]
 
             db_project.save()
+
+        except UserORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user id")
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid project id")
         except:
             raise InvalidEntityException(source='repositories', code='not allowed',
                                          message="Unable to update project with provided attr "+ str(key))
@@ -139,16 +139,16 @@ class WorkTaskRepo(object):
         try:
             db_user = UserORM.objects.get(id=user_id)
             db_project = ProjectORM.objects.get(user=db_user, id=project_id)
-        except UserORM.DoesNotExist:
-            raise NoPermissionException(message="Invalid user id")
-        except ProjectORM.DoesNotExist:
-            raise NoPermissionException(message="Invalid project id")
 
-        try:
             if task_id:
                 db_work_task = WorkTaskORM.objects.get(project=db_project, id=task_id)
             else:
                 db_work_task = WorkTaskORM.objects.get(project=db_project, title=title)
+
+        except UserORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user id")
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid project id")
         except WorkTaskORM.DoesNotExist:
             raise EntityDoesNotExistException
 
@@ -160,14 +160,14 @@ class WorkTaskRepo(object):
         try:
             db_user = UserORM.objects.get(id=user_id)
             db_project = ProjectORM.objects.get(user=db_user, id=project_id)
+
+            db_work_task = WorkTaskORM(project=db_project, title=title, description=description, price=price)
+            db_work_task.save()
+
         except UserORM.DoesNotExist:
             raise NoPermissionException(message="Invalid user id")
         except ProjectORM.DoesNotExist:
             raise NoPermissionException(message="Invalid project id")
-
-        try:
-            db_work_task = WorkTaskORM(project=db_project, title=title, description=description, price=price)
-            db_work_task.save()
         except:
             raise InvalidEntityException(source='repositories', code='could not save',
                                          message="Unable to create such task")
@@ -181,19 +181,19 @@ class WorkTaskRepo(object):
             db_user = UserORM.objects.get(id=user_id)
             db_project = ProjectORM.objects.get(user=db_user, id=project_id)
             db_work_task = WorkTaskORM.objects.get(project=db_project, id=task_id)
+
+            for attr in new_attrs.keys():
+                if attr is not None:
+                    db_work_task.__dict__[attr] = new_attrs[attr]
+
+            db_work_task.save()
+
         except UserORM.DoesNotExist:
             raise NoPermissionException(message="Invalid user id")
         except ProjectORM.DoesNotExist:
             raise NoPermissionException(message="Invalid project id")
         except WorkTaskORM.DoesNotExist:
             raise NoPermissionException(message="Invalid task id")
-
-        try:
-            for attr in new_attrs.keys():
-                if attr is not None:
-                    db_work_task.__dict__[attr] = new_attrs[attr]
-
-            db_work_task.save()
         except:
             raise InvalidEntityException(source='repositories', code='could not update',
                                          message="'%s' attribute is invalid" % attr)
@@ -206,11 +206,13 @@ class WorkTaskRepo(object):
         try:
             db_user = UserORM.objects.get(id=user_id)
             db_project = ProjectORM.objects.get(user=db_user, id=project_id)
-        except (UserORM.DoesNotExist, ProjectORM.DoesNotExist):
-            raise NoPermissionException(message="Invalid user or project id")
 
-        try:
             db_work_tasks = db_project.worktaskorm_set.all()
+
+        except UserORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user id")
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid project id")
         except:
             raise InvalidEntityException(source='repositories', code='could not find',
                                          message="Unable to find tasks in specified project")
