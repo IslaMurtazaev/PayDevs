@@ -87,6 +87,23 @@ class GetTotalInteractor(Interactor):
 
 #--------------------------- Work Task ----------------------------------------#
 
+class GetTaskInteractor(Interactor):
+
+    def __init__(self, work_task_repo):
+        self.work_task_repo = work_task_repo
+
+    def set_params(self, user_id, project_id, task_id, title):
+        self.user_id = user_id
+        self.project_id = project_id
+        self.task_id = task_id
+        self.title = title
+        return self
+
+    def execute(self):
+        return self.work_task_repo.get_task(user_id=self.user_id, project_id=self.project_id, task_id=self.task_id, title=self.title)
+
+
+
 
 class CreateTaskInteractor(Interactor):
 

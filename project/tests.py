@@ -7,10 +7,26 @@ from project.models import ProjectORM, HourPaymentORM, WorkTimeORM, WorkTaskORM,
 from project.repositories import ProjectRepo, WorkTaskRepo
 
 
+# -------------------------- Project_Tests ------------------------------------- #
+
+class ProjectMethodTest(TestCase):
+
+    def setUp(self):
+        user = UserORM(username="islam", password='sizam123')
+        user.save()
+        self.user_id = user.id
+
+        self.project = ProjectORM(title="My Firs Project", user=user, type_of_payment='T_P')
+        self.project.save()
+        self.project_id = self.project.id
 
 
 
-class TaskPaymentMethodTest(TestCase):
+
+# ------------------------ TaskWork_Tests -------------------------------------- #
+
+class WorkTaskMethodTest(TestCase):
+
     def setUp(self):
         user = UserORM(username="admin", password='qwert12345')
         user.save()
@@ -19,7 +35,6 @@ class TaskPaymentMethodTest(TestCase):
         self.project = ProjectORM(title="My Firs Project", user=user, type_of_payment='T_P')
         self.project.save()
         self.project_id = self.project.id
-
 
 
     def test_method_get_total(self):
@@ -41,6 +56,7 @@ class TaskPaymentMethodTest(TestCase):
 
         self.assertEqual(type(total), int)
         self.assertEqual(total, 0)
+
 
 
 # class HourPaymentMethodTest(TestCase):

@@ -1,8 +1,8 @@
 from project.repositories import ProjectRepo, WorkTaskRepo
 from project.views import ProjectView, CreateProjectView, AllProjectsView, TotalView, CreateTaskView, \
-                            GetAllTasksView, UpdateProjectView
+                            GetAllTasksView, UpdateProjectView, GetTaskView
 from project.interactors import GetProjectInteractor, CreateProjectInteractor, GetAllProjectsInteractor, \
-                                 GetTotalInteractor, CreateTaskInteractor, GetAllTasksInteractor, UpdateProjectInteractor
+            GetTotalInteractor, CreateTaskInteractor, GetAllTasksInteractor, UpdateProjectInteractor, GetTaskInteractor
                                  
 
 
@@ -90,6 +90,21 @@ class WorkTaskRepoFactory(object):
     @staticmethod
     def get():
         return WorkTaskRepo()
+
+
+
+
+class GetTaskInteractorFactory(object):
+    @staticmethod
+    def get():
+        work_task_repo = WorkTaskRepoFactory.get()
+        return GetTaskInteractor(work_task_repo)
+
+
+
+def get_task_factory():
+    get_task_interactor = GetTaskInteractorFactory.get()
+    return GetTaskView(get_task_interactor)
 
 
 

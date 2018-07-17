@@ -106,6 +106,25 @@ class TotalView(object):
 
 #--------------------------- Work Task ----------------------------------------#
 
+class GetTaskView(object):
+
+    def __init__(self, get_task_interactor):
+        self.get_task_interactor = get_task_interactor
+
+    @serialize_exception
+    def get(self, *args, **kwargs):
+        user_id = kwargs.get('user_id')
+        project_id = kwargs.get('project_id')
+        task_id = kwargs.get('task_id')
+        task_title = kwargs.get('title')
+        task = self.get_task_interactor.set_params(user_id=user_id, project_id=project_id, task_id=task_id, title=task_title).execute()
+
+        body = WorkTaskSerializer.serializer(task)
+        status = 200
+        return body, status
+
+
+
 class CreateTaskView(object):
 
     def __init__(self, create_task_interactor):
@@ -118,9 +137,9 @@ class CreateTaskView(object):
         title = kwargs.get('title')
         description = kwargs.get('description')
         price = kwargs.get('price')
-        work_task = self.create_task_interactor.set_params(user_id=user_id, project_id=project_id, title=title,
+        task = self.create_task_interactor.set_params(user_id=user_id, project_id=project_id, title=title,
                                                            description=description, price=price).execute()
-        body = WorkTaskSerializer.serializer(work_task)
+        body = WorkTaskSerializer.serializer(task)
         status = 201
         return body, status
 
@@ -135,8 +154,8 @@ class GetAllTasksView(object):
     def get(self, *args, **kwargs):
         user_id = kwargs.get('user_id')
         project_id = kwargs.get('project_id')
-        work_tasks = self.get_all_tasks_interactor.set_params(user_id=user_id, project_id=project_id).execute()
+        tasks = self.get_all_tasks_interactor.set_params(user_id=user_id, project_id=project_id).execute()
 
-        body = WorkTaskListSerializer.serializer(work_tasks)
+        body = WorkTaskListSerializer.serializer(tasks)
         status = 200
         return body, status
