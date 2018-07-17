@@ -8,7 +8,7 @@ from PayDevs.exceptions import EntityDoesNotExistException, InvalidEntityExcepti
 
 class ProjectRepo(object):
 
-    def get_project(self, user_id, project_id=None, title=None):
+    def get(self, user_id, project_id=None, title=None):
         try:
             db_user = UserORM.objects.get(id=user_id)
 
@@ -24,7 +24,7 @@ class ProjectRepo(object):
 
 
 
-    def create_project(self, user_id, title, description, type_of_payment, rate):
+    def create(self, user_id, title, description, type_of_payment, rate):
         try:
             db_user = UserORM.objects.get(id=user_id)
         except UserORM.DoesNotExist:
@@ -43,7 +43,7 @@ class ProjectRepo(object):
 
 
 
-    def get_all_projects(self, user_id):
+    def get_all(self, user_id):
         try:
             db_user = UserORM.objects.get(id=user_id)
             db_projects = db_user.projectorm_set.all()
@@ -55,7 +55,7 @@ class ProjectRepo(object):
 
 
 
-    def update_project(self, user_id, project_id, new_attrs):
+    def update(self, user_id, project_id, new_attrs):
         try:
             db_user = UserORM.objects.get(id=user_id)
             db_project = db_user.projectorm_set.get(id=project_id)

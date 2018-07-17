@@ -15,7 +15,7 @@ class GetProjectInteractor(Interactor):
         return self
 
     def execute(self):
-        return self.project_repo.get_project(user_id=self.user_id, title=self.title, project_id=self.project_id)
+        return self.project_repo.get(user_id=self.user_id, title=self.title, project_id=self.project_id)
 
 
 
@@ -33,7 +33,7 @@ class CreateProjectInteractor(Interactor):
         return self
     
     def execute(self):
-        return self.project_repo.create_project(user_id=self.user_id, title=self.title, description=self.description,
+        return self.project_repo.create(user_id=self.user_id, title=self.title, description=self.description,
                                                 type_of_payment=self.type_of_payment, rate=self.rate)
 
 
@@ -48,7 +48,7 @@ class GetAllProjectsInteractor(Interactor):
         return self
 
     def execute(self):
-        return self.project_repo.get_all_projects(self.user_id)
+        return self.project_repo.get_all(self.user_id)
 
 
 
@@ -65,7 +65,7 @@ class UpdateProjectInteractor(Interactor):
         return self
 
     def execute(self):
-        return self.project_repo.update_project(user_id=self.user_id, project_id=self.project_id,
+        return self.project_repo.update(user_id=self.user_id, project_id=self.project_id,
                                                 new_attrs=self.project_new_attrs)
 
 
