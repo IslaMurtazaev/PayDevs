@@ -1,10 +1,4 @@
 from django.test import TestCase
-from datetime import timedelta
-from django.utils import timezone
-from django.contrib.auth.models import User
-from django.contrib.auth.models import User
-
-
 from account.models import UserORM
 from project.models import ProjectORM, HourPaymentORM, WorkTimeORM, WorkTaskORM, MonthPaymentORM, WorkDayORM
 from project.entities import Project
@@ -126,8 +120,24 @@ class ProjectMethodTest(TestCase):
             self.project_repo.update(self.user.id, self.project.id, {'not_existing_field': True})
 
 
-    def test_decode_private_method(self):
 
+    def test_delete_method(self):
+        deleted_project_entity = self.project_repo.delete(user_id=self.user.id, project_id=self.project.id)
+
+        self.assertEqual(deleted_project_entity.title, "PayDevs")
+
+        self.assertEqual(deleted_project_entity.description, "Time is Money")
+
+        self.assertEqual(deleted_project_entity.type_of_payment, "T_P")
+
+        self.assertTrue(deleted_project_entity.status)
+
+        with self.assertRaises(EntityDoesNotExistException):
+            self.project_repo.get(user_id=self.user.id, project_id=self.project.id)
+
+
+
+    def test_decode_private_method(self):
         project_entity = self.project_repo._decode_db_project(self.project)
 
         self.assertTrue(isinstance(project_entity, Project))
