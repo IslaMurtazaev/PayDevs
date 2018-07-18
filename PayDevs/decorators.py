@@ -1,5 +1,5 @@
 from PayDevs.exceptions import EntityDoesNotExistException, NoPermissionException, PayDevsException, \
-    EntityIntegrityException, InvalidEntityException
+    EntityIntegrityException, InvalidEntityException, NoLoggedException
 from PayDevs.serializer import ExampleExceptionSerializer
 
 exception_status_code = {
@@ -7,6 +7,7 @@ exception_status_code = {
     NoPermissionException: 403,
     EntityIntegrityException: 409,
     InvalidEntityException: 422,
+    NoLoggedException: 401,
 }
 
 
