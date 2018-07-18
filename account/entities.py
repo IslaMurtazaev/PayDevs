@@ -61,7 +61,3 @@ class TokenUser(object):
             'user_id': self.user_id,
         }
 
-
-
-
-

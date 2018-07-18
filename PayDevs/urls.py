@@ -17,9 +17,11 @@ from django.contrib import admin
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 
-from account.factories import get_user_factories, get_user_all_factories, get_user_regist_factories, \
-    get_user_login_factories
-from PayDevs.views import ViewWrapper, index, login
+from account.factories import get_user_factories, get_user_all_factories, get_user_regist_factories, get_user_login_factories
+from project.factories import get_project_factory, create_project_factory, get_all_projects_factory, get_total_factory, \
+    create_task_factory, get_all_tasks_factory, update_project_factory, get_task_factory, update_task_factory
+from PayDevs.views import ViewWrapper, index, login # create_project
+
 
 urlpatterns = [
     path('create_user/', index),
@@ -29,5 +31,16 @@ urlpatterns = [
     path('users/create', csrf_exempt(ViewWrapper.as_view(view_factory=get_user_regist_factories)), name='create_user'),
     path('users/login', csrf_exempt(ViewWrapper.as_view(view_factory=get_user_login_factories)), name='login_user'),
     path('users/', ViewWrapper.as_view(view_factory=get_user_factories), name='get_user'),
+    
+    # path('create_project/', create_project),
+    path('project', ViewWrapper.as_view(view_factory=get_project_factory), name='get_project'),
+    path('project/create', csrf_exempt(ViewWrapper.as_view(view_factory=create_project_factory)), name='create_project'),
+    path('project/update/', csrf_exempt(ViewWrapper.as_view(view_factory=update_project_factory)), name='update_project'),
+    path('project/all', ViewWrapper.as_view(view_factory=get_all_projects_factory), name='get_all_projects'),
+    path('project/total', ViewWrapper.as_view(view_factory=get_total_factory), name='get_total'),
 
+    path('project/task', ViewWrapper.as_view(view_factory=get_task_factory), name='get_task'),
+    path('project/task/create', csrf_exempt(ViewWrapper.as_view(view_factory=create_task_factory)), name='create_task'),
+    path('project/task/update', csrf_exempt(ViewWrapper.as_view(view_factory=update_task_factory)), name='update_task'),
+    path('project/task/all', ViewWrapper.as_view(view_factory=get_all_tasks_factory), name='get_all_tasks'),
 ]

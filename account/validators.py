@@ -109,7 +109,7 @@ class UserAttributeSimilarityValidator(object):
 
             value_parts = re.split(r'\W', value) + [value]
             for part in value_parts:
-                if SequenceMatcher(None, a=password.lower(), b=value.lower()) \
+                if SequenceMatcher(None, a=password.lower(), b=part.lower()) \
                         .quick_ratio() >= self.max_similarity:
                     raise InvalidEntityException(source='password', code='not allowed', \
                                                  message="Your password is too similar to your other fields.")
@@ -132,9 +132,10 @@ class CommonPasswordValidator(object):
         self.common_sequences = common_sequences
 
     def validate(self, password, user=None):
-        if password in self.common_sequences:
-            raise InvalidEntityException(source='password', code='not allowed', \
-                                         message="Your password is a common sequence.")
+        for sequence in self.common_sequences:
+            if password in sequence:
+                raise InvalidEntityException(source='password', code='not allowed', \
+                                             message="Your password is a common sequence.")
 
 
 class NumericPasswordValidator(object):

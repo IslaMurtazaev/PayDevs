@@ -14,18 +14,18 @@ class ViewWrapper(View):
 
     def get(self, request, *args, **kwargs):
         kwargs.update(request.POST.dict())
-        logged_user_id = self.auth_get_user(request)
-        kwargs.update({'user_id': logged_user_id})
+        kwargs.update(self.params(request))
         body, status = self.view_factory().get(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
     def post(self, request, *args, **kwargs):
         kwargs.update(request.POST.dict())
-        kwargs.update({'secret_key': settings.SECRET_KEY})
-        logged_user_id = self.auth_get_user(request)
-        kwargs.update({'user_id': logged_user_id})
+        # json_data = json.loads(str(request.body, encoding='utf-8'))
+        # kwargs.update(json_data)
+        kwargs.update(self.params(request))
         body, status = self.view_factory().post(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
+
 
 
     def auth_get_user(self, request):
@@ -34,14 +34,33 @@ class ViewWrapper(View):
             return None
         token = auth_header.replace('Token ', '')
         logged_id = AuthUserInteractorFactory().create().set_params(token=token,
-                                                                    secket_key=settings.SECRET_KEY).execute()
+                                                                    secret_key=settings.SECRET_KEY).execute()
         return logged_id
+
+
+    def params(self, request):
+        logged_user_id = self.auth_get_user(request)
+        return {
+                    'user_id': logged_user_id,
+                    'project_id': request.META.get('HTTP_PROJECT'),
+                    'task_id': request.META.get('HTTP_TASK'),
+                    'secret_key': settings.SECRET_KEY
+                }
+
+    def get_params(self, request):
+        pass
+
+    def post_params(self, request):
+        pass
 
 
 def index(request):
     return render(request, 'index.html')
 
 
-
 def login(request):
     return render(request, 'login.html')
+
+
+def create_project(request):
+    return render(request, 'create_project.html')

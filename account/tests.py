@@ -337,8 +337,8 @@ class ClientAccountTest(TestCase):
 
     def test_creat_user_get_token(self):
         response = self.client.post(reverse('create_user'), {'username': 'TestUser',
-                                                      'email': 'testuser@email.ru',
-                                                      'password': 'qwert12345'})
+                                                             'email': 'testuser@email.ru',
+                                                             'password': 'qwert12345'})
 
         body = json.loads(response.content.decode())
         self.assertEqual(response.status_code, 200)
@@ -355,7 +355,7 @@ class ClientAccountTest(TestCase):
                                                   'email': 'testuser@email.ru',
                                                   'password': 'qwert12345'})
         response = self.client.post(reverse('login_user'), {'username': 'TestUser',
-                                                     'password': 'qwert12345'})
+                                                            'password': 'qwert12345'})
 
         body = json.loads(response.content.decode())
         token = body.get('token')
@@ -366,4 +366,3 @@ class ClientAccountTest(TestCase):
         self.assertEqual(body.get('email'), 'testuser@email.ru')
         self.assertEqual(body.get('is_active'), True)
         self.assertEqual(body.get('is_staff'), False)
-
