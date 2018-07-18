@@ -46,37 +46,6 @@ class Project(object):
 
 
 
-class HourPayment(object):
-
-    def __init__(self, id=None, project=None, rate=0, start_rout_date=None, end_rout_date=None):
-        self._id = id
-        self._project = project
-        self._rate = rate
-        # self._start_rout_date = start_rout_date
-        # self._end_rout_date = end_rout_date
-
-
-    @property
-    def id(self):
-        return self._id
-
-    @property
-    def project(self):
-        return self._project
-
-    @property
-    def rate(self):
-        return self._rate
-
-    # @property
-    # def start_rout_date(self):
-    #     return self._start_rout_date
-    
-    # @property
-    # def end_rout_date(self):
-    #     return self._end_rout_date
-
-
 
 class WorkTime(object):
 
@@ -151,28 +120,6 @@ class WorkTask(object):
     def paid(self):
         return self._paid
 
-
-
-
-class MonthPayment(object):
-
-    def __init__(self, id=None, project=None, rate=None):
-        self._id = id 
-        self._project = project
-        self._rate = rate
-
-
-    @property
-    def id(self):
-        return self._id
-
-    @property
-    def project(self):
-        return self._project
-
-    @property
-    def rate(self):
-        return self._rate
 
 
 

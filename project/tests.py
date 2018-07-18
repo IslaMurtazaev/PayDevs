@@ -3,13 +3,14 @@ from account.models import UserORM
 from project.models import ProjectORM, HourPaymentORM, WorkTimeORM, WorkTaskORM, MonthPaymentORM, WorkDayORM
 from project.entities import Project
 from project.repositories import ProjectRepo, WorkTaskRepo
+from project.interactors import GetProjectInteractor, CreateProjectInteractor
 from PayDevs.exceptions import *
 from project.validators import *
 
 
 # -------------------------- Project_Tests ------------------------------------- #
 
-class ProjectMethodTest(TestCase):
+class ProjectRepoMethodTest(TestCase):
 
     def setUp(self):
         self.user = UserORM(username="islam", password='sizam123')
@@ -141,6 +142,30 @@ class ProjectMethodTest(TestCase):
         project_entity = self.project_repo._decode_db_project(self.project)
 
         self.assertTrue(isinstance(project_entity, Project))
+
+
+
+
+    class ProjectInteractorsTest(TestCase):
+
+        def setUp(self):
+            self.create_project_interactor = CreateProjectInteractor(ProjectRepo())
+            self.get_project_interactor = GetProjectInteractor(ProjectRepo())
+            self.user = UserORM(username="IslaMurtazaev", password="sizam123")
+
+
+        def test_methods(self):
+            self.create_project_interactor.project_repo.create(self.user.id, "title1", "description1", "T_P")
+            created_project = self.get_project_interactor.project_repo.get(self.user.id, "title1")
+
+            self.assertEqual(created_project.title, "title1")
+
+            self.assertEqual(created_project.description, "description1")
+
+            self.assertEqual(created_project.type_of_payment, "T_P")
+
+            self.assertEqual(created_project.status, True)
+
 
 
 # ------------------------ TaskWork_Tests -------------------------------------- #
