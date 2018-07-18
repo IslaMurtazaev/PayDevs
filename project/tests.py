@@ -225,3 +225,25 @@ class RateTypeValidatorMethodTest(TestCase):
 
         with self.assertRaises(InvalidEntityException):
             RateTypeValidator().validate((12,3,543))
+
+
+class NoRangeValidatorMethodTest(TestCase):
+
+    def test_method_type(self):
+        start_date = timezone.now()
+        end_date = start_date + timedelta(days=30)
+        self.assertEqual(None, NoRangeValidator().validate(start_date, end_date))
+
+        with self.assertRaises(InvalidEntityException):
+            NoRangeValidator().validate(start_date, start_date)
+
+
+
+class StartBeforeEndValidatorMethodTest(TestCase):
+
+    def test_method_type(self):
+        start_date = timezone.now()
+        end_date = start_date - timedelta(days=30)
+
+        with self.assertRaises(InvalidEntityException):
+            StartBeforeEndValidator().validate(start_date, end_date)

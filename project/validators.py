@@ -3,7 +3,6 @@ from PayDevs.exceptions import InvalidEntityException, NoPermissionException
 
 import re
 from datetime import timedelta
-from django.db import models
 from django.utils import timezone
 
 #######################Title Validator####################################
@@ -92,19 +91,23 @@ def get_date_validator():
 def validatedate():
 	validate(end_date,start_date, project, get_date_validator())
 
+    
 
 
 class NoRangeValidator(object):
+
 	def validate(self, start_date, end_date, project=None):
-		if start_date==end_date:
+		if start_date == end_date:
 			raise InvalidEntityException(source='end_date', code='not_allowed', message="No time spent for project.")
 	
 
 class StartBeforeEndValidator(object):
-	def validate(self, start_date, end_date, project=None):
-		if start_date>end_date:
-			raise InvalidEntityException(source='start_date', code='not_allowed', message="Set end_date correctly")
 
+
+	def validate(self, start_date, end_date, project=None):
+		if start_date > end_date:
+			raise InvalidEntityException(source='end_date', code='not_allowed', message="Set up end_date correctly.")
+	
 
 
 ########################Permission Validator###############################################
