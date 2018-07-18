@@ -364,3 +364,15 @@ class StartBeforeEndValidatorMethodTest(TestCase):
 
         with self.assertRaises(InvalidEntityException):
             StartBeforeEndValidator().validate(start_date, end_date)
+
+
+
+class TypeOfPaymentValidatorMethodTest(TestCase):
+
+    def test_method_type(self):
+        self.assertEqual(None, TypeOfPaymentValidator().validate('H_P'))
+        self.assertEqual(None, TypeOfPaymentValidator().validate('M_P'))
+
+
+        with self.assertRaises(InvalidEntityException):
+            TypeOfPaymentValidator().validate('Y_P')

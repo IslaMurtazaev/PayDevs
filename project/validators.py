@@ -91,7 +91,7 @@ def get_date_validator():
 def validatedate():
 	validate(end_date,start_date, project, get_date_validator())
 
-    
+		
 
 
 class NoRangeValidator(object):
@@ -103,16 +103,26 @@ class NoRangeValidator(object):
 
 class StartBeforeEndValidator(object):
 
-
 	def validate(self, start_date, end_date, project=None):
 		if start_date > end_date:
 			raise InvalidEntityException(source='end_date', code='not_allowed', message="Set up end_date correctly.")
 	
 
 
-########################Permission Validator###############################################
+########################Type of payment Validator###############################################
 
 		
+class TypeOfPaymentValidator(object):
+	def __init__(self):
+		self.TYPE_OF_PAYMENTS = (
+				('H_P', 'Почасовая'),
+				('M_P', 'Помесячная'),
+				('T_P', 'Позадачная')
+		)
+
+	def validate(self, type_of_payment, project=None):
+			if not type_of_payment in (item[0] for item in self.TYPE_OF_PAYMENTS):
+				raise InvalidEntityException(source='type_of_payment', code='not_allowed', message="No such type of payment")
 
 
 
