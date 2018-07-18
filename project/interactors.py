@@ -38,20 +38,6 @@ class CreateProjectInteractor(Interactor):
 
 
 
-class GetAllProjectsInteractor(Interactor):
-
-    def __init__(self, project_repo):
-        self.project_repo = project_repo
-
-    def set_params(self, **kwargs):
-        self.user_id = kwargs.get('user_id')
-        return self
-
-    def execute(self):
-        return self.project_repo.get_all(self.user_id)
-
-
-
 
 class UpdateProjectInteractor(Interactor):
 
@@ -75,6 +61,36 @@ class UpdateProjectInteractor(Interactor):
     def execute(self):
         return self.project_repo.update(user_id=self.user_id, project_id=self.project_id,
                                                 new_attrs=self.project_new_attrs)
+
+
+
+class DeleteProjectInteractor(Interactor):
+
+    def __init__(self, project_repo):
+        self.project_repo = project_repo
+
+    def set_params(self, *args, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        self.project_id = kwargs.get('project_id')
+        return self
+
+    def execute(self, *args, **kwargs):
+        return self.project_repo.delete(self.user_id, self.project_id)
+
+
+
+
+class GetAllProjectsInteractor(Interactor):
+
+    def __init__(self, project_repo):
+        self.project_repo = project_repo
+
+    def set_params(self, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        return self
+
+    def execute(self):
+        return self.project_repo.get_all(self.user_id)
 
 
 
@@ -155,6 +171,22 @@ class UpdateTaskInteractor(Interactor):
     def execute(self):
         return self.work_task_repo.update(user_id=self.user_id, project_id=self.project_id, task_id=self.task_id,
                                           new_attrs=self.new_attrs)
+
+
+
+class DeleteTaskInteractor(Interactor):
+
+    def __init__(self, work_task_repo):
+        self.work_task_repo = work_task_repo
+
+    def set_params(self, *args, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        self.project_id = kwargs.get('project_id')
+        self.task_id = kwargs.get('task_id')
+        return self
+
+    def execute(self, *args, **kwargs):
+        return self.work_task_repo.delete(user_id=self.user_id, project_id=self.project_id, task_id=self.task_id)
 
 
 

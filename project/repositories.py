@@ -78,6 +78,23 @@ class ProjectRepo(object):
 
 
 
+    def delete(self, user_id, project_id):
+        try:
+            db_user = UserORM.objects.get(id=user_id)
+            db_project = ProjectORM.objects.get(user=db_user, id=project_id)
+
+            project = self._decode_db_project(db_project)
+            db_project.delete()
+        except UserORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user id")
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid project id")
+
+        return project
+
+
+
+
     def get_total(self, user_id, project_id):
         try:
             db_user = UserORM.objects.get(id=user_id)
@@ -202,6 +219,23 @@ class WorkTaskRepo(object):
                                          message="'%s' attribute is invalid" % attr)
 
         return self._decode_db_work_task(db_work_task)
+
+
+
+    def delete(self, user_id, project_id, task_id):
+        try:
+            db_user = UserORM.objects.get(id=user_id)
+            db_project = ProjectORM.objects.get(user=db_user, id=project_id)
+            db_task = WorkTaskORM.objects.get(project=db_project, id=task_id)
+
+            task = self._decode_db_work_task(db_task)
+            db_task.delete()
+        except UserORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user id")
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid project id")
+
+        return task
 
 
 

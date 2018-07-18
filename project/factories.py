@@ -1,9 +1,9 @@
 from project.repositories import ProjectRepo, WorkTaskRepo
 from project.views import ProjectView, CreateProjectView, AllProjectsView, TotalView, CreateTaskView, \
-            GetAllTasksView, UpdateProjectView, GetTaskView, UpdateTaskView
+            GetAllTasksView, UpdateProjectView, GetTaskView, UpdateTaskView, DeleteProjectView, DeleteTaskView
 from project.interactors import GetProjectInteractor, CreateProjectInteractor, GetAllProjectsInteractor, \
             GetTotalInteractor, CreateTaskInteractor, GetAllTasksInteractor, UpdateProjectInteractor, GetTaskInteractor, \
-            UpdateTaskInteractor
+            UpdateTaskInteractor, DeleteProjectInteractor, DeleteTaskInteractor
                                  
 
 
@@ -45,6 +45,30 @@ def create_project_factory():
 
 
 
+class UpdateProjectInteractorFactory(object):
+    @staticmethod
+    def get():
+        project_repo = ProjectRepoFactory.get()
+        return UpdateProjectInteractor(project_repo)
+
+
+
+
+
+class DeleteProjectInteractorFactory(object):
+    @staticmethod
+    def get():
+        project_repo = ProjectRepoFactory.get()
+        return DeleteProjectInteractor(project_repo)
+
+
+def delete_project_factory():
+    delete_project_interactor = DeleteProjectInteractorFactory.get()
+    return DeleteProjectView(delete_project_interactor)
+
+
+
+
 class GetAllProjectsInteractorFactory(object):
     @staticmethod
     def get():
@@ -55,15 +79,6 @@ class GetAllProjectsInteractorFactory(object):
 def get_all_projects_factory():
     get_all_projects_interactor = GetAllProjectsInteractorFactory.get()
     return AllProjectsView(get_all_projects_interactor)
-
-
-
-
-class UpdateProjectInteractorFactory(object):
-    @staticmethod
-    def get():
-        project_repo = ProjectRepoFactory.get()
-        return UpdateProjectInteractor(project_repo)
 
 
 def update_project_factory():
@@ -133,6 +148,20 @@ class UpdateTaskInteractorFactory(object):
 def update_task_factory():
     update_task_interactor = UpdateTaskInteractorFactory.get()
     return UpdateTaskView(update_task_interactor)
+
+
+
+
+class DeleteTaskInteractorFactory(object):
+    @staticmethod
+    def get():
+        task_repo = WorkTaskRepoFactory.get()
+        return DeleteTaskInteractor(task_repo)
+
+
+def delete_task_factory():
+    delete_task_interactor = DeleteTaskInteractorFactory.get()
+    return DeleteTaskView(delete_task_interactor)
 
 
 
