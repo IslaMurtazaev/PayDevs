@@ -1,11 +1,16 @@
 from django.test import TestCase
 from datetime import timedelta
 from django.utils import timezone
+from django.contrib.auth.models import User
+from django.contrib.auth.models import User
+
+
 from account.models import UserORM
 from project.models import ProjectORM, HourPaymentORM, WorkTimeORM, WorkTaskORM, MonthPaymentORM, WorkDayORM
 from project.entities import Project
 from project.repositories import ProjectRepo, WorkTaskRepo
 from PayDevs.exceptions import *
+from project.validators import *
 
 
 # -------------------------- Project_Tests ------------------------------------- #
@@ -252,3 +257,100 @@ class WorkTaskMethodTest(TestCase):
 #                 workday.save()
 
 #         self.assertEqual(self.project_month.total(), 150)
+
+
+class TitleMinLengthValidatorMethodTest(TestCase):
+    def test_method_type(self):
+        self.assertEqual(None, TitleMinLengthValidator().validate('Pro'))
+        self.assertEqual(None, TitleMinLengthValidator().validate('PayDevs'))
+
+        with self.assertRaises(InvalidEntityException):
+            TitleMinLengthValidator().validate('A')
+
+
+        with self.assertRaises(InvalidEntityException):
+            TitleMinLengthValidator().validate(' ')
+
+
+
+class TitleMaxLengthValidatorMethodTest(TestCase):
+    def test_method_type(self):
+        self.assertEqual(None, TitleMaxLengthValidator().validate('zhanzat'))
+        self.assertEqual(None, TitleMaxLengthValidator().validate('zhanzatbekzatadiduduk'))
+
+        with self.assertRaises(InvalidEntityException):
+            TitleMaxLengthValidator().validate('zhanzatbekzatduulatadiletboldukanusonbek')
+
+
+class TitleRegexValidatorMethodTest(TestCase):
+    def test_method_type(self):
+        self.assertEqual(None, TitleRegex().validate('24K'))
+        self.assertEqual(None, TitleRegex().validate('Pay_Devs'))
+        self.assertEqual(None, TitleRegex().validate('Pay-Devs'))
+        self.assertEqual(None, TitleRegex().validate('McDonald\'s'))
+        self.assertEqual(None, TitleRegex().validate('PayDevs 1.2'))
+
+
+
+        with self.assertRaises(InvalidEntityException):
+            TitleRegex().validate('-PayDevs')
+
+        with self.assertRaises(InvalidEntityException):
+            TitleRegex().validate('_Paydevs')
+
+
+        with self.assertRaises(InvalidEntityException):
+            TitleRegex().validate('zhanzat.')
+
+        with self.assertRaises(InvalidEntityException):
+            TitleRegex().validate('zhanzat, ')
+
+
+
+class PositiveRateValidatorMethodTest(TestCase):
+    def test_method_type(self):
+        self.assertEqual(None, PositiveRateValidator().validate(200))
+        self.assertEqual(None, PositiveRateValidator().validate(0))
+
+        with self.assertRaises(InvalidEntityException):
+            PositiveRateValidator().validate(-10)
+
+
+class RateTypeValidatorMethodTest(TestCase):
+    def test_method_type(self):
+        self.assertEqual(None, RateTypeValidator().validate(234.45))
+        self.assertEqual(None, RateTypeValidator().validate(234))        
+
+        with self.assertRaises(InvalidEntityException):
+            RateTypeValidator().validate("Billion")
+
+        with self.assertRaises(InvalidEntityException):
+            RateTypeValidator().validate(None)
+
+        with self.assertRaises(InvalidEntityException):
+            RateTypeValidator().validate([100,34,21])
+
+        with self.assertRaises(InvalidEntityException):
+            RateTypeValidator().validate((12,3,543))
+
+
+class NoRangeValidatorMethodTest(TestCase):
+
+    def test_method_type(self):
+        start_date = timezone.now()
+        end_date = start_date + timedelta(days=30)
+        self.assertEqual(None, NoRangeValidator().validate(start_date, end_date))
+
+        with self.assertRaises(InvalidEntityException):
+            NoRangeValidator().validate(start_date, start_date)
+
+
+
+class StartBeforeEndValidatorMethodTest(TestCase):
+
+    def test_method_type(self):
+        start_date = timezone.now()
+        end_date = start_date - timedelta(days=30)
+
+        with self.assertRaises(InvalidEntityException):
+            StartBeforeEndValidator().validate(start_date, end_date)
