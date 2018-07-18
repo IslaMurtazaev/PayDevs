@@ -86,11 +86,11 @@ class AuthUserInteractor(Interactor):
     def __init__(self, token_decoder):
         self.token_decoder = token_decoder
 
-    def set_params(self, token, secret_key, **kwargs):
+    def set_params(self, token, secret_key=None, **kwargs):
         self.token = token
-        self.secret_key = secret_key
+        self.secket_key = secret_key
         return self
 
     def execute(self, *args, **kwargs):
-        user_id = self.token_decoder.decode(self.token, self.secret_key)
+        user_id = self.token_decoder.decode(self.token, self.secket_key)
         return user_id

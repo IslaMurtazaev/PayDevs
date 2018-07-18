@@ -13,15 +13,18 @@ class ViewWrapper(View):
     view_factory = None
 
     def get(self, request, *args, **kwargs):
-        kwargs.update(request.POST.dict())
+        kwargs.update(request.GET.dict())
         kwargs.update(self.params(request))
         body, status = self.view_factory().get(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
     def post(self, request, *args, **kwargs):
-        kwargs.update(request.POST.dict())
-        # json_data = json.loads(str(request.body, encoding='utf-8'))
-        # kwargs.update(json_data)
+
+        try:
+            json_data = json.loads(str(request.body, encoding='utf-8'))
+        except:
+            json_data = request.POST.dict()
+        kwargs.update(json_data)
         kwargs.update(self.params(request))
         body, status = self.view_factory().post(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
@@ -30,6 +33,7 @@ class ViewWrapper(View):
 
     def auth_get_user(self, request):
         auth_header = request.META.get('HTTP_AUTHORIZATION')
+        print(auth_header)
         if auth_header is None:
             return None
         token = auth_header.replace('Token ', '')
@@ -54,13 +58,3 @@ class ViewWrapper(View):
         pass
 
 
-def index(request):
-    return render(request, 'index.html')
-
-
-def login(request):
-    return render(request, 'login.html')
-
-
-def create_project(request):
-    return render(request, 'create_project.html')

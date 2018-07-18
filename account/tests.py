@@ -336,9 +336,10 @@ class ClientAccountTest(TestCase):
         self.client = Client()
 
     def test_creat_user_get_token(self):
-        response = self.client.post(reverse('create_user'), {'username': 'TestUser',
-                                                             'email': 'testuser@email.ru',
-                                                             'password': 'qwert12345'})
+        data = json.dumps({'username': 'TestUser',
+                           'email': 'testuser@email.ru',
+                           'password': 'qwert12345'})
+        response = self.client.post(reverse('create_user'), data, content_type="application/json")
 
         body = json.loads(response.content.decode())
         self.assertEqual(response.status_code, 200)
@@ -351,11 +352,13 @@ class ClientAccountTest(TestCase):
         #                                     '8bTAVrGJ50-dDVx72m7d759o')
 
     def test_login_user_get_token(self):
-        self.client.post(reverse('create_user'), {'username': 'TestUser',
-                                                  'email': 'testuser@email.ru',
-                                                  'password': 'qwert12345'})
-        response = self.client.post(reverse('login_user'), {'username': 'TestUser',
-                                                            'password': 'qwert12345'})
+        data = json.dumps({'username': 'TestUser',
+                           'email': 'testuser@email.ru',
+                           'password': 'qwert12345'})
+        self.client.post(reverse('create_user'), data, content_type="application/json")
+        data = json.dumps({'username': 'TestUser',
+                'password': 'qwert12345'})
+        response = self.client.post(reverse('login_user'), data, content_type="application/json")
 
         body = json.loads(response.content.decode())
         token = body.get('token')

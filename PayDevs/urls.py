@@ -20,12 +20,10 @@ from django.views.decorators.csrf import csrf_exempt
 from account.factories import get_user_factories, get_user_all_factories, get_user_regist_factories, get_user_login_factories
 from project.factories import get_project_factory, create_project_factory, get_all_projects_factory, get_total_factory, \
     create_task_factory, get_all_tasks_factory, update_project_factory, get_task_factory, update_task_factory
-from PayDevs.views import ViewWrapper, index, login # create_project
+from PayDevs.views import ViewWrapper
 
 
 urlpatterns = [
-    path('create_user/', index),
-    path('login_user/', login),
     path('admin/', admin.site.urls),
     path('users/all', ViewWrapper.as_view(view_factory=get_user_all_factories)),
     path('users/create', csrf_exempt(ViewWrapper.as_view(view_factory=get_user_regist_factories)), name='create_user'),
