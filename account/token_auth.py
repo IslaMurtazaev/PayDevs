@@ -10,5 +10,8 @@ def gen_token(user, secret_key):
 
 
 def token_decoder(token, secret_key):
-    payload = jwt.decode(token, secret_key)
+    try:
+        payload = jwt.decode(token, secret_key)
+    except :
+        payload = {}
     return payload.get('user_id', None)

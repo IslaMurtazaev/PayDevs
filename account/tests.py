@@ -370,6 +370,12 @@ class ClientAccountTest(TestCase):
         self.assertEqual(body.get('is_active'), True)
         self.assertEqual(body.get('is_staff'), False)
 
+        header = {'HTTP_AUTHORIZATION': token + "25" }
+        response_get = self.client.get(reverse('get_user'), **header)
+        body = json.loads(response_get.content.decode())
+        message = body.get('error').get('message')
+        self.assertRegex(message, 'Authentication required')
+
     def test_login_username_validate(self):
         data = json.dumps({'username': 'sd',
                            'email': 'testuser@email.ru',
@@ -465,5 +471,4 @@ class ClientAccountEmailValidateTest(TestCase):
 
         body = json.loads(response.content.decode())
         message = body.get('error').get('message')
-        print(message)
         self.assertRegex(message, 'Email not allowed')
