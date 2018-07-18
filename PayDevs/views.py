@@ -43,7 +43,6 @@ class ViewWrapper(View):
 
     def auth_get_user(self, request):
         auth_header = request.META.get('HTTP_AUTHORIZATION')
-        print(auth_header)
         if auth_header is None:
             return None
         token = auth_header.replace('Token ', '')

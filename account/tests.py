@@ -369,3 +369,101 @@ class ClientAccountTest(TestCase):
         self.assertEqual(body.get('email'), 'testuser@email.ru')
         self.assertEqual(body.get('is_active'), True)
         self.assertEqual(body.get('is_staff'), False)
+
+    def test_login_username_validate(self):
+        data = json.dumps({'username': 'sd',
+                           'email': 'testuser@email.ru',
+                           'password': 'qwert12345'})
+        response = self.client.post(reverse('create_user'), data, content_type="application/json")
+
+        body = json.loads(response.content.decode())
+        message = body.get('error').get('message')
+        self.assertRegex(message, 'Your username must contain at least 3 character.')
+        data = json.dumps({'username': 'zhanzatbekzatduulatadiletboldukanusonbektaalaibekafhudlhfsjgyj',
+                           'email': 'testuser@email.ru',
+                           'password': 'qwert12345'})
+        response = self.client.post(reverse('create_user'), data, content_type="application/json")
+
+        body = json.loads(response.content.decode())
+        message = body.get('error').get('message')
+        self.assertRegex(message, 'Your username is too long. Max allowed length is 50.')
+
+        data = json.dumps({'username': '1sddfsdfsd',
+                           'email': 'testuser@email.ru',
+                           'password': 'qwert12345'})
+        response = self.client.post(reverse('create_user'), data, content_type="application/json")
+
+        body = json.loads(response.content.decode())
+        message = body.get('error').get('message')
+        self.assertRegex(message, 'Username not allowed')
+
+
+class ClientAccountPasswordValidateTest(TestCase):
+
+
+    def test_login_password_validate_max_len(self):
+        data = json.dumps({'username': 'sddqweqweq',
+                           'email': 'testuser@email.ru',
+                           'password': 'qwert3'})
+        response = self.client.post(reverse('create_user'), data, content_type="application/json")
+
+        body = json.loads(response.content.decode())
+        message = body.get('error').get('message')
+        self.assertRegex(message, 'Your password must contain at least 8 character.')
+
+    def test_login_password_validate_numeric(self):
+        data = json.dumps({'username': 'sddqweqweq',
+                           'email': 'testuser@email.ru',
+                           'password': '121321231564'})
+        response = self.client.post(reverse('create_user'), data, content_type="application/json")
+
+        body = json.loads(response.content.decode())
+        message = body.get('error').get('message')
+        self.assertRegex(message, 'Your password consists of only digits.')
+
+
+    def test_login_password_validate_attribute_similarity_salidator(self):
+        data = json.dumps({'username': 'sddqweqweq',
+                           'email': 'testuser@email.ru',
+                           'password': 'sddqweqweq'})
+        response = self.client.post(reverse('create_user'), data, content_type="application/json")
+
+        body = json.loads(response.content.decode())
+        message = body.get('error').get('message')
+        self.assertRegex(message, 'Your password is too similar to your other fields.')
+
+
+    def test_login_password_validate_common_password_validator(self):
+        data = json.dumps({'username': 'sddqweqweq',
+                           'email': 'testuser@email.ru',
+                           'password': 'abcdefghijklmnopqrstuvwxyz'})
+        response = self.client.post(reverse('create_user'), data, content_type="application/json")
+
+        body = json.loads(response.content.decode())
+        message = body.get('error').get('message')
+        self.assertRegex(message, 'Your password is a common sequence.')
+
+
+
+class ClientAccountEmailValidateTest(TestCase):
+
+    def test_login_email_validator(self):
+        data = json.dumps({'username': 'sddqweqweq',
+                           'email': 'testuseremail.ru',
+                           'password': 'abcdefghijklmnopqrstuvwxyz'})
+        response = self.client.post(reverse('create_user'), data, content_type="application/json")
+
+        body = json.loads(response.content.decode())
+        message = body.get('error').get('message')
+        self.assertRegex(message, 'Invalid email address')
+
+    def test_login_email_domaine_validator(self):
+        data = json.dumps({'username': 'sddqweqweq',
+                           'email': 'testuser@027168.com',
+                           'password': 'abcdefghijklmnopqrstuvwxyz'})
+        response = self.client.post(reverse('create_user'), data, content_type="application/json")
+
+        body = json.loads(response.content.decode())
+        message = body.get('error').get('message')
+        print(message)
+        self.assertRegex(message, 'Email not allowed')
