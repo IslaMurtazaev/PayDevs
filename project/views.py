@@ -37,7 +37,7 @@ class UpdateProjectView(object):
         self.update_project_interactor = update_project_interactor
 
     @serialize_exception
-    def post(self, *args, **kwargs):
+    def put(self, *args, **kwargs):
         updated_project = self.update_project_interactor.set_params(**kwargs).execute()
 
         body = ProjectSerializer.serializer(updated_project)
@@ -125,7 +125,7 @@ class UpdateTaskView(object):
         self.update_task_interactor = update_task_interactor
 
     @serialize_exception
-    def post(self, *args, **kwargs):
+    def put(self, *args, **kwargs):
         modified_task = self.update_task_interactor.set_params(**kwargs).execute()
 
         body = WorkTaskSerializer.serializer(modified_task)

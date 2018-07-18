@@ -19,23 +19,37 @@ class ViewWrapper(View):
 
 
     def post(self, request, *args, **kwargs):
+        kwargs.update(self.params(request))
         try:
             json_data = json.loads(str(request.body, encoding='utf-8'))
         except:
             json_data = request.POST.dict()
 
         kwargs.update(json_data)
-        kwargs.update(self.params(request))
         body, status = self.view_factory().post(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
 
-    def delete(self, request, *args, **kwargs):
-        json_data = json.loads(str(request.body, encoding='utf-8'))
+    def put(self, request, *args, **kwargs):
+        kwargs.update(self.params(request))
+        try:
+            json_data = json.loads(str(request.body, encoding='utf-8'))
+        except:
+            json_data = request.POST.dict()
+
         kwargs.update(json_data)
-        kwargs.update({'secret_key': settings.SECRET_KEY})
-        logged_user_id = self.auth_get_user(request)
-        kwargs.update({'user_id': logged_user_id})
+        body, status = self.view_factory().put(*args, **kwargs)
+        return HttpResponse(json.dumps(body), status=status, content_type='application/json')
+
+
+    def delete(self, request, *args, **kwargs):
+        kwargs.update(self.params(request))
+        try:
+            json_data = json.loads(str(request.body, encoding='utf-8'))
+        except:
+            json_data = request.POST.dict()
+
+        kwargs.update(json_data)
         body, status = self.view_factory().delete(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
