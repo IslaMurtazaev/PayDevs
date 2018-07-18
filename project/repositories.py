@@ -146,7 +146,6 @@ class ProjectRepo(object):
     def _set_rate(self, db_project, rate):
         if (db_project.type_of_payment.lower() == 'h_p'):
             HourPaymentORM(project=db_project, rate=rate).save()
-            print('enter')
         elif (db_project.type_of_payment.lower() == 'm_p'):
             MonthPaymentORM(project=db_project, rate=rate).save()
 
