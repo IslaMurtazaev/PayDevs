@@ -8,10 +8,10 @@ class GetProjectInteractor(Interactor):
     def __init__(self, project_repo):
         self.project_repo = project_repo
 
-    def set_params(self, user_id, title, project_id, *args, **kwargs):
-        self.user_id = user_id
-        self.title = title
-        self.project_id = project_id
+    def set_params(self, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        self.title = kwargs.get('title')
+        self.project_id = kwargs.get('project_id')
         return self
 
     def execute(self):
@@ -24,12 +24,12 @@ class CreateProjectInteractor(Interactor):
     def __init__(self, project_repo):
         self.project_repo = project_repo
 
-    def set_params(self, user_id, title, description, type_of_payment, rate, *args, **kwargs):
-        self.user_id = user_id
-        self.title = title
-        self.description = description
-        self.type_of_payment = type_of_payment
-        self.rate = rate
+    def set_params(self, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        self.title = kwargs.get('title')
+        self.description = kwargs.get('description')
+        self.type_of_payment = kwargs.get('type_of_payment')
+        self.rate = kwargs.get('rate')
         return self
     
     def execute(self):
@@ -43,8 +43,8 @@ class GetAllProjectsInteractor(Interactor):
     def __init__(self, project_repo):
         self.project_repo = project_repo
 
-    def set_params(self, user_id, *args, **kwargs):
-        self.user_id = user_id
+    def set_params(self, **kwargs):
+        self.user_id = kwargs.get('user_id')
         return self
 
     def execute(self):
@@ -58,10 +58,18 @@ class UpdateProjectInteractor(Interactor):
     def __init__(self, project_repo):
         self.project_repo = project_repo
 
-    def set_params(self, user_id, project_id, project_new_attrs, *args, **kwargs):
-        self.user_id = user_id
-        self.project_id = project_id
-        self.project_new_attrs = project_new_attrs
+    def set_params(self, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        self.project_id = kwargs.get('project_id')
+
+        self.project_new_attrs = {
+            'title': kwargs.get('title'),
+            'description': kwargs.get('description'),
+            'start_date': kwargs.get('start_date'),
+            'end_date': kwargs.get('end_date'),
+            'type_of_payment': kwargs.get('type_of_payment'),
+            'status': kwargs.get('status')
+        }
         return self
 
     def execute(self):
@@ -75,9 +83,9 @@ class GetTotalInteractor(Interactor):
     def __init__(self, project_repo):
         self.project_repo = project_repo
 
-    def set_params(self, user_id, project_id, *args, **kwargs):
-        self.user_id = user_id
-        self.project_id = project_id
+    def set_params(self, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        self.project_id = kwargs.get('project_id')
         return self
 
     def execute(self):
@@ -92,11 +100,11 @@ class GetTaskInteractor(Interactor):
     def __init__(self, work_task_repo):
         self.work_task_repo = work_task_repo
 
-    def set_params(self, user_id, project_id, task_id, title):
-        self.user_id = user_id
-        self.project_id = project_id
-        self.task_id = task_id
-        self.title = title
+    def set_params(self, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        self.project_id = kwargs.get('project_id')
+        self.task_id = kwargs.get('task_id')
+        self.title = kwargs.get('title')
         return self
 
     def execute(self):
@@ -110,12 +118,12 @@ class CreateTaskInteractor(Interactor):
     def __init__(self, work_task_repo):
         self.work_task_repo = work_task_repo
 
-    def set_params(self, user_id, project_id, title, description, price, *args, **kwargs):
-        self.user_id = user_id
-        self.project_id = project_id
-        self.title = title
-        self.description = description
-        self.price = price
+    def set_params(self, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        self.project_id = kwargs.get('project_id')
+        self.title = kwargs.get('title')
+        self.description = kwargs.get('description')
+        self.price = kwargs.get('price')
         return self
 
     def execute(self):
@@ -131,11 +139,17 @@ class UpdateTaskInteractor(Interactor):
     def __init__(self, work_task_repo):
         self.work_task_repo = work_task_repo
 
-    def set_params(self, user_id, project_id, task_id, new_attrs):
-        self.user_id = user_id
-        self.project_id = project_id
-        self.task_id = task_id
-        self.new_attrs = new_attrs
+    def set_params(self, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        self.project_id = kwargs.get('project_id')
+        self.task_id = kwargs.get('task_id')
+        self.new_attrs = {
+            'title': kwargs.get('title'),
+            'description': kwargs.get('description'),
+            'price': kwargs.get('price'),
+            'completed': kwargs.get('completed'),
+            'paid': kwargs.get('paid')
+        }
         return self
 
     def execute(self):
@@ -149,9 +163,9 @@ class GetAllTasksInteractor(Interactor):
     def __init__(self, work_task_repo):
         self.work_task_repo = work_task_repo
 
-    def set_params(self, user_id, project_id):
-        self.user_id = user_id
-        self.project_id = project_id
+    def set_params(self, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        self.project_id = kwargs.get('project_id')
         return self
 
     def execute(self):
