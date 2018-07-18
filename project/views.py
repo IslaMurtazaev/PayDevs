@@ -2,10 +2,9 @@ from project.serializers import ProjectSerializer, ProjectListSerializer, WorkTa
 from PayDevs.decorators import serialize_exception
 
 
-#------------------------ Project ---------------------------------------------#
+# ------------------------ Project ---------------------------------------------#
 
 class ProjectView(object):
-
     def __init__(self, get_project_interactor):
         self.get_project_interactor = get_project_interactor
 
@@ -19,9 +18,7 @@ class ProjectView(object):
 
 
 
-
 class CreateProjectView(object):
-
     def __init__(self, create_project_interactor):
         self.create_project_interactor = create_project_interactor
 
@@ -31,7 +28,6 @@ class CreateProjectView(object):
         body = ProjectSerializer.serializer(project)
         status = 201
         return body, status
-
 
 
 
@@ -47,7 +43,6 @@ class UpdateProjectView(object):
         body = ProjectSerializer.serializer(updated_project)
         status = 200
         return body, status
-
 
 
 
@@ -83,7 +78,6 @@ class AllProjectsView(object):
 
 
 class TotalView(object):
-
     def __init__(self, get_total_interactor):
         self.get_total_interactor = get_total_interactor
 
@@ -96,11 +90,9 @@ class TotalView(object):
         return body, status
 
 
-
-#--------------------------- Work Task ----------------------------------------#
+# --------------------------- Work Task ----------------------------------------#
 
 class GetTaskView(object):
-
     def __init__(self, get_task_interactor):
         self.get_task_interactor = get_task_interactor
 
@@ -115,7 +107,6 @@ class GetTaskView(object):
 
 
 class CreateTaskView(object):
-
     def __init__(self, create_task_interactor):
         self.create_task_interactor = create_task_interactor
 
@@ -129,9 +120,7 @@ class CreateTaskView(object):
 
 
 
-
 class UpdateTaskView(object):
-
     def __init__(self, update_task_interactor):
         self.update_task_interactor = update_task_interactor
 
@@ -142,7 +131,6 @@ class UpdateTaskView(object):
         body = WorkTaskSerializer.serializer(modified_task)
         status = 200
         return body, status
-
 
 
 
@@ -161,9 +149,7 @@ class DeleteTaskView(object):
 
 
 
-
 class GetAllTasksView(object):
-
     def __init__(self, get_all_tasks_interactor):
         self.get_all_tasks_interactor = get_all_tasks_interactor
 

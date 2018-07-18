@@ -1,10 +1,11 @@
-from django.test import TestCase
-
+from django.test import TestCase, Client
+from django.urls import reverse
 from account.entities import User
 from account.models import UserORM
 from account.serializers import UserSerializer, UserListSerializer
 from account.validators import *
 from PayDevs.exceptions import InvalidEntityException
+
 
 # ----------------PASSWORD VALIDATORS TESTS------------------------------------#
 
@@ -33,7 +34,6 @@ class UserAttributeSimilarityValidatorMethodTest(TestCase):
     def test_method_validate_type(self):
         islam = UserORM.objects.get(username="IslamIsTheBest")
         with self.assertRaises(InvalidEntityException):
-
             UserAttributeSimilarityValidator().validate(password=islam.password, user=islam)
 
         self.assertIsNone(UserAttributeSimilarityValidator().validate(password='sizamopen', user=islam))
@@ -104,12 +104,7 @@ class EmailValidateMethodTest(TestCase):
         self.assertEqual(None, EmailAtValidators().validate('exmaple@mail.ru'))
 
 
-
-
-
 class EmailForbiddenEmailDomainsValidatorMethodTest(TestCase):
-
-
     def test_method_validate_type(self):
         self.assertEqual(None, EmailForbiddenEmailDomainsValidator().validate('exmaple@mail.ru'))
         self.assertEqual(None, EmailForbiddenEmailDomainsValidator().validate('exmapl@gmail.com'))
@@ -125,17 +120,13 @@ class EmailForbiddenEmailDomainsValidatorMethodTest(TestCase):
         with self.assertRaises(InvalidEntityException):
             EmailForbiddenEmailDomainsValidator().validate('exmaple@shitaway.ga')
 
-
         with self.assertRaises(InvalidEntityException):
             EmailForbiddenEmailDomainsValidator().validate('exmaple@zzz.com')
 
 
-
 class ValidatorFunctionsTest(TestCase):
-
     def setUp(self):
         self.user = User(username='TestMyTest', email='test@mail.ru')
-
 
     def test_function_hashed_password(self):
         hashed = hashed_password('password', user=self.user).decode()
@@ -179,7 +170,6 @@ class ValidatorFunctionsTest(TestCase):
         except InvalidEntityException as e:
             self.assertRegex(str(e), 'Your password is a common sequence.')
 
-
     def test_function_validate_password_user_attribute(self):
         try:
             hashed_password('TestMyTest', user=self.user).decode()
@@ -191,7 +181,6 @@ class ValidatorFunctionsTest(TestCase):
         except InvalidEntityException as e:
             self.assertRegex(str(e), 'Your password is too similar to your other fields.')
 
-
     def test_function_validate_username(self):
         with self.assertRaises(InvalidEntityException):
             validate_username('we', user=self.user)
@@ -201,7 +190,6 @@ class ValidatorFunctionsTest(TestCase):
 
         with self.assertRaises(InvalidEntityException):
             validate_username('23123sdfsdf', user=self.user)
-
 
     def test_function_validate_email(self):
         user = User(username='TestMyTest', email='test@mail.ru')
@@ -224,7 +212,6 @@ class ValidatorFunctionsTest(TestCase):
         with self.assertRaises(InvalidEntityException):
             validate_email('exampleamil.@ru', user=user)
 
-
     def test_function_validate(self):
         try:
             validate('123', self.user, get_password_validators())
@@ -239,7 +226,6 @@ class ValidatorFunctionsTest(TestCase):
 
 class ForbiddenNamesValidatorMethodTest(TestCase):
     def test_method_validate_type(self):
-
         self.assertEqual(None, ForbiddenNamesValidator().validate('zhanzat'))
         self.assertEqual(None, ForbiddenNamesValidator().validate('BrzinaRutina'))
 
@@ -259,7 +245,6 @@ class UsernameMinLengthValidatorMethodTest(TestCase):
         with self.assertRaises(InvalidEntityException):
             UsernameMinLengthValidator().validate('Po')
 
-
         with self.assertRaises(InvalidEntityException):
             UsernameMinLengthValidator().validate('a')
 
@@ -267,7 +252,8 @@ class UsernameMinLengthValidatorMethodTest(TestCase):
 class UsernameMaxLengthValidatorMethodTest(TestCase):
     def test_method_type(self):
         self.assertEqual(None, UsernameMaxLengthValidator().validate('zhanzat'))
-        self.assertEqual(None, UsernameMaxLengthValidator().validate('zhanzatbekzatduulatadiletboldukanusonbektaalaibeka'))
+        self.assertEqual(None,
+                         UsernameMaxLengthValidator().validate('zhanzatbekzatduulatadiletboldukanusonbektaalaibeka'))
 
         with self.assertRaises(InvalidEntityException):
             UsernameMaxLengthValidator().validate('zhanzatbekzatduulatadiletboldukanusonbektaalaibekafhudlhfsjgyj')
@@ -294,9 +280,7 @@ class UsernameRegexMethodValidator(TestCase):
             UsernameRegex().validate('zhanzat, bekzat')
 
 
-
 class UserSerializerTest(TestCase):
-
     def test_user_serializer(self):
         user = User(id=1, username='TestName', email='test@gmail.com', password='123456789', is_active=True,
                     is_staff=False)
@@ -313,7 +297,6 @@ class UserSerializerTest(TestCase):
 
 
 class UserListSerializeTest(TestCase):
-
     def test_user_serializer(self):
         users = []
         for i in range(3):
@@ -343,3 +326,46 @@ class UserListSerializeTest(TestCase):
         self.assertEqual(UserListSerializer.model, User)
         self.assertEqual(UserListSerializer.fields, ['id', 'username', 'email'])
         self.assertListEqual(UserListSerializer.serializer(users), serilalizer)
+
+
+# --------------------------------------Test Client Account -----------------------------------------------#
+
+
+class ClientAccountTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+    def test_creat_user_get_token(self):
+        data = json.dumps({'username': 'TestUser',
+                           'email': 'testuser@email.ru',
+                           'password': 'qwert12345'})
+        response = self.client.post(reverse('create_user'), data, content_type="application/json")
+
+        body = json.loads(response.content.decode())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(body.get('username'), 'TestUser')
+        self.assertEqual(body.get('email'), 'testuser@email.ru')
+        self.assertEqual(body.get('is_active'), True)
+        self.assertEqual(body.get('is_staff'), False)
+        # self.assertEqual(body.get('token'), 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.'
+        #                                     'eyJ1c2VyX2lkIjoxfQ.eG9Qo15OqpTeRPyYjML'
+        #                                     '8bTAVrGJ50-dDVx72m7d759o')
+
+    def test_login_user_get_token(self):
+        data = json.dumps({'username': 'TestUser',
+                           'email': 'testuser@email.ru',
+                           'password': 'qwert12345'})
+        self.client.post(reverse('create_user'), data, content_type="application/json")
+        data = json.dumps({'username': 'TestUser',
+                'password': 'qwert12345'})
+        response = self.client.post(reverse('login_user'), data, content_type="application/json")
+
+        body = json.loads(response.content.decode())
+        token = body.get('token')
+        header = {'HTTP_AUTHORIZATION': token}
+        response_get = self.client.get(reverse('get_user'), **header)
+        body = json.loads(response_get.content.decode())
+        self.assertEqual(body.get('username'), 'TestUser')
+        self.assertEqual(body.get('email'), 'testuser@email.ru')
+        self.assertEqual(body.get('is_active'), True)
+        self.assertEqual(body.get('is_staff'), False)

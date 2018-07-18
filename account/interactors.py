@@ -47,7 +47,7 @@ class RegisterUserInteractor(Interactor):
         valid_user = User(username=self.username, email=self.email)
         self.validate_username.validate(username=self.username, user=valid_user)
         self.validate_email.validate(email=self.email, user=valid_user)
-        self.password = self.hashed_password(password=self.password, user=valid_user)
+        self.password = self.hashed_password.hashed(password=self.password, user=valid_user)
         new_user = self.user_repo.create_default_user(username=self.username)
         user_update = User(id=new_user.id, username=self.username, email=self.email, password=self.password,
                            is_active=True)
@@ -86,11 +86,11 @@ class AuthUserInteractor(Interactor):
     def __init__(self, token_decoder):
         self.token_decoder = token_decoder
 
-    def set_params(self, token, secret_key, **kwargs):
+    def set_params(self, token, secret_key=None, **kwargs):
         self.token = token
-        self.secret_key = secret_key
+        self.secket_key = secret_key
         return self
 
     def execute(self, *args, **kwargs):
-        user_id = self.token_decoder.decode(self.token, self.secret_key)
+        user_id = self.token_decoder.decode(self.token, self.secket_key)
         return user_id
