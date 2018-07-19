@@ -134,8 +134,8 @@ class ProjectRepo(object):
             'user': str(db_project.user),
             'title': db_project.title,
             'description': db_project.description,
-            'start_date': str(db_project.start_date),
-            'end_date': str(db_project.end_date),
+            'start_date': db_project.start_date,
+            'end_date': db_project.end_date,
             'type_of_payment': db_project.type_of_payment,
             'status': db_project.status
         }

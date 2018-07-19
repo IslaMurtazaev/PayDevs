@@ -57,6 +57,17 @@ class DateFormatSerializer(BaseSerializer):
         return result
 
 
+class DateFormatListSerializer(DateFormatSerializer):
+
+    @classmethod
+    def serializer(cls, list_obj):
+        result = list()
+        for obj in list_obj:
+            result.append(super().serializer(obj))
+        return result
+
+
+
 class ExampleExceptionSerializer(BaseSerializer):
     model = None
     fields = ['source', 'code']

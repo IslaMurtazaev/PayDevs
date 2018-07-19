@@ -1,13 +1,13 @@
-from PayDevs.serializer import BaseSerializer, ListSerializer
+from PayDevs.serializer import BaseSerializer, ListSerializer, DateFormatSerializer, DateFormatListSerializer
 from project.entities import Project, WorkTask, WorkedDay
 
 
-class ProjectSerializer(BaseSerializer):
+class ProjectSerializer(DateFormatSerializer):
     model = Project
     fields = ['id', 'user', 'title', 'description', 'start_date', 'end_date',  'type_of_payment', 'status']
 
 
-class ProjectListSerializer(ListSerializer):
+class ProjectListSerializer(DateFormatListSerializer):
     model = Project
     fields = ['id', 'user', 'title', 'description', 'start_date', 'end_date',  'type_of_payment', 'status']
 
