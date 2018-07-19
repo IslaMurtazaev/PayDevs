@@ -1,10 +1,11 @@
-from project.repositories import ProjectRepo, WorkTaskRepo, WorkDayRepo
+from project.repositories import ProjectRepo, WorkTaskRepo, WorkDayRepo, WorkTimeRepo
 from project.views import ProjectView, CreateProjectView, AllProjectsView, TotalView, CreateTaskView, \
             GetAllTasksView, UpdateProjectView, GetTaskView, UpdateTaskView, DeleteProjectView, DeleteTaskView, \
-            CreateWorkDayView
+            CreateWorkDayView, CreateWorkTimeView
 from project.interactors import GetProjectInteractor, CreateProjectInteractor, GetAllProjectsInteractor, \
             GetTotalInteractor, CreateTaskInteractor, GetAllTasksInteractor, UpdateProjectInteractor, GetTaskInteractor, \
-            UpdateTaskInteractor, DeleteProjectInteractor, DeleteTaskInteractor, CreateWorkDayInteractor
+            UpdateTaskInteractor, DeleteProjectInteractor, DeleteTaskInteractor, CreateWorkDayInteractor, \
+            CreateWorkTimeInteractor
                                  
 
 
@@ -197,3 +198,23 @@ class CreateWorkDayInteractorFactory(object):
 def create_work_day_factory():
     create_work_day_interactor = CreateWorkDayInteractorFactory.get()
     return CreateWorkDayView(create_work_day_interactor)
+
+
+# ------------------------ Work Time ------------------------------------- #
+
+class WorkTimeRepoFactory(object):
+    @staticmethod
+    def get():
+        return WorkTimeRepo()
+
+
+class CreateWorkTimeInteractorFactory(object):
+    @staticmethod
+    def get():
+        work_time_repo = WorkTimeRepoFactory.get()
+        return CreateWorkTimeInteractor(work_time_repo)
+
+
+def create_work_hours_factory():
+    create_work_time_interactor = CreateWorkTimeInteractorFactory.get()
+    return CreateWorkTimeView(create_work_time_interactor)

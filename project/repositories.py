@@ -285,17 +285,17 @@ class WorkDayRepo(object):
 
 
 
-    def create(self, user_id, project_id, month_payment_id, rate):
+    def create(self, user_id, project_id, month_payment_id, day):
         try:
             db_user = UserORM.objects.get(id=user_id)
             db_project = ProjectORM.objects.get(user=db_user, id=project_id)
 
-            if (month_payment_id):
-                db_month_payment = MonthPaymentORM.objects.get(project=db_project, id=month_payment_id)
-            else:
-                db_month_payment = MonthPaymentORM.objects.get(project=db_project, rate=rate)
+            db_month_payment = MonthPaymentORM.objects.get(project=db_project, id=month_payment_id)
 
-            db_worked_day = WorkDayORM(month_payment=db_month_payment)
+            if day is not None:
+                day = datetime.strptime(day, "%Y-%m-%d")
+
+            db_worked_day = WorkDayORM(month_payment=db_month_payment, day=day)
 
             db_worked_day.save()
 
@@ -305,7 +305,7 @@ class WorkDayRepo(object):
             raise NoPermissionException(message="Invalid project id")
         except MonthPaymentORM.DoesNotExist:
             raise InvalidEntityException(source='repositories', code='not found',
-                                         message="Invalid MonthPayment id or rate")
+                                         message="Invalid MonthPayment id")
         except:
             raise InvalidEntityException(source='repositories', code='could not save',
                                          message="Unable to create such worked day")
@@ -336,3 +336,48 @@ class WorkDayRepo(object):
         }
 
         return WorkedDay(**fields)
+
+
+# ---------------------------- Work Time ------------------------------------ #
+
+class WorkTimeRepo(object):
+
+    def create(self, user_id, project_id, hour_payment_id, start_work, end_work):
+        try:
+            db_user = UserORM.objects.get(id=user_id)
+            db_project = ProjectORM.objects.get(user=db_user, id=project_id)
+
+            db_hour_payment = HourPaymentORM.objects.get(project=db_project, id=hour_payment_id)
+
+            if start_work is not None:
+                start_work = datetime.strptime(start_work, "%Y-%m-%dT%H:%M:%S.%fZ")
+            if end_work is not None:
+                end_work = datetime.strptime(end_work, "%Y-%m-%dT%H:%M:%S.%fZ")
+
+            db_worked_time = WorkTimeORM(hour_payment=db_hour_payment, start_work=start_work, end_work=end_work)
+
+            db_worked_time.save()
+
+        except UserORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user id")
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid project id")
+        except HourPaymentORM.DoesNotExist:
+            raise InvalidEntityException(source='repositories', code='not found',
+                                         message="Invalid HourPayment id")
+        except:
+            raise InvalidEntityException(source='repositories', code='could not save',
+                                         message="Unable to create such worked day")
+        return self._decode_db_work_time(db_worked_time)
+
+
+    def _decode_db_work_time(self, db_work_time):
+        fields = {
+            'id': db_work_time.id,
+            'hour_payment': str(db_work_time.hour_payment),
+            'start_work': db_work_time.start_work,
+            'end_work': db_work_time.end_work,
+            'paid': db_work_time.paid
+        }
+
+        return WorkTime(**fields)

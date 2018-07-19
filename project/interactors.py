@@ -211,16 +211,41 @@ class GetAllTasksInteractor(Interactor):
 
 class CreateWorkDayInteractor(Interactor):
 
-    def __init__(self, work_task_repo):
-        self.work_task_repo = work_task_repo
+    def __init__(self, work_day_repo):
+        self.work_day_repo = work_day_repo
 
     def set_params(self, **kwargs):
         self.user_id = kwargs.get('user_id')
         self.project_id = kwargs.get('project_id')
         self.month_payment_id = kwargs.get('month_payment_id')
-        self.rate = kwargs.get('rate')
+        self.day = kwargs.get('day')
         return self
 
     def execute(self):
-        return self.work_task_repo.create(user_id=self.user_id, project_id=self.project_id,
-                                          month_payment_id=self.month_payment_id, rate=self.rate)
+        return self.work_day_repo.create(user_id=self.user_id, project_id=self.project_id,
+                                         month_payment_id=self.month_payment_id, day=self.day)
+
+# TODO add full CRUD to WorkedDay
+
+# ------------------------------- Work Time ------------------------------------ #
+
+
+class CreateWorkTimeInteractor(Interactor):
+
+    def __init__(self, work_time_repo):
+        self.work_time_repo = work_time_repo
+
+    def set_params(self, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        self.project_id = kwargs.get('project_id')
+        self.hour_payment_id = kwargs.get('hour_payment_id')
+        self.start_work = kwargs.get('start_work')
+        self.end_work = kwargs.get('end_work')
+        return self
+
+    def execute(self):
+        return self.work_time_repo.create(user_id=self.user_id, project_id=self.project_id,
+                                          hour_payment_id=self.hour_payment_id, start_work=self.start_work,
+                                          end_work=self.end_work)
+
+# TODO add full CRUD to WorkedDay

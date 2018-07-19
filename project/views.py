@@ -1,4 +1,5 @@
-from project.serializers import ProjectSerializer, ProjectListSerializer, WorkTaskSerializer, WorkTaskListSerializer, WorkDaySerializer
+from project.serializers import ProjectSerializer, ProjectListSerializer, WorkTaskSerializer, WorkTaskListSerializer, \
+    WorkDaySerializer, WorkTimeSerializer
 from PayDevs.decorators import serialize_exception
 
 
@@ -173,5 +174,20 @@ class CreateWorkDayView(object):
         created_worked_day = self.create_work_day_interactor.set_params(**kwargs).execute()
 
         body = WorkDaySerializer.serializer(created_worked_day)
+        status = 201
+        return body, status
+
+
+# ------------------------------ Work Hours ------------------------------ #
+
+class CreateWorkTimeView(object):
+    def __init__(self, create_work_time_interactor):
+        self.create_work_time_interactor = create_work_time_interactor
+
+    @serialize_exception
+    def post(self, *args, **kwargs):
+        created_worked_time = self.create_work_time_interactor.set_params(**kwargs).execute()
+
+        body = WorkTimeSerializer.serializer(created_worked_time)
         status = 201
         return body, status
