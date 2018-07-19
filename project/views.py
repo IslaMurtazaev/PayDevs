@@ -217,6 +217,19 @@ class UpdateWorkDayView(object):
 
 
 
+class DeleteWorkDayView(object):
+
+    def __init__(self, delete_work_day_interactor):
+        self.delete_work_day_interactor = delete_work_day_interactor
+
+    @serialize_exception
+    def delete(self, *args, **kwargs):
+        deleted_worked_day = self.delete_work_day_interactor.set_params(**kwargs).execute()
+
+        body = WorkDaySerializer.serializer(deleted_worked_day)
+        status = 201
+        return body, status
+
 # ------------------------------ Work Time ------------------------------ #
 
 class GetWorkTimeView(object):
@@ -259,5 +272,20 @@ class UpdateWorkTimeView(object):
         updated_worked_time = self.update_work_time_interactor.set_params(**kwargs).execute()
 
         body = WorkTimeSerializer.serializer(updated_worked_time)
+        status = 201
+        return body, status
+
+
+
+class DeleteWorkTimeView(object):
+
+    def __init__(self, delete_work_time_interactor):
+        self.delete_work_time_interactor = delete_work_time_interactor
+
+    @serialize_exception
+    def delete(self, *args, **kwargs):
+        deleted_worked_time = self.delete_work_time_interactor.set_params(**kwargs).execute()
+
+        body = WorkTimeSerializer.serializer(deleted_worked_time)
         status = 201
         return body, status

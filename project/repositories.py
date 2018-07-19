@@ -349,11 +349,35 @@ class WorkDayRepo(object):
             raise NoPermissionException(message="Invalid user or project id")
         except MonthPaymentORM.DoesNotExist:
             raise NoPermissionException(message="Invalid month_payment id")
-        except:
+        except (ValueError, KeyError):
             raise InvalidEntityException(source='repositories', code='could not update',
                                          message="'%s' attribute is invalid" % attr)
+        except:
+            raise InvalidEntityException(source='repositories', code='could not update',
+                                         message="Unable to update this work_day")
 
         return self._decode_db_work_day(db_worked_day)
+
+
+
+    def delete(self, user_id, project_id, month_payment_id, work_day_id):
+        try:
+            db_project = ProjectORM.objects.get(user_id=user_id, id=project_id)
+            db_month_payment = MonthPaymentORM.objects.get(project=db_project, id=month_payment_id)
+            db_worked_day = WorkDayORM.objects.get(month_payment=db_month_payment, id=work_day_id)
+
+            deleted_work_day = self._decode_db_work_day(db_worked_day)
+            db_worked_day.delete()
+
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user or project id")
+        except MonthPaymentORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid month_payment id")
+        except:
+            raise InvalidEntityException(source='repositories', code='could not update',
+                                         message="Could not delete this work_day")
+
+        return deleted_work_day
 
 
 
@@ -456,11 +480,35 @@ class WorkTimeRepo(object):
             raise NoPermissionException(message="Invalid user or project id")
         except HourPaymentORM.DoesNotExist:
             raise NoPermissionException(message="Invalid hour_payment id ")
+        except (ValueError, KeyError):
+            raise InvalidEntityException(source='repositories', code='could not update',
+                                         message="'%s' attribute is invalid" % attr)        
+        except:
+            raise InvalidEntityException(source='repositories', code='could not update',
+                                         message="Unable to update this work_time")
+
+        return self._decode_db_work_time(db_worked_time)
+
+
+
+    def delete(self, user_id, project_id, hour_payment_id, work_time_id):
+        try:
+            db_project = ProjectORM.objects.get(user_id=user_id, id=project_id)
+            db_hour_payment = HourPaymentORM.objects.get(project=db_project, id=hour_payment_id)
+            db_worked_time = WorkTimeORM.objects.get(hour_payment=db_hour_payment, id=work_time_id)
+
+            deleted_work_time = self._decode_db_work_time(db_worked_time)
+            db_worked_time.delete()
+
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user or project id")
+        except HourPaymentORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid hour_payment id ")
         except:
             raise InvalidEntityException(source='repositories', code='could not update',
                                          message="'%s' attribute is invalid" % attr)
 
-        return self._decode_db_work_time(db_worked_time)
+        return deleted_work_time
 
 
 

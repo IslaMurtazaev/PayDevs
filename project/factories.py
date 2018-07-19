@@ -1,12 +1,13 @@
 from project.repositories import ProjectRepo, WorkTaskRepo, WorkDayRepo, WorkTimeRepo
 from project.views import ProjectView, CreateProjectView, AllProjectsView, TotalView, CreateTaskView, \
             GetAllTasksView, UpdateProjectView, GetTaskView, UpdateTaskView, DeleteProjectView, DeleteTaskView, \
-            CreateWorkDayView, CreateWorkTimeView, GetWorkDayView, GetWorkTimeView, UpdateWorkDayView, UpdateWorkTimeView
+            CreateWorkDayView, CreateWorkTimeView, GetWorkDayView, GetWorkTimeView, UpdateWorkDayView, UpdateWorkTimeView, \
+            DeleteWorkDayView, DeleteWorkTimeView
 from project.interactors import GetProjectInteractor, CreateProjectInteractor, GetAllProjectsInteractor, \
             GetTotalInteractor, CreateTaskInteractor, GetAllTasksInteractor, UpdateProjectInteractor, GetTaskInteractor, \
             UpdateTaskInteractor, DeleteProjectInteractor, DeleteTaskInteractor, CreateWorkDayInteractor, \
             CreateWorkTimeInteractor, GetWorkDayInteractor, GetWorkTimeInteractor, UpdateWorkDayInteractor, \
-            UpdateWorkTimeInteractor
+            UpdateWorkTimeInteractor, DeleteWorkDayInteractor, DeleteWorkTimeInteractor
                                  
 
 
@@ -228,6 +229,20 @@ def update_work_day_factory():
     return UpdateWorkDayView(update_work_day_interactor)
 
 
+
+
+class DeleteWorkDayInteractorFactory(object):
+    @staticmethod
+    def get():
+        work_day_repo = WorkDayRepoFactory.get()
+        return DeleteWorkDayInteractor(work_day_repo)
+
+
+def delete_work_day_factory():
+    delete_work_day_interactor = DeleteWorkDayInteractorFactory.get()
+    return DeleteWorkDayView(delete_work_day_interactor)
+
+
 # ------------------------ Work Time ------------------------------------- #
 
 class WorkTimeRepoFactory(object):
@@ -274,3 +289,15 @@ def update_work_time_factory():
     update_work_time_interactor = UpdateWorkTimeInteractorFactory.get()
     return UpdateWorkTimeView(update_work_time_interactor)
 
+
+
+class DeleteWorkTimeInteractorFactory(object):
+    @staticmethod
+    def get():
+        work_time_repo = WorkTimeRepoFactory.get()
+        return DeleteWorkTimeInteractor(work_time_repo)
+
+
+def delete_work_time_factory():
+    delete_work_time_interactor = DeleteWorkTimeInteractorFactory.get()
+    return DeleteWorkTimeView(delete_work_time_interactor)
