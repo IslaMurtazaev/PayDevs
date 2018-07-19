@@ -6,6 +6,7 @@ from PayDevs.decorators import serialize_exception
 # ------------------------ Project ---------------------------------------------#
 
 class ProjectView(object):
+
     def __init__(self, get_project_interactor):
         self.get_project_interactor = get_project_interactor
 
@@ -20,6 +21,7 @@ class ProjectView(object):
 
 
 class CreateProjectView(object):
+
     def __init__(self, create_project_interactor):
         self.create_project_interactor = create_project_interactor
 
@@ -79,6 +81,7 @@ class AllProjectsView(object):
 
 
 class TotalView(object):
+
     def __init__(self, get_total_interactor):
         self.get_total_interactor = get_total_interactor
 
@@ -94,6 +97,7 @@ class TotalView(object):
 # --------------------------- Work Task ----------------------------------------#
 
 class GetTaskView(object):
+
     def __init__(self, get_task_interactor):
         self.get_task_interactor = get_task_interactor
 
@@ -108,6 +112,7 @@ class GetTaskView(object):
 
 
 class CreateTaskView(object):
+
     def __init__(self, create_task_interactor):
         self.create_task_interactor = create_task_interactor
 
@@ -122,6 +127,7 @@ class CreateTaskView(object):
 
 
 class UpdateTaskView(object):
+
     def __init__(self, update_task_interactor):
         self.update_task_interactor = update_task_interactor
 
@@ -151,6 +157,7 @@ class DeleteTaskView(object):
 
 
 class GetAllTasksView(object):
+
     def __init__(self, get_all_tasks_interactor):
         self.get_all_tasks_interactor = get_all_tasks_interactor
 
@@ -165,7 +172,22 @@ class GetAllTasksView(object):
 
 # -------------------------- Work Day ----------------------------- #
 
+class GetWorkDayView(object):
+
+    def __init__(self, get_work_day_interactor):
+        self.get_work_day_interactor = get_work_day_interactor
+
+    @serialize_exception
+    def get(self, *args, **kwargs):
+        worked_day = self.get_work_day_interactor.set_params(**kwargs).execute()
+
+        body = WorkDaySerializer.serializer(worked_day)
+        status = 200
+        return body, status
+
+
 class CreateWorkDayView(object):
+
     def __init__(self, create_work_day_interactor):
         self.create_work_day_interactor = create_work_day_interactor
 
@@ -180,7 +202,22 @@ class CreateWorkDayView(object):
 
 # ------------------------------ Work Hours ------------------------------ #
 
+class GetWorkTimeView(object):
+
+    def __init__(self, get_work_time_interactor):
+        self.get_work_time_interactor = get_work_time_interactor
+
+    @serialize_exception
+    def get(self, *args, **kwargs):
+        worked_time = self.get_work_time_interactor.set_params(**kwargs).execute()
+
+        body = WorkTimeSerializer.serializer(worked_time)
+        status = 200
+        return body, status
+
+
 class CreateWorkTimeView(object):
+
     def __init__(self, create_work_time_interactor):
         self.create_work_time_interactor = create_work_time_interactor
 

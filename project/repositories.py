@@ -64,7 +64,7 @@ class ProjectRepo(object):
 
             for key in new_attrs.keys():
                 if new_attrs[key] is not None:
-                    db_project.__getattribute__(key) # TODO add validator for this
+                    db_project.__getattribute__(key)
                     if (key == 'start_date' or key == 'end_date'):
                         db_project.__setattr__(key, datetime.strptime(new_attrs[key], "%Y-%m-%dT%H:%M:%S.%fZ"))
                     else:
@@ -280,8 +280,24 @@ class WorkTaskRepo(object):
 
 class WorkDayRepo(object):
 
-    def get(self):
-        pass
+    def get(self, user_id, project_id, month_payment_id, work_day_id):
+        try:
+            db_project = ProjectORM.objects.get(user_id=user_id, id=project_id)
+            db_month_payment = MonthPaymentORM.objects.get(project=db_project, id=month_payment_id)
+            db_worked_day = WorkDayORM.objects.get(month_payment=db_month_payment, id=work_day_id)
+
+
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user or project id")
+        except MonthPaymentORM.DoesNotExist:
+            raise InvalidEntityException(source='repositories', code='could not find',
+                                         message="Unable to find specified month_payment")
+        except:
+            raise InvalidEntityException(source='repositories', code='could not find',
+                                         message="Unable to find specified worked day")
+
+        return self._decode_db_work_day(db_worked_day)
+
 
 
 
@@ -341,6 +357,25 @@ class WorkDayRepo(object):
 # ---------------------------- Work Time ------------------------------------ #
 
 class WorkTimeRepo(object):
+
+    def get(self, user_id, project_id, hour_payment_id, work_time_id):
+        try:
+            db_project = ProjectORM.objects.get(user_id=user_id, id=project_id)
+            db_hour_payment = HourPaymentORM.objects.get(project=db_project, id=hour_payment_id)
+            db_worked_time = WorkTimeORM.objects.get(hour_payment=db_hour_payment, id=work_time_id)
+
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user or project id")
+        except HourPaymentORM.DoesNotExist:
+            raise InvalidEntityException(source='repositories', code='could not find',
+                                         message="Unable to find specified hour_payment")
+        except:
+            raise InvalidEntityException(source='repositories', code='could not find',
+                                         message="Unable to find specified worked time")
+
+        return self._decode_db_work_time(db_worked_time)
+
+
 
     def create(self, user_id, project_id, hour_payment_id, start_work, end_work):
         try:

@@ -1,11 +1,11 @@
 from project.repositories import ProjectRepo, WorkTaskRepo, WorkDayRepo, WorkTimeRepo
 from project.views import ProjectView, CreateProjectView, AllProjectsView, TotalView, CreateTaskView, \
             GetAllTasksView, UpdateProjectView, GetTaskView, UpdateTaskView, DeleteProjectView, DeleteTaskView, \
-            CreateWorkDayView, CreateWorkTimeView
+            CreateWorkDayView, CreateWorkTimeView, GetWorkDayView, GetWorkTimeView
 from project.interactors import GetProjectInteractor, CreateProjectInteractor, GetAllProjectsInteractor, \
             GetTotalInteractor, CreateTaskInteractor, GetAllTasksInteractor, UpdateProjectInteractor, GetTaskInteractor, \
             UpdateTaskInteractor, DeleteProjectInteractor, DeleteTaskInteractor, CreateWorkDayInteractor, \
-            CreateWorkTimeInteractor
+            CreateWorkTimeInteractor, GetWorkDayInteractor, GetWorkTimeInteractor
                                  
 
 
@@ -188,6 +188,20 @@ class WorkDayRepoFactory(object):
         return WorkDayRepo()
 
 
+
+class GetWorkDayInteractorFactory(object):
+    @staticmethod
+    def get():
+        work_day_repo = WorkDayRepoFactory.get()
+        return GetWorkDayInteractor(work_day_repo)
+
+
+def get_work_day_factory():
+    get_work_day_interactor = GetWorkDayInteractorFactory.get()
+    return GetWorkDayView(get_work_day_interactor)
+
+
+
 class CreateWorkDayInteractorFactory(object):
     @staticmethod
     def get():
@@ -208,6 +222,20 @@ class WorkTimeRepoFactory(object):
         return WorkTimeRepo()
 
 
+
+class GetWorkTimeInteractorFactory(object):
+    @staticmethod
+    def get():
+        work_time_repo = WorkTimeRepoFactory.get()
+        return GetWorkTimeInteractor(work_time_repo)
+
+
+def get_work_time_factory():
+    get_work_time_interactor = GetWorkTimeInteractorFactory.get()
+    return GetWorkTimeView(get_work_time_interactor)
+
+
+
 class CreateWorkTimeInteractorFactory(object):
     @staticmethod
     def get():
@@ -215,6 +243,6 @@ class CreateWorkTimeInteractorFactory(object):
         return CreateWorkTimeInteractor(work_time_repo)
 
 
-def create_work_hours_factory():
+def create_work_time_factory():
     create_work_time_interactor = CreateWorkTimeInteractorFactory.get()
     return CreateWorkTimeView(create_work_time_interactor)

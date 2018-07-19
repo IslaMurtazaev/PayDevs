@@ -71,6 +71,10 @@ class ViewWrapper(View):
                     'user_id': logged_user_id,
                     'project_id': request.META.get('HTTP_PROJECT'),
                     'task_id': request.META.get('HTTP_TASK'),
+                    'hour_payment_id': request.META.get('HTTP_HOURPAYMENT'),
+                    'month_payment_id': request.META.get('HTTP_MONTHPAYMENT'),
+                    'work_day_id': request.META.get('HTTP_WORKDAY'),
+                    'work_time_id': request.META.get('HTTP_WORKTIME'),
                     'secret_key': settings.SECRET_KEY
                 }
 
