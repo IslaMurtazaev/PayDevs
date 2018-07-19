@@ -62,11 +62,28 @@ class ProjectRepoMethodTest(TestCase):
             self.project_repo.create(self.user.id+1, "TestingTesting", "1..2..3..", "H_P", 12)
 
 
-    def test_set_rate_private_methd(self):
+    def test_set_rate_private_method(self):
 
-        project1 = self.project_repo.create(self.user.id, "TestingTesting", "1..2..3..", "H_P", 12)
+        project_entity = self.project_repo.create(self.user.id, "TestingTesting", "1..2..3..", "H_P", 12)
 
-        self.assertEqual(HourPaymentORM.objects.get(project=project1.id).rate, 12)
+        db_project = ProjectORM.objects.get(id=project_entity.id)
+
+        type_of_payment1 = HourPaymentORM.objects.get(project=db_project)
+
+        self.assertEqual(db_project.hourpaymentorm_set.all()[0], HourPaymentORM.objects.filter(project=db_project)[0])
+
+        self.assertEqual(HourPaymentORM.objects.get(project=db_project), type_of_payment1)
+
+        self.assertEqual(type_of_payment1.rate, 12)
+
+        project2 = self.project_repo.create(self.user.id, "TestingTesting", "1..2..3..", "M_P", 300)
+
+        type_of_payment2 = MonthPaymentORM.objects.get(project=project2.id)
+
+        self.assertEqual(MonthPaymentORM.objects.get(project=project2.id), type_of_payment2)
+
+        self.assertEqual(type_of_payment2.rate, 300)
+
 
         # self.assertGreater(len(project1.hourpaymentorm_set.all()), 0)
 

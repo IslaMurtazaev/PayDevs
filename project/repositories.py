@@ -280,14 +280,17 @@ class WorkDayRepo(object):
 
 
 
-    def create(self, user_id, project_id, month_payment_id):
+    def create(self, user_id, project_id, month_payment_id, rate):
         try:
             db_user = UserORM.objects.get(id=user_id)
             db_project = ProjectORM.objects.get(user=db_user, id=project_id)
-            db_month_payment = MonthPaymentORM.objects.get(project=db_project, id=month_payment_id)
+
+            if (month_payment_id):
+                db_month_payment = MonthPaymentORM.objects.get(project=db_project, id=month_payment_id)
+            else:
+                db_month_payment = MonthPaymentORM.objects.get(project=db_project, rate=rate)
 
             db_worked_day = WorkDayORM(month_payment=db_month_payment)
-            print(db_worked_day)
 
             db_worked_day.save()
 
@@ -297,10 +300,10 @@ class WorkDayRepo(object):
             raise NoPermissionException(message="Invalid project id")
         except MonthPaymentORM.DoesNotExist:
             raise InvalidEntityException(source='repositories', code='not found',
-                                         message="Invalid MonthPayment id")
-        # except:
-        #     raise InvalidEntityException(source='repositories', code='could not save',
-        #                                  message="Unable to create such worked day")
+                                         message="Invalid MonthPayment id or rate")
+        except:
+            raise InvalidEntityException(source='repositories', code='could not save',
+                                         message="Unable to create such worked day")
         return self._decode_db_work_day(db_worked_day)
 
 

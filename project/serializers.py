@@ -22,6 +22,6 @@ class WorkTaskListSerializer(ListSerializer):
     fields = ['id', 'project', 'title', 'description', 'price', 'completed', 'paid']
 
 
-class WorkDaySerializer(BaseSerializer):
+class WorkDaySerializer(DateFormatSerializer):
     model = WorkedDay
     fields = ['id', 'month_payment', 'day', 'paid']
