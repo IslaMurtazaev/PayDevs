@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from account.models import UserORM
 from project.entities import Project, WorkTask, WorkedDay, WorkTime
 from project.models import ProjectORM, HourPaymentORM, MonthPaymentORM, WorkTaskORM, WorkDayORM, WorkTimeORM
@@ -63,7 +65,10 @@ class ProjectRepo(object):
             for key in new_attrs.keys():
                 if new_attrs[key] is not None:
                     db_project.__getattribute__(key) # TODO add validator for this
-                    db_project.__setattr__(key, new_attrs[key])
+                    if (key == 'start_date' or key == 'end_date'):
+                        db_project.__setattr__(key, datetime.strptime(new_attrs[key], "%Y-%m-%dT%H:%M:%S.%fZ"))
+                    else:
+                       db_project.__setattr__(key, new_attrs[key])
 
             db_project.save()
 
