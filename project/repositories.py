@@ -1,6 +1,6 @@
 from account.models import UserORM
-from project.entities import Project, WorkTask
-from project.models import ProjectORM, HourPaymentORM, MonthPaymentORM, WorkTaskORM
+from project.entities import Project, WorkTask, WorkedDay, WorkTime
+from project.models import ProjectORM, HourPaymentORM, MonthPaymentORM, WorkTaskORM, WorkDayORM, WorkTimeORM
 from PayDevs.exceptions import EntityDoesNotExistException, InvalidEntityException, NoPermissionException
 
 
@@ -269,3 +269,62 @@ class WorkTaskRepo(object):
         }
 
         return WorkTask(**fields)
+
+
+# ------------------------- Work Day -------------------------------------- #
+
+class WorkDayRepo(object):
+
+    def get(self):
+        pass
+
+
+
+    def create(self, user_id, project_id, month_payment_id):
+        try:
+            db_user = UserORM.objects.get(id=user_id)
+            db_project = ProjectORM.objects.get(user=db_user, id=project_id)
+            db_month_payment = MonthPaymentORM.objects.get(project=db_project, id=month_payment_id)
+
+            db_worked_day = WorkDayORM(month_payment=db_month_payment)
+            print(db_worked_day)
+
+            db_worked_day.save()
+
+        except UserORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user id")
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid project id")
+        except MonthPaymentORM.DoesNotExist:
+            raise InvalidEntityException(source='repositories', code='not found',
+                                         message="Invalid MonthPayment id")
+        # except:
+        #     raise InvalidEntityException(source='repositories', code='could not save',
+        #                                  message="Unable to create such worked day")
+        return self._decode_db_work_day(db_worked_day)
+
+
+    def get_all(self, user_id, project_id):
+        try:
+            db_user = UserORM.objects.get(id=user_id)
+            db_project = ProjectORM.objects.get(user=db_user, id=project_id)
+            db_monthpayments = db_project.monthpaymentorm_set.all()
+
+            db_worked_days = list()
+
+            for db_monthpayment in db_monthpayments:
+                db_worked_days += db_monthpayment.worktimeorm_set.all()
+
+        except:
+            raise Exception
+
+
+    def _decode_db_work_day(self, db_work_day):
+        fields = {
+            'id': db_work_day.id,
+            'month_payment': str(db_work_day.month_payment),
+            'day': db_work_day.day,
+            'paid': db_work_day.paid
+        }
+
+        return WorkedDay(**fields)

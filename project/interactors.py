@@ -205,3 +205,21 @@ class GetAllTasksInteractor(Interactor):
 
     def execute(self):
         return self.work_task_repo.get_all(user_id=self.user_id, project_id=self.project_id)
+
+
+# -------------------------- Work Day ------------------------------------ #
+
+class CreateWorkDayInteractor(Interactor):
+
+    def __init__(self, work_task_repo):
+        self.work_task_repo = work_task_repo
+
+    def set_params(self, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        self.project_id = kwargs.get('project_id')
+        self.month_payment_id = kwargs.get('month_payment_id')
+        return self
+
+    def execute(self):
+        return self.work_task_repo.create(user_id=self.user_id, project_id=self.project_id,
+                                          month_payment_id=self.month_payment_id)

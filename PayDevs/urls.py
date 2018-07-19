@@ -20,7 +20,7 @@ from django.views.decorators.csrf import csrf_exempt
 from account.factories import get_user_factories, get_user_all_factories, get_user_regist_factories, get_user_login_factories
 from project.factories import get_project_factory, create_project_factory, get_all_projects_factory, get_total_factory, \
     create_task_factory, get_all_tasks_factory, update_project_factory, get_task_factory, update_task_factory, delete_project_factory, \
-    delete_task_factory
+    delete_task_factory, create_work_day_factory
 
 from PayDevs.views import ViewWrapper
 
@@ -44,4 +44,7 @@ urlpatterns = [
     path('project/task/update', csrf_exempt(ViewWrapper.as_view(view_factory=update_task_factory)), name='update_task'),
     path('project/task/delete', csrf_exempt(ViewWrapper.as_view(view_factory=delete_task_factory)), name='delete_task'),
     path('project/task/all', ViewWrapper.as_view(view_factory=get_all_tasks_factory), name='get_all_tasks'),
+
+    # path('project/day', ViewWrapper.as_view(view_factory=get_work_day_factory), name='get_work_day'),
+    path('project/day/create', csrf_exempt(ViewWrapper.as_view(view_factory=create_work_day_factory)), name='create_work_day'),
 ]
