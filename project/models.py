@@ -109,7 +109,8 @@ class MonthPaymentORM(models.Model):
     #     count_worked_day = len([i for i in worked_days if i.is_completed()])
     #     return self.rate * count_worked_day
 
-class WorkDayORM(models.Model):
+
+class WorkedDayORM(models.Model):
     month_payment = models.ForeignKey(MonthPaymentORM, on_delete=models.CASCADE)
     day = models.DateField(default=current_date)
     paid = models.BooleanField(default=False)

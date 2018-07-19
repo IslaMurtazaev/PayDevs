@@ -1,6 +1,6 @@
 from django.test import TestCase
 from account.models import UserORM
-from project.models import ProjectORM, HourPaymentORM, WorkTimeORM, WorkTaskORM, MonthPaymentORM, WorkDayORM
+from project.models import ProjectORM, HourPaymentORM, WorkTimeORM, WorkTaskORM, MonthPaymentORM, WorkedDayORM
 from project.entities import Project
 from project.repositories import ProjectRepo, WorkTaskRepo
 from project.interactors import GetProjectInteractor, CreateProjectInteractor

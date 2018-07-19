@@ -1,3 +1,4 @@
+import datetime
 import inspect
 
 from PayDevs.exceptions import SerializerException, PayDevsException, EntityDoesNotExistException
@@ -35,6 +36,29 @@ class BaseSerializer(object):
 
 
 class ListSerializer(BaseSerializer):
+
+    @classmethod
+    def serializer(cls, list_obj):
+        result = list()
+        for obj in list_obj:
+            result.append(super().serializer(obj))
+        return result
+
+
+class DateFormatSerializer(BaseSerializer):
+    format = "%Y-%m-%e %T%z"
+
+    @classmethod
+    def serializer(cls, list_obj):
+        result = super().serializer(list_obj)
+        for key in result:
+            if type(result[key]) == datetime.datetime or type(result[key]) == datetime.date:
+                result[key] = result[key].strftime(cls.format)
+            return result
+
+
+
+class DateFormatListSerializer(DateFormatSerializer):
 
     @classmethod
     def serializer(cls, list_obj):

@@ -19,7 +19,7 @@ class UserAllView(object):
         self.get_user_interactor = get_user_interactor
 
     @serialize_exception
-    def get(self):
+    def get(self, *args, **kwargs):
         users = self.get_user_interactor.set_params().execute()
         body = UserListSerializer.serializer(users)
         status = 200
