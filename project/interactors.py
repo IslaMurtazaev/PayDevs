@@ -243,6 +243,28 @@ class CreateWorkDayInteractor(Interactor):
         return self.work_day_repo.create(user_id=self.user_id, project_id=self.project_id,
                                          month_payment_id=self.month_payment_id, day=self.day)
 
+
+
+class UpdateWorkDayInteractor(Interactor):
+
+    def __init__(self, work_day_repo):
+        self.work_day_repo = work_day_repo
+
+    def set_params(self, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        self.project_id = kwargs.get('project_id')
+        self.month_payment_id = kwargs.get('month_payment_id')
+        self.work_day_id = kwargs.get('work_day_id')
+        self.new_attrs = {
+            'day': kwargs.get('day'),
+            'paid': kwargs.get('paid')
+        }
+        return self
+
+    def execute(self):
+        return self.work_day_repo.update(user_id=self.user_id, project_id=self.project_id, work_day_id=self.work_day_id,
+                                         month_payment_id=self.month_payment_id, new_attrs=self.new_attrs)
+
 # TODO add full CRUD to WorkedDay
 
 # ------------------------------- Work Time ------------------------------------ #
@@ -282,5 +304,28 @@ class CreateWorkTimeInteractor(Interactor):
         return self.work_time_repo.create(user_id=self.user_id, project_id=self.project_id,
                                           hour_payment_id=self.hour_payment_id, start_work=self.start_work,
                                           end_work=self.end_work)
+
+
+
+class UpdateWorkTimeInteractor(Interactor):
+
+    def __init__(self, work_time_repo):
+        self.work_time_repo = work_time_repo
+
+    def set_params(self, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        self.project_id = kwargs.get('project_id')
+        self.hour_payment_id = kwargs.get('hour_payment_id')
+        self.work_time_id = kwargs.get('work_time_id')
+        self.new_attrs = {
+            'start_work': kwargs.get('start_work'),
+            'end_work': kwargs.get('end_work'),
+            'paid': kwargs.get('paid')
+        }
+        return self
+
+    def execute(self):
+        return self.work_time_repo.update(user_id=self.user_id, project_id=self.project_id, work_time_id=self.work_time_id,
+                                          hour_payment_id=self.hour_payment_id, new_attrs=self.new_attrs)
 
 # TODO add full CRUD to WorkedDay

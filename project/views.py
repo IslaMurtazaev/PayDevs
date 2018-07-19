@@ -186,6 +186,7 @@ class GetWorkDayView(object):
         return body, status
 
 
+
 class CreateWorkDayView(object):
 
     def __init__(self, create_work_day_interactor):
@@ -200,7 +201,23 @@ class CreateWorkDayView(object):
         return body, status
 
 
-# ------------------------------ Work Hours ------------------------------ #
+
+class UpdateWorkDayView(object):
+
+    def __init__(self, update_work_day_interactor):
+        self.update_work_day_interactor = update_work_day_interactor
+
+    @serialize_exception
+    def put(self, *args, **kwargs):
+        updated_worked_day = self.update_work_day_interactor.set_params(**kwargs).execute()
+
+        body = WorkDaySerializer.serializer(updated_worked_day)
+        status = 201
+        return body, status
+
+
+
+# ------------------------------ Work Time ------------------------------ #
 
 class GetWorkTimeView(object):
 
@@ -216,6 +233,7 @@ class GetWorkTimeView(object):
         return body, status
 
 
+
 class CreateWorkTimeView(object):
 
     def __init__(self, create_work_time_interactor):
@@ -226,5 +244,20 @@ class CreateWorkTimeView(object):
         created_worked_time = self.create_work_time_interactor.set_params(**kwargs).execute()
 
         body = WorkTimeSerializer.serializer(created_worked_time)
+        status = 201
+        return body, status
+
+
+
+class UpdateWorkTimeView(object):
+
+    def __init__(self, update_work_time_interactor):
+        self.update_work_time_interactor = update_work_time_interactor
+
+    @serialize_exception
+    def put(self, *args, **kwargs):
+        updated_worked_time = self.update_work_time_interactor.set_params(**kwargs).execute()
+
+        body = WorkTimeSerializer.serializer(updated_worked_time)
         status = 201
         return body, status

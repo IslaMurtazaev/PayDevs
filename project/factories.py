@@ -1,11 +1,12 @@
 from project.repositories import ProjectRepo, WorkTaskRepo, WorkDayRepo, WorkTimeRepo
 from project.views import ProjectView, CreateProjectView, AllProjectsView, TotalView, CreateTaskView, \
             GetAllTasksView, UpdateProjectView, GetTaskView, UpdateTaskView, DeleteProjectView, DeleteTaskView, \
-            CreateWorkDayView, CreateWorkTimeView, GetWorkDayView, GetWorkTimeView
+            CreateWorkDayView, CreateWorkTimeView, GetWorkDayView, GetWorkTimeView, UpdateWorkDayView, UpdateWorkTimeView
 from project.interactors import GetProjectInteractor, CreateProjectInteractor, GetAllProjectsInteractor, \
             GetTotalInteractor, CreateTaskInteractor, GetAllTasksInteractor, UpdateProjectInteractor, GetTaskInteractor, \
             UpdateTaskInteractor, DeleteProjectInteractor, DeleteTaskInteractor, CreateWorkDayInteractor, \
-            CreateWorkTimeInteractor, GetWorkDayInteractor, GetWorkTimeInteractor
+            CreateWorkTimeInteractor, GetWorkDayInteractor, GetWorkTimeInteractor, UpdateWorkDayInteractor, \
+            UpdateWorkTimeInteractor
                                  
 
 
@@ -214,6 +215,19 @@ def create_work_day_factory():
     return CreateWorkDayView(create_work_day_interactor)
 
 
+
+class UpdateWorkDayInteractorFactory(object):
+    @staticmethod
+    def get():
+        work_day_repo = WorkDayRepoFactory.get()
+        return UpdateWorkDayInteractor(work_day_repo)
+
+
+def update_work_day_factory():
+    update_work_day_interactor = UpdateWorkDayInteractorFactory.get()
+    return UpdateWorkDayView(update_work_day_interactor)
+
+
 # ------------------------ Work Time ------------------------------------- #
 
 class WorkTimeRepoFactory(object):
@@ -246,3 +260,17 @@ class CreateWorkTimeInteractorFactory(object):
 def create_work_time_factory():
     create_work_time_interactor = CreateWorkTimeInteractorFactory.get()
     return CreateWorkTimeView(create_work_time_interactor)
+
+
+
+class UpdateWorkTimeInteractorFactory(object):
+    @staticmethod
+    def get():
+        work_time_repo = WorkTimeRepoFactory.get()
+        return UpdateWorkTimeInteractor(work_time_repo)
+
+
+def update_work_time_factory():
+    update_work_time_interactor = UpdateWorkTimeInteractorFactory.get()
+    return UpdateWorkTimeView(update_work_time_interactor)
+

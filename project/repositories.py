@@ -68,7 +68,7 @@ class ProjectRepo(object):
                     if (key == 'start_date' or key == 'end_date'):
                         db_project.__setattr__(key, datetime.strptime(new_attrs[key], "%Y-%m-%dT%H:%M:%S.%fZ"))
                     else:
-                       db_project.__setattr__(key, new_attrs[key])
+                        db_project.__setattr__(key, new_attrs[key])
 
             db_project.save()
 
@@ -328,6 +328,35 @@ class WorkDayRepo(object):
         return self._decode_db_work_day(db_worked_day)
 
 
+
+    def update(self, user_id, project_id, month_payment_id, work_day_id, new_attrs):
+        try:
+            db_project = ProjectORM.objects.get(user_id=user_id, id=project_id)
+            db_month_payment = MonthPaymentORM.objects.get(project=db_project, id=month_payment_id)
+            db_worked_day = WorkDayORM.objects.get(month_payment=db_month_payment, id=work_day_id)
+
+            for attr in new_attrs.keys():
+                if new_attrs[attr] is None:
+                    continue
+                elif (attr == 'day'):
+                    db_worked_day.__dict__[attr] = datetime.strptime(new_attrs[attr], "%Y-%m-%d")
+                else:
+                    db_worked_day.__dict__[attr] = new_attrs[attr]
+
+            db_worked_day.save()
+
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user or project id")
+        except MonthPaymentORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid month_payment id")
+        except:
+            raise InvalidEntityException(source='repositories', code='could not update',
+                                         message="'%s' attribute is invalid" % attr)
+
+        return self._decode_db_work_day(db_worked_day)
+
+
+
     def get_all(self, user_id, project_id):
         try:
             db_user = UserORM.objects.get(id=user_id)
@@ -404,6 +433,35 @@ class WorkTimeRepo(object):
             raise InvalidEntityException(source='repositories', code='could not save',
                                          message="Unable to create such worked day")
         return self._decode_db_work_time(db_worked_time)
+
+
+
+    def update(self, user_id, project_id, hour_payment_id, work_time_id, new_attrs):
+        try:
+            db_project = ProjectORM.objects.get(user_id=user_id, id=project_id)
+            db_hour_payment = HourPaymentORM.objects.get(project=db_project, id=hour_payment_id)
+            db_worked_time = WorkTimeORM.objects.get(hour_payment=db_hour_payment, id=work_time_id)
+
+            for attr in new_attrs.keys():
+                if new_attrs[attr] is None:
+                    continue
+                elif (attr == 'start_work' or attr == 'end_work'):
+                    db_worked_time.__dict__[attr] = datetime.strptime(new_attrs[attr], "%Y-%m-%dT%H:%M:%S.%fZ")
+                else:
+                    db_worked_time.__dict__[attr] = new_attrs[attr]
+
+            db_worked_time.save()
+
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user or project id")
+        except HourPaymentORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid hour_payment id ")
+        except:
+            raise InvalidEntityException(source='repositories', code='could not update',
+                                         message="'%s' attribute is invalid" % attr)
+
+        return self._decode_db_work_time(db_worked_time)
+
 
 
     def _decode_db_work_time(self, db_work_time):
