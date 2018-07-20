@@ -62,13 +62,12 @@ class ProjectRepo(object):
             db_user = UserORM.objects.get(id=user_id)
             db_project = db_user.projectorm_set.get(id=project_id)
 
-            for key in new_attrs.keys():
-                if new_attrs[key] is not None:
-                    db_project.__getattribute__(key)
-                    if (key == 'start_date' or key == 'end_date'):
-                        db_project.__setattr__(key, datetime.strptime(new_attrs[key], "%Y-%m-%dT%H:%M:%S.%fZ"))
+            for attr in new_attrs.keys():
+                if new_attrs[attr] is not None:
+                    if (attr == 'start_date' or attr == 'end_date'):
+                        db_project.__dict__[attr] = datetime.strptime(new_attrs[attr], "%Y-%m-%dT%H:%M:%S.%fZ")
                     else:
-                        db_project.__setattr__(key, new_attrs[key])
+                        db_project.__dict__[attr] = new_attrs[attr]
 
             db_project.save()
 
@@ -76,9 +75,12 @@ class ProjectRepo(object):
             raise NoPermissionException(message="Invalid user id")
         except ProjectORM.DoesNotExist:
             raise NoPermissionException(message="Invalid project id")
+        except (KeyError, ValueError):
+            raise InvalidEntityException(source='repositories', code='not allowed',
+                                         message="Unable to update project with provided attr "+ str(attr))
         except:
             raise InvalidEntityException(source='repositories', code='not allowed',
-                                         message="Unable to update project with provided attr "+ str(key))
+                                         message="Unable to update project")
         return self._decode_db_project(db_project)
 
 
@@ -218,9 +220,12 @@ class WorkTaskRepo(object):
             raise NoPermissionException(message="Invalid project id")
         except WorkTaskORM.DoesNotExist:
             raise NoPermissionException(message="Invalid task id")
-        except:
+        except (KeyError, ValueError):
             raise InvalidEntityException(source='repositories', code='could not update',
                                          message="'%s' attribute is invalid" % attr)
+        except:
+            raise InvalidEntityException(source='repositories', code='not allowed',
+                                         message="Unable to update task")
 
         return self._decode_db_work_task(db_work_task)
 

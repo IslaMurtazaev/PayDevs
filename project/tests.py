@@ -134,8 +134,10 @@ class ProjectRepoMethodTest(TestCase):
         with self.assertRaises(NoPermissionException):
             self.project_repo.update(self.user.id, self.project.id+1, {})
 
-        with self.assertRaises(InvalidEntityException):
-            self.project_repo.update(self.user.id, self.project.id, {'not_existing_field': True})
+        self.project_repo.update(self.user.id, self.project.id, {'not_existing_field': True})
+
+        with self.assertRaises(AttributeError):
+            self.project_repo.get(user_id=self.user.id, project_id=self.project.id).not_existing_field == True
 
 
 
