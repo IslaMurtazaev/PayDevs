@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.utils import timezone
 
 from account.models import UserORM
 from project.entities import Project, WorkTask, WorkedDay, WorkTime
@@ -101,36 +102,85 @@ class ProjectRepo(object):
 
 
 
-
-    def get_total(self, user_id, project_id):
+    def get_worked(self, user_id, project_id, start_date_boundary=None, end_date_boundary=None):
         try:
             db_user = UserORM.objects.get(id=user_id)
             db_project = ProjectORM.objects.get(user=db_user, id=project_id)
+
+            type_of_payment = db_project.type_of_payment.lower()
+
+            if (type_of_payment == 'h_p'):
+                return self._get_worked_time(db_project, start_date_boundary, end_date_boundary)
+            elif (type_of_payment == 'm_p'):
+                return self._get_worked_days(db_project)
+            else:
+                return self._get_worked_tasks(db_project)
+
+
         except UserORM.DoesNotExist:
             raise NoPermissionException(message="Invalid user id")
         except ProjectORM.DoesNotExist:
             raise NoPermissionException(message="Invalid project id")
-
-        if (db_project.type_of_payment.lower() == 'h_p'):
-            raise NotImplementedError
-        elif (db_project.type_of_payment.lower() == 'm_p'):
-            raise NotImplementedError
-        else:
-            return self._get_tasks_total(db_project)
-
-
-
-    def _get_tasks_total(self, db_project):
-        try:
-            tasks = db_project.worktaskorm_set.all()
-            total = 0
-            for task in tasks:
-                if (task.completed and not task.paid):
-                    total += task.price
         except:
-            raise InvalidEntityException(source='repositories', code='could not sum total',
-                                         message="'%s' task attribute is invalid" % task.title)
-        return total
+            raise InvalidEntityException(source='repositories', code='could not get worked',
+                                         message="Unable to get worked in '%s' type of payment" % type_of_payment)
+
+
+    def _get_worked_tasks(self, db_project):
+        db_worked_tasks = db_project.worktaskorm_set.filter(completed=True, paid=False)
+
+        return [WorkTaskRepo()._decode_db_work_task(db_work_task) for db_work_task in db_worked_tasks]
+
+
+    def _get_worked_days(self, db_project):
+        db_month_payments = MonthPaymentORM.objects.filter(project=db_project)
+        db_worked_days = list()
+
+        for db_month_payment in db_month_payments:
+            db_worked_days += db_month_payment.workdayorm_set.exclude(day__gte=timezone.now().replace(day=1).date())
+
+        return db_worked_days
+
+
+    def _get_worked_time(self, db_project, start_boundary, end_boundary):
+        db_hour_payments = HourPaymentORM.objects.filter(project=db_project)
+        db_worked_time_list = list()
+
+        for db_hour_payment in db_hour_payments:
+            db_worked_time_list += db_hour_payment.worktimeorm_set.filter(start_work__gte=start_boundary, end_work__lte=end_boundary)
+
+        return db_worked_time_list
+
+
+    # def get_total(self, user_id, project_id):
+    #     try:
+    #         db_user = UserORM.objects.get(id=user_id)
+    #         db_project = ProjectORM.objects.get(user=db_user, id=project_id)
+    #     except UserORM.DoesNotExist:
+    #         raise NoPermissionException(message="Invalid user id")
+    #     except ProjectORM.DoesNotExist:
+    #         raise NoPermissionException(message="Invalid project id")
+    #
+    #     if (db_project.type_of_payment.lower() == 'h_p'):
+    #         raise NotImplementedError
+    #     elif (db_project.type_of_payment.lower() == 'm_p'):
+    #         raise NotImplementedError
+    #     else:
+    #         return self._get_tasks_total(db_project)
+    #
+    #
+    #
+    # def _get_tasks_total(self, db_project):
+    #     try:
+    #         tasks = db_project.worktaskorm_set.all()
+    #         total = 0
+    #         for task in tasks:
+    #             if (task.completed and not task.paid):
+    #                 total += task.price
+    #     except:
+    #         raise InvalidEntityException(source='repositories', code='could not sum total',
+    #                                      message="'%s' task attribute is invalid" % task.title)
+    #     return total
 
 
 
@@ -209,7 +259,7 @@ class WorkTaskRepo(object):
             db_work_task = WorkTaskORM.objects.get(project=db_project, id=task_id)
 
             for attr in new_attrs.keys():
-                if attr is not None:
+                if new_attrs[attr] is not None:
                     db_work_task.__dict__[attr] = new_attrs[attr]
 
             db_work_task.save()

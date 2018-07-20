@@ -94,18 +94,54 @@ class GetAllProjectsInteractor(Interactor):
 
 
 
+
+class GetRateInteractor(Interactor):
+
+    def __init__(self, project_repo):
+        self.project_repo = project_repo
+
+    def set_params(self, type_of_payment, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        self.project_id = kwargs.get('project_id')
+        self.type_of_payment = type_of_payment
+        return self
+
+    def execute(self):
+        return self.project_repo.get_rate(self.user_id, self.project_id, self.type_of_payment)
+
+
+
+class GetWorkedInteractor(Interactor):
+
+    def __init__(self, project_repo):
+        self.project_repo = project_repo
+
+    def set_params(self, type_of_payment, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        self.project_id = kwargs.get('project_id')
+        self.type_of_payment = type_of_payment
+        return self
+
+    def execute(self):
+        return self.project_repo.get_worked(self.user_id, self.project_id, self.type_of_payment)
+
+
+
 class GetTotalInteractor(Interactor):
 
     def __init__(self, project_repo):
         self.project_repo = project_repo
 
-    def set_params(self, **kwargs):
+    def set_params(self, type_of_payment, worked, **kwargs):
         self.user_id = kwargs.get('user_id')
         self.project_id = kwargs.get('project_id')
+        self.type_of_payment = type_of_payment
+        self.worked = worked
         return self
 
     def execute(self):
-        return self.project_repo.get_total(self.user_id, self.project_id)
+        pass
+
 
 
 

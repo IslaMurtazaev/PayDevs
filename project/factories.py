@@ -3,11 +3,11 @@ from project.views import ProjectView, CreateProjectView, AllProjectsView, Total
             GetAllTasksView, UpdateProjectView, GetTaskView, UpdateTaskView, DeleteProjectView, DeleteTaskView, \
             CreateWorkDayView, CreateWorkTimeView, GetWorkDayView, GetWorkTimeView, UpdateWorkDayView, UpdateWorkTimeView, \
             DeleteWorkDayView, DeleteWorkTimeView
-from project.interactors import GetProjectInteractor, CreateProjectInteractor, GetAllProjectsInteractor, \
+from project.interactors import GetProjectInteractor, CreateProjectInteractor, GetAllProjectsInteractor, GetWorkedInteractor,\
             GetTotalInteractor, CreateTaskInteractor, GetAllTasksInteractor, UpdateProjectInteractor, GetTaskInteractor, \
             UpdateTaskInteractor, DeleteProjectInteractor, DeleteTaskInteractor, CreateWorkDayInteractor, \
             CreateWorkTimeInteractor, GetWorkDayInteractor, GetWorkTimeInteractor, UpdateWorkDayInteractor, \
-            UpdateWorkTimeInteractor, DeleteWorkDayInteractor, DeleteWorkTimeInteractor
+            UpdateWorkTimeInteractor, DeleteWorkDayInteractor, DeleteWorkTimeInteractor, GetRateInteractor
                                  
 
 
@@ -56,6 +56,10 @@ class UpdateProjectInteractorFactory(object):
         return UpdateProjectInteractor(project_repo)
 
 
+def update_project_factory():
+    update_project_interactor = UpdateProjectInteractorFactory.get()
+    return UpdateProjectView(update_project_interactor)
+
 
 
 
@@ -85,11 +89,20 @@ def get_all_projects_factory():
     return AllProjectsView(get_all_projects_interactor)
 
 
-def update_project_factory():
-    update_project_interactor = UpdateProjectInteractorFactory.get()
-    return UpdateProjectView(update_project_interactor)
 
 
+class GetRateInteractorFactory(object):
+    @staticmethod
+    def get():
+        project_repo = ProjectRepoFactory.get()
+        return GetRateInteractor(project_repo)
+
+
+class GetWorkedInteractorFactory(object):
+    @staticmethod
+    def get():
+        project_repo = ProjectRepoFactory.get()
+        return GetWorkedInteractor(project_repo)
 
 
 class GetTotalInteractorFactory(object):
@@ -100,8 +113,10 @@ class GetTotalInteractorFactory(object):
 
 
 def get_total_factory():
+    get_rate_interactor = GetRateInteractorFactory.get()
+    get_worked_interactor = GetWorkedInteractorFactory.get()
     get_total_interactor = GetTotalInteractorFactory.get()
-    return TotalView(get_total_interactor)
+    return TotalView(get_rate_interactor, get_worked_interactor, get_total_interactor)
 
 
 #--------------------------- Work Task ----------------------------------------#
