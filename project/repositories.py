@@ -1,10 +1,12 @@
 from account.models import UserORM
 from project.entities import Project, WorkTask, MonthPayment, WorkedDay, HourPayment, WorkTime
-from project.models import ProjectORM, HourPaymentORM, MonthPaymentORM, WorkTaskORM, WorkedDayORM
-from PayDevs.exceptions import EntityDoesNotExistException, InvalidEntityException, NoPermissionException
-
+from project.models import ProjectORM, HourPaymentORM, MonthPaymentORM, WorkTaskORM, WorkedDayORM, WorkTimeORM
+from PayDevs.exceptions import EntityDoesNotExistException, InvalidEntityException, NoPermissionException, \
+    EntityIntegrityException
+from django.db.utils import IntegrityError
 
 # ------------------------------------------ Project --------------------------------------------#
+
 
 class ProjectRepo(object):
     def _decode_db_project(self, db_project, is_mine=False, entity_type_list=None):
@@ -138,6 +140,7 @@ class WorkTaskRepo:
         return tasks
 
     def create(self, work_task):
+
         db_work_task = WorkTaskORM.objects.create(
             project_id=work_task.project_id,
             title=work_task.title,
@@ -153,14 +156,14 @@ class WorkTaskRepo:
             db_work_task = WorkTaskORM.objects.get(id=work_task.id)
         except WorkTaskORM.DoesNotExist:
             raise EntityDoesNotExistException
-        if work_task.title:
-            db_work_task.title = work_task.title
-        if work_task.description:
-            db_work_task.description = work_task.description
+
+        db_work_task.title = work_task.title
+        db_work_task.description = work_task.description
         db_work_task.completed = work_task.completed
         db_work_task.paid = work_task.paid
+        db_work_task.price = work_task.price
         db_work_task.save()
-        self._decode_db_work_task(db_work_task)
+        return self._decode_db_work_task(db_work_task)
 
     def delete(self, work_task_id):
         try:
@@ -177,7 +180,7 @@ class WorkTaskRepo:
             'id': db_work_task.id,
             'project_id': db_work_task.project.id,
             'title': db_work_task.title,
-            'description': db_work_task.decription,
+            'description': db_work_task.description,
             'price': db_work_task.price,
             'completed': db_work_task.completed,
             'paid': db_work_task.paid
@@ -204,7 +207,7 @@ class MonthPaymentRepo:
     def get(self, month_payment_id):
         try:
             db_month_payment = MonthPaymentORM.objects.select_related('project').get(id=month_payment_id)
-        except ProjectORM.DoesNotExist:
+        except MonthPaymentORM.DoesNotExist:
             raise EntityDoesNotExistException
 
         return self._decode_db_month_payment(db_month_payment,
@@ -213,22 +216,24 @@ class MonthPaymentRepo:
     def get_all(self, project_id):
         try:
             db_month_payments = MonthPaymentORM.objects.select_related('project').filter(project_id=project_id)
-        except ProjectORM.DoesNotExist:
+        except MonthPaymentORM.DoesNotExist:
             raise EntityDoesNotExistException
 
-        return [self._get_worked_days(db_month_payment) for db_month_payment in db_month_payments]
+        return [self._decode_db_month_payment(db_month_payment,
+                                              work_days=self._get_worked_days(db_month_payment.id))
+                for db_month_payment in db_month_payments]
 
     def create(self, month_payment):
         db_month_payment = MonthPaymentORM.objects.create(
             project_id=month_payment.project_id,
             rate=month_payment.rate
         )
-        return self._decode_db_month_payment(db_month_payment)
+        return self._decode_db_month_payment(db_month_payment, self._get_worked_days(db_month_payment.id))
 
     def update(self, month_payment):
         try:
             db_month_payment = MonthPaymentORM.objects.get(id=month_payment.id)
-        except ProjectORM.DoesNotExist:
+        except MonthPaymentORM.DoesNotExist:
             raise EntityDoesNotExistException
         db_month_payment.rate = month_payment.rate
         db_month_payment.save()
@@ -237,7 +242,7 @@ class MonthPaymentRepo:
     def delete(self, month_payment_id):
         try:
             db_month_payment = MonthPaymentORM.objects.get(id=month_payment_id)
-        except WorkTaskORM.DoesNotExist:
+        except MonthPaymentORM.DoesNotExist:
             raise EntityDoesNotExistException
         work_task = self._decode_db_month_payment(db_month_payment,
                                                   self._get_worked_days(db_month_payment.id))
@@ -249,7 +254,7 @@ class MonthPaymentRepo:
         worked_days = []
         try:
             db_month_payment = MonthPaymentORM.objects.select_related('project').get(id=month_payment_id)
-            db_worked_days = db_month_payment.workdayorm_set.all()
+            db_worked_days = db_month_payment.workeddayorm_set.all()
         except ProjectORM.DoesNotExist:
             raise EntityDoesNotExistException
         for db_worked_day in db_worked_days:
@@ -266,6 +271,19 @@ class WorkedDayRepo:
             day=worked_day.day,
             paid=worked_day.paid
         )
+        return self._decode_db_worked_day(db_worked_day)
+
+
+    def update(self, worked_day):
+        try:
+            db_worked_day = WorkedDayORM.objects.get(id=worked_day.id)
+        except WorkedDayORM.DoesNotExist:
+            raise EntityDoesNotExistException
+
+        db_worked_day.day = worked_day.day
+        db_worked_day.paid = worked_day.paid
+        db_worked_day.save()
+
         return self._decode_db_worked_day(db_worked_day)
 
 
@@ -299,7 +317,7 @@ class WorkedDayRepo:
 
         fileds = {
             'id': db_wored_day.id,
-            'month_payment': db_wored_day.month_payment,
+            'month_payment_id': db_wored_day.month_payment.id,
             'day': db_wored_day.day,
             'paid': db_wored_day.paid
         }
@@ -349,6 +367,10 @@ class HourPaymentRepo:
             db_hour_payment = HourPaymentORM.objects.get(id=hour_payment.id)
         except ProjectORM.DoesNotExist:
             raise EntityDoesNotExistException
+        db_hour_payment.rate = hour_payment.rate
+        db_hour_payment.save()
+        return self._decode_db_hour_payment(db_hour_payment,
+                                            work_times=self._get_worked_times(db_hour_payment.id))
 
 
 
@@ -356,7 +378,7 @@ class HourPaymentRepo:
         fileds = {
             'id': db_hour_payment.id,
             'project_id': db_hour_payment.project.id,
-            'rate': db_hour_payment.project.rate,
+            'rate': db_hour_payment.rate,
             'work_times': work_times
         }
 
@@ -376,10 +398,60 @@ class HourPaymentRepo:
 
 class WorkTimeRepo:
 
+    def create(self, work_time):
+        db_work_time = WorkTimeORM.objects.create(
+            hour_payment_id=work_time.hour_payment_id,
+            start_work=work_time.start_work,
+            end_work=work_time.end_work,
+            paid=work_time.paid
+        )
+        return self._decode_db_work_time(db_work_time)
+
+
+    def get_all(self, hour_payment_id):
+        try:
+            db_work_times = WorkTimeORM.objects.select_related('hour_payment').filter(hour_payment_id=hour_payment_id)
+        except WorkTimeORM.DoesNotExist:
+            raise EntityDoesNotExistException
+
+        return [self._decode_db_work_time(db_work_time) for db_work_time in db_work_times]
+
+
+    def get(self, work_time_id):
+        try:
+            db_work_time = WorkTimeORM.objects.select_related('hour_payment').get(id=work_time_id)
+        except WorkTimeORM.DoesNotExist:
+            raise EntityDoesNotExistException
+
+        return self._decode_db_work_time(db_work_time)
+
+    def update(self, work_time):
+        try:
+            db_work_time = WorkTimeORM.objects.select_related('hour_payment').get(id=work_time.id)
+        except WorkTimeORM.DoesNotExist:
+            raise EntityDoesNotExistException
+
+        db_work_time.paid = work_time.paid
+        db_work_time.start_work = work_time.start_work
+        db_work_time.end_work = work_time.end_work
+
+        return self._decode_db_work_time(db_work_time)
+
+    def delete(self, work_time_id):
+        try:
+            db_work_time = WorkTimeORM.objects.select_related('hour_payment').get(id=work_time_id)
+        except WorkTimeORM.DoesNotExist:
+            raise EntityDoesNotExistException
+
+        work_time = self._decode_db_work_time(db_work_time)
+        db_work_time.delete()
+        return work_time
+
+
     def _decode_db_work_time(self, db_work_time):
         fileds = {
             'id': db_work_time.id,
-            'hour_payment_id': db_work_time.hour_payment_id,
+            'hour_payment_id': db_work_time.hour_payment.id,
             'start_work': db_work_time.start_work,
             'end_work': db_work_time.end_work,
             'paid': db_work_time.paid

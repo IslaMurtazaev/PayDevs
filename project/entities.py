@@ -67,11 +67,16 @@ class Project(object):
 class HourPayment(object):
 
 
-    def __init__(self, project_id=None, rate=None, work_times=None):
+    def __init__(self, id=None, project_id=None, rate=None, work_times=None):
+        self._id = id
         self._project_id = project_id
         self._rate = rate
         self._work_times = work_times
 
+
+    @property
+    def id(self):
+        return self._id
 
     @property
     def project_id(self):
@@ -106,7 +111,7 @@ class WorkTime(object):
         return self._id
 
     @property
-    def hour_payment(self):
+    def hour_payment_id(self):
         return self._hour_payment_id
 
     @property
@@ -143,7 +148,7 @@ class WorkTask(object):
         return self._id
 
     @property
-    def project(self):
+    def project_id(self):
         return self._project_id
 
     @property
@@ -188,7 +193,8 @@ class MonthPayment(object):
     @property
     def total(self):
         worked_days = self._work_days
-        count_worked_day = len(set([work_day for work_day in worked_days if work_day.paid]))
+        count_worked_day = len(set([work_day.day for work_day
+                                    in worked_days if not work_day.paid]))
         return self.rate * count_worked_day
 
 
