@@ -85,10 +85,6 @@ class ProjectRepoMethodTest(TestCase):
         self.assertEqual(type_of_payment2.rate, 300)
 
 
-        # self.assertGreater(len(project1.hourpaymentorm_set.all()), 0)
-
-
-
 
     def test_update_method(self):
         new_attrs = {
@@ -162,6 +158,24 @@ class ProjectRepoMethodTest(TestCase):
 
         self.assertTrue(isinstance(project_entity, Project))
 
+        self.assertNotEquals(project_entity.__dict__, self.project.__dict__)
+
+        self.assertEqual(project_entity.id, self.project.id)
+
+        self.assertEqual(project_entity.user, self.project.user.__str__())
+
+        self.assertEqual(project_entity.title, self.project.title)
+
+        self.assertEqual(project_entity.description, self.project.description)
+
+        self.assertEqual(project_entity.start_date, self.project.start_date)
+
+        self.assertEqual(project_entity.end_date, self.project.end_date)
+
+        self.assertEqual(project_entity.type_of_payment, self.project.type_of_payment)
+
+        self.assertEqual(project_entity.status, self.project.status)
+
 
 
 
@@ -198,7 +212,6 @@ class WorkTaskMethodTest(TestCase):
 
         self.project = ProjectORM(title="My Firs Project", user=user, type_of_payment='T_P')
         self.project.save()
-        self.project_id = self.project.id
 
 
     def test_get_total_method(self):
@@ -206,7 +219,7 @@ class WorkTaskMethodTest(TestCase):
             worked_task = WorkTaskORM(title='My Task number %s' % i, price=10 * (i + 1), completed=True, project=self.project)
             worked_task.save()
 
-        total = ProjectRepo().get_total(user_id=self.user_id, project_id=self.project_id)
+        total = ProjectRepo().get_total(user_id=self.user_id, project_id=self.project.id)
 
         self.assertEqual(type(total), float)
         self.assertEqual(total, 550)
@@ -216,7 +229,7 @@ class WorkTaskMethodTest(TestCase):
         worked_task = WorkTaskORM(title='My Task number %s' % 100, price=100000, completed=True, paid=True, project=self.project)
         worked_task.save()
 
-        total = ProjectRepo().get_total(user_id=self.user_id, project_id=self.project_id)
+        total = ProjectRepo().get_total(user_id=self.user_id, project_id=self.project.id)
 
         self.assertEqual(type(total), int)
         self.assertEqual(total, 0)
