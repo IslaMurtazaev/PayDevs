@@ -26,10 +26,20 @@ class WorkTaskListSerializer(ListSerializer):
 
 class WorkDaySerializer(DateFormatSerializer):
     model = WorkedDay
-    fields = ['id', 'month_payment', 'day', 'paid']
+    fields = ['id', 'day', 'paid', 'rate']
+
+
+class WorkDayListSerializer(DateFormatListSerializer):
+    model = WorkedDay
+    fields = ['id', 'day', 'paid', 'rate']
 
 
 
 class WorkTimeSerializer(DateFormatSerializer):
     model = WorkTime
-    fields = ['id', 'hour_payment', 'start_work', 'end_work', 'paid']
+    fields = ['id', 'start_work', 'end_work', 'paid', 'rate']
+
+
+class WorkTimeListSerializer(DateFormatListSerializer):
+    model = WorkTime
+    fields = ['id', 'start_work', 'end_work', 'paid', 'rate']

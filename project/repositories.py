@@ -78,7 +78,7 @@ class ProjectRepo(object):
             raise NoPermissionException(message="Invalid project id")
         except (KeyError, ValueError):
             raise InvalidEntityException(source='repositories', code='not allowed',
-                                         message="Unable to update project with provided attr "+ str(attr))
+                                         message="Unable to update project with provided attr "+ attr)
         except:
             raise InvalidEntityException(source='repositories', code='not allowed',
                                          message="Unable to update project")
@@ -102,23 +102,40 @@ class ProjectRepo(object):
 
 
 
-    def get_worked(self, user_id, project_id, start_date_boundary=None, end_date_boundary=None):
+
+    def get_type_of_payment(self, user_id, project_id):
         try:
             db_user = UserORM.objects.get(id=user_id)
             db_project = ProjectORM.objects.get(user=db_user, id=project_id)
 
-            type_of_payment = db_project.type_of_payment.lower()
-
-            if (type_of_payment == 'h_p'):
-                return self._get_worked_time(db_project, start_date_boundary, end_date_boundary)
-            elif (type_of_payment == 'm_p'):
-                return self._get_worked_days(db_project)
-            else:
-                return self._get_worked_tasks(db_project)
+            type_of_payment = db_project.type_of_payment
 
 
         except UserORM.DoesNotExist:
             raise NoPermissionException(message="Invalid user id")
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid project id")
+
+        return type_of_payment
+
+
+
+    def get_worked(self, type_of_payment, project_id, start_date_boundary=None, end_date_boundary=None):
+        try:
+            db_project = ProjectORM.objects.get(id=project_id)
+
+            if (type_of_payment == 'H_P'):
+                start_date_boundary = datetime.strptime(start_date_boundary, "%Y-%m-%dT%H:%M:%S.%fZ")
+                end_date_boundary = datetime.strptime(end_date_boundary, "%Y-%m-%dT%H:%M:%S.%fZ")
+                return self._get_worked_time(db_project, start_date_boundary, end_date_boundary)
+
+            elif (type_of_payment == 'M_P'):
+                return self._get_worked_days(db_project)
+
+            else:
+                return self._get_worked_tasks(db_project)
+
+
         except ProjectORM.DoesNotExist:
             raise NoPermissionException(message="Invalid project id")
         except:
@@ -134,23 +151,26 @@ class ProjectRepo(object):
 
     def _get_worked_days(self, db_project):
         db_month_payments = MonthPaymentORM.objects.filter(project=db_project)
-        db_worked_days = list()
+        worked_days = list()
 
         for db_month_payment in db_month_payments:
-            db_worked_days += db_month_payment.workdayorm_set.exclude(day__gte=timezone.now().replace(day=1).date())
+            for db_worked_day in db_month_payment.workdayorm_set.exclude(day__gte=timezone.now().replace(day=1).date(),
+                                                                         paid=False):
+                worked_days.append(WorkDayRepo()._decode_db_work_day(db_worked_day, db_month_payment.rate))
 
-        return db_worked_days
+        return worked_days
 
 
     def _get_worked_time(self, db_project, start_boundary, end_boundary):
         db_hour_payments = HourPaymentORM.objects.filter(project=db_project)
-        db_worked_time_list = list()
+        worked_time_list = list()
 
         for db_hour_payment in db_hour_payments:
-            db_worked_time_list += db_hour_payment.worktimeorm_set.filter(start_work__gte=start_boundary, end_work__lte=end_boundary)
+            for db_worked_time in db_hour_payment.worktimeorm_set.filter(start_work__gte=start_boundary,
+                                                                         end_work__lte=end_boundary, paid=False):
+                worked_time_list.append(WorkTimeRepo()._decode_db_work_time(db_worked_time, db_hour_payment.rate))
 
-        return db_worked_time_list
-
+        return worked_time_list
 
     # def get_total(self, user_id, project_id):
     #     try:
@@ -201,9 +221,11 @@ class ProjectRepo(object):
 
 
     def _set_rate(self, db_project, rate):
-        if (db_project.type_of_payment.lower() == 'h_p'):
+
+        if (db_project.type_of_payment == 'H_P'):
             HourPaymentORM(project=db_project, rate=rate).save()
-        elif (db_project.type_of_payment.lower() == 'm_p'):
+
+        elif (db_project.type_of_payment == 'M_P'):
             MonthPaymentORM(project=db_project, rate=rate).save()
 
 
@@ -351,7 +373,7 @@ class WorkDayRepo(object):
             raise InvalidEntityException(source='repositories', code='could not find',
                                          message="Unable to find specified worked day")
 
-        return self._decode_db_work_day(db_worked_day)
+        return self._decode_db_work_day(db_worked_day, db_month_payment.rate)
 
 
 
@@ -380,7 +402,7 @@ class WorkDayRepo(object):
         except:
             raise InvalidEntityException(source='repositories', code='could not save',
                                          message="Unable to create such worked day")
-        return self._decode_db_work_day(db_worked_day)
+        return self._decode_db_work_day(db_worked_day, db_month_payment.rate)
 
 
 
@@ -411,7 +433,7 @@ class WorkDayRepo(object):
             raise InvalidEntityException(source='repositories', code='could not update',
                                          message="Unable to update this work_day")
 
-        return self._decode_db_work_day(db_worked_day)
+        return self._decode_db_work_day(db_worked_day, db_month_payment.rate)
 
 
 
@@ -421,7 +443,7 @@ class WorkDayRepo(object):
             db_month_payment = MonthPaymentORM.objects.get(project=db_project, id=month_payment_id)
             db_worked_day = WorkDayORM.objects.get(month_payment=db_month_payment, id=work_day_id)
 
-            deleted_work_day = self._decode_db_work_day(db_worked_day)
+            deleted_work_day = self._decode_db_work_day(db_worked_day, db_month_payment.rate)
             db_worked_day.delete()
 
         except ProjectORM.DoesNotExist:
@@ -440,23 +462,31 @@ class WorkDayRepo(object):
         try:
             db_user = UserORM.objects.get(id=user_id)
             db_project = ProjectORM.objects.get(user=db_user, id=project_id)
-            db_monthpayments = db_project.monthpaymentorm_set.all()
 
-            db_worked_days = list()
+            worked_days = list()
 
-            for db_monthpayment in db_monthpayments:
-                db_worked_days += db_monthpayment.worktimeorm_set.all()
+            for db_month_payment in db_project.monthpaymentorm_set.all():
+                for db_work_day in db_month_payment.workdayorm_set.all():
+                    worked_days.append(self._decode_db_work_day(db_work_day, db_month_payment.rate))
 
+        except UserORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user id")
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid project id")
         except:
-            raise Exception
+            raise InvalidEntityException(source='repositories', code='could not find',
+                                         message="Unable to find work day in specified project")
+
+        return worked_days
 
 
-    def _decode_db_work_day(self, db_work_day):
+
+    def _decode_db_work_day(self, db_work_day, rate):
         fields = {
             'id': db_work_day.id,
-            'month_payment': str(db_work_day.month_payment),
             'day': db_work_day.day,
-            'paid': db_work_day.paid
+            'paid': db_work_day.paid,
+            'rate': rate
         }
 
         return WorkedDay(**fields)
@@ -481,7 +511,7 @@ class WorkTimeRepo(object):
             raise InvalidEntityException(source='repositories', code='could not find',
                                          message="Unable to find specified worked time")
 
-        return self._decode_db_work_time(db_worked_time)
+        return self._decode_db_work_time(db_worked_time, db_hour_payment.rate)
 
 
 
@@ -511,7 +541,7 @@ class WorkTimeRepo(object):
         except:
             raise InvalidEntityException(source='repositories', code='could not save',
                                          message="Unable to create such worked day")
-        return self._decode_db_work_time(db_worked_time)
+        return self._decode_db_work_time(db_worked_time, db_hour_payment.rate)
 
 
 
@@ -542,7 +572,7 @@ class WorkTimeRepo(object):
             raise InvalidEntityException(source='repositories', code='could not update',
                                          message="Unable to update this work_time")
 
-        return self._decode_db_work_time(db_worked_time)
+        return self._decode_db_work_time(db_worked_time, db_hour_payment.rate)
 
 
 
@@ -552,28 +582,50 @@ class WorkTimeRepo(object):
             db_hour_payment = HourPaymentORM.objects.get(project=db_project, id=hour_payment_id)
             db_worked_time = WorkTimeORM.objects.get(hour_payment=db_hour_payment, id=work_time_id)
 
-            deleted_work_time = self._decode_db_work_time(db_worked_time)
+            deleted_work_time = self._decode_db_work_time(db_worked_time, db_hour_payment.rate)
             db_worked_time.delete()
 
         except ProjectORM.DoesNotExist:
             raise NoPermissionException(message="Invalid user or project id")
         except HourPaymentORM.DoesNotExist:
-            raise NoPermissionException(message="Invalid hour_payment id ")
+            raise NoPermissionException(message="Invalid hour_payment id")
         except:
-            raise InvalidEntityException(source='repositories', code='could not update',
-                                         message="'%s' attribute is invalid" % attr)
+            raise InvalidEntityException(source='repositories', code='could not delete',
+                                         message="Unable to delete the work_time")
 
         return deleted_work_time
 
 
 
-    def _decode_db_work_time(self, db_work_time):
+    def get_all(self, user_id, project_id):
+        try:
+            db_user = UserORM.objects.get(id=user_id)
+            db_project = ProjectORM.objects.get(user=db_user, id=project_id)
+
+            worked_time_list = list()
+            for db_hour_payment in db_project.hourpaymentorm_set.all():
+                for db_work_time in db_hour_payment.worktimeorm_set.all():
+                    worked_time_list.append(self._decode_db_work_time(db_work_time, db_hour_payment.rate))
+
+        except UserORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid user id")
+        except ProjectORM.DoesNotExist:
+            raise NoPermissionException(message="Invalid project id")
+        except:
+            raise InvalidEntityException(source='repositories', code='could not find',
+                                         message="Unable to find tasks in specified project")
+
+        return worked_time_list
+
+
+
+    def _decode_db_work_time(self, db_work_time, rate):
         fields = {
             'id': db_work_time.id,
-            'hour_payment': str(db_work_time.hour_payment),
             'start_work': db_work_time.start_work,
             'end_work': db_work_time.end_work,
-            'paid': db_work_time.paid
+            'paid': db_work_time.paid,
+            'rate': rate
         }
 
         return WorkTime(**fields)

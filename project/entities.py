@@ -49,21 +49,16 @@ class Project(object):
 
 class WorkTime(object):
 
-    def __init__(self, id=None, hour_payment=None, start_work=None, end_work=None, paid=False):
+    def __init__(self, id=None, start_work=None, end_work=None, paid=False, rate=0):
         self._id = id
-        self._hour_payment = hour_payment
         self._start_work = start_work
         self._end_work = end_work
         self._paid = paid
-        
+        self._rate = rate
 
     @property
     def id(self):
         return self._id
-
-    @property
-    def hour_payment(self):
-        return self._hour_payment
 
     @property
     def start_work(self):
@@ -77,6 +72,9 @@ class WorkTime(object):
     def paid(self):
         return self._paid
 
+    @property
+    def rate(self):
+        return self._rate
 
 
 
@@ -125,20 +123,16 @@ class WorkTask(object):
 
 class WorkedDay(object):
 
-    def __init__(self, id=None, month_payment=None, day=None, paid=False):
+    def __init__(self, id=None, day=None, paid=False, rate=0):
         self._id = id 
-        self._month_payment = month_payment
         self._day = day
         self._paid = paid
+        self._rate = rate
 
 
     @property
     def id(self):
         return self._id
-
-    @property
-    def month_payment(self):
-        return self._month_payment
 
     @property
     def day(self):
@@ -147,3 +141,7 @@ class WorkedDay(object):
     @property
     def paid(self):
         return self._paid
+
+    @property
+    def rate(self):
+        return self._rate
