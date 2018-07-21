@@ -1,13 +1,14 @@
 from project.repositories import ProjectRepo, WorkTaskRepo, WorkDayRepo, WorkTimeRepo
-from project.views import ProjectView, CreateProjectView, AllProjectsView, TotalView, CreateTaskView, \
+from project.views import ProjectView, CreateProjectView, GetAllProjectsView, TotalView, CreateTaskView, \
             GetAllTasksView, UpdateProjectView, GetTaskView, UpdateTaskView, DeleteProjectView, DeleteTaskView, \
             CreateWorkDayView, CreateWorkTimeView, GetWorkDayView, GetWorkTimeView, UpdateWorkDayView, UpdateWorkTimeView, \
-            DeleteWorkDayView, DeleteWorkTimeView
+            DeleteWorkDayView, DeleteWorkTimeView, GetAllWorkDaysView, GetWorkTimeListView
 from project.interactors import GetProjectInteractor, CreateProjectInteractor, GetAllProjectsInteractor, GetWorkedInteractor,\
             GetTotalInteractor, CreateTaskInteractor, GetAllTasksInteractor, UpdateProjectInteractor, GetTaskInteractor, \
             UpdateTaskInteractor, DeleteProjectInteractor, DeleteTaskInteractor, CreateWorkDayInteractor, \
             CreateWorkTimeInteractor, GetWorkDayInteractor, GetWorkTimeInteractor, UpdateWorkDayInteractor, \
-            UpdateWorkTimeInteractor, DeleteWorkDayInteractor, DeleteWorkTimeInteractor, GetRateInteractor
+            UpdateWorkTimeInteractor, DeleteWorkDayInteractor, DeleteWorkTimeInteractor, GetTypeOfPaymentInteractor, \
+            GetAllWorkDaysInteractor, GetWorkTimeListInteractor
                                  
 
 
@@ -86,16 +87,16 @@ class GetAllProjectsInteractorFactory(object):
 
 def get_all_projects_factory():
     get_all_projects_interactor = GetAllProjectsInteractorFactory.get()
-    return AllProjectsView(get_all_projects_interactor)
+    return GetAllProjectsView(get_all_projects_interactor)
 
 
 
 
-class GetRateInteractorFactory(object):
+class GetTypeOfPaymentInteractorFactory(object):
     @staticmethod
     def get():
         project_repo = ProjectRepoFactory.get()
-        return GetRateInteractor(project_repo)
+        return GetTypeOfPaymentInteractor(project_repo)
 
 
 class GetWorkedInteractorFactory(object):
@@ -108,15 +109,14 @@ class GetWorkedInteractorFactory(object):
 class GetTotalInteractorFactory(object):
     @staticmethod
     def get():
-        project_repo = ProjectRepoFactory.get()
-        return GetTotalInteractor(project_repo)
+        return GetTotalInteractor()
 
 
 def get_total_factory():
-    get_rate_interactor = GetRateInteractorFactory.get()
+    get_type_of_payment_interactor = GetTypeOfPaymentInteractorFactory.get()
     get_worked_interactor = GetWorkedInteractorFactory.get()
     get_total_interactor = GetTotalInteractorFactory.get()
-    return TotalView(get_rate_interactor, get_worked_interactor, get_total_interactor)
+    return TotalView(get_type_of_payment_interactor, get_worked_interactor, get_total_interactor)
 
 
 #--------------------------- Work Task ----------------------------------------#
@@ -258,6 +258,19 @@ def delete_work_day_factory():
     return DeleteWorkDayView(delete_work_day_interactor)
 
 
+
+class GetAllWorkDaysInteractorFactory(object):
+    @staticmethod
+    def get():
+        work_day_repo = WorkDayRepo()
+        return GetAllWorkDaysInteractor(work_day_repo)
+
+
+def get_all_work_days_factory():
+    get_all_work_days_interactor = GetAllWorkDaysInteractorFactory.get()
+    return GetAllWorkDaysView(get_all_work_days_interactor)
+
+
 # ------------------------ Work Time ------------------------------------- #
 
 class WorkTimeRepoFactory(object):
@@ -316,3 +329,16 @@ class DeleteWorkTimeInteractorFactory(object):
 def delete_work_time_factory():
     delete_work_time_interactor = DeleteWorkTimeInteractorFactory.get()
     return DeleteWorkTimeView(delete_work_time_interactor)
+
+
+
+class GetWorkTimeListInteractorFactory(object):
+    @staticmethod
+    def get():
+        work_time_repo = WorkTimeRepo()
+        return GetWorkTimeListInteractor(work_time_repo)
+
+
+def get_work_time_list_factory():
+    get_work_time_list_interactor = GetWorkTimeListInteractorFactory.get()
+    return GetWorkTimeListView(get_work_time_list_interactor)

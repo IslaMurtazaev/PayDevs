@@ -21,7 +21,8 @@ from account.factories import get_user_factories, get_user_all_factories, get_us
 from project.factories import get_project_factory, create_project_factory, get_all_projects_factory, get_total_factory, \
     create_task_factory, get_all_tasks_factory, update_project_factory, get_task_factory, update_task_factory, delete_project_factory, \
     delete_task_factory, create_work_day_factory, create_work_time_factory, get_work_day_factory, get_work_time_factory, \
-    update_work_day_factory, update_work_time_factory, delete_work_day_factory, delete_work_time_factory
+    update_work_day_factory, update_work_time_factory, delete_work_day_factory, delete_work_time_factory, get_all_work_days_factory, \
+    get_work_time_list_factory
 
 from PayDevs.views import ViewWrapper
 
@@ -50,9 +51,11 @@ urlpatterns = [
     path('project/day/create', csrf_exempt(ViewWrapper.as_view(view_factory=create_work_day_factory)), name='create_work_day'),
     path('project/day/update', csrf_exempt(ViewWrapper.as_view(view_factory=update_work_day_factory)), name='update_work_day'),
     path('project/day/delete', csrf_exempt(ViewWrapper.as_view(view_factory=delete_work_day_factory)), name='delete_work_day'),
+    path('project/day/all', ViewWrapper.as_view(view_factory=get_all_work_days_factory), name="get_all_work_days"),
 
     path('project/hours', ViewWrapper.as_view(view_factory=get_work_time_factory), name='get_work_day'),
     path('project/hours/create', csrf_exempt(ViewWrapper.as_view(view_factory=create_work_time_factory)), name='create_work_hours'),
     path('project/hours/update', csrf_exempt(ViewWrapper.as_view(view_factory=update_work_time_factory)), name='update_work_time'),
-    path('project/hours/delete', csrf_exempt(ViewWrapper.as_view(view_factory=delete_work_time_factory)), name='delete_work_time')
+    path('project/hours/delete', csrf_exempt(ViewWrapper.as_view(view_factory=delete_work_time_factory)), name='delete_work_time'),
+    path('project/hours/all', ViewWrapper.as_view(view_factory=get_work_time_list_factory), name="get_work_time_list")
 ]

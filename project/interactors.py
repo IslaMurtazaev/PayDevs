@@ -1,7 +1,7 @@
 from PayDevs.interactors import Interactor
 
 
-#------------------------ Project ---------------------------------------------#
+# ------------------------ Project --------------------------------------------- #
 
 class GetProjectInteractor(Interactor):
 
@@ -95,7 +95,7 @@ class GetAllProjectsInteractor(Interactor):
 
 
 
-class GetRateInteractor(Interactor):
+class GetTypeOfPaymentInteractor(Interactor):
 
     def __init__(self, project_repo):
         self.project_repo = project_repo
@@ -103,11 +103,10 @@ class GetRateInteractor(Interactor):
     def set_params(self, type_of_payment, **kwargs):
         self.user_id = kwargs.get('user_id')
         self.project_id = kwargs.get('project_id')
-        self.type_of_payment = type_of_payment
         return self
 
     def execute(self):
-        return self.project_repo.get_rate(self.user_id, self.project_id, self.type_of_payment)
+        return self.project_repo.get_type_of_payment(self.user_id, self.project_id)
 
 
 
@@ -117,13 +116,15 @@ class GetWorkedInteractor(Interactor):
         self.project_repo = project_repo
 
     def set_params(self, type_of_payment, **kwargs):
-        self.user_id = kwargs.get('user_id')
         self.project_id = kwargs.get('project_id')
         self.type_of_payment = type_of_payment
+        self.start_date_boundary = kwargs.get('start_date')
+        self.end_date_boundary = kwargs.get('end_date')
         return self
 
     def execute(self):
-        return self.project_repo.get_worked(self.user_id, self.project_id, self.type_of_payment)
+        return self.project_repo.get_worked(self.project_id, self.type_of_payment, self.start_date_boundary,
+                                            self.end_date_boundary)
 
 
 
@@ -133,20 +134,20 @@ class GetTotalInteractor(Interactor):
         self.project_repo = project_repo
 
     def set_params(self, type_of_payment, worked, **kwargs):
-        self.user_id = kwargs.get('user_id')
-        self.project_id = kwargs.get('project_id')
         self.type_of_payment = type_of_payment
         self.worked = worked
         return self
 
     def execute(self):
-        pass
+        if (self.type_of_payment == 'H_P'):
+            print('H_P')
+        elif (self.type_of_payment == 'M_P'):
+            print('M_P')
+        else:
+            print('T_P')
 
 
-
-
-#--------------------------- Work Task ----------------------------------------#
-
+# --------------------------- Work Task ---------------------------------------- #
 
 
 class GetTaskInteractor(Interactor):
@@ -318,6 +319,22 @@ class DeleteWorkDayInteractor(Interactor):
     def execute(self):
         return self.work_day_repo.delete(user_id=self.user_id, project_id=self.project_id, work_day_id=self.work_day_id,
                                          month_payment_id=self.month_payment_id)
+
+
+
+class GetAllWorkDaysInteractor(Interactor):
+
+    def __init__(self, work_day_repo):
+        self.work_day_repo = work_day_repo
+
+    def set_params(self, *args, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        self.project_id = kwargs.get('project_id')
+        return self
+
+    def execute(self):
+        return self.work_day_repo.get_all(user_id=self.user_id, project_id=self.project_id)
+
 # ------------------------------- Work Time ------------------------------------ #
 
 class GetWorkTimeInteractor(Interactor):
@@ -397,3 +414,19 @@ class DeleteWorkTimeInteractor(Interactor):
     def execute(self):
         return self.work_time_repo.delete(user_id=self.user_id, project_id=self.project_id, work_time_id=self.work_time_id,
                                           hour_payment_id=self.hour_payment_id)
+
+
+
+
+class GetWorkTimeListInteractor(Interactor):
+
+    def __init__(self, work_time_repo):
+        self.work_time_repo = work_time_repo
+
+    def set_params(self, *args, **kwargs):
+        self.user_id = kwargs.get('user_id')
+        self.project_id = kwargs.get('project_id')
+        return self
+
+    def execute(self):
+        return self.work_time_repo.get_all(user_id=self.user_id, project_id=self.project_id)

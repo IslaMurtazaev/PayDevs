@@ -1,5 +1,5 @@
 from project.serializers import ProjectSerializer, ProjectListSerializer, WorkTaskSerializer, WorkTaskListSerializer, \
-    WorkDaySerializer, WorkTimeSerializer
+    WorkDaySerializer, WorkDayListSerializer, WorkTimeSerializer, WorkTimeListSerializer
 from PayDevs.decorators import serialize_exception
 
 
@@ -65,7 +65,7 @@ class DeleteProjectView(object):
 
 
 
-class AllProjectsView(object):
+class GetAllProjectsView(object):
 
     def __init__(self, get_project_interactor):
         self.get_project_interactor = get_project_interactor
@@ -91,7 +91,7 @@ class TotalView(object):
     def get(self, *args, **kwargs):
         type_of_payment = self.get_type_of_payment_interactor.set_params(**kwargs).execute()
         worked = self.get_worked_interactor.set_params(type_of_payment, **kwargs).execute()
-        total = self.get_total_interactor.set_params(worked, **kwargs).execute()
+        total = self.get_total_interactor.set_params(type_of_payment, worked, **kwargs).execute()
 
         body = total
         status = 200
@@ -234,6 +234,22 @@ class DeleteWorkDayView(object):
         status = 201
         return body, status
 
+
+
+class GetAllWorkDaysView(object):
+
+    def __init__(self, get_all_work_days_interactor):
+        self.get_all_work_days_interactor = get_all_work_days_interactor
+
+    @serialize_exception
+    def get(self, *args, **kwargs):
+        worked_day = self.get_all_work_days_interactor.set_params(**kwargs).execute()
+
+        body = WorkDayListSerializer.serializer(worked_day)
+        status = 200
+        return body, status
+
+
 # ------------------------------ Work Time ------------------------------ #
 
 class GetWorkTimeView(object):
@@ -292,4 +308,19 @@ class DeleteWorkTimeView(object):
 
         body = WorkTimeSerializer.serializer(deleted_worked_time)
         status = 201
+        return body, status
+
+
+
+class GetWorkTimeListView(object):
+
+    def __init__(self, get_all_work_time_list_interactor):
+        self.get_all_work_time_list_interactor = get_all_work_time_list_interactor
+
+    @serialize_exception
+    def get(self, *args, **kwargs):
+        worked_time_list = self.get_all_work_time_list_interactor.set_params(**kwargs).execute()
+
+        body = WorkTimeListSerializer.serializer(worked_time_list)
+        status = 200
         return body, status

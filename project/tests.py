@@ -201,7 +201,7 @@ class ProjectRepoMethodTest(TestCase):
 
 
 
-# ------------------------ TaskWork_Tests -------------------------------------- #
+# ------------------------ Total_Tests -------------------------------------- #
 
 class TotalMethodTest(TestCase):
 
@@ -212,11 +212,9 @@ class TotalMethodTest(TestCase):
         self.project_with_tasks = ProjectORM(title="My Firs Project", user=self.user, type_of_payment='T_P')
         self.project_with_tasks.save()
 
-        self.project_with_hour_payment = ProjectORM(user=self.user, type_of_payment='H_P')
-        self.project_with_hour_payment.save()
+        ProjectRepo().create(self.user.id, 'title', 'with hour payment', 'H_P', 12)
 
-        self.project_with_month_payment = ProjectORM(user=self.user, type_of_payment='M_P')
-        self.project_with_month_payment.save()
+        ProjectRepo().create(self.user.id, 'title', 'with month payment', 'M_P', 300)
 
 
     def test_get_total_worked_tasks(self):
@@ -224,7 +222,7 @@ class TotalMethodTest(TestCase):
             worked_task = WorkTaskORM(title='My Task number %s' % i, price=10 * (i + 1), completed=True, project=self.project_with_tasks)
             worked_task.save()
 
-        total_worked = ProjectRepo().get_worked(user_id=self.user.id, project_id=self.project_with_tasks.id)
+        total_worked = ProjectRepo().get_worked(project_id=self.project_with_tasks.id, type_of_payment='T_P')
         total = sum([worked_task.price for worked_task in total_worked])
 
         self.assertEqual(type(total), float)
@@ -240,7 +238,7 @@ class TotalMethodTest(TestCase):
                 worked_task.paid = False
             worked_task.save()
 
-        total_worked = ProjectRepo().get_worked(user_id=self.user.id, project_id=self.project_with_tasks.id)
+        total_worked = ProjectRepo().get_worked(project_id=self.project_with_tasks.id, type_of_payment='T_P')
         total = sum([worked_task.price for worked_task in total_worked])
 
         self.assertTrue(type(total_worked), WorkTask)
@@ -252,7 +250,7 @@ class TotalMethodTest(TestCase):
         worked_task = WorkTaskORM(title='My Task number %s' % 100, price=100000, completed=True, paid=True, project=self.project_with_tasks)
         worked_task.save()
 
-        total_worked = ProjectRepo().get_worked(user_id=self.user.id, project_id=self.project_with_tasks.id)
+        total_worked = ProjectRepo().get_worked(project_id=self.project_with_tasks.id, type_of_payment='T_P')
         total = sum([worked_task.price for worked_task in total_worked])
 
         self.assertEqual(type(total), int)
@@ -268,7 +266,7 @@ class TotalMethodTest(TestCase):
                 worked_task.completed = True
             worked_task.save()
 
-        total_worked = ProjectRepo().get_worked(user_id=self.user.id, project_id=self.project_with_tasks.id)
+        total_worked = ProjectRepo().get_worked(project_id=self.project_with_tasks.id, type_of_payment='T_P')
         total = sum([worked_task.price for worked_task in total_worked])
 
         self.assertEqual(type(total), float)
@@ -276,11 +274,13 @@ class TotalMethodTest(TestCase):
 
 
     def total_worked_time(self):
+        project = ProjectORM.objects.get(description='with hour payment')
+
         for i in range(10):
             worked_time = WorkTimeORM(end_work = timezone.now() + timedelta(hours=8))
             worked_time.save()
 
-        total_worked = ProjectRepo.get_worked(user_id=self.user.id, project_id=self.project_with_hour_payment.id)
+        total_worked = ProjectRepo.get_worked(project_id=project.id, type_of_payment='M_P')
 
         self.assertTrue(type(total_worked[0]), WorkTime)
 
@@ -288,15 +288,41 @@ class TotalMethodTest(TestCase):
 
 
     def total_worked_days(self):
-        for i in range(10):
-            worked_days = WorkDayORM(day=timezone.now().date() + timedelta(days=i+10))
-            worked_days.save()
+        project = ProjectORM.objects.get(description='with month payment')
 
-        total_worked = ProjectRepo.get_worked(user_id=self.user.id, project_id=self.project_with_hour_payment.id)
+        month_payment = project.monthpaymentorm_set.get(1)
+
+        WorkDayORM(month_payment=month_payment, day=timezone.now()).save()
+
+        total_worked = ProjectRepo().get_worked(project_id=project.id, type_of_payment='M_P')
+
+        self.assertEqual(len(total_worked), 0)
+
+        previous_month = timezone.now().replace(month=timezone.now().month-1)
+
+        WorkDayORM(month_payment=month_payment, day=previous_month).save()
 
         self.assertTrue(type(total_worked[0]), WorkedDay)
 
+        WorkDayORM(month_payment=month_payment, day=previous_month).save()
+
+        self.assertTrue(len(total_worked) == 2)
+
+
+    def total_worked_time(self):
+        project = ProjectORM.objects.get(description='with hour payment')
+
+        hour_payment = project.hourpaymentorm_set.get(1)
+
+        for i in range(10):
+            WorkTimeORM(hour_payment=hour_payment, start_work=timezone.now() + timedelta(days=i),
+                        end_work=timezone.now() + timedelta(days=i, hours=8)).save()
+        total_worked = ProjectRepo().get_worked(project.id, 'H_P', timezone.now(), timezone.now())
+
         self.assertEqual(len(total_worked), 10)
+
+        self.assertTrue(type(total_worked[0]), WorkTime)
+
 
 
 # class HourPaymentMethodTest(TestCase):
