@@ -120,7 +120,7 @@ class ProjectRepo(object):
 
 
 
-    def get_worked(self, type_of_payment, project_id, start_date_boundary=None, end_date_boundary=None):
+    def get_worked(self, project_id, type_of_payment, start_date_boundary=None, end_date_boundary=None):
         try:
             db_project = ProjectORM.objects.get(id=project_id)
 
@@ -172,40 +172,8 @@ class ProjectRepo(object):
 
         return worked_time_list
 
-    # def get_total(self, user_id, project_id):
-    #     try:
-    #         db_user = UserORM.objects.get(id=user_id)
-    #         db_project = ProjectORM.objects.get(user=db_user, id=project_id)
-    #     except UserORM.DoesNotExist:
-    #         raise NoPermissionException(message="Invalid user id")
-    #     except ProjectORM.DoesNotExist:
-    #         raise NoPermissionException(message="Invalid project id")
-    #
-    #     if (db_project.type_of_payment.lower() == 'h_p'):
-    #         raise NotImplementedError
-    #     elif (db_project.type_of_payment.lower() == 'm_p'):
-    #         raise NotImplementedError
-    #     else:
-    #         return self._get_tasks_total(db_project)
-    #
-    #
-    #
-    # def _get_tasks_total(self, db_project):
-    #     try:
-    #         tasks = db_project.worktaskorm_set.all()
-    #         total = 0
-    #         for task in tasks:
-    #             if (task.completed and not task.paid):
-    #                 total += task.price
-    #     except:
-    #         raise InvalidEntityException(source='repositories', code='could not sum total',
-    #                                      message="'%s' task attribute is invalid" % task.title)
-    #     return total
-
-
 
     def _decode_db_project(self, db_project):
-        # TODO make decode transform fields without making them strings
         fileds = {
             'id': db_project.id,
             'user': str(db_project.user),
@@ -386,7 +354,7 @@ class WorkDayRepo(object):
             db_month_payment = MonthPaymentORM.objects.get(project=db_project, id=month_payment_id)
 
             if day is not None:
-                day = datetime.strptime(day, "%Y-%m-%d")
+                day = datetime.strptime(day, "%Y-%m-%d").date()
 
             db_worked_day = WorkDayORM(month_payment=db_month_payment, day=day)
 
@@ -416,7 +384,7 @@ class WorkDayRepo(object):
                 if new_attrs[attr] is None:
                     continue
                 elif (attr == 'day'):
-                    db_worked_day.__dict__[attr] = datetime.strptime(new_attrs[attr], "%Y-%m-%d")
+                    db_worked_day.__dict__[attr] = datetime.strptime(new_attrs[attr], "%Y-%m-%d").date()
                 else:
                     db_worked_day.__dict__[attr] = new_attrs[attr]
 
@@ -526,10 +494,9 @@ class WorkTimeRepo(object):
                 start_work = datetime.strptime(start_work, "%Y-%m-%dT%H:%M:%S.%fZ")
             if end_work is not None:
                 end_work = datetime.strptime(end_work, "%Y-%m-%dT%H:%M:%S.%fZ")
-
             db_worked_time = WorkTimeORM(hour_payment=db_hour_payment, start_work=start_work, end_work=end_work)
-
             db_worked_time.save()
+
 
         except UserORM.DoesNotExist:
             raise NoPermissionException(message="Invalid user id")

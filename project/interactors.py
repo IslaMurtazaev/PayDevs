@@ -1,4 +1,5 @@
 from PayDevs.interactors import Interactor
+from project.entities import Project
 
 
 # ------------------------ Project --------------------------------------------- #
@@ -60,7 +61,7 @@ class UpdateProjectInteractor(Interactor):
 
     def execute(self):
         return self.project_repo.update(user_id=self.user_id, project_id=self.project_id,
-                                                new_attrs=self.project_new_attrs)
+                                        new_attrs=self.project_new_attrs)
 
 
 
@@ -100,7 +101,7 @@ class GetTypeOfPaymentInteractor(Interactor):
     def __init__(self, project_repo):
         self.project_repo = project_repo
 
-    def set_params(self, type_of_payment, **kwargs):
+    def set_params(self, **kwargs):
         self.user_id = kwargs.get('user_id')
         self.project_id = kwargs.get('project_id')
         return self
@@ -130,21 +131,13 @@ class GetWorkedInteractor(Interactor):
 
 class GetTotalInteractor(Interactor):
 
-    def __init__(self, project_repo):
-        self.project_repo = project_repo
-
     def set_params(self, type_of_payment, worked, **kwargs):
         self.type_of_payment = type_of_payment
         self.worked = worked
         return self
 
     def execute(self):
-        if (self.type_of_payment == 'H_P'):
-            print('H_P')
-        elif (self.type_of_payment == 'M_P'):
-            print('M_P')
-        else:
-            print('T_P')
+        return Project.get_total(self.type_of_payment, self.worked)
 
 
 # --------------------------- Work Task ---------------------------------------- #

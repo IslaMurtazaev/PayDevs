@@ -75,6 +75,8 @@ class ViewWrapper(View):
                     'month_payment_id': request.META.get('HTTP_MONTHPAYMENT'),
                     'work_day_id': request.META.get('HTTP_WORKDAY'),
                     'work_time_id': request.META.get('HTTP_WORKTIME'),
+                    'start_date': request.META.get('HTTP_STARTDATE'),
+                    'end_date': request.META.get('HTTP_ENDDATE'),
                     'secret_key': settings.SECRET_KEY
                 }
 

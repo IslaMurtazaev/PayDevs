@@ -44,6 +44,20 @@ class Project(object):
     def status(self):
         return self._status
 
+    @staticmethod
+    def get_total(type_of_payment, worked):
+        if (type_of_payment == 'H_P'):
+            total = 0
+            for worked_time in worked:
+                worked_hours = (worked_time.end_work - worked_time.start_work).seconds / 3600
+                total += worked_hours * worked_time.rate
+            return total
+
+        elif (type_of_payment == 'M_P'):
+            return sum([worked_day.rate for worked_day in worked])
+
+        else:
+            return sum([worked_task.price for worked_task in worked])
 
 
 

@@ -21,7 +21,6 @@ class ProjectRepoFactory(object):
 
 
 
-
 class GetProjectInteractorFactory(object):
     @staticmethod
     def get():
