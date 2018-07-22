@@ -101,8 +101,7 @@ class GetTypeOfPaymentInteractorFactory(object):
 class GetTimestampInteractorFactory(object):
     @staticmethod
     def get():
-        project_repo = ProjectRepoFactory.get()
-        return GetTimestampInteractor(project_repo)
+        return GetTimestampInteractor()
 
 
 class GetWorkedInteractorFactory(object):

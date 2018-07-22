@@ -113,19 +113,13 @@ class GetTypeOfPaymentInteractor(Interactor):
 
 class GetTimestampInteractor(Interactor):
 
-    def __init__(self, project_repo):
-        self.project_repo = project_repo
-
-    def set_params(self, type_of_payment, **kwargs):
-        self.project_id = kwargs.get('project_id')
-        self.start_date_boundary = kwargs.get('start_date')
-        self.end_date_boundary = kwargs.get('end_date')
+    def set_params(self, type_of_payment, worked, **kwargs):
         self.type_of_payment = type_of_payment
+        self.worked = worked
         return self
 
     def execute(self):
-        return self.project_repo.get_timestamp(self.project_id, self.type_of_payment, self.start_date_boundary,
-                                               self.end_date_boundary)
+        return Project.get_timestamp(self.type_of_payment, self.worked)
 
 
 

@@ -1,3 +1,5 @@
+from PayDevs.exceptions import InvalidEntityException
+
 class Project(object):
     
     def __init__(self, id=None, title=None, description=None, start_date=None, end_date=None,\
@@ -46,18 +48,40 @@ class Project(object):
 
     @staticmethod
     def get_total(type_of_payment, worked):
-        if (type_of_payment == 'H_P'):
-            total = 0
-            for worked_time in worked:
-                worked_hours = (worked_time.end_work - worked_time.start_work).seconds / 3600
-                total += worked_hours * worked_time.rate
-            return total
+        try:
+            if (type_of_payment == 'H_P'):
+                total = 0
+                for worked_time in worked:
+                    worked_hours = (worked_time.end_work - worked_time.start_work).seconds / 3600
+                    total += worked_hours * worked_time.rate
+                return total
 
-        elif (type_of_payment == 'M_P'):
-            return sum([worked_day.rate for worked_day in worked])
+            elif (type_of_payment == 'M_P'):
+                return sum([worked_day.rate for worked_day in worked])
 
-        else:
-            return sum([worked_task.price for worked_task in worked])
+            else:
+                return sum([worked_task.price for worked_task in worked])
+
+        except:
+            raise InvalidEntityException(source='entities', code='invalid entity', message="Can't sum total of project")
+
+
+    @staticmethod
+    def get_timestamp(type_of_payment, worked):
+        try:
+            if (type_of_payment == 'H_P'):
+                total = 0
+                for worked_time in worked:
+                    worked_hours = (worked_time.end_work - worked_time.start_work).seconds / 3600
+                    total += worked_hours
+                return {'hours': int(total)}
+
+            elif (type_of_payment == 'M_P'):
+                return {'days': len(worked)}
+
+        except:
+            raise InvalidEntityException(source='entities', code='invalid entity',
+                                         message="Can't get a timestamp of project")
 
 
 
