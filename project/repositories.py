@@ -78,7 +78,7 @@ class ProjectRepo(object):
             raise NoPermissionException(message="Invalid project id")
         except (KeyError, ValueError):
             raise InvalidEntityException(source='repositories', code='not allowed',
-                                         message="Unable to update project with provided attr "+ attr)
+                                         message="Unable to update project with provided attr '%s'" % attr)
         except:
             raise InvalidEntityException(source='repositories', code='not allowed',
                                          message="Unable to update project")
@@ -494,9 +494,9 @@ class WorkTimeRepo(object):
                 start_work = datetime.strptime(start_work, "%Y-%m-%dT%H:%M:%S.%fZ")
             if end_work is not None:
                 end_work = datetime.strptime(end_work, "%Y-%m-%dT%H:%M:%S.%fZ")
+
             db_worked_time = WorkTimeORM(hour_payment=db_hour_payment, start_work=start_work, end_work=end_work)
             db_worked_time.save()
-
 
         except UserORM.DoesNotExist:
             raise NoPermissionException(message="Invalid user id")
