@@ -4,11 +4,11 @@ from project.views import ProjectView, CreateProjectView, GetAllProjectsView, To
             CreateWorkDayView, CreateWorkTimeView, GetWorkDayView, GetWorkTimeView, UpdateWorkDayView, UpdateWorkTimeView, \
             DeleteWorkDayView, DeleteWorkTimeView, GetAllWorkDaysView, GetWorkTimeListView
 from project.interactors import GetProjectInteractor, CreateProjectInteractor, GetAllProjectsInteractor, GetWorkedInteractor,\
-            GetTotalInteractor, CreateTaskInteractor, GetAllTasksInteractor, UpdateProjectInteractor, GetTaskInteractor, \
-            UpdateTaskInteractor, DeleteProjectInteractor, DeleteTaskInteractor, CreateWorkDayInteractor, \
+            GetTotalInteractor, GetBillInteractor, CreateTaskInteractor, GetAllTasksInteractor, UpdateProjectInteractor, \
+            GetTaskInteractor, UpdateTaskInteractor, DeleteProjectInteractor, DeleteTaskInteractor, CreateWorkDayInteractor, \
             CreateWorkTimeInteractor, GetWorkDayInteractor, GetWorkTimeInteractor, UpdateWorkDayInteractor, \
             UpdateWorkTimeInteractor, DeleteWorkDayInteractor, DeleteWorkTimeInteractor, GetTypeOfPaymentInteractor, \
-            GetAllWorkDaysInteractor, GetWorkTimeListInteractor
+            GetAllWorkDaysInteractor, GetWorkTimeListInteractor, GetTimestampInteractor
                                  
 
 
@@ -98,6 +98,13 @@ class GetTypeOfPaymentInteractorFactory(object):
         return GetTypeOfPaymentInteractor(project_repo)
 
 
+class GetTimestampInteractorFactory(object):
+    @staticmethod
+    def get():
+        project_repo = ProjectRepoFactory.get()
+        return GetTimestampInteractor(project_repo)
+
+
 class GetWorkedInteractorFactory(object):
     @staticmethod
     def get():
@@ -111,11 +118,20 @@ class GetTotalInteractorFactory(object):
         return GetTotalInteractor()
 
 
+class GetBillInteractorFactory(object):
+    @staticmethod
+    def get():
+        project_repo = ProjectRepoFactory.get()
+        return GetBillInteractor(project_repo)
+
+
 def get_total_factory():
     get_type_of_payment_interactor = GetTypeOfPaymentInteractorFactory.get()
+    get_timestampt_interactor = GetTimestampInteractorFactory.get()
     get_worked_interactor = GetWorkedInteractorFactory.get()
     get_total_interactor = GetTotalInteractorFactory.get()
-    return TotalView(get_type_of_payment_interactor, get_worked_interactor, get_total_interactor)
+    get_bill_interactor = GetBillInteractorFactory.get()
+    return TotalView(get_type_of_payment_interactor, get_timestampt_interactor, get_worked_interactor, get_total_interactor, get_bill_interactor)
 
 
 #--------------------------- Work Task ----------------------------------------#

@@ -82,18 +82,22 @@ class GetAllProjectsView(object):
 
 class TotalView(object):
 
-    def __init__(self, get_type_of_payment_interactor, get_worked_interactor, get_total_interactor):
+    def __init__(self, get_type_of_payment_interactor, get_timestamp_interactor, get_worked_interactor, get_total_interactor, get_bill_interactor):
         self.get_type_of_payment_interactor = get_type_of_payment_interactor
+        self.get_timestamp_interactor = get_timestamp_interactor
         self.get_worked_interactor = get_worked_interactor
         self.get_total_interactor = get_total_interactor
+        self.get_bill_interactor = get_bill_interactor
 
     @serialize_exception
     def get(self, *args, **kwargs):
         type_of_payment = self.get_type_of_payment_interactor.set_params(**kwargs).execute()
+        timestamp = self.get_timestamp_interactor.set_params(type_of_payment, **kwargs).execute()
         worked = self.get_worked_interactor.set_params(type_of_payment, **kwargs).execute()
         total = self.get_total_interactor.set_params(type_of_payment, worked, **kwargs).execute()
+        bill = self.get_bill_interactor.set_params(type_of_payment, timestamp, total, **kwargs).execute()
 
-        body = total
+        body = bill
         status = 200
         return body, status
 

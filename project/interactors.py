@@ -35,7 +35,7 @@ class CreateProjectInteractor(Interactor):
 
     def execute(self):
         return self.project_repo.create(user_id=self.user_id, title=self.title, description=self.description,
-                                                type_of_payment=self.type_of_payment, rate=self.rate)
+                                        type_of_payment=self.type_of_payment, rate=self.rate)
 
 
 
@@ -111,6 +111,24 @@ class GetTypeOfPaymentInteractor(Interactor):
 
 
 
+class GetTimestampInteractor(Interactor):
+
+    def __init__(self, project_repo):
+        self.project_repo = project_repo
+
+    def set_params(self, type_of_payment, **kwargs):
+        self.project_id = kwargs.get('project_id')
+        self.start_date_boundary = kwargs.get('start_date')
+        self.end_date_boundary = kwargs.get('end_date')
+        self.type_of_payment = type_of_payment
+        return self
+
+    def execute(self):
+        return self.project_repo.get_timestamp(self.project_id, self.type_of_payment, self.start_date_boundary,
+                                               self.end_date_boundary)
+
+
+
 class GetWorkedInteractor(Interactor):
 
     def __init__(self, project_repo):
@@ -138,6 +156,23 @@ class GetTotalInteractor(Interactor):
 
     def execute(self):
         return Project.get_total(self.type_of_payment, self.worked)
+
+
+
+class GetBillInteractor(Interactor):
+
+    def __init__(self, project_repo):
+        self.project_repo = project_repo
+
+    def set_params(self, type_of_payment, timestamp, total, **kwargs):
+        self.project_id = kwargs.get('project_id')
+        self.type_of_payment = type_of_payment
+        self.timestamp = timestamp
+        self.total = total
+        return self
+
+    def execute(self):
+        return self.project_repo.get_bill(self.project_id, self.type_of_payment, self.timestamp, self.total)
 
 
 # --------------------------- Work Task ---------------------------------------- #
