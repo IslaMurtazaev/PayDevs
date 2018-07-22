@@ -5,15 +5,15 @@ from PayDevs.exceptions import EntityDoesNotExistException, InvalidEntityExcepti
     EntityIntegrityException
 from django.db.utils import IntegrityError
 
+
 # ------------------------------------------ Project --------------------------------------------#
 
 
 class ProjectRepo(object):
-    def _decode_db_project(self, db_project, is_mine=False, entity_type_list=None):
-
+    def _decode_db_project(self, db_project, is_mine=False, paid=None, last_month_days=None, boundary=None):
         fileds = {
             'id': db_project.id,
-            'user': db_project.user,
+            'user_id': db_project.user.id,
             'title': db_project.title,
             'description': db_project.description,
             'start_date': db_project.start_date,
@@ -21,23 +21,23 @@ class ProjectRepo(object):
             'type_of_payment': db_project.type_of_payment,
             'status': db_project.status,
             'is_mine': is_mine,
-            'entity_type_list': entity_type_list
+            'entity_type_list': self._get_entity_type_list(db_project.id,
+                                                           paid=paid, last_month_days=last_month_days,
+                                                           boundary=boundary)
         }
 
         return Project(**fileds)
 
-    def get(self, project_id, logged_id=None):
+    def get(self, project_id, logged_id=None, paid=None, last_month_days=None, boundary=None):
         try:
             db_project = ProjectORM.objects.select_related('user').get(id=project_id)
         except ProjectORM.DoesNotExist:
             raise EntityDoesNotExistException
 
         return self._decode_db_project(db_project, is_mine=(logged_id == db_project.user.id),
-                                       entity_type_list=self._get_entity_type_list(project_id))
+                                       paid=paid, last_month_days=last_month_days, boundary=boundary)
 
-
-
-    def create(self, project):
+    def create(self, project, paid=None, last_month_days=None, boundary=None):
         db_project = ProjectORM.objects.create(
             title=project.title,
             description=project.description,
@@ -49,9 +49,19 @@ class ProjectRepo(object):
         )
 
         return self._decode_db_project(db_project=db_project, is_mine=True,
-                                       entity_type_list=self._get_entity_type_list(db_project.id))
+                                       paid=paid, last_month_days=last_month_days, boundary=boundary)
 
-    def get_all(self, user_id):
+
+    def delete(self, project_id):
+        try:
+            db_project = ProjectORM.objects.get(id=project_id)
+        except ProjectORM.DoesNotExist:
+            raise EntityDoesNotExistException
+        project = self._decode_db_project(db_project)
+        db_project.delete()
+        return project
+
+    def get_all(self, user_id, paid=None, last_month_days=None, boundary=None):
         try:
             db_user = UserORM.objects.get(id=user_id)
             db_projects = db_user.projectorm_set.all()
@@ -59,12 +69,11 @@ class ProjectRepo(object):
             raise NoPermissionException(message="Invalid user id")
 
         projects = [self._decode_db_project(db_project, is_mine=True,
-                                            entity_type_list=self._get_entity_type_list(db_project.id))
+                                            paid=paid, last_month_days=last_month_days, boundary=boundary)
                     for db_project in db_projects]
         return projects
 
-
-    def update(self, project):
+    def update(self, project, paid=None, last_month_days=None, boundary=None):
         try:
             db_project = ProjectORM.objects.get(id=project.id)
         except ProjectORM.DoesNotExist:
@@ -80,11 +89,9 @@ class ProjectRepo(object):
 
         db_project.save()
 
+        return self._decode_db_project(db_project, paid=paid, last_month_days=last_month_days, boundary=boundary)
 
-        return self._decode_db_project(db_project, entity_type_list=self._get_entity_type_list(db_project.id))
-
-
-    def _get_entity_type_list(self, project_id):
+    def _get_entity_type_list(self, project_id, paid=None, last_month_days=None, boundary=None):
         entity_type_list = []
         try:
             db_project = ProjectORM.objects.select_related('user').get(id=project_id)
@@ -93,7 +100,7 @@ class ProjectRepo(object):
                 hour_payment_repo = HourPaymentRepo()
                 for db_hour_payment in db_hour_payments:
                     entity_type_list.append(hour_payment_repo._decode_db_hour_payment(
-                        db_hour_payment, work_times=hour_payment_repo._get_worked_times(db_hour_payment.id)
+                        db_hour_payment, work_time_paid=paid, work_time_boundary=boundary
                     ))
             elif db_project.type_of_payment == 'M_P':
                 db_month_payments = db_project.monthpaymentorm_set.all()
@@ -101,11 +108,13 @@ class ProjectRepo(object):
                 for db_month_payment in db_month_payments:
                     entity_type_list.append(
                         month_payment_repo._decode_db_month_payment(db_month_payment,
-                                                                    work_days=
-                                                                    month_payment_repo._get_worked_days(
-                                                                        db_month_payment.id)))
+                                                                    work_day_paid=paid,
+                                                                    last_month_days=last_month_days))
             elif db_project.type_of_payment == 'T_P':
-                db_work_tasks = db_project.worktaskorm_set.all()
+                if paid is None:
+                    db_work_tasks = db_project.worktaskorm_set.filter(completed=True)
+                else:
+                    db_work_tasks = db_project.worktaskorm_set.filter(paid=paid, completed=True)
                 for db_work_task in db_work_tasks:
                     entity_type_list.append(WorkTaskRepo()._decode_db_work_task(db_work_task))
 
@@ -114,16 +123,11 @@ class ProjectRepo(object):
             raise EntityDoesNotExistException
 
 
-
-
-
-
 # -------------------------- Work Task ----------------------------------------#
 
 
 
 class WorkTaskRepo:
-
     def get(self, work_task_id):
         try:
             db_work_task = WorkTaskORM.objects.get(id=work_task_id)
@@ -134,7 +138,7 @@ class WorkTaskRepo:
 
     def get_all(self, project_id):
         tasks = []
-        db_work_tasks = WorkTaskORM.objects.filter(user_id=project_id)
+        db_work_tasks = WorkTaskORM.objects.filter(project_id=project_id)
         for db_work_task in db_work_tasks:
             tasks.append(self._decode_db_work_task(db_work_task))
         return tasks
@@ -174,7 +178,6 @@ class WorkTaskRepo:
         db_work_task.delete()
         return work_task
 
-
     def _decode_db_work_task(self, db_work_task):
         fields = {
             'id': db_work_task.id,
@@ -193,68 +196,79 @@ class WorkTaskRepo:
 
 
 class MonthPaymentRepo:
-    def _decode_db_month_payment(self, db_month_payment,  work_days=None):
+    def _decode_db_month_payment(self, db_month_payment, work_day_paid=None, last_month_days=None):
 
         fileds = {
             'id': db_month_payment.id,
             'project_id': db_month_payment.project.id,
             'rate': db_month_payment.rate,
-            'work_days': work_days
+            'work_days': self._get_worked_days(db_month_payment.id,
+                                               paid=work_day_paid, last_month_days=last_month_days)
         }
 
         return MonthPayment(**fileds)
 
-    def get(self, month_payment_id):
+    def get(self, month_payment_id, work_day_paid=None, last_month_days=None):
         try:
             db_month_payment = MonthPaymentORM.objects.select_related('project').get(id=month_payment_id)
         except MonthPaymentORM.DoesNotExist:
             raise EntityDoesNotExistException
 
         return self._decode_db_month_payment(db_month_payment,
-                                             work_days=self._get_worked_days(db_month_payment.id))
+                                             work_day_paid=work_day_paid, last_month_days=last_month_days)
 
-    def get_all(self, project_id):
+    def get_all(self, project_id, work_day_paid=None, last_month_days=None):
         try:
             db_month_payments = MonthPaymentORM.objects.select_related('project').filter(project_id=project_id)
         except MonthPaymentORM.DoesNotExist:
             raise EntityDoesNotExistException
 
         return [self._decode_db_month_payment(db_month_payment,
-                                              work_days=self._get_worked_days(db_month_payment.id))
+                                              work_day_paid=work_day_paid, last_month_days=last_month_days)
                 for db_month_payment in db_month_payments]
 
-    def create(self, month_payment):
+    def create(self, month_payment, work_day_paid=None, last_month_days=None):
         db_month_payment = MonthPaymentORM.objects.create(
             project_id=month_payment.project_id,
             rate=month_payment.rate
         )
-        return self._decode_db_month_payment(db_month_payment, self._get_worked_days(db_month_payment.id))
+        return self._decode_db_month_payment(db_month_payment,
+                                             work_day_paid=work_day_paid, last_month_days=last_month_days)
 
-    def update(self, month_payment):
+    def update(self, month_payment, work_day_paid=None, last_month_days=None):
         try:
             db_month_payment = MonthPaymentORM.objects.get(id=month_payment.id)
         except MonthPaymentORM.DoesNotExist:
             raise EntityDoesNotExistException
         db_month_payment.rate = month_payment.rate
         db_month_payment.save()
-        return self._decode_db_month_payment(db_month_payment, work_days=self._get_worked_days(month_payment.id))
+        return self._decode_db_month_payment(db_month_payment,
+                                             work_day_paid=work_day_paid, last_month_days=last_month_days)
 
-    def delete(self, month_payment_id):
+    def delete(self, month_payment_id, work_day_paid=None, last_month_days=None):
         try:
             db_month_payment = MonthPaymentORM.objects.get(id=month_payment_id)
         except MonthPaymentORM.DoesNotExist:
             raise EntityDoesNotExistException
         work_task = self._decode_db_month_payment(db_month_payment,
-                                                  self._get_worked_days(db_month_payment.id))
+                                                  work_day_paid=work_day_paid, last_month_days=last_month_days)
         db_month_payment.delete()
         return work_task
 
-
-    def _get_worked_days(self, month_payment_id):
+    def _get_worked_days(self, month_payment_id, paid=None, last_month_days=None):
         worked_days = []
         try:
             db_month_payment = MonthPaymentORM.objects.select_related('project').get(id=month_payment_id)
-            db_worked_days = db_month_payment.workeddayorm_set.all()
+            if paid is None:
+                if last_month_days is None:
+                    db_worked_days = db_month_payment.workeddayorm_set.all()
+                else:
+                    db_worked_days = db_month_payment.workeddayorm_set.filter(day__lt=last_month_days)
+            else:
+                if last_month_days is None:
+                    db_worked_days = db_month_payment.workeddayorm_set.filter(paid=paid)
+                else:
+                    db_worked_days = db_month_payment.workeddayorm_set.filter(paid=paid, day__lt=last_month_days)
         except ProjectORM.DoesNotExist:
             raise EntityDoesNotExistException
         for db_worked_day in db_worked_days:
@@ -262,9 +276,7 @@ class MonthPaymentRepo:
         return worked_days
 
 
-
 class WorkedDayRepo:
-
     def create(self, worked_day):
         db_worked_day = WorkedDayORM.objects.create(
             month_payment_id=worked_day.month_payment_id,
@@ -272,7 +284,6 @@ class WorkedDayRepo:
             paid=worked_day.paid
         )
         return self._decode_db_worked_day(db_worked_day)
-
 
     def update(self, worked_day):
         try:
@@ -286,7 +297,6 @@ class WorkedDayRepo:
 
         return self._decode_db_worked_day(db_worked_day)
 
-
     def delete(self, worked_day_id):
         try:
             db_worked_day = WorkedDayORM.objects.get(id=worked_day_id)
@@ -295,7 +305,6 @@ class WorkedDayRepo:
         worked_day = self._decode_db_worked_day(db_worked_day)
         db_worked_day.delete()
         return worked_day
-
 
     def get(self, worked_day_id):
         try:
@@ -312,7 +321,6 @@ class WorkedDayRepo:
 
         return [self._decode_db_worked_day(db_worked_day) for db_worked_day in db_worked_days]
 
-
     def _decode_db_worked_day(self, db_wored_day):
 
         fileds = {
@@ -324,71 +332,79 @@ class WorkedDayRepo:
         return WorkedDay(**fileds)
 
 
-
 class HourPaymentRepo:
-
-    def get(self, hour_payment_id):
+    def get(self, hour_payment_id, work_time_paid=None, work_time_boundary=None):
         try:
             db_hour_payment = HourPaymentORM.objects.select_related('project').get(id=hour_payment_id)
         except ProjectORM.DoesNotExist:
             raise EntityDoesNotExistException
         return self._decode_db_hour_payment(db_hour_payment,
-                                            work_times=self._get_worked_times(db_hour_payment.id))
+                                            work_time_paid=work_time_paid, work_time_boundary=work_time_boundary)
 
-    def get_all(self, project_id):
+    def get_all(self, project_id, work_time_paid=None, work_time_boundary=None):
         try:
             db_hour_payments = HourPaymentORM.objects.filter(project_id=project_id)
         except ProjectORM.DoesNotExist:
             raise EntityDoesNotExistException
         return [self._decode_db_hour_payment(db_hour_payment,
-                                             work_times=self._get_worked_times(db_hour_payment.id))
+                                             work_time_paid=work_time_paid, work_time_boundary=work_time_boundary)
                 for db_hour_payment in db_hour_payments]
 
-
-    def create(self, hour_payment):
+    def create(self, hour_payment, work_time_paid=None, work_time_boundary=None):
         db_hour_payment = HourPaymentORM.objects.create(
             project_id=hour_payment.project_id,
             rate=hour_payment.rate
         )
         return self._decode_db_hour_payment(db_hour_payment,
-                                            work_times=self._get_worked_times(db_hour_payment.id))
+                                            work_time_paid=work_time_paid, work_time_boundary=work_time_boundary)
 
-    def delete(self, hour_payment_id):
+    def delete(self, hour_payment_id, work_time_paid=None, work_time_boundary=None):
         try:
             db_hour_payment = HourPaymentORM.objects.get(id=hour_payment_id)
         except ProjectORM.DoesNotExist:
             raise EntityDoesNotExistException
-        hour_payment = self._decode_db_hour_payment(db_hour_payment)
+        hour_payment = self._decode_db_hour_payment(db_hour_payment,
+                                                    work_time_paid=work_time_paid,
+                                                    work_time_boundary=work_time_boundary)
         db_hour_payment.delete()
         return hour_payment
 
-    def update(self, hour_payment):
+    def update(self, hour_payment, work_time_paid=None, work_time_boundery=None):
         try:
             db_hour_payment = HourPaymentORM.objects.get(id=hour_payment.id)
         except ProjectORM.DoesNotExist:
             raise EntityDoesNotExistException
         db_hour_payment.rate = hour_payment.rate
         db_hour_payment.save()
-        return self._decode_db_hour_payment(db_hour_payment,
-                                            work_times=self._get_worked_times(db_hour_payment.id))
+        return self._decode_db_hour_payment(db_hour_payment, work_time_paid=work_time_paid,
+                                            work_time_boundary=work_time_boundery)
 
-
-
-    def _decode_db_hour_payment(self, db_hour_payment, work_times=None):
+    def _decode_db_hour_payment(self, db_hour_payment, work_time_paid=None, work_time_boundary=None):
         fileds = {
             'id': db_hour_payment.id,
             'project_id': db_hour_payment.project.id,
             'rate': db_hour_payment.rate,
-            'work_times': work_times
+            'work_times': self._get_worked_times(db_hour_payment.id, paid=work_time_paid, boundary=work_time_boundary)
         }
 
         return HourPayment(**fileds)
 
-    def _get_worked_times(self, hour_payment_id):
+    def _get_worked_times(self, hour_payment_id, paid=None, boundary=None):
         worked_times = []
         try:
-            db_month_payment =HourPaymentORM.objects.select_related('project').get(id=hour_payment_id)
-            db_worked_times = db_month_payment.worktimeorm_set.all()
+            db_month_payment = HourPaymentORM.objects.select_related('project').get(id=hour_payment_id)
+            if paid is None:
+                if boundary is None:
+                    db_worked_times = db_month_payment.worktimeorm_set.all()
+                else:
+                    db_worked_times = db_month_payment.worktimeorm_set.filter(start_work__gte=boundary[0],
+                                                                              end_work__lte=boundary[1])
+            else:
+                if boundary is None:
+                    db_worked_times = db_month_payment.worktimeorm_set.filter(paid=paid)
+                else:
+                    db_worked_times = db_month_payment.worktimeorm_set.filter(start_work__gte=boundary[0],
+                                                                              end_work__lte=boundary[1], paid=paid)
         except ProjectORM.DoesNotExist:
             raise EntityDoesNotExistException
         for db_worked_time in db_worked_times:
@@ -397,7 +413,6 @@ class HourPaymentRepo:
 
 
 class WorkTimeRepo:
-
     def create(self, work_time):
         db_work_time = WorkTimeORM.objects.create(
             hour_payment_id=work_time.hour_payment_id,
@@ -407,7 +422,6 @@ class WorkTimeRepo:
         )
         return self._decode_db_work_time(db_work_time)
 
-
     def get_all(self, hour_payment_id):
         try:
             db_work_times = WorkTimeORM.objects.select_related('hour_payment').filter(hour_payment_id=hour_payment_id)
@@ -415,7 +429,6 @@ class WorkTimeRepo:
             raise EntityDoesNotExistException
 
         return [self._decode_db_work_time(db_work_time) for db_work_time in db_work_times]
-
 
     def get(self, work_time_id):
         try:
@@ -446,7 +459,6 @@ class WorkTimeRepo:
         work_time = self._decode_db_work_time(db_work_time)
         db_work_time.delete()
         return work_time
-
 
     def _decode_db_work_time(self, db_work_time):
         fileds = {

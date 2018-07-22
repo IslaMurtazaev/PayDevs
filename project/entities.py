@@ -1,17 +1,17 @@
 class Project(object):
     
     def __init__(self, id=None, title=None, description=None, start_date=None, end_date=None,\
-                 user=None, type_of_payment=None, status=False,  is_mine=False, _entity_type_list=None):
+                 user_id=None, type_of_payment=None, status=False,  is_mine=False, entity_type_list=None):
         self._id = id
         self._title = title
         self._description = description
         self._start_date = start_date
         self._end_date = end_date
-        self._user = user
+        self._user_id = user_id
         self._type_of_payment = type_of_payment
         self._status = status
         self._is_mine = is_mine
-        self._entity_type_list = _entity_type_list
+        self._entity_type_list = entity_type_list
 
         
 
@@ -36,8 +36,8 @@ class Project(object):
         return self._end_date
 
     @property
-    def user(self):
-        return self._user
+    def user_id(self):
+        return self._user_id
 
     @property
     def type_of_payment(self):
@@ -92,8 +92,7 @@ class HourPayment(object):
         work_times = self._work_times
         val = 0
         for work_time in work_times:
-            if work_time.status:
-                val += (work_time.end_work - work_time.start_work).seconds / 3600
+            val += (work_time.end_work - work_time.start_work).seconds / 3600
         return val * self.rate
 
 
@@ -194,7 +193,7 @@ class MonthPayment(object):
     def total(self):
         worked_days = self._work_days
         count_worked_day = len(set([work_day.day for work_day
-                                    in worked_days if not work_day.paid]))
+                                    in worked_days]))
         return self.rate * count_worked_day
 
 
