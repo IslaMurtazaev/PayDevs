@@ -18,7 +18,7 @@ from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 
 from account.factories import get_user_factories, get_user_all_factories, get_user_regist_factories, get_user_login_factories
-from project.factories import get_project_factory, create_project_factory, get_all_projects_factory, get_total_factory, \
+from project.factories.view_factories import get_project_factory, create_project_factory, get_all_projects_factory, get_total_factory, \
     create_task_factory, get_all_tasks_factory, update_project_factory, get_task_factory, update_task_factory, delete_project_factory, \
     delete_task_factory, create_work_day_factory, create_work_time_factory, get_work_day_factory, get_work_time_factory, \
     update_work_day_factory, update_work_time_factory, delete_work_day_factory, delete_work_time_factory, get_all_work_days_factory, \

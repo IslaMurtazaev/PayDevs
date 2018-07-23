@@ -5,7 +5,7 @@ from account.validators import *
 from account.repositories import UserRepo
 from account.views import UserView, UserAllView, UserRegisterView, LoginUserView
 
-
+# TODO divide factories into one module
 class UserRepoFactory(object):
     @staticmethod
     def get():

@@ -49,7 +49,7 @@ class DateFormatSerializer(BaseSerializer):
     format = "%Y-%m-%e %T%z"
 
     @classmethod
-    def serializer(cls, list_obj):
+    def serializer(cls, list_obj): #TODO change name
         result = super().serializer(list_obj)
         for key in result:
             if type(result[key]) == datetime.datetime or type(result[key]) == datetime.date:

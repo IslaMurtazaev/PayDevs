@@ -29,7 +29,7 @@ class CreateProjectView(object):
     def post(self, *args, **kwargs):
         project = self.create_project_interactor.set_params(**kwargs).execute()
         body = ProjectSerializer.serializer(project)
-        status = 201
+        status = 201 #TODO make constants
         return body, status
 
 
@@ -85,7 +85,7 @@ class TotalView(object):
     def __init__(self, get_type_of_payment_interactor, get_timestamp_interactor, get_worked_interactor, get_total_interactor, get_bill_interactor):
         self.get_type_of_payment_interactor = get_type_of_payment_interactor
         self.get_timestamp_interactor = get_timestamp_interactor
-        self.get_worked_interactor = get_worked_interactor
+        self.get_worked_interactor = get_worked_interactor #TODO make one interactor
         self.get_total_interactor = get_total_interactor
         self.get_bill_interactor = get_bill_interactor
 

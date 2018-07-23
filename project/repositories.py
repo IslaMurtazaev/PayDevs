@@ -13,7 +13,7 @@ class ProjectRepo(object):
 
     def get(self, user_id, project_id=None, title=None):
         try:
-            db_user = UserORM.objects.get(id=user_id)
+            db_user = UserORM.objects.get(id=user_id) #TODO make project_repo use only own ORM and others through their repos
 
             if project_id:
                 db_project = db_user.projectorm_set.get(id=project_id)
@@ -213,7 +213,7 @@ class ProjectRepo(object):
             'status': db_project.status
         }
 
-        return Project(**fileds)
+        return Project(**fileds) # TODO try to take it out of repo if you use it outside
 
 
     def _set_rate(self, db_project, rate):

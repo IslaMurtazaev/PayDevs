@@ -6,7 +6,7 @@ from project.repositories import ProjectRepo, WorkTaskRepo
 from project.interactors import GetProjectInteractor, CreateProjectInteractor
 from PayDevs.exceptions import *
 from project.validators import *
-
+#TODO add integration tests, interactors tests etc..
 
 # -------------------------- Project_Tests ------------------------------------- #
 
