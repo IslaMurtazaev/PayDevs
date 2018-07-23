@@ -63,8 +63,7 @@ class ProjectRepo(object):
 
     def get_all(self, user_id, paid=None, last_month_days=None, boundary=None):
         try:
-            db_user = UserRepo.get(id=user_id)
-            db_projects = db_user.projectorm_set.all()
+            db_projects = ProjectORM.objects.filter(user_id=user_id)
         except ProjectORM.DoesNotExist:
             raise NoPermissionException(message="Invalid user id")
 

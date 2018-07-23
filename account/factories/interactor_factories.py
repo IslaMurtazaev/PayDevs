@@ -8,23 +8,23 @@ from account.interactors import GetUsersInteractor, GetUsersAllInteractor, Login
 
 class GetUsersInteractorFactory(object):
     @staticmethod
-    def get():
-        user_repo_factory = UserRepoFactory().get()
+    def create():
+        user_repo_factory = UserRepoFactory().create()
         return GetUsersInteractor(user_repo_factory)
 
 
 
 class GetUsersAllInteractorFactory(object):
     @staticmethod
-    def get():
-        user_repo_factory = UserRepoFactory().get()
+    def create():
+        user_repo_factory = UserRepoFactory().create()
         return GetUsersAllInteractor(user_repo_factory)
 
 
 class LoginUserInreractorFactory(object):
     @staticmethod
-    def get():
-        user_repo_factory = UserRepoFactory().get()
+    def create():
+        user_repo_factory = UserRepoFactory().create()
         valid_check_password_factory = ValidateCheckPasswordFactory()
         get_token = TokenGenFactory()
         return LoginUserInteractor(user_repo_factory, valid_check_password_factory, get_token)
@@ -34,8 +34,8 @@ class LoginUserInreractorFactory(object):
 
 class RegisterUserInteractorFactory(object):
     @staticmethod
-    def get():
-        user_repo_factory = UserRepoFactory().get()
+    def create():
+        user_repo_factory = UserRepoFactory().create()
         validate_username_factory = UsernameValidatorFactory()
         validate_email_factory = EmailValidatorFactory()
         hashed_password_factory = HashPasswordFactor()

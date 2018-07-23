@@ -4,7 +4,7 @@ from account.repositories import UserRepo
 
 class UserRepoFactory(object):
     @staticmethod
-    def get():
+    def create():
         return UserRepo()
 
 

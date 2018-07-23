@@ -2,6 +2,7 @@ import datetime
 
 from django.test import TestCase
 
+from account.entities import User
 from account.repositories import UserRepo
 from project.entities import Project
 from project.interactors import GetProjectInteractor, CreateProjectInteractor
@@ -13,7 +14,13 @@ from PayDevs.exceptions import NoLoggedException, NoPermissionException
 class GetProjectInteractorTest(TestCase):
 
     def setUp(self):
-        self.user = UserRepo().create_default_user('testUser')
+        user = User(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+        self.user = UserRepo().create_user(user)
         project = Project(
             title='Test Project',
             description='My Test project',
@@ -48,7 +55,13 @@ class GetProjectInteractorTest(TestCase):
 class CreateProjectInteractorTest(TestCase):
 
     def setUp(self):
-        self.user = UserRepo().create_default_user('testUser')
+        user = User(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+        self.user = UserRepo().create_user(user)
 
     def test_method_set_params_exclude(self):
         project = CreateProjectInteractor(project_repo=ProjectRepo(),

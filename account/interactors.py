@@ -18,7 +18,7 @@ class LoginUserInteractor(Interactor):
         return self
 
     def execute(self, *args, **kwargs):
-        user = self.user_repo.get_user(username=self.username)
+        user = self.user_repo.get_user_by_username(username=self.username)
         chpw = self.valid_check_password.check_password(self.password, user.password)
         token = self.get_token.encode(user, self.secret_key)
         if not chpw:
@@ -48,7 +48,9 @@ class RegisterUserInteractor(Interactor):
         self.validate_username.validate(username=self.username, user=valid_user)
         self.validate_email.validate(email=self.email, user=valid_user)
         self.password = self.hashed_password.hashed(password=self.password, user=valid_user)
-        new_user = self.user_repo.create_default_user(username=self.username)
+        user = User(username=self.username)
+        new_user = self.user_repo.create_user(user=user)
+        print(new_user.id)
         user_update = User(id=new_user.id, username=self.username, email=self.email, password=self.password,
                            is_active=True)
         return self.user_repo.update_user(user_update)
@@ -67,7 +69,7 @@ class GetUsersInteractor(Interactor):
     def execute(self, *args, **kwargs):
         if self.id is None:
             raise NoLoggedException()
-        return self.user_repo.get_user(id=self.id)
+        return self.user_repo.get_user_by_id(id=self.id)
 
 
 class GetUsersAllInteractor(Interactor):

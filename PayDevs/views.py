@@ -3,7 +3,7 @@ import json
 from django.http import HttpResponse
 from django.views import View
 
-from account.factories import AuthUserInteractorFactory
+from account.factories.interactor_factories import AuthUserInteractorFactory
 from PayDevs import settings
 
 

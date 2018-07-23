@@ -22,7 +22,7 @@ from account.factories.view_factory import get_user_all_factories, get_user_regi
     get_user_factories
 from project.factories.factories import get_project_factory, create_project_factory, update_project_factory, \
     delete_project_factory, get_all_projects_factory, get_total_factory, create_task_factory, update_task_factory, \
-    delete_task_factory, get_all_tasks_factory
+    delete_task_factory, get_all_tasks_factory, get_task_factory
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -4,32 +4,39 @@ from PayDevs.exceptions import EntityDoesNotExistException, EntityIntegrityExcep
 from django.db.utils import IntegrityError
 
 
-
 class UserRepo:
-
-
-    def get_user(self, id=None, username=None, email=None):
+    def get_user_by_id(self, id=None):
         try:
-            if id is not None:
-                db_user = UserORM.objects.get(id=id)
-            elif username is not None:
-                db_user = UserORM.objects.get(username=username)
-            else:
-                db_user = UserORM.objects.get(email=email)
+            db_user = UserORM.objects.get(id=id)
 
         except UserORM.DoesNotExist:
             raise EntityDoesNotExistException
 
         return self._decode_db_user(db_user)
 
-
-    def create_default_user(self, username):
+    def get_user_by_username(self, username=None):
         try:
-            db_user = UserORM.objects.create(username=username)
-        except IntegrityError:
-            raise EntityIntegrityException(username=username)
+            db_user = UserORM.objects.get(username=username)
+        except UserORM.DoesNotExist:
+            raise EntityDoesNotExistException
+
         return self._decode_db_user(db_user)
 
+    def get_user_by_user_email(self, email=None):
+        try:
+            db_user = UserORM.objects.get(username=email)
+        except UserORM.DoesNotExist:
+            raise EntityDoesNotExistException
+
+        return self._decode_db_user(db_user)
+
+    def create_user(self, user):
+        try:
+            db_user = UserORM(username=user.username)
+            db_user.save()
+        except IntegrityError:
+            raise EntityIntegrityException(username=user.username)
+        return self._decode_db_user(db_user)
 
     def update_user(self, user):
         db_user = UserORM.objects.get(id=user.id)
@@ -42,19 +49,8 @@ class UserRepo:
 
         return self._decode_db_user(db_user)
 
-    def all(self):
-        try:
-            db_users = UserORM.objects.all()
-        except UserORM.DoesNotExist:
-            raise EntityDoesNotExistException
-        users = list()
-        for db_user in db_users:
-            users.append(self._decode_db_user(db_user))
-        return users
-
     def get_user_project(self):
         pass
-
 
     def _decode_db_user(self, db_user):
         fileds = {

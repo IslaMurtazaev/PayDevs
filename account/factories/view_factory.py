@@ -4,22 +4,22 @@ from account.views import UserView, UserAllView, UserRegisterView, LoginUserView
 
 
 def get_user_factories():
-    get_user_interactor = GetUsersInteractorFactory().get()
-    return UserView(get_user_interactor)
+    create_user_interactor = GetUsersInteractorFactory().create()
+    return UserView(create_user_interactor)
 
 
 def get_user_all_factories():
-    get_user_interactor = GetUsersAllInteractorFactory().get()
-    return UserAllView(get_user_interactor)
+    create_user_interactor = GetUsersAllInteractorFactory().create()
+    return UserAllView(create_user_interactor)
 
 
 
 def get_user_regist_factories():
-    get_user_interactor = RegisterUserInteractorFactory().get()
-    get_auth_interactor = LoginUserInreractorFactory().get()
-    return UserRegisterView(get_user_interactor, get_auth_interactor)
+    create_user_interactor = RegisterUserInteractorFactory().create()
+    create_auth_interactor = LoginUserInreractorFactory().create()
+    return UserRegisterView(create_user_interactor, create_auth_interactor)
 
 
 def get_user_login_factories():
-    get_user_interactor = LoginUserInreractorFactory().get()
-    return LoginUserView(get_user_interactor)
+    create_user_interactor = LoginUserInreractorFactory().create()
+    return LoginUserView(create_user_interactor)
