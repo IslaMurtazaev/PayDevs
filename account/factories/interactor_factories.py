@@ -2,7 +2,7 @@ from account.factories.repo_factories import UserRepoFactory
 from account.factories.token_factories import TokenGenFactory, TokenDecodeFactory
 from account.factories.validate_factories import ValidateCheckPasswordFactory, UsernameValidatorFactory, \
     EmailValidatorFactory, HashPasswordFactor
-from account.interactors import GetUsersInteractor, GetUsersAllInteractor, LoginUserInteractor, RegisterUserInteractor, \
+from account.interactors import GetUsersInteractor, LoginUserInteractor, RegisterUserInteractor, \
     AuthUserInteractor
 
 
@@ -12,13 +12,6 @@ class GetUsersInteractorFactory(object):
         user_repo_factory = UserRepoFactory().create()
         return GetUsersInteractor(user_repo_factory)
 
-
-
-class GetUsersAllInteractorFactory(object):
-    @staticmethod
-    def create():
-        user_repo_factory = UserRepoFactory().create()
-        return GetUsersAllInteractor(user_repo_factory)
 
 
 class LoginUserInreractorFactory(object):

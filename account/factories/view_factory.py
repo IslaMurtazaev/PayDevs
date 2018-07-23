@@ -1,16 +1,11 @@
-from account.factories.interactor_factories import GetUsersInteractorFactory, GetUsersAllInteractorFactory, \
+from account.factories.interactor_factories import GetUsersInteractorFactory, \
     RegisterUserInteractorFactory, LoginUserInreractorFactory
-from account.views import UserView, UserAllView, UserRegisterView, LoginUserView
+from account.views import UserView, UserRegisterView, LoginUserView
 
 
 def get_user_factories():
     create_user_interactor = GetUsersInteractorFactory().create()
     return UserView(create_user_interactor)
-
-
-def get_user_all_factories():
-    create_user_interactor = GetUsersAllInteractorFactory().create()
-    return UserAllView(create_user_interactor)
 
 
 

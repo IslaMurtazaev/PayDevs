@@ -45,15 +45,18 @@ class RegisterUserInteractor(Interactor):
 
     def execute(self, *args, **kwargs):
         valid_user = User(username=self.username, email=self.email)
-        self.validate_username.validate(username=self.username, user=valid_user)
-        self.validate_email.validate(email=self.email, user=valid_user)
-        self.password = self.hashed_password.hashed(password=self.password, user=valid_user)
+        self._validate(valid_user)
         user = User(username=self.username)
         new_user = self.user_repo.create_user(user=user)
-        print(new_user.id)
         user_update = User(id=new_user.id, username=self.username, email=self.email, password=self.password,
                            is_active=True)
         return self.user_repo.update_user(user_update)
+
+
+    def _validate(self, valid_user):
+        self.validate_username.validate(username=self.username, user=valid_user)
+        self.validate_email.validate(email=self.email, user=valid_user)
+        self.password = self.hashed_password.hashed(password=self.password, user=valid_user)
 
 
 
@@ -71,16 +74,6 @@ class GetUsersInteractor(Interactor):
             raise NoLoggedException()
         return self.user_repo.get_user_by_id(id=self.id)
 
-
-class GetUsersAllInteractor(Interactor):
-    def __init__(self, user_repo):
-        self.user_repo = user_repo
-
-    def set_params(self, *args, **kwargs):
-        return self
-
-    def execute(self, *args, **kwargs):
-        return self.user_repo.all()
 
 
 class AuthUserInteractor(Interactor):

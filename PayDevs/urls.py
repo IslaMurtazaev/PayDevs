@@ -18,7 +18,7 @@ from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 
 from PayDevs.views import ViewWrapper
-from account.factories.view_factory import get_user_all_factories, get_user_regist_factories, get_user_login_factories, \
+from account.factories.view_factory import get_user_regist_factories, get_user_login_factories, \
     get_user_factories
 from project.factories.factories import get_project_factory, create_project_factory, update_project_factory, \
     delete_project_factory, get_all_projects_factory, get_total_factory, create_task_factory, update_task_factory, \
@@ -26,7 +26,6 @@ from project.factories.factories import get_project_factory, create_project_fact
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('users/all', ViewWrapper.as_view(view_factory=get_user_all_factories)),
     path('users/create', csrf_exempt(ViewWrapper.as_view(view_factory=get_user_regist_factories)), name='create_user'),
     path('users/login', csrf_exempt(ViewWrapper.as_view(view_factory=get_user_login_factories)), name='login_user'),
     path('users/', ViewWrapper.as_view(view_factory=get_user_factories), name='get_user'),
