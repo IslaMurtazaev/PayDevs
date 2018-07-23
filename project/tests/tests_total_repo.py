@@ -96,6 +96,7 @@ class HourPaymentTotalAndRepoTest(TestCase):
         hour_payment_total = hour_payment_get.total
         self.assertEqual(hour_payment_total, 3 * hour_payment_get.rate)
 
+
 class MonthPaymentTotalAndRepoTest(TestCase):
 
     def setUp(self):

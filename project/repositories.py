@@ -1,4 +1,5 @@
 from account.models import UserORM
+from account.repositories import UserRepo
 from project.entities import Project, WorkTask, MonthPayment, WorkedDay, HourPayment, WorkTime
 from project.models import ProjectORM, HourPaymentORM, MonthPaymentORM, WorkTaskORM, WorkedDayORM, WorkTimeORM
 from PayDevs.exceptions import EntityDoesNotExistException, NoPermissionException
@@ -62,9 +63,9 @@ class ProjectRepo(object):
 
     def get_all(self, user_id, paid=None, last_month_days=None, boundary=None):
         try:
-            db_user = UserORM.objects.get(id=user_id)
+            db_user = UserRepo.get(id=user_id)
             db_projects = db_user.projectorm_set.all()
-        except (UserORM.DoesNotExist, ProjectORM.DoesNotExist):
+        except ProjectORM.DoesNotExist:
             raise NoPermissionException(message="Invalid user id")
 
         projects = [self._decode_db_project(db_project, is_mine=True,

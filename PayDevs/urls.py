@@ -17,13 +17,12 @@ from django.contrib import admin
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 
-from account.factories import get_user_factories, get_user_all_factories, get_user_regist_factories, get_user_login_factories
-from project.factories import get_project_factory, create_project_factory, get_all_projects_factory, get_total_factory, \
-    create_task_factory, get_all_tasks_factory, update_project_factory, get_task_factory, update_task_factory, delete_project_factory, \
-    delete_task_factory
-
 from PayDevs.views import ViewWrapper
-
+from account.factories.view_factory import get_user_all_factories, get_user_regist_factories, get_user_login_factories, \
+    get_user_factories
+from project.factories.factories import get_project_factory, create_project_factory, update_project_factory, \
+    delete_project_factory, get_all_projects_factory, get_total_factory, create_task_factory, update_task_factory, \
+    delete_task_factory, get_all_tasks_factory
 
 urlpatterns = [
     path('admin/', admin.site.urls),

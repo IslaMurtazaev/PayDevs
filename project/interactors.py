@@ -2,13 +2,14 @@ from PayDevs.interactors import Interactor
 
 
 #------------------------ Project ---------------------------------------------#
-from project.entities import Project
+from project.entities import Project, WorkTask
 
 
 class GetProjectInteractor(Interactor):
 
-    def __init__(self, project_repo):
+    def __init__(self, project_repo, validate_user_project):
         self.project_repo = project_repo
+        self.validate_user_project = validate_user_project
 
     def set_params(self, project_id, logged_id=None, **kwargs):
         self.logged_id = logged_id
@@ -16,6 +17,7 @@ class GetProjectInteractor(Interactor):
         return self
 
     def execute(self):
+        self.validate_user_project.validate_pemission(self.logged_id)
         return self.project_repo.get(logged_id=self.logged_id, project_id=self.project_id)
 
 
@@ -72,6 +74,7 @@ class UpdateProjectInteractor(Interactor):
         type_of_payment = self.type_of_payment if self.type_of_payment is not None else project.type_of_payment
         status = self.status if self.status else project.status
         update_project = Project(
+            id=project.id,
             title=title,
             description=description,
             start_date=start_date,
@@ -118,18 +121,19 @@ class GetAllProjectsInteractor(Interactor):
 
 
 
-class GetTotalInteractor(Interactor):
+class ProjectGetTotalInteractor(Interactor):
 
     def __init__(self, project_repo):
         self.project_repo = project_repo
 
-    def set_params(self, **kwargs):
-        self.user_id = kwargs.get('user_id')
-        self.project_id = kwargs.get('project_id')
+    def set_params(self, logged_id, project_id, **kwargs):
+        self.user_id = logged_id
+        self.project_id = project_id
         return self
 
     def execute(self):
-        return self.project_repo.get_total(self.user_id, self.project_id)
+        project = self.project_repo.get(self.project_id)
+        return project.total
 
 
 
@@ -139,39 +143,53 @@ class GetTotalInteractor(Interactor):
 
 class GetTaskInteractor(Interactor):
 
-    def __init__(self, work_task_repo):
+    def __init__(self, work_task_repo, validate_user_project):
         self.work_task_repo = work_task_repo
+        self.validate_user_project = validate_user_project
 
-    def set_params(self, **kwargs):
-        self.user_id = kwargs.get('user_id')
-        self.project_id = kwargs.get('project_id')
-        self.task_id = kwargs.get('task_id')
-        self.title = kwargs.get('title')
+    def set_params(self, logged_id, project_id, task_id,  **kwargs):
+        self.user_id = logged_id
+        self.project_id = project_id
+        self.task_id = task_id
         return self
 
     def execute(self):
-        return self.work_task_repo.get(user_id=self.user_id, project_id=self.project_id,
-                                       task_id=self.task_id, title=self.title)
+        self.validate_user_project.validate_pemission(self.user_id)
+        work_task = self.work_task_repo.get(self.task_id)
+        self.validate_user_project.validate_pemission(self.project_id, work_task.project_id)
+        return work_task
 
 
 
 
 class CreateTaskInteractor(Interactor):
 
-    def __init__(self, work_task_repo):
+    def __init__(self, work_task_repo, validate_user_project):
         self.work_task_repo = work_task_repo
+        self.validate_user_project = validate_user_project
 
-    def set_params(self, **kwargs):
-        self.user_id = kwargs.get('user_id')
-        self.project_id = kwargs.get('project_id')
-        self.title = kwargs.get('title')
-        self.description = kwargs.get('description')
-        self.price = kwargs.get('price')
+    def set_params(self, logged_id, project_id, title, description, price, paid, completed,**kwargs):
+        self.user_id = logged_id
+        self.project_id = project_id
+        self.title = title
+        self.description = description
+        self.price = price
+        self.paid = paid
+        self.completed = completed
         return self
 
     def execute(self):
-        return self.work_task_repo.create(user_id=self.user_id, project_id=self.project_id, title=self.title,
-                                                    description=self.description, price=self.price)
+        self.validate_user_project.validate_pemission(self.user_id)
+        work_task = WorkTask(
+            project_id=self.project_id,
+            title=self.title,
+            description=self.description,
+            price=self.price,
+            paid=self.paid,
+            completed=self.completed
+        )
+
+        return self.work_task_repo.create(work_task)
 
 
 
@@ -179,53 +197,73 @@ class CreateTaskInteractor(Interactor):
 
 class UpdateTaskInteractor(Interactor):
 
-    def __init__(self, work_task_repo):
+    def __init__(self, work_task_repo, validate_user_project):
         self.work_task_repo = work_task_repo
+        self.validate_user_project = validate_user_project
 
-    def set_params(self, **kwargs):
-        self.user_id = kwargs.get('user_id')
-        self.project_id = kwargs.get('project_id')
-        self.task_id = kwargs.get('task_id')
-        self.new_attrs = {
-            'title': kwargs.get('title'),
-            'description': kwargs.get('description'),
-            'price': kwargs.get('price'),
-            'completed': kwargs.get('completed'),
-            'paid': kwargs.get('paid')
-        }
+    def set_params(self, logged_id, project_id, task_id, title, description, price, compledted, paid, **kwargs):
+        self.user_id = logged_id
+        self.project_id = project_id
+        self.task_id = task_id
+        self.title = title
+        self.description = description
+        self.price = price
+        self.completed = compledted
+        self.paid = paid
         return self
 
     def execute(self):
-        return self.work_task_repo.update(user_id=self.user_id, project_id=self.project_id, task_id=self.task_id,
-                                          new_attrs=self.new_attrs)
+        self.validate_user_project.validate_pemission(self.user_id)
+        work_task = self.work_task_repo.get(self.task_id)
+        self.validate_user_project.validate_pemission(self.project_id, work_task.project_id)
+        title = self.title if self.title is not None else work_task.title
+        description = self.description if self.description is not None else work_task.description
+        price = self.price if self.price is not None else work_task.price
+        completed = self.completed if self.completed is not None else work_task.completed
+        paid = self.paid if self.paid is not None else work_task.paid
+        update_work_task = WorkTask(
+            title=title,
+            description=description,
+            price=price,
+            completed=completed,
+            paid=paid
+        )
+
+        return self.work_task_repo.update(update_work_task)
 
 
 
 class DeleteTaskInteractor(Interactor):
 
-    def __init__(self, work_task_repo):
+    def __init__(self, work_task_repo, validate_user_project):
         self.work_task_repo = work_task_repo
+        self.validate_user_project = validate_user_project
 
-    def set_params(self, *args, **kwargs):
-        self.user_id = kwargs.get('user_id')
-        self.project_id = kwargs.get('project_id')
-        self.task_id = kwargs.get('task_id')
+    def set_params(self, logged_id, project_id, task_id,*args, **kwargs):
+        self.user_id = logged_id
+        self.project_id = project_id
+        self.task_id = task_id
         return self
 
     def execute(self, *args, **kwargs):
-        return self.work_task_repo.delete(user_id=self.user_id, project_id=self.project_id, task_id=self.task_id)
+        self.validate_user_project.validate_pemission(self.user_id)
+        work_task = self.work_task_repo.get(self.task_id)
+        self.validate_user_project.validate_pemission(self.project_id, work_task.project_id)
+        return self.work_task_repo.delete(work_task.id)
 
 
 
 class GetAllTasksInteractor(Interactor):
 
-    def __init__(self, work_task_repo):
+    def __init__(self, work_task_repo, validate_user_project):
         self.work_task_repo = work_task_repo
+        self.validate_user_project = validate_user_project
 
-    def set_params(self, **kwargs):
-        self.user_id = kwargs.get('user_id')
-        self.project_id = kwargs.get('project_id')
+    def set_params(self, logged_id, project_id, **kwargs):
+        self.user_id = logged_id
+        self.project_id = project_id
         return self
 
     def execute(self):
-        return self.work_task_repo.get_all(user_id=self.user_id, project_id=self.project_id)
+        self.validate_user_project.validate_pemission(self.user_id)
+        return self.work_task_repo.get_all(self.project_id)

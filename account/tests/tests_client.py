@@ -10,7 +10,7 @@ class ClientAccountTest(TestCase):
     def setUp(self):
         self.client = Client()
 
-    def test_creat_user_get_token(self):
+    def test_create_user_get_token(self):
         data = json.dumps({'username': 'TestUser',
                            'email': 'testuser@email.ru',
                            'password': 'qwert12345'})
