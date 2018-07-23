@@ -2,7 +2,7 @@ from PayDevs.interactors import Interactor
 
 
 #------------------------ Project ---------------------------------------------#
-from project.entities import Project, WorkTask
+from project.entities import Project, WorkTask, HourPayment
 
 
 class GetProjectInteractor(Interactor):
@@ -267,3 +267,109 @@ class GetAllTasksInteractor(Interactor):
     def execute(self):
         self.validate_user_project.validate_pemission(self.user_id)
         return self.work_task_repo.get_all(self.project_id)
+
+
+
+class GetHourPaymentInteractor(Interactor):
+
+
+    def __init__(self, hour_payment_repo, validate_user_project):
+        self.hour_payment_repo = hour_payment_repo
+        self.hour_payment_repo = self.validate_user_project = validate_user_project
+
+
+
+    def set_params(self, hour_payment_id, project_id, logged_id, **kwargs):
+        self.hour_payment_id = hour_payment_id
+        self.project_id = project_id
+        self.user_id = logged_id
+        return self
+
+    def execute(self, *args, **kwargs):
+        self.validate_user_project.validate_pemission(logged_id=self.user_id)
+        hour_payment = self.hour_payment_repo.get(self.hour_payment_id)
+        self.validate_user_project.validate_pemission(hour_payment.project_id, self.project_id)
+        return hour_payment
+
+
+
+class CreateHourPaymentInteractor(Interactor):
+
+    def __init__(self, hour_payment_repo, validate_user_project):
+        self.hour_payment_repo = hour_payment_repo
+        self.hour_payment_repo = self.validate_user_project = validate_user_project
+
+
+
+    def execute(self, project_id, rate, logged_id, *args, **kwargs):
+        self.project_id = project_id
+        self.rate = rate
+        self.user_id = logged_id
+        return self
+
+    def set_params(self, *args, **kwargs):
+        self.validate_user_project.validate_pemission(logged_id=self.user_id)
+        hour_payment = HourPayment(
+            project_id=self.project_id,
+            rate=self.rate
+        )
+        return self.hour_payment_repo.create(hour_payment)
+
+
+
+class UpdateHourPaymentInteractor(Interactor):
+
+    def __init__(self, hour_payment_repo, project_repo, validate_user_project):
+        self.hour_payment_repo = hour_payment_repo
+        self.project_repo = project_repo
+        self.validate_user_project = validate_user_project
+
+
+    def set_params(self, hour_payment_id, rate, project_id, logged_id, **kwargs):
+        self.hour_payment_id = hour_payment_id
+        self.rate = rate
+        self.project_id = project_id
+        self.user_id = logged_id
+        return self
+
+
+    def execute(self, *args, **kwargs):
+
+        self._validate(self.user_id)
+        hour_payment = self.hour_payment_repo.get(self.hour_payment_id)
+        self.validate_user_project.validate_pemission(self.project_id, hour_payment.project_id)
+        rate = self.rate if self.rate is not None else hour_payment.rate
+        update_hour_payment = HourPayment(
+            id=hour_payment.id,
+            rate=rate,
+            project_id=hour_payment.project_id
+        )
+        return self.hour_payment_repo.update(update_hour_payment)
+
+
+    def _validate(self, logged_id):
+        self.validate_user_project.validate_pemission(logged_id=logged_id)
+        project = self.project_repo.get(self.project_id)
+        self.validate_user_project.validate_pemission(project.user_id, self.user_id)
+
+
+
+class DeleteHourPaymentInteractor(Interactor):
+
+    def __init__(self, hour_payment_repo, project_repo, validate_user_project):
+        self.hour_payment_repo = hour_payment_repo
+        self.validate_user_project = validate_user_project
+        self.project_repo = project_repo
+
+
+    def set_params(self, hour_payment_id, project_id, logged_id, *args, **kwargs):
+        self.hour_payment_id = hour_payment_id,
+        self.project_id = project_id
+        self.user_id = logged_id
+        return self
+
+
+    def execute(self, *args, **kwargs):
+        self.validate_user_project.validate_pemission(logged_id=self.user_id)
+        project = self.project_repo.get(self.project_id)
+        self.validate_user_project.validate_pemission(project.user_id, self.user_id)
