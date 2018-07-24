@@ -17,7 +17,7 @@ def serialize_exception(method):
             return method(*args, **kwargs)
         except PayDevsException as e:
             ExampleExceptionSerializer.model = e.__class__
-            body = ExampleExceptionSerializer.serializer(e)
+            body = ExampleExceptionSerializer.serialize(e)
             status = exception_status_code[type(e)]
         return body, status
 

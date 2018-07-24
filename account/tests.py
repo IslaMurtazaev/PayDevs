@@ -293,7 +293,7 @@ class UserSerializerTest(TestCase):
         }
         self.assertEqual(UserSerializer.model, User)
         self.assertEqual(UserSerializer.fields, ['id', 'username', 'email', 'is_active', 'is_staff'])
-        self.assertDictEqual(UserSerializer.serializer(user), serilalizer)
+        self.assertDictEqual(UserSerializer.serialize(user), serilalizer)
 
 
 class UserListSerializeTest(TestCase):
@@ -325,7 +325,7 @@ class UserListSerializeTest(TestCase):
 
         self.assertEqual(UserListSerializer.model, User)
         self.assertEqual(UserListSerializer.fields, ['id', 'username', 'email'])
-        self.assertListEqual(UserListSerializer.serializer(users), serilalizer)
+        self.assertListEqual(UserListSerializer.serialize(users), serilalizer)
 
 
 # --------------------------------------Test Client Account -----------------------------------------------#
@@ -335,7 +335,7 @@ class ClientAccountTest(TestCase):
     def setUp(self):
         self.client = Client()
 
-    def test_creat_user_get_token(self):
+    def test_create_user_get_token(self):
         data = json.dumps({'username': 'TestUser',
                            'email': 'testuser@email.ru',
                            'password': 'qwert12345'})
@@ -357,7 +357,7 @@ class ClientAccountTest(TestCase):
                            'password': 'qwert12345'})
         self.client.post(reverse('create_user'), data, content_type="application/json")
         data = json.dumps({'username': 'TestUser',
-                'password': 'qwert12345'})
+                           'password': 'qwert12345'})
         response = self.client.post(reverse('login_user'), data, content_type="application/json")
 
         body = json.loads(response.content.decode())
@@ -428,7 +428,7 @@ class ClientAccountPasswordValidateTest(TestCase):
         self.assertRegex(message, 'Your password consists of only digits.')
 
 
-    def test_login_password_validate_attribute_similarity_salidator(self):
+    def test_login_password_validate_attribute_similarity_validator(self):
         data = json.dumps({'username': 'sddqweqweq',
                            'email': 'testuser@email.ru',
                            'password': 'sddqweqweq'})
@@ -463,7 +463,7 @@ class ClientAccountEmailValidateTest(TestCase):
         message = body.get('error').get('message')
         self.assertRegex(message, 'Invalid email address')
 
-    def test_login_email_domaine_validator(self):
+    def test_login_email_domain_validator(self):
         data = json.dumps({'username': 'sddqweqweq',
                            'email': 'testuser@027168.com',
                            'password': 'abcdefghijklmnopqrstuvwxyz'})

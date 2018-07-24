@@ -9,7 +9,7 @@ class UserView(object):
     @serialize_exception
     def get(self, *args, **kwargs):
         user = self.get_user_interactor.set_params(id=kwargs['user_id']).execute()
-        body = UserSerializer.serializer(user)
+        body = UserSerializer.serialize(user)
         status = 200
         return body, status
 
@@ -21,7 +21,7 @@ class UserAllView(object):
     @serialize_exception
     def get(self):
         users = self.get_user_interactor.set_params().execute()
-        body = UserListSerializer.serializer(users)
+        body = UserListSerializer.serialize(users)
         status = 200
         return body, status
 
@@ -35,7 +35,7 @@ class UserRegisterView(object):
     def post(self, *args, **kwargs):
         self.get_user_interactor.set_params(**kwargs).execute()
         user = self.auth(**kwargs)
-        body = UserSerializer.serializer(user)
+        body = UserSerializer.serialize(user)
         body.update({'token': user.token})
         status = 200
         return body, status
@@ -52,7 +52,7 @@ class LoginUserView(object):
     @serialize_exception
     def post(self, *args, **kwargs):
         user = self.get_user_interactor.set_params(**kwargs).execute()
-        body = UserSerializer.serializer(user)
+        body = UserSerializer.serialize(user)
         body.update({'token': user.token})
         status = 200
         return body, status
