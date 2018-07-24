@@ -68,16 +68,7 @@ def delete_project_factory():
 
 
 
-class GetAllProjectsInteractorFactory(object):
-    @staticmethod
-    def get():
-        project_repo = ProjectRepoFactory.get()
-        return GetAllProjectsInteractor(project_repo)
 
-
-def get_all_projects_factory():
-    get_all_projects_interactor = GetAllProjectsInteractorFactory.get()
-    return AllProjectsView(get_all_projects_interactor)
 
 
 def update_project_factory():

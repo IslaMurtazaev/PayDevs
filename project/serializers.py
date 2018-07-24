@@ -7,7 +7,7 @@ class ProjectSerializer(DateFormatSerializer):
     fields = ['id', 'user_id', 'title', 'description', 'start_date', 'end_date',  'type_of_payment', 'status']
 
 
-class ProjectListSerializer(ListSerializer):
+class ProjectListSerializer(DateFormatListSerializer):
     model = Project
     fields = ['id', 'user_id', 'title', 'description', 'start_date', 'end_date',  'type_of_payment', 'status']
 

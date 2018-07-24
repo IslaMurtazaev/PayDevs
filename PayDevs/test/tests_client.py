@@ -66,6 +66,7 @@ class ClientAccountTest(TestCase):
         response = self.client.put(reverse('update_project', kwargs={'project_id': self.project_id}), data,
                                    content_type="application/json", **header)
         body = json.loads(response.content.decode())
+        print(body)
         self.assertEqual(body.get('title'), 'Project web')
         self.assertEqual(body.get('description'), "logic web site Test update")
         self.assertEqual(body.get('status'), True)

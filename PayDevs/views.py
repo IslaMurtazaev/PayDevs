@@ -68,8 +68,6 @@ class ViewWrapper(View):
         logged_user_id = self.auth_get_user(request)
         return {
                     'logged_id': logged_user_id,
-                    # 'project_id': request.META.get('HTTP_PROJECT'),
-                    'task_id': request.META.get('HTTP_TASK'),
                     'secret_key': settings.SECRET_KEY
                 }
 

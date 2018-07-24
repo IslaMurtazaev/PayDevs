@@ -21,8 +21,21 @@ class UserPermissionsValidator:
                                          message="The type of payment must be only one T_P, H_P and M_P")
 
 
+    def validate_task_payment(self, type_of_payment):
+        self._validate_project_payment(type_of_payment, 'T_P')
+
+    def validate_month_payment(self, type_of_payment):
+        self._validate_project_payment(type_of_payment, 'M_P')
+
+    def validate_hour_payment(self, type_of_payment):
+        self._validate_project_payment(type_of_payment, 'H_P')
 
 
+
+    def _validate_project_payment(self, type_of_payment,eq_type_of_payment):
+        if type_of_payment != eq_type_of_payment:
+            raise InvalidEntityException(source='validate', code='other_type_of_payment',
+                                         message="The type of payment for the project must be %s" % eq_type_of_payment)
 class ProjectDateTimeValidator:
     def date_time_format(self, date_string):
         if date_string is None:
