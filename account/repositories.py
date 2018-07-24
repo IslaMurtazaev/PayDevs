@@ -1,10 +1,15 @@
 from account.entities import User
 from account.models import UserORM
-from PayDevs.exceptions import EntityDoesNotExistException, EntityIntegrityException
+from PayDevs.exceptions import EntityDoesNotExistException, EntityIntegrityException, NoPermissionException
 from django.db.utils import IntegrityError
 
 
 class UserRepo:
+    def check_password(self, user, password):
+        db_user = UserORM.objects.get(username=user.username)
+        if not db_user.check_password(password):
+            raise NoPermissionException('Roles do not match')
+
     def get_user_by_id(self, id=None):
         try:
             db_user = UserORM.objects.get(id=id)
@@ -32,8 +37,13 @@ class UserRepo:
 
     def create_user(self, user):
         try:
-            db_user = UserORM(username=user.username)
-            db_user.save()
+            db_user = UserORM.objects.create_user(
+                username=user.username,
+                email=user.email,
+                password=user.password,
+                is_staff=user.is_staff
+            )
+
         except IntegrityError:
             raise EntityIntegrityException(username=user.username)
         return self._decode_db_user(db_user)

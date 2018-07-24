@@ -10,12 +10,19 @@ from PayDevs.exceptions import InvalidEntityException
 
 # ------------------------------ PASSWORD ------------------------------ #
 
+class UsernameEmailValidator:
+    def validate_username(self, username, user=None):
+        return validate_username(username, user=user)
+
+    def validate_email(self, email, user=None):
+        validate_email(email, user=user)
+
 
 def hashed_password(password, user=None):
     validate_password(password, user)
-    password = password + settings.SECRET_KEY
-    password = password.encode()
-    return bcrypt.hashpw(password, salt=bcrypt.gensalt())
+    # password = password + settings.SECRET_KEY
+    # password = password.encode()
+    # return bcrypt.hashpw(password, salt=bcrypt.gensalt())
 
 
 def check_password(password, hashed):
@@ -78,7 +85,12 @@ def validate(value, user=None, validators=None):
         raise InvalidEntityException(source='validate', code='not_allowed', message=str(errors))
 
 
+
 # ------------------------- PASSWORD VALIDATORS --------------------------- #
+
+
+
+
 
 class MinimumLengthValidator(object):
     def __init__(self, min_len=8):

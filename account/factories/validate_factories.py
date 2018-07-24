@@ -1,4 +1,5 @@
-from account.validators import check_password, validate_username, validate_email, hashed_password
+from account.validators import check_password, hashed_password, \
+    UsernameEmailValidator
 
 
 class ValidateCheckPasswordFactory(object):
@@ -7,20 +8,15 @@ class ValidateCheckPasswordFactory(object):
         return check_password(passoword, hashed)
 
 
-class UsernameValidatorFactory(object):
-    @staticmethod
-    def validate(username, user=None):
-        return validate_username(username=username, user=user)
+class UsernameEmailValidatorFactory(object):
 
-
-class EmailValidatorFactory(object):
     @staticmethod
-    def validate(email, user=None):
-        return validate_email(email=email, user=user)
+    def create():
+        return UsernameEmailValidator()
 
 
 
 class HashPasswordFactor(object):
     @staticmethod
     def hashed(password, user=None):
-        return hashed_password(password=password, user=user).decode()
+        return hashed_password(password=password, user=user) # .decode()
