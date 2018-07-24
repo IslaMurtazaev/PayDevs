@@ -16,8 +16,22 @@ class ClientAccountTest(TestCase):
         body = json.loads(response.content.decode())
         self.token = body.get('token')
 
+        data = json.dumps({
+            "title": "Project 1",
+            "description": "Test test",
+            "start_date": "2016-12-20T23:00:00.000000Z+0600",
+            "end_date": "2018-12-20T12:30:00.000000Z+0600",
+            "type_of_payment": "H_P",
 
-    def test_create_user_get_token(self):
+        })
+        header = {'HTTP_AUTHORIZATION': self.token}
+        response = self.client.post(reverse('create_project'), data, content_type="application/json", **header)
+        body = json.loads(response.content.decode())
+        self.id = body.get('id')
+
+
+
+    def test_create_project(self):
         data = json.dumps({
                     "title": "Project web",
                     "description": "logic web site",
@@ -31,5 +45,23 @@ class ClientAccountTest(TestCase):
         body = json.loads(response.content.decode())
         self.assertEqual(body.get('title'), 'Project web')
         self.assertEqual(body.get('description'), 'logic web site')
-        self.assertEqual(body.get('start_date'), "2016-12-20T23:00:00.000000Z+0600")
-        self.assertEqual(body.get('end_date'), "2018-12-20T12:30:00.000000Z+0600")
+        self.assertEqual(body.get('start_date'), '2016-12-20 23:00:00+0600')
+        self.assertEqual(body.get('end_date'), '2018-12-20 12:30:00+0600')
+        self.assertEqual(body.get('status'), True)
+
+
+    def test_update_project(self):
+        data = json.dumps({
+                    "title": "Project web",
+                    "description": "logic web site Test update",
+
+                })
+        header = {'HTTP_AUTHORIZATION': self.token}
+        response = self.client.post(reverse('update_project', kwargs={'project_id': 1}), data,
+                                    content_type="application/json", **header)
+        body = json.loads(response.content.decode())
+        self.assertEqual(body.get('title'), 'Project web')
+        self.assertEqual(body.get('description'), "logic web site Test update")
+        self.assertEqual(body.get('status'), True)
+
+
