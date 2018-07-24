@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
+
 from account.entities import User
 from account.models import UserORM
 from account.serializers import UserSerializer, UserListSerializer
@@ -335,7 +336,7 @@ class ClientAccountTest(TestCase):
     def setUp(self):
         self.client = Client()
 
-    def test_create_user_get_token(self):
+    def test_creat_user_get_token(self):
         data = json.dumps({'username': 'TestUser',
                            'email': 'testuser@email.ru',
                            'password': 'qwert12345'})
@@ -357,7 +358,7 @@ class ClientAccountTest(TestCase):
                            'password': 'qwert12345'})
         self.client.post(reverse('create_user'), data, content_type="application/json")
         data = json.dumps({'username': 'TestUser',
-                           'password': 'qwert12345'})
+                'password': 'qwert12345'})
         response = self.client.post(reverse('login_user'), data, content_type="application/json")
 
         body = json.loads(response.content.decode())
@@ -428,7 +429,7 @@ class ClientAccountPasswordValidateTest(TestCase):
         self.assertRegex(message, 'Your password consists of only digits.')
 
 
-    def test_login_password_validate_attribute_similarity_validator(self):
+    def test_login_password_validate_attribute_similarity_salidator(self):
         data = json.dumps({'username': 'sddqweqweq',
                            'email': 'testuser@email.ru',
                            'password': 'sddqweqweq'})
@@ -463,7 +464,7 @@ class ClientAccountEmailValidateTest(TestCase):
         message = body.get('error').get('message')
         self.assertRegex(message, 'Invalid email address')
 
-    def test_login_email_domain_validator(self):
+    def test_login_email_domaine_validator(self):
         data = json.dumps({'username': 'sddqweqweq',
                            'email': 'testuser@027168.com',
                            'password': 'abcdefghijklmnopqrstuvwxyz'})

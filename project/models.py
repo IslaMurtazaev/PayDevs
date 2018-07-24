@@ -79,7 +79,8 @@ class MonthPaymentORM(models.Model):
     rate = models.FloatField(default=0)
 
 
-class WorkDayORM(models.Model):
+
+class WorkedDayORM(models.Model):
     month_payment = models.ForeignKey(MonthPaymentORM, on_delete=models.CASCADE)
     day = models.DateField(default=current_date)
     paid = models.BooleanField(default=False)

@@ -14,17 +14,6 @@ class UserView(object):
         return body, status
 
 
-class UserAllView(object):
-    def __init__(self, get_user_interactor):
-        self.get_user_interactor = get_user_interactor
-
-    @serialize_exception
-    def get(self):
-        users = self.get_user_interactor.set_params().execute()
-        body = UserListSerializer.serialize(users)
-        status = 200
-        return body, status
-
 
 class UserRegisterView(object):
     def __init__(self, get_user_interactor, get_auth_interactor):

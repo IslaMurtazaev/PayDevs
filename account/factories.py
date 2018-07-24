@@ -1,9 +1,9 @@
-from account.interactors import GetUsersInteractor, GetUsersAllInteractor, RegisterUserInteractor, LoginUserInteractor,\
+from account.interactors import GetUsersInteractor, RegisterUserInteractor, LoginUserInteractor,\
     AuthUserInteractor
 from account.token_auth import token_decoder, gen_token
 from account.validators import *
 from account.repositories import UserRepo
-from account.views import UserView, UserAllView, UserRegisterView, LoginUserView
+from account.views import UserView, UserRegisterView, LoginUserView
 
 # TODO divide factories into one module
 class UserRepoFactory(object):
@@ -29,7 +29,7 @@ class GetUsersAllInteractorFactory(object):
     @staticmethod
     def get():
         user_repo_factory = UserRepoFactory().get()
-        return GetUsersAllInteractor(user_repo_factory)
+        return GetUsersInteractor(user_repo_factory)
 
 
 class TokenGenFactory(object):
@@ -98,9 +98,9 @@ def get_user_factories():
     return UserView(get_user_interactor)
 
 
-def get_user_all_factories():
-    get_user_interactor = GetUsersAllInteractorFactory().get()
-    return UserAllView(get_user_interactor)
+# def get_user_all_factories():
+#     get_user_interactor = GetUsersAllInteractorFactory().get()
+#     return UserAllView(get_user_interactor)
 
 
 
