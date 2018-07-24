@@ -8,7 +8,7 @@ class UserView(object):
 
     @serialize_exception
     def get(self, *args, **kwargs):
-        user = self.get_user_interactor.set_params(id=kwargs['user_id']).execute()
+        user = self.get_user_interactor.set_params(id=kwargs['logged_id']).execute()
         body = UserSerializer.serializer(user)
         status = 200
         return body, status

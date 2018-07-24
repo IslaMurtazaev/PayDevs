@@ -27,21 +27,28 @@ class ClientAccountTest(TestCase):
         header = {'HTTP_AUTHORIZATION': self.token}
         response = self.client.post(reverse('create_project'), data, content_type="application/json", **header)
         body = json.loads(response.content.decode())
-        self.id = body.get('id')
+        self.project_id = body.get('id')
 
-
+    def test_create_get(self):
+        header = {'HTTP_AUTHORIZATION': self.token}
+        response = self.client.get(reverse('get_project', kwargs={'project_id': self.project_id}),
+                                   content_type="application/json", **header)
+        body = json.loads(response.content.decode())
+        self.assertEqual(body.get('title'), "Project 1")
+        self.assertEqual(body.get('description'), "Test test")
+        self.assertEqual(body.get('status'), True)
 
     def test_create_project(self):
         data = json.dumps({
-                    "title": "Project web",
-                    "description": "logic web site",
-                    "start_date": "2016-12-20T23:00:00.000000Z+0600",
-                    "end_date": "2018-12-20T12:30:00.000000Z+0600",
-                    "type_of_payment": "H_P",
+            "title": "Project web",
+            "description": "logic web site",
+            "start_date": "2016-12-20T23:00:00.000000Z+0600",
+            "end_date": "2018-12-20T12:30:00.000000Z+0600",
+            "type_of_payment": "H_P",
 
-                })
+        })
         header = {'HTTP_AUTHORIZATION': self.token}
-        response = self.client.post(reverse('create_project'), data, content_type="application/json", **header)
+        response = self.client.put(reverse('create_project'), data, content_type="application/json", **header)
         body = json.loads(response.content.decode())
         self.assertEqual(body.get('title'), 'Project web')
         self.assertEqual(body.get('description'), 'logic web site')
@@ -49,19 +56,34 @@ class ClientAccountTest(TestCase):
         self.assertEqual(body.get('end_date'), '2018-12-20 12:30:00+0600')
         self.assertEqual(body.get('status'), True)
 
-
     def test_update_project(self):
         data = json.dumps({
-                    "title": "Project web",
-                    "description": "logic web site Test update",
+            "title": "Project web",
+            "description": "logic web site Test update",
 
-                })
+        })
         header = {'HTTP_AUTHORIZATION': self.token}
-        response = self.client.post(reverse('update_project', kwargs={'project_id': 1}), data,
-                                    content_type="application/json", **header)
+        response = self.client.put(reverse('update_project', kwargs={'project_id': self.project_id}), data,
+                                   content_type="application/json", **header)
         body = json.loads(response.content.decode())
         self.assertEqual(body.get('title'), 'Project web')
         self.assertEqual(body.get('description'), "logic web site Test update")
         self.assertEqual(body.get('status'), True)
+
+    def test_update_delete(self):
+        header = {'HTTP_AUTHORIZATION': self.token}
+        self.client.delete(reverse('delete_project', kwargs={'project_id': self.project_id}),
+                           content_type="application/json", **header)
+
+        response = self.client.get(reverse('get_project', kwargs={'project_id': self.project_id}),
+                                   content_type="application/json", **header)
+
+        body = json.loads(response.content.decode())
+        message = body.get('error').get('message')
+        source = body.get('error').get('source')
+        code = body.get('error').get('code')
+        self.assertEqual(source, 'entity')
+        self.assertEqual(code, 'not_fond')
+        self.assertEqual(message, 'Entity not font')
 
 

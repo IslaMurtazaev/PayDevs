@@ -80,11 +80,8 @@ class ProjectRepo(object):
         db_project.description = project.description
         db_project.status = project.status
         db_project.type_of_payment = project.type_of_payment
-        if project.start_date:
-            db_project.start_date = project.start_date
-        if project.end_date:
-            db_project.end_date = project.end_date
-
+        db_project.start_date = project.start_date
+        db_project.end_date = project.end_date
         db_project.status = project.status
 
         db_project.save()

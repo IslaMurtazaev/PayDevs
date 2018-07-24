@@ -11,7 +11,6 @@ class ProjectView(object):
 
     @serialize_exception
     def get(self, *args, **kwargs):
-        print(kwargs)
         project = self.project_interactors.set_params(*args, **kwargs).execute()
         body = ProjectSerializer.serializer(project)
         status = 200

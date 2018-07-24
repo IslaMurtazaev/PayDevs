@@ -63,11 +63,11 @@ class CreateProjectInteractorTest(TestCase):
         )
         self.user = UserRepo().create_user(user)
 
-    def test_method_set_params_exclude(self):
-        project = CreateProjectInteractor(project_repo=ProjectRepo(),
-                                       validate_user_project=UserPermissionsValidator(UserRepo())).set_params(
-            logged_id=self.user.id,
-            title="Test",
-            description="Description testr",
-            type_of_payment='T_P',
-            rate=500).execute()
+    # def test_method_set_params_exclude(self):
+    #     project = CreateProjectInteractor(project_repo=ProjectRepo(),
+    #                                    validate_user_project=UserPermissionsValidator(UserRepo())).set_params(
+    #         logged_id=self.user.id,
+    #         title="Test",
+    #         description="Description testr",
+    #         type_of_payment='T_P',
+    #         rate=500).execute()
