@@ -1,22 +1,44 @@
-from PayDevs.serializer import BaseSerializer, ListSerializer
-from project.entities import Project, WorkTask
+from PayDevs.serializer import BaseSerializer, ListSerializer, DateFormatSerializer, DateFormatListSerializer
+from project.entities import Project, WorkTask, WorkedDay, WorkTime
 
 
-class ProjectSerializer(BaseSerializer):
+class ProjectSerializer(DateFormatSerializer):
     model = Project
-    fields = ['id', 'user', 'title', 'description', 'start_date', 'end_date',  'type_of_payment', 'status']
+    fields = ['id', 'user_id', 'title', 'description', 'start_date', 'end_date',  'type_of_payment', 'status']
 
 
 class ProjectListSerializer(ListSerializer):
     model = Project
-    fields = ['id', 'user', 'title', 'description', 'start_date', 'end_date',  'type_of_payment', 'status']
+    fields = ['id', 'user_id', 'title', 'description', 'start_date', 'end_date',  'type_of_payment', 'status']
 
 
 class WorkTaskSerializer(BaseSerializer):
     model = WorkTask
-    fields = ['id', 'project', 'title', 'description', 'price', 'completed', 'paid']
+    fields = ['id', 'project_id', 'title', 'description', 'price', 'completed', 'paid']
 
 
 class WorkTaskListSerializer(ListSerializer):
     model = WorkTask
-    fields = ['id', 'project', 'title', 'description', 'price', 'completed', 'paid']
+    fields = ['id', 'project_id', 'title', 'description', 'price', 'completed', 'paid']
+
+
+
+class WorkDaySerializer(DateFormatSerializer):
+    model = WorkedDay
+    fields = ['id', 'day', 'paid', 'rate']
+
+
+class WorkDayListSerializer(DateFormatListSerializer):
+    model = WorkedDay
+    fields = ['id', 'day', 'paid', 'rate']
+
+
+
+class WorkTimeSerializer(DateFormatSerializer):
+    model = WorkTime
+    fields = ['id', 'start_work', 'end_work', 'paid', 'rate']
+
+
+class WorkTimeListSerializer(DateFormatListSerializer):
+    model = WorkTime
+    fields = ['id', 'start_work', 'end_work', 'paid', 'rate']

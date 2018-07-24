@@ -54,7 +54,7 @@ class DateFormatSerializer(BaseSerializer):
         for key in result:
             if type(result[key]) == datetime.datetime or type(result[key]) == datetime.date:
                 result[key] = result[key].strftime(cls.format)
-            return result
+        return result
 
 
 

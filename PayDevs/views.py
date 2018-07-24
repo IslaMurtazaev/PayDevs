@@ -48,7 +48,6 @@ class ViewWrapper(View):
             json_data = json.loads(str(request.body, encoding='utf-8'))
         except:
             json_data = request.POST.dict()
-
         kwargs.update(json_data)
         body, status = self.view_factory().delete(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
@@ -68,8 +67,8 @@ class ViewWrapper(View):
     def params(self, request):
         logged_user_id = self.auth_get_user(request)
         return {
-                    'user_id': logged_user_id,
-                    'project_id': request.META.get('HTTP_PROJECT'),
+                    'logged_id': logged_user_id,
+                    # 'project_id': request.META.get('HTTP_PROJECT'),
                     'task_id': request.META.get('HTTP_TASK'),
                     'secret_key': settings.SECRET_KEY
                 }

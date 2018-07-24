@@ -1,9 +1,9 @@
 from project.repositories import ProjectRepo, WorkTaskRepo
-from project.views import ProjectView, CreateProjectView, AllProjectsView, TotalView, CreateTaskView, \
-            GetAllTasksView, UpdateProjectView, GetTaskView, UpdateTaskView, DeleteProjectView, DeleteTaskView
+from project.views import ProjectView, AllProjectsView, TotalView, CreateTaskView, \
+            GetAllTasksView, GetTaskView, UpdateTaskView, DeleteTaskView
 from project.interactors import GetProjectInteractor, CreateProjectInteractor, GetAllProjectsInteractor, CreateTaskInteractor, GetAllTasksInteractor, UpdateProjectInteractor, GetTaskInteractor, \
             UpdateTaskInteractor, DeleteProjectInteractor, DeleteTaskInteractor
-                                 
+
 
 
 #------------------------ Project ---------------------------------------------#
@@ -39,7 +39,7 @@ class CreateProjectInteractorFactory(object):
 
 def create_project_factory():
     create_project_interactor = CreateProjectInteractorFactory.get()
-    return CreateProjectView(create_project_interactor)
+    return ProjectView(create_project_interactor)
 
 
 

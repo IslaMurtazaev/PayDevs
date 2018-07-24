@@ -351,13 +351,12 @@ class HourPaymentRepo:
                                              work_time_paid=work_time_paid, work_time_boundary=work_time_boundary)
                 for db_hour_payment in db_hour_payments]
 
-    def create(self, hour_payment, work_time_paid=None, work_time_boundary=None):
+    def create(self, hour_payment):
         db_hour_payment = HourPaymentORM.objects.create(
             project_id=hour_payment.project_id,
             rate=hour_payment.rate
         )
-        return self._decode_db_hour_payment(db_hour_payment,
-                                            work_time_paid=work_time_paid, work_time_boundary=work_time_boundary)
+        return self._decode_db_hour_payment(db_hour_payment)
 
     def delete(self, hour_payment_id, work_time_paid=None, work_time_boundary=None):
         try:
