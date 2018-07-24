@@ -1,7 +1,7 @@
 from project.serializers import ProjectSerializer, ProjectListSerializer, WorkTaskSerializer, WorkTaskListSerializer, \
     WorkDaySerializer, WorkDayListSerializer, WorkTimeSerializer, WorkTimeListSerializer
 from PayDevs.decorators import serialize_exception
-
+from PayDevs.constants import StatusCodes
 
 # ------------------------ Project ---------------------------------------------#
 
@@ -15,7 +15,7 @@ class ProjectView(object):
         project = self.get_project_interactor.set_params(**kwargs).execute()
 
         body = ProjectSerializer.serializer(project)
-        status = 200
+        status = StatusCodes.OK
         return body, status
 
 
@@ -29,7 +29,7 @@ class CreateProjectView(object):
     def post(self, *args, **kwargs):
         project = self.create_project_interactor.set_params(**kwargs).execute()
         body = ProjectSerializer.serializer(project)
-        status = 201 #TODO make constants
+        status = StatusCodes.CREATED
         return body, status
 
 
@@ -44,7 +44,7 @@ class UpdateProjectView(object):
         updated_project = self.update_project_interactor.set_params(**kwargs).execute()
 
         body = ProjectSerializer.serializer(updated_project)
-        status = 200
+        status = StatusCodes.OK
         return body, status
 
 
@@ -59,7 +59,7 @@ class DeleteProjectView(object):
         deleted_project = self.delete_project_interactor.set_params(**kwargs).execute()
 
         body = ProjectSerializer.serializer(deleted_project)
-        status = 200
+        status = StatusCodes.OK
         return body, status
 
 
@@ -75,7 +75,7 @@ class GetAllProjectsView(object):
         projects = self.get_project_interactor.set_params(**kwargs).execute()
 
         body = ProjectListSerializer.serializer(projects)
-        status = 200
+        status = StatusCodes.OK
         return body, status
 
 
@@ -98,7 +98,7 @@ class TotalView(object):
         bill = self.get_bill_interactor.set_params(type_of_payment, timestamp, total, **kwargs).execute()
 
         body = bill
-        status = 200
+        status = StatusCodes.OK
         return body, status
 
 
@@ -114,7 +114,7 @@ class GetTaskView(object):
         task = self.get_task_interactor.set_params(**kwargs).execute()
 
         body = WorkTaskSerializer.serializer(task)
-        status = 200
+        status = StatusCodes.OK
         return body, status
 
 
@@ -129,7 +129,7 @@ class CreateTaskView(object):
         task = self.create_task_interactor.set_params(**kwargs).execute()
 
         body = WorkTaskSerializer.serializer(task)
-        status = 201
+        status = StatusCodes.CREATED
         return body, status
 
 
@@ -144,7 +144,7 @@ class UpdateTaskView(object):
         modified_task = self.update_task_interactor.set_params(**kwargs).execute()
 
         body = WorkTaskSerializer.serializer(modified_task)
-        status = 200
+        status = StatusCodes.OK
         return body, status
 
 
@@ -159,7 +159,7 @@ class DeleteTaskView(object):
         deleted_task = self.delete_task_interactor.set_params(**kwargs).execute()
 
         body = WorkTaskSerializer.serializer(deleted_task)
-        status = 200
+        status = StatusCodes.OK
         return body, status
 
 
@@ -174,7 +174,7 @@ class GetAllTasksView(object):
         tasks = self.get_all_tasks_interactor.set_params(**kwargs).execute()
 
         body = WorkTaskListSerializer.serializer(tasks)
-        status = 200
+        status = StatusCodes.OK
         return body, status
 
 
@@ -190,7 +190,7 @@ class GetWorkDayView(object):
         worked_day = self.get_work_day_interactor.set_params(**kwargs).execute()
 
         body = WorkDaySerializer.serializer(worked_day)
-        status = 200
+        status = StatusCodes.OK
         return body, status
 
 
@@ -205,7 +205,7 @@ class CreateWorkDayView(object):
         created_worked_day = self.create_work_day_interactor.set_params(**kwargs).execute()
 
         body = WorkDaySerializer.serializer(created_worked_day)
-        status = 201
+        status = StatusCodes.OK
         return body, status
 
 
@@ -220,7 +220,7 @@ class UpdateWorkDayView(object):
         updated_worked_day = self.update_work_day_interactor.set_params(**kwargs).execute()
 
         body = WorkDaySerializer.serializer(updated_worked_day)
-        status = 201
+        status = StatusCodes.OK
         return body, status
 
 
@@ -235,7 +235,7 @@ class DeleteWorkDayView(object):
         deleted_worked_day = self.delete_work_day_interactor.set_params(**kwargs).execute()
 
         body = WorkDaySerializer.serializer(deleted_worked_day)
-        status = 201
+        status = StatusCodes.OK
         return body, status
 
 
@@ -250,7 +250,7 @@ class GetAllWorkDaysView(object):
         worked_day = self.get_all_work_days_interactor.set_params(**kwargs).execute()
 
         body = WorkDayListSerializer.serializer(worked_day)
-        status = 200
+        status = StatusCodes.OK
         return body, status
 
 
@@ -266,7 +266,7 @@ class GetWorkTimeView(object):
         worked_time = self.get_work_time_interactor.set_params(**kwargs).execute()
 
         body = WorkTimeSerializer.serializer(worked_time)
-        status = 200
+        status = StatusCodes.OK
         return body, status
 
 
@@ -281,7 +281,7 @@ class CreateWorkTimeView(object):
         created_worked_time = self.create_work_time_interactor.set_params(**kwargs).execute()
 
         body = WorkTimeSerializer.serializer(created_worked_time)
-        status = 201
+        status = StatusCodes.CREATED
         return body, status
 
 
@@ -296,7 +296,7 @@ class UpdateWorkTimeView(object):
         updated_worked_time = self.update_work_time_interactor.set_params(**kwargs).execute()
 
         body = WorkTimeSerializer.serializer(updated_worked_time)
-        status = 201
+        status = StatusCodes.OK
         return body, status
 
 
@@ -311,7 +311,7 @@ class DeleteWorkTimeView(object):
         deleted_worked_time = self.delete_work_time_interactor.set_params(**kwargs).execute()
 
         body = WorkTimeSerializer.serializer(deleted_worked_time)
-        status = 201
+        status = StatusCodes.OK
         return body, status
 
 
@@ -326,5 +326,5 @@ class GetWorkTimeListView(object):
         worked_time_list = self.get_all_work_time_list_interactor.set_params(**kwargs).execute()
 
         body = WorkTimeListSerializer.serializer(worked_time_list)
-        status = 200
+        status = StatusCodes.OK
         return body, status
