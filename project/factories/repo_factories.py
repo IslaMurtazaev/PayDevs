@@ -11,33 +11,33 @@ class ProjectRepoFactory(object):
 class WorkTaskRepoFactory(object):
     @staticmethod
     def create():
-        WorkTaskRepo()
+        return WorkTaskRepo()
 
 
 
 class HourPaymentRepoFactory(object):
     @staticmethod
     def create():
-        HourPaymentRepo()
+        return HourPaymentRepo()
 
 
 class WorkTimeRepoFactory(object):
 
     @staticmethod
     def create():
-        WorkTimeRepo()
+        return WorkTimeRepo()
 
 
 
 class MonthPaymentRepoFactory(object):
     @staticmethod
     def create():
-        MonthPaymentRepo()
+        return MonthPaymentRepo()
 
 
 class WorkedDayRepoFactory(object):
     @staticmethod
     def create():
-        WorkedDayRepo()
+        return WorkedDayRepo()
 
 
