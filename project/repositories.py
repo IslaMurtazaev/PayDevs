@@ -80,8 +80,12 @@ class ProjectRepo(object):
         db_project.type_of_payment = project.type_of_payment
         db_project.start_date = project.start_date
         db_project.end_date = project.end_date
-        db_project.status = project.status
 
+        if project.start_date:
+            db_project.start_date = project.start_date
+        if project.end_date:
+            db_project.end_date = project.end_date
+        db_project.status = project.status
         db_project.save()
 
         return self._decode_db_project(db_project, paid=paid, last_month_days=last_month_days, boundary=boundary)
@@ -334,7 +338,7 @@ class HourPaymentRepo:
     def get(self, hour_payment_id, work_time_paid=None, work_time_boundary=None):
         try:
             db_hour_payment = HourPaymentORM.objects.select_related('project').get(id=hour_payment_id)
-        except ProjectORM.DoesNotExist:
+        except HourPaymentORM.DoesNotExist:
             raise EntityDoesNotExistException
         return self._decode_db_hour_payment(db_hour_payment,
                                             work_time_paid=work_time_paid, work_time_boundary=work_time_boundary)
@@ -342,7 +346,7 @@ class HourPaymentRepo:
     def get_all(self, project_id, work_time_paid=None, work_time_boundary=None):
         try:
             db_hour_payments = HourPaymentORM.objects.filter(project_id=project_id)
-        except ProjectORM.DoesNotExist:
+        except HourPaymentORM.DoesNotExist:
             raise EntityDoesNotExistException
         return [self._decode_db_hour_payment(db_hour_payment,
                                              work_time_paid=work_time_paid, work_time_boundary=work_time_boundary)
@@ -358,7 +362,7 @@ class HourPaymentRepo:
     def delete(self, hour_payment_id, work_time_paid=None, work_time_boundary=None):
         try:
             db_hour_payment = HourPaymentORM.objects.get(id=hour_payment_id)
-        except ProjectORM.DoesNotExist:
+        except HourPaymentORM.DoesNotExist:
             raise EntityDoesNotExistException
         hour_payment = self._decode_db_hour_payment(db_hour_payment,
                                                     work_time_paid=work_time_paid,
@@ -369,7 +373,7 @@ class HourPaymentRepo:
     def update(self, hour_payment, work_time_paid=None, work_time_boundery=None):
         try:
             db_hour_payment = HourPaymentORM.objects.get(id=hour_payment.id)
-        except ProjectORM.DoesNotExist:
+        except HourPaymentORM.DoesNotExist:
             raise EntityDoesNotExistException
         db_hour_payment.rate = hour_payment.rate
         db_hour_payment.save()

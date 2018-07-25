@@ -1,5 +1,6 @@
 from account.serializers import UserSerializer, UserListSerializer
 from PayDevs.decorators import serialize_exception
+from PayDevs.constants import StatusCodes
 
 
 class UserView(object):
@@ -10,7 +11,7 @@ class UserView(object):
     def get(self, *args, **kwargs):
         user = self.get_user_interactor.set_params(id=kwargs['logged_id']).execute()
         body = UserSerializer.serialize(user)
-        status = 200
+        status = StatusCodes.OK
         return body, status
 
 
@@ -26,7 +27,7 @@ class UserRegisterView(object):
         user = self.auth(**kwargs)
         body = UserSerializer.serialize(user)
         body.update({'token': user.token})
-        status = 200
+        status = StatusCodes.CREATED
         return body, status
 
     def auth(self, username, password, secret_key=None, **kwargs):
@@ -43,5 +44,5 @@ class LoginUserView(object):
         user = self.get_user_interactor.set_params(**kwargs).execute()
         body = UserSerializer.serialize(user)
         body.update({'token': user.token})
-        status = 200
+        status = StatusCodes.OK
         return body, status

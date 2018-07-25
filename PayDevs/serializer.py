@@ -69,7 +69,10 @@ class DateFormatListSerializer(DateFormatSerializer):
         return result
 
 
+
+
 class ExceptionSerializer(BaseSerializer):
+
     model = None
     fields = ['source', 'code']
 

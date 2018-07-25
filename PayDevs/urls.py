@@ -30,13 +30,16 @@ urlpatterns = [
     path('users/', ViewWrapper.as_view(view_factory=get_user_factories), name='get_user'),
 
     path('project/create', csrf_exempt(ViewWrapper.as_view(view_factory=create_project_factory)), name='create_project'),
-    path('project/all', ViewWrapper.as_view(view_factory=get_projects_all_factory), name='get_all_projects'),
+
+
+
+
     path('project/<int:project_id>/', ViewWrapper.as_view(view_factory=get_project_factory), name='get_project'),
     path('project/<int:project_id>/update/', csrf_exempt(ViewWrapper.as_view(view_factory=update_project_factory)),
          name='update_project'),
     path('project/<int:project_id>/delete/', csrf_exempt(ViewWrapper.as_view(view_factory=delete_project_factory)),
          name='delete_project'),
-    # path('project/total', ViewWrapper.as_view(view_factory=get_total_factory), name='get_total'),
+    path('project/all', ViewWrapper.as_view(view_factory=get_projects_all_factory), name='get_all_projects'),
 
 
     path('project/<int:project_id>/task/create/', csrf_exempt(ViewWrapper.as_view(view_factory=create_task_factory)),
@@ -63,4 +66,36 @@ urlpatterns = [
          name='delete_month_payment'),
     path('project/<int:project_id>/monthpayment/all/', ViewWrapper.as_view(view_factory=get_all_month_payments_factory),
          name='get_all_month_payments'),
+
+
+    path('project/<int:project_id>/hour_payment/create/',
+         csrf_exempt(ViewWrapper.as_view(view_factory=create_hour_payment_factory)), name='create_hour_payment'),
+
+    path('project/<int:project_id>/hour_payment/all/',
+         csrf_exempt(ViewWrapper.as_view(view_factory=get_all_hour_payment_factory)), name='get_all_hour_payment'),
+
+    path('project/<int:project_id>/hour_payment/<int:hour_payment_id>/',
+         csrf_exempt(ViewWrapper.as_view(view_factory=get_hour_payment_factory)), name='get_hour_payment'),
+
+    path('project/<int:project_id>/hour_payment/<int:hour_payment_id>/update/',
+         csrf_exempt(ViewWrapper.as_view(view_factory=update_hour_payment_factory)), name='update_hour_payment'),
+
+    path('project/<int:project_id>/hour_payment/<int:hour_payment_id>/delete/',
+         csrf_exempt(ViewWrapper.as_view(view_factory=delete_hour_payment_factory)), name='delete_hour_payment'),
+
+
+
+    path('project/<int:project_id>/hour_payment/<int:hour_payment_id>/work_time/create',
+         csrf_exempt(ViewWrapper.as_view(view_factory=create_work_time_factory)), name='create_work_time'),
+
+    path('project/<int:project_id>/hour_payment/<int:hour_payment_id>/work_time/all',
+         csrf_exempt(ViewWrapper.as_view(view_factory=get_all_work_time_factory)), name='get_all_work_time'),
+
+    path('project/<int:project_id>/hour_payment/<int:hour_payment_id>/work_time/<int:work_time_id>',
+         csrf_exempt(ViewWrapper.as_view(view_factory=get_work_time_factory)), name='get_work_time'),
+    path('project/<int:project_id>/hour_payment/<int:hour_payment_id>/work_time/<int:work_time_id>/update',
+             csrf_exempt(ViewWrapper.as_view(view_factory=update_work_time_factory)), name='update_work_time'),
+    path('project/<int:project_id>/hour_payment/<int:hour_payment_id>/work_time/<int:work_time_id>/delete',
+                 csrf_exempt(ViewWrapper.as_view(view_factory=delete_work_time_factory)), name='delete_work_time'),
+
 ]
