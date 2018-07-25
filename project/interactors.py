@@ -352,7 +352,7 @@ class DeleteHourPaymentInteractor(Interactor):
         self.project_repo = project_repo
 
     def set_params(self, hour_payment_id, project_id, logged_id, *args, **kwargs):
-        self.hour_payment_id = hour_payment_id,
+        self.hour_payment_id = hour_payment_id
         self.project_id = project_id
         self.user_id = logged_id
         return self

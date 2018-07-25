@@ -179,7 +179,6 @@ class HourPaymentView(object):
 
     @serialize_exception
     def get(self, *args, **kwargs):
-        print(kwargs)
         worked_time = self.work_time_interactor.set_params(**kwargs).execute()
         body = HourPaymentSerializer.serialize(worked_time)
         status = StatusCodes.OK
