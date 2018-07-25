@@ -1,7 +1,7 @@
 from project.factories.interactor_factories import CreateProjectInteractorFactory, GetProjectInteractorFactory, \
     DeleteProjectInteractorFactory, UpdateProjectInteractorFactory, GetAllProjectsInteractorFactory, \
     CreateTaskInteractorFactory, GetTaskInteractorFactory, UpdateTaskInteractorFactory, DeleteTaskInteractorFactory, \
-    GetAllaskInteractorFactory
+    GetAllTaskInteractorFactory
 from project.views import ProjectView, GetAllProjectsView, TaskView, GetAllTasksView
 
 
@@ -50,5 +50,5 @@ def delete_task_factory():
     return TaskView(get_task_interactor)
 
 def get_all_tasks_factory():
-    get_task_interactor = GetAllaskInteractorFactory().create()
+    get_task_interactor = GetAllTaskInteractorFactory.create()
     return GetAllTasksView(get_task_interactor)

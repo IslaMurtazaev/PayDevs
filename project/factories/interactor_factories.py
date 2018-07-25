@@ -88,7 +88,7 @@ class DeleteTaskInteractorFactory(object):
         return DeleteTaskInteractor(create_task_repo, create_project_repo, validate_user_project)
 
 
-class GetAllaskInteractorFactory(object):
+class GetAllTaskInteractorFactory(object):
     @staticmethod
     def create():
         create_task_repo = WorkTaskRepoFactory().create()

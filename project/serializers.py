@@ -1,5 +1,5 @@
 from PayDevs.serializer import BaseSerializer, ListSerializer, DateFormatSerializer, DateFormatListSerializer
-from project.entities import Project, WorkTask, WorkedDay, WorkTime
+from project.entities import Project, WorkTask, WorkedDay, WorkTime, MonthPayment
 
 
 class ProjectSerializer(DateFormatSerializer):
@@ -21,6 +21,11 @@ class WorkTaskListSerializer(ListSerializer):
     model = WorkTask
     fields = ['id', 'project_id', 'title', 'description', 'price', 'completed', 'paid']
 
+
+
+class MonthPaymentSerializer(DateFormatSerializer):
+    model = MonthPayment
+    fields = ['id', 'project_id', 'rate']
 
 
 class WorkDaySerializer(DateFormatSerializer):
