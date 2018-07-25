@@ -10,7 +10,8 @@ from project.factories.validator_factories import UserPermissionsValidatorFactor
 from project.interactors import CreateProjectInteractor, UpdateProjectInteractor, DeleteProjectInteractor, \
     GetProjectInteractor, GetAllProjectsInteractor, CreateTaskInteractor, GetTaskInteractor, UpdateTaskInteractor, \
     DeleteTaskInteractor, GetAllTasksInteractor, CreateHourPaymentInteractor, GetHourPaymentInteractor, \
-    UpdateHourPaymentInteractor, DeleteHourPaymentInteractor, GetAllHourPaymentInteractor, CreateWorkTimeInteractor
+    UpdateHourPaymentInteractor, DeleteHourPaymentInteractor, GetAllHourPaymentInteractor, CreateWorkTimeInteractor, \
+    GetWorkTimeInteractor, UpdateWorkTimeInteractor, DeleteWorkTimeInteractor, GetAllWorkTimeInteractor
 
 
 class CreateProjectInteractorFactory(object):
@@ -163,3 +164,51 @@ class CreateWorkTimeInteractorFactory(object):
         project_date_time = ProjectDateTimeValidatorFactory.create()
         return CreateWorkTimeInteractor(create_hour_payment_repo, create_project_repo,
                                         validate_user_project, project_date_time)
+
+
+
+
+class GetWorkTimeInteractorFactory(object):
+    @staticmethod
+    def create():
+        create_hour_payment_repo = WorkTimeRepoFactory().create()
+        validate_user_project = UserPermissionsValidatorFactory().create()
+        create_project_repo = HourPaymentRepoFactory().create()
+        return GetWorkTimeInteractor(create_hour_payment_repo, create_project_repo,
+                                        validate_user_project)
+
+
+
+class UpdateWorkTimeInteractorFactory(object):
+    @staticmethod
+    def create():
+        create_work_time_repo = WorkTimeRepoFactory().create()
+        create_hour_payment_repo = HourPaymentRepoFactory().create()
+        validate_user_project = UserPermissionsValidatorFactory().create()
+        create_project_repo = ProjectRepoFactory().create()
+        project_date_time = ProjectDateTimeValidatorFactory.create()
+        return UpdateWorkTimeInteractor(create_work_time_repo, create_project_repo, create_hour_payment_repo,
+                                        validate_user_project, project_date_time)
+
+
+
+class DeleteWorkTimeInteractorFactory(object):
+    @staticmethod
+    def create():
+        create_work_time_repo = WorkTimeRepoFactory().create()
+        create_hour_payment_repo = HourPaymentRepoFactory().create()
+        validate_user_project = UserPermissionsValidatorFactory().create()
+        create_project_repo = ProjectRepoFactory().create()
+        return DeleteWorkTimeInteractor(create_work_time_repo, create_hour_payment_repo, create_project_repo,
+                                        validate_user_project)
+
+
+
+class GetAllWorkTimeInteractorFactory(object):
+    @staticmethod
+    def create():
+        create_hour_payment_repo = WorkTimeRepoFactory().create()
+        validate_user_project = UserPermissionsValidatorFactory().create()
+        create_project_repo = HourPaymentRepoFactory().create()
+        return GetAllWorkTimeInteractor(create_hour_payment_repo, create_project_repo,
+                                     validate_user_project)

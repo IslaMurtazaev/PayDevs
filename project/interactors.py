@@ -397,10 +397,11 @@ class GetWorkTimeInteractor(Interactor):
         self.hour_payment_repo = hour_payment_repo
         self.validate_user_project = validate_user_project
 
-    def set_params(self, work_time_id, hour_payment_id, logged_id=None, *args, **kwargs):
+    def set_params(self, work_time_id, hour_payment_id, project_id, logged_id=None, *args, **kwargs):
         self.work_time_id = work_time_id
         self.user_id = logged_id
         self.hour_payment_id = hour_payment_id
+        self.project_id = project_id
         return self
 
     def execute(self, *args, **kwargs):
@@ -408,6 +409,7 @@ class GetWorkTimeInteractor(Interactor):
         self.validate_user_project.validate_pemission(logged_id=self.user_id)
         hour_payment = self.hour_payment_repo.get(self.hour_payment_id)
         self.validate_user_project.validate_pemission(hour_payment.id, work_time.hour_payment_id)
+        self.validate_user_project.validate_pemission(hour_payment.project_id, self.project_id)
         return work_time
 
 
@@ -443,24 +445,28 @@ class CreateWorkTimeInteractor(Interactor):
 
 
 class UpdateWorkTimeInteractor(Interactor):
-    def __init__(self, work_time_repo, validate_user_project):
+    def __init__(self, work_time_repo, project_repo, hour_payment_repo, validate_user_project, project_date_validator):
         self.work_time_repo = work_time_repo
         self.validate_user_project = validate_user_project
+        self.hour_payment_repo = hour_payment_repo
+        self.project_date_validator = project_date_validator
+        self.project_repo = project_repo
 
-    def set_params(self, work_time_id, logged_id, hour_payment_id, paid, start_work, end_work, *args, **kwargs):
+    def set_params(self, work_time_id, project_id, logged_id, hour_payment_id, paid=None,
+                   start_work=None, end_work=None, **kwargs):
         self.work_time_id = work_time_id
         self.user_id = logged_id
         self.hour_payment_id = hour_payment_id
         self.paid = paid
         self.start_work = start_work
         self.end_work = end_work
+        self.project_id = project_id
         return self
 
     def execute(self, *args, **kwargs):
         self.validate_user_project.validate_pemission(logged_id=self.user_id)
         work_time = self.work_time_repo.get(self.work_time_id)
-        self.validate_user_project.validate_pemission(work_time.hour_payment_id, self.hour_payment_id)
-
+        self._validate(work_time)
         start_work = self.start_work if self.start_work is not None else work_time.start_work
         end_work = self.end_work if self.end_work is not None else work_time.end_work
         paid = self.paid if self.paid is not None else work_time.paid
@@ -474,11 +480,20 @@ class UpdateWorkTimeInteractor(Interactor):
         return self.work_time_repo.update(work_time_update)
 
 
+    def _validate(self, work_time):
+        hour_payment = self.hour_payment_repo.get(self.hour_payment_id)
+        project = self.project_repo.get(hour_payment.project_id)
+        self.validate_user_project.validate_pemission(work_time.hour_payment_id, self.hour_payment_id)
+        self.validate_user_project.validate_pemission(project.id, self.project_id)
+        self.validate_user_project.validate_pemission(project.user_id, self.user_id)
+
+
 class DeleteWorkTimeInteractor(Interactor):
-    def __init__(self, work_time_repo, hour_payment_repo, validate_user_project):
+    def __init__(self, work_time_repo, hour_payment_repo, project_repo, validate_user_project):
         self.work_time_repo = work_time_repo
         self.hour_payment_repo = hour_payment_repo
         self.validate_user_project = validate_user_project
+        self.project_repo = project_repo
 
     def set_params(self, work_time_id, hour_payment_id, logged_id, *args, **kwargs):
         self.work_time_id = work_time_id
@@ -489,9 +504,14 @@ class DeleteWorkTimeInteractor(Interactor):
     def execute(self, *args, **kwargs):
         self.validate_user_project.validate_pemission(logged_id=self.user_id)
         work_time = self.work_time_repo.get(self.work_time_id)
-        self.validate_user_project.validate_pemission(self.hour_payment_id, work_time.hour_payment_id)
-
+        self._validate(work_time)
         return self.work_time_repo.delete(work_time.id)
+
+    def _validate(self, work_time):
+        hour_payment = self.hour_payment_repo.get(work_time.hour_payment_id)
+        project = self.project_repo.get(hour_payment.project_id)
+        self.validate_user_project.validate_pemission(self.hour_payment_id, hour_payment.id)
+        self.validate_user_project.validate_pemission(project.user_id, self.user_id)
 
 
 class GetAllWorkTimeInteractor(Interactor):
