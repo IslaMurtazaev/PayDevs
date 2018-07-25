@@ -1,5 +1,6 @@
 from project.serializers import ProjectSerializer, ProjectListSerializer, WorkTaskSerializer, WorkTaskListSerializer, \
-    WorkDaySerializer, WorkDayListSerializer, WorkTimeSerializer, WorkTimeListSerializer
+    WorkDaySerializer, WorkDayListSerializer, WorkTimeSerializer, WorkTimeListSerializer, MonthPaymentSerializer, \
+    MonthPaymentListSerializer
 from PayDevs.decorators import serialize_exception
 from PayDevs.constants import StatusCodes
 
@@ -7,8 +8,8 @@ from PayDevs.constants import StatusCodes
 
 class ProjectView(object):
 
-    def __init__(self, get_project_interactor):
-        self.project_interactors = get_project_interactor
+    def __init__(self, project_interactor):
+        self.project_interactors = project_interactor
 
 
     @serialize_exception
@@ -47,39 +48,15 @@ class ProjectView(object):
 
 class GetAllProjectsView(object):
 
-    def __init__(self, get_project_interactor):
-        self.get_project_interactor = get_project_interactor
-
+    def __init__(self, get_all_projects_interactor):
+        self.get_all_projects_interactor = get_all_projects_interactor
 
     @serialize_exception
     def get(self, *args, **kwargs):
-        projects = self.get_project_interactor.set_params(**kwargs).execute()
+        projects = self.get_all_projects_interactor.set_params(**kwargs).execute()
         body = ProjectListSerializer.serialize(projects)
         status = StatusCodes.OK
         return body, status
-
-
-
-# class TotalView(object):
-#
-#     def __init__(self, get_type_of_payment_interactor, get_timestamp_interactor, get_worked_interactor, get_total_interactor, get_bill_interactor):
-#         self.get_type_of_payment_interactor = get_type_of_payment_interactor
-#         self.get_timestamp_interactor = get_timestamp_interactor
-#         self.get_worked_interactor = get_worked_interactor #TODO make one interactor
-#         self.get_total_interactor = get_total_interactor
-#         self.get_bill_interactor = get_bill_interactor
-#
-#     @serialize_exception
-#     def get(self, *args, **kwargs):
-#         type_of_payment = self.get_type_of_payment_interactor.set_params(**kwargs).execute()
-#         worked = self.get_worked_interactor.set_params(type_of_payment, **kwargs).execute()
-#         timestamp = self.get_timestamp_interactor.set_params(type_of_payment, worked, **kwargs).execute()
-#         total = self.get_total_interactor.set_params(type_of_payment, worked, **kwargs).execute()
-#         bill = self.get_bill_interactor.set_params(type_of_payment, timestamp, total, **kwargs).execute()
-#
-#         body = bill
-#         status = StatusCodes.OK
-#         return body, status
 
 
 
@@ -136,122 +113,56 @@ class GetAllTasksView(object):
 
 
 
-# class GetWorkDayView(object):
-#
-#     def __init__(self, get_work_day_interactor):
-#         self.get_work_day_interactor = get_work_day_interactor
-#
-#     @serialize_exception
-#     def get(self, *args, **kwargs):
-#         worked_day = self.get_work_day_interactor.set_params(**kwargs).execute()
-#         body = WorkDaySerializer.serialize(worked_day)
-#         status = StatusCodes.OK
-#         return body, status
-#
-#
-# class CreateWorkDayView(object):
-#
-#     def __init__(self, create_work_day_interactor):
-#         self.create_work_day_interactor = create_work_day_interactor
-#
-#     @serialize_exception
-#     def post(self, *args, **kwargs):
-#         created_worked_day = self.create_work_day_interactor.set_params(**kwargs).execute()
-#         body = WorkDaySerializer.serialize(created_worked_day)
-#         status = StatusCodes.OK
-#         return body, status
-#
-#
-# class UpdateWorkDayView(object):
-#
-#     def __init__(self, update_work_day_interactor):
-#         self.update_work_day_interactor = update_work_day_interactor
-#
-#     @serialize_exception
-#     def put(self, *args, **kwargs):
-#         updated_worked_day = self.update_work_day_interactor.set_params(**kwargs).execute()
-#         body = WorkDaySerializer.serialize(updated_worked_day)
-#         status = StatusCodes.OK
-#         return body, status
-#
-#
-# class DeleteWorkDayView(object):
-#
-#     def __init__(self, delete_work_day_interactor):
-#         self.delete_work_day_interactor = delete_work_day_interactor
-#
-#     @serialize_exception
-#     def delete(self, *args, **kwargs):
-#         deleted_worked_day = self.delete_work_day_interactor.set_params(**kwargs).execute()
-#         body = WorkDaySerializer.serialize(deleted_worked_day)
-#         status = StatusCodes.OK
-#         return body, status
-#
-#
-# class GetAllWorkDaysView(object):
-#
-#     def __init__(self, get_all_work_days_interactor):
-#         self.get_all_work_days_interactor = get_all_work_days_interactor
-#
-#     @serialize_exception
-#     def get(self, *args, **kwargs):
-#         worked_day = self.get_all_work_days_interactor.set_params(**kwargs).execute()
-#         body = WorkDayListSerializer.serialize(worked_day)
-#         status = StatusCodes.OK
-#         return body, status
-#
-#
-#
-# class GetWorkTimeView(object):
-#
-#     def __init__(self, get_work_time_interactor):
-#         self.get_work_time_interactor = get_work_time_interactor
-#
-#     @serialize_exception
-#     def get(self, *args, **kwargs):
-#         worked_time = self.get_work_time_interactor.set_params(**kwargs).execute()
-#         body = WorkTimeSerializer.serialize(worked_time)
-#         status = StatusCodes.OK
-#         return body, status
-#
-#
-# class CreateWorkTimeView(object):
-#
-#     def __init__(self, create_work_time_interactor):
-#         self.create_work_time_interactor = create_work_time_interactor
-#
-#     @serialize_exception
-#     def post(self, *args, **kwargs):
-#         created_worked_time = self.create_work_time_interactor.set_params(**kwargs).execute()
-#         body = WorkTimeSerializer.serialize(created_worked_time)
-#         status = StatusCodes.CREATED
-#         return body, status
-#
-#
-# class UpdateWorkTimeView(object):
-#
-#     def __init__(self, update_work_time_interactor):
-#         self.update_work_time_interactor = update_work_time_interactor
-#
-#     @serialize_exception
-#     def put(self, *args, **kwargs):
-#         updated_worked_time = self.update_work_time_interactor.set_params(**kwargs).execute()
-#         body = WorkTimeSerializer.serialize(updated_worked_time)
-#         status = StatusCodes.OK
-#         return body, status
-#
-#
-# class DeleteWorkTimeView(object):
-#
-#     def __init__(self, delete_work_time_interactor):
-#         self.delete_work_time_interactor = delete_work_time_interactor
-#
-#     @serialize_exception
-#     def delete(self, *args, **kwargs):
-#         deleted_worked_time = self.delete_work_time_interactor.set_params(**kwargs).execute()
-#         body = WorkTimeSerializer.serialize(deleted_worked_time)
-#         status = StatusCodes.OK
-#         return body, status
+class MonthPaymentView(object):
+
+    def __init__(self, month_payment_interactor):
+        self.month_payment_interactor = month_payment_interactor
+
+
+    @serialize_exception
+    def get(self, *args, **kwargs):
+        month_payment = self.month_payment_interactor.set_params(**kwargs).execute()
+        body = MonthPaymentSerializer.serialize(month_payment)
+        status = StatusCodes.OK
+        return body, status
+
+
+    @serialize_exception
+    def post(self, *args, **kwargs):
+        created_month_payment = self.month_payment_interactor.set_params(**kwargs).execute()
+        body = MonthPaymentSerializer.serialize(created_month_payment)
+        status = StatusCodes.CREATED
+        return body, status
+
+
+    @serialize_exception
+    def put(self, *args, **kwargs):
+        updated_month_payment = self.month_payment_interactor.set_params(**kwargs).execute()
+        body = MonthPaymentSerializer.serialize(updated_month_payment)
+        status = StatusCodes.OK
+        return body, status
+
+
+    @serialize_exception
+    def delete(self, *args, **kwargs):
+        deleted_month_payment = self.month_payment_interactor.set_params(**kwargs).execute()
+        body = MonthPaymentSerializer.serialize(deleted_month_payment)
+        status = StatusCodes.OK
+        return body, status
+
+
+class GetAllMonthPaymentsView(object):
+
+    def __init__(self, get_all_month_payments_interactor):
+        self.get_all_month_payments_interactor = get_all_month_payments_interactor
+
+    @serialize_exception
+    def get(self, *args, **kwargs):
+        month_payments = self.get_all_month_payments_interactor.set_params(**kwargs).execute()
+        body = MonthPaymentListSerializer.serialize(month_payments)
+        status = StatusCodes.OK
+        return body, status
+
 
 
 

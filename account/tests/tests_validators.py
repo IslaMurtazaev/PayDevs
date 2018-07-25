@@ -129,51 +129,36 @@ class ValidatorFunctionsTest(TestCase):
     def setUp(self):
         self.user = User(username='TestMyTest', email='test@mail.ru')
 
-    def test_function_hashed_password(self):
-        hashed = hashed_password('password', user=self.user).decode()
-        self.assertTrue(check_password('password', hashed))
-        with self.assertRaises(InvalidEntityException):
-            hashed_password('pass').decode()
-        with self.assertRaises(InvalidEntityException):
-            hashed_password('123456789').decode()
-        with self.assertRaises(InvalidEntityException):
-            hashed_password('test@mail.ru', user=self.user).decode()
-        with self.assertRaises(InvalidEntityException):
-            hashed_password('TestMyTest', user=self.user).decode()
 
-    def test_function_check_password(self):
-        password = 'secret_password'
-        hashed = hashed_password(password).decode()
-        self.assertTrue(check_password(password, hashed))
 
     def test_function_validate_password_exception_source_code(self):
         try:
-            hashed_password('passw', user=self.user).decode()
+            hashed_password('passw', user=self.user)
         except InvalidEntityException as e:
             self.assertEqual(e.source, 'validate')
             self.assertEqual(e.code, 'not_allowed')
 
     def test_function_validate_password_minimum_length(self):
         try:
-            hashed_password('passw', user=self.user).decode()
+            hashed_password('passw', user=self.user)
         except InvalidEntityException as e:
             self.assertRegex(str(e), 'Your password must contain at least 8 character.')
 
     def test_function_validate_password_numeric(self):
         try:
-            hashed_password('45345465156', user=self.user).decode()
+            hashed_password('45345465156', user=self.user)
         except InvalidEntityException as e:
             self.assertRegex(str(e), 'Your password consists of only digits.')
 
     def test_function_validate_password_common(self):
         try:
-            hashed_password('qwertyui', user=self.user).decode()
+            hashed_password('qwertyui', user=self.user)
         except InvalidEntityException as e:
             self.assertRegex(str(e), 'Your password is a common sequence.')
 
     def test_function_validate_password_user_attribute(self):
         try:
-            hashed_password('TestMyTest', user=self.user).decode()
+            hashed_password('TestMyTest', user=self.user)
         except InvalidEntityException as e:
             self.assertRegex(str(e), 'Your password is too similar to your other fields.')
 

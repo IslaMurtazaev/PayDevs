@@ -4,25 +4,24 @@ from PayDevs import settings
 from PayDevs.exceptions import EntityDoesNotExistException, InvalidEntityException
 from account.entities import User
 from account.factories.token_factories import TokenGenFactory, TokenDecodeFactory
-from account.factories.validate_factories import ValidateCheckPasswordFactory, UsernameValidatorFactory, \
-    EmailValidatorFactory, HashPasswordFactor
+from account.factories.validate_factories import HashPasswordFactor
 from account.interactors import LoginUserInteractor, RegisterUserInteractor, GetUsersInteractor, AuthUserInteractor
 from account.models import UserORM
 from account.repositories import UserRepo
-from account.validators import hashed_password
+from account.validators import UsernameEmailValidator
 
 
 class LoginUserInteractorTest(TestCase):
     def setUp(self):
-        self.user = UserORM.objects.create(
+        self.user = UserORM.objects.create_user(
             username="testUser",
             email="test@gmail.com",
-            password=hashed_password('qwert12345').decode()
+            password='qwert12345'
         )
 
 
     def test_set_params_execute(self):
-        user = LoginUserInteractor(UserRepo(), ValidateCheckPasswordFactory(), TokenGenFactory()).\
+        user = LoginUserInteractor(UserRepo(), TokenGenFactory()).\
             set_params(username="testUser", password='qwert12345', secret_key=settings.SECRET_KEY).execute()
 
         self.assertEqual(self.user.id, user.id)
@@ -32,7 +31,7 @@ class LoginUserInteractorTest(TestCase):
 
     def test_set_params_execute_exception(self):
         with self.assertRaises(EntityDoesNotExistException):
-            LoginUserInteractor(UserRepo(), ValidateCheckPasswordFactory(), TokenGenFactory()).\
+            LoginUserInteractor(UserRepo(), TokenGenFactory()).\
                 set_params(username="testUser1", password='qwert12345', secret_key=settings.SECRET_KEY).execute()
 
 
@@ -40,8 +39,7 @@ class LoginUserInteractorTest(TestCase):
 
 class RegisterUserInteractorTest(TestCase):
     def test_set_params_execute(self):
-        user = RegisterUserInteractor(UserRepo(), UsernameValidatorFactory(),
-                               EmailValidatorFactory(), HashPasswordFactor()).set_params(
+        user = RegisterUserInteractor(UserRepo(), UsernameEmailValidator(), HashPasswordFactor()).set_params(
             username="testUser",
             email="test@gmail.com",
             password='qwert12345',
@@ -54,8 +52,8 @@ class RegisterUserInteractorTest(TestCase):
 
     def test_set_params_execute_valid_username(self):
         try:
-            user = RegisterUserInteractor(UserRepo(), UsernameValidatorFactory(),
-                                   EmailValidatorFactory(), HashPasswordFactor()).set_params(
+            user = RegisterUserInteractor(UserRepo(), UsernameEmailValidator(),
+                                          HashPasswordFactor()).set_params(
                 username="te",
                 email="test@gmail.com",
                 password='qwert12345',
@@ -67,8 +65,8 @@ class RegisterUserInteractorTest(TestCase):
 
     def test_set_params_execute_valid_email(self):
         try:
-            user = RegisterUserInteractor(UserRepo(), UsernameValidatorFactory(),
-                                   EmailValidatorFactory(), HashPasswordFactor()).set_params(
+            user = RegisterUserInteractor(UserRepo(), UsernameEmailValidator(),
+                                          HashPasswordFactor()).set_params(
                 username="testUser",
                 email="testgmail@.com",
                 password='qwert12345',
@@ -80,8 +78,8 @@ class RegisterUserInteractorTest(TestCase):
 
     def test_set_params_execute_valid_password(self):
         try:
-            user = RegisterUserInteractor(UserRepo(), UsernameValidatorFactory(),
-                                   EmailValidatorFactory(), HashPasswordFactor()).set_params(
+            user = RegisterUserInteractor(UserRepo(), UsernameEmailValidator(),
+                                          HashPasswordFactor()).set_params(
                 username="testUser",
                 email="testg@mail.com",
                 password='4545412345',
@@ -94,10 +92,10 @@ class RegisterUserInteractorTest(TestCase):
 
 class GetUsersInteractorTest(TestCase):
     def setUp(self):
-        self.user = UserORM.objects.create(
+        self.user = UserORM.objects.create_user(
             username="testUser",
             email="test@gmail.com",
-            password=hashed_password('qwert12345').decode()
+            password='qwert12345'
         )
 
     def test_set_params_execute(self):
@@ -116,12 +114,12 @@ class GetUsersInteractorTest(TestCase):
 
 class AuthUserInteractorTest(TestCase):
     def setUp(self):
-        self.user_db = UserORM.objects.create(
+        self.user_db = UserORM.objects.create_user(
             username="testUser",
             email="test@gmail.com",
-            password=hashed_password('qwert12345').decode()
+            password='qwert12345'
         )
-        self.user = LoginUserInteractor(UserRepo(), ValidateCheckPasswordFactory(), TokenGenFactory()). \
+        self.user = LoginUserInteractor(UserRepo(), TokenGenFactory()). \
             set_params(username="testUser", password='qwert12345', secret_key=settings.SECRET_KEY).execute()
 
 
@@ -130,4 +128,4 @@ class AuthUserInteractorTest(TestCase):
                                                             secret_key=settings.SECRET_KEY).execute()
 
         self.assertEqual(user_id, self.user.id)
-        self.assertEqual(user_id, self.user_db.id)
+        self.assertEqual(user_id, self.user.id)
