@@ -303,9 +303,6 @@ class CreateHourPaymentInteractor(Interactor):
         return self
 
 
-    def set_params(self, *args, **kwargs):
-        self.validate_user_project.validate_permission(logged_id=self.user_id)
-
     def execute(self, *args, **kwargs):
         self.validate_user_project.validate_permission(logged_id=self.user_id)
         project = self.project_repo.get(self.project_id)
