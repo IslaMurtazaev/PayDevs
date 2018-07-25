@@ -42,7 +42,7 @@ class UserPermissionValidator:
 
 
 class ProjectDateTimeValidator:
-    def date_time_format(self, date_string):
+    def vaildate_datetime_format(self, date_string):
         if date_string is None:
             return None
         try:

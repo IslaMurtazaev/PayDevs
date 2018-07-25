@@ -287,7 +287,7 @@ class UserListSerializeTest(TestCase):
         users = []
         for i in range(3):
             user = User(id=i, username='TestName%d' % i,
-                        email='tests%d@gmail.com' % i, password='123456789', is_active=True,
+                        email='test%d@gmail.com' % i, password='123456789', is_active=True,
                         is_staff=False)
             users.append(user)
 
@@ -311,6 +311,7 @@ class UserListSerializeTest(TestCase):
 
         self.assertEqual(UserListSerializer.model, User)
         self.assertEqual(UserListSerializer.fields, ['id', 'username', 'email'])
+        print(serilalizer[0] == UserListSerializer.serialize(users)[0])
         self.assertListEqual(UserListSerializer.serialize(users), serilalizer)
 
 

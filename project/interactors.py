@@ -40,8 +40,8 @@ class CreateProjectInteractor(Interactor):
         self.user_permission_validator.validate_permission(self.logged_id)
         self.user_permission_validator.validate_type_of_payment(self.type_of_payment)
 
-        start_date = self.project_date_validator.date_time_format(self.start_date)
-        end_date = self.project_date_validator.date_time_format(self.end_date)
+        start_date = self.project_date_validator.vaildate_datetime_format(self.start_date)
+        end_date = self.project_date_validator.vaildate_datetime_format(self.end_date)
 
         project = Project(user_id=self.logged_id,
                           title=self.title,
@@ -438,8 +438,8 @@ class CreateWorkTimeInteractor(Interactor):
         self.validate_user_project.validate_permission(logged_id=self.user_id)
         hour_payment = self.hour_payment_repo.get(self.hour_payment_id)
         self.validate_user_project.validate_permission(hour_payment.project_id, self.project_id)
-        start_work = self.project_date_validator.date_time_format(self.start_work)
-        end_work = self.project_date_validator.date_time_format(self.end_work)
+        start_work = self.project_date_validator.vaildate_datetime_format(self.start_work)
+        end_work = self.project_date_validator.vaildate_datetime_format(self.end_work)
         work_time = WorkTime(
             hour_payment_id=self.hour_payment_id,
             start_work=start_work,
@@ -476,8 +476,8 @@ class UpdateWorkTimeInteractor(Interactor):
         end_work = self.end_work if self.end_work is not None else work_time.end_work
         paid = self.paid if self.paid is not None else work_time.paid
 
-        start_work = self.project_date_validator.date_time_format(start_work)
-        end_work = self.project_date_validator.date_time_format(end_work)
+        start_work = self.project_date_validator.vaildate_datetime_format(start_work)
+        end_work = self.project_date_validator.vaildate_datetime_format(end_work)
 
         work_time_update = WorkTime(
             id=work_time.id,
