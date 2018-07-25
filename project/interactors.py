@@ -275,7 +275,7 @@ class GetAllTasksInteractor(Interactor):
 class GetHourPaymentInteractor(Interactor):
     def __init__(self, hour_payment_repo, validate_user_project):
         self.hour_payment_repo = hour_payment_repo
-        self.hour_payment_repo = self.validate_user_project = validate_user_project
+        self.validate_user_project = validate_user_project
 
     def set_params(self, hour_payment_id, project_id, logged_id, **kwargs):
         self.hour_payment_id = hour_payment_id

@@ -98,15 +98,6 @@ class ViewWrapper(View):
         logged_user_id = self.auth_get_user(request)
         return {
                     'logged_id': logged_user_id,
-
-                    # 'project_id': request.META.get('HTTP_PROJECT'),
-                    'task_id': request.META.get('HTTP_TASK'),
-                    'hour_payment_id': request.META.get('HTTP_HOURPAYMENT'),
-                    'month_payment_id': request.META.get('HTTP_MONTHPAYMENT'),
-                    'work_day_id': request.META.get('HTTP_WORKDAY'),
-                    'work_time_id': request.META.get('HTTP_WORKTIME'),
-                    'start_date': request.META.get('HTTP_STARTDATE'),
-                    'end_date': request.META.get('HTTP_ENDDATE'),
                     'secret_key': settings.SECRET_KEY
                 }
 

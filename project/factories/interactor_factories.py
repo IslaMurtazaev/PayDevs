@@ -8,7 +8,7 @@ from project.factories.validator_factories import UserPermissionsValidatorFactor
 
 from project.interactors import CreateProjectInteractor, UpdateProjectInteractor, DeleteProjectInteractor, \
     GetProjectInteractor, GetAllProjectsInteractor, CreateTaskInteractor, GetTaskInteractor, UpdateTaskInteractor, \
-    DeleteTaskInteractor, GetAllTasksInteractor, CreateHourPaymentInteractor
+    DeleteTaskInteractor, GetAllTasksInteractor, CreateHourPaymentInteractor, GetHourPaymentInteractor
 
 
 class CreateProjectInteractorFactory(object):
@@ -109,8 +109,17 @@ class GetAllTaskInteractorFactory(object):
 class CreateHourPaymentInteractorFactory():
     @staticmethod
     def create():
-        create_task_repo = HourPaymentRepoFactory().create()
+        create_hour_payment_repo = HourPaymentRepoFactory().create()
         validate_user_project = UserPermissionsValidatorFactory.create()
         create_project_repo = ProjectRepoFactory().create()
-        return CreateHourPaymentInteractor(create_task_repo, create_project_repo, validate_user_project)
+        return CreateHourPaymentInteractor(create_hour_payment_repo, create_project_repo, validate_user_project)
+
+
+
+class GetHourPaymentInteractorFactory(object):
+    @staticmethod
+    def create():
+        create_hour_payment_repo = HourPaymentRepoFactory().create()
+        validate_user_project = UserPermissionsValidatorFactory.create()
+        return GetHourPaymentInteractor(create_hour_payment_repo, validate_user_project)
 
