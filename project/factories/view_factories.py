@@ -6,9 +6,11 @@ from project.factories.interactor_factories import CreateProjectInteractorFactor
     CreateHourPaymentInteractorFactory, GetHourPaymentInteractorFactory, UpdateHourPaymentInteractorFactory, \
     DeleteHourPaymentInteractorFactory, GetAllHourPaymentInteractorFactory, CreateWorkTimeInteractorFactory, \
     GetWorkTimeInteractorFactory, UpdateWorkTimeInteractorFactory, DeleteWorkTimeInteractorFactory, \
-    GetAllWorkTimeInteractorFactory
+    GetAllWorkTimeInteractorFactory, CreateWorkedDayInteractorFactory, GetWorkedDayInteractorFactory, \
+    UpdateWorkedDayInteractorFactory, DeleteWorkedDayInteractorFactory, GetAllWorkedDaysInteractorFactory
 from project.views import ProjectView, GetAllProjectsView, TaskView, GetAllTasksView, MonthPaymentView, \
-    GetAllMonthPaymentsView, HourPaymentView, GetAllHourPaymentView, WorkTimeView, GetWorkTimeListView
+    GetAllMonthPaymentsView, HourPaymentView, GetAllHourPaymentView, WorkTimeView, GetWorkTimeListView, WorkedDayView, \
+    GetAllWorkedDaysView
 
 
 def create_project_factory():
@@ -60,14 +62,15 @@ def get_all_tasks_factory():
     return GetAllTasksView(get_all_tasks_interactor)
 
 
-def get_month_payment_factory():
-    get_month_payment_interactor = GetMonthPaymentInteractorFactory.create()
-    return MonthPaymentView(get_month_payment_interactor)
-
 
 def create_month_payment_factory():
     create_month_payment_interactor = CreateMonthPaymentInteractorFactory.create()
     return MonthPaymentView(create_month_payment_interactor)
+
+
+def get_month_payment_factory():
+    get_month_payment_interactor = GetMonthPaymentInteractorFactory.create()
+    return MonthPaymentView(get_month_payment_interactor)
 
 
 def update_month_payment_factory():
@@ -83,6 +86,34 @@ def delete_month_payment_factory():
 def get_all_month_payments_factory():
     get_all_month_payments_interactor = GetAllMonthPaymentsInteractorFactory.create()
     return GetAllMonthPaymentsView(get_all_month_payments_interactor)
+
+
+
+def create_worked_day_factory():
+    create_worked_day_interactor = CreateWorkedDayInteractorFactory.create()
+    return WorkedDayView(create_worked_day_interactor)
+
+
+def get_worked_day_factory():
+    get_worked_day_interactor = GetWorkedDayInteractorFactory.create()
+    return WorkedDayView(get_worked_day_interactor)
+
+
+def update_worked_day_factory():
+    update_worked_day_interactor = UpdateWorkedDayInteractorFactory.create()
+    return WorkedDayView(update_worked_day_interactor)
+
+
+def delete_worked_day_factory():
+    delete_worked_day_interactor = DeleteWorkedDayInteractorFactory.create()
+    return WorkedDayView(delete_worked_day_interactor)
+
+
+def get_all_worked_days_factory():
+    get_all_worked_days_interactor = GetAllWorkedDaysInteractorFactory.create()
+    return GetAllWorkedDaysView(get_all_worked_days_interactor)
+
+
 
 
 def create_hour_payment_factory():

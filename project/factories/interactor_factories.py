@@ -1,5 +1,5 @@
-from project.factories.repo_factories import ProjectRepoFactory, WorkTaskRepoFactory, MonthPaymentRepoFactory,\
-    HourPaymentRepoFactory, WorkTimeRepoFactory
+from project.factories.repo_factories import ProjectRepoFactory, WorkTaskRepoFactory, MonthPaymentRepoFactory, \
+    WorkedDayRepoFactory, HourPaymentRepoFactory, WorkTimeRepoFactory
 from project.factories.validator_factories import UserPermissionsValidatorFactory, ProjectDateTimeValidatorFactory
 from project.interactors import CreateProjectInteractor, UpdateProjectInteractor, DeleteProjectInteractor, \
     GetProjectInteractor, GetAllProjectsInteractor, CreateTaskInteractor, GetTaskInteractor, UpdateTaskInteractor, \
@@ -7,7 +7,8 @@ from project.interactors import CreateProjectInteractor, UpdateProjectInteractor
     UpdateMonthPaymentInteractor, DeleteMonthPaymentInteractor, GetAllMonthPaymentsInteractor, \
     CreateHourPaymentInteractor, GetHourPaymentInteractor, UpdateHourPaymentInteractor, DeleteHourPaymentInteractor, \
     GetAllHourPaymentInteractor, CreateWorkTimeInteractor, GetWorkTimeInteractor, UpdateWorkTimeInteractor, \
-    DeleteWorkTimeInteractor, GetAllWorkTimeInteractor
+    DeleteWorkTimeInteractor, GetAllWorkTimeInteractor, GetWorkedDayInteractor, CreateWorkedDayInteractor, \
+    UpdateWorkedDayInteractor, DeleteWorkedDayInteractor, GetAllWorkedDaysInteractor
 
 
 class CreateProjectInteractorFactory(object):
@@ -104,27 +105,27 @@ class GetAllTasksInteractorFactory(object):
 
 
 
-class GetMonthPaymentInteractorFactory(object):
-    @staticmethod
-    def create():
-        month_payment_repo = MonthPaymentRepoFactory().create()
-        user_permission_validator = UserPermissionsValidatorFactory.create()
-        return GetMonthPaymentInteractor(month_payment_repo, user_permission_validator)
-
-
 class CreateMonthPaymentInteractorFactory(object):
     @staticmethod
     def create():
-        month_payment_repo = MonthPaymentRepoFactory().create()
-        project_repo = ProjectRepoFactory().create()
+        month_payment_repo = MonthPaymentRepoFactory.create()
+        project_repo = ProjectRepoFactory.create()
         user_permission_validator = UserPermissionsValidatorFactory.create()
         return CreateMonthPaymentInteractor(month_payment_repo, project_repo, user_permission_validator)
+
+
+class GetMonthPaymentInteractorFactory(object):
+    @staticmethod
+    def create():
+        month_payment_repo = MonthPaymentRepoFactory.create()
+        user_permission_validator = UserPermissionsValidatorFactory.create()
+        return GetMonthPaymentInteractor(month_payment_repo, user_permission_validator)
 
 
 class UpdateMonthPaymentInteractorFactory(object):
     @staticmethod
     def create():
-        month_payment_repo = MonthPaymentRepoFactory().create()
+        month_payment_repo = MonthPaymentRepoFactory.create()
         user_permission_validator = UserPermissionsValidatorFactory.create()
         return UpdateMonthPaymentInteractor(month_payment_repo, user_permission_validator)
 
@@ -132,7 +133,7 @@ class UpdateMonthPaymentInteractorFactory(object):
 class DeleteMonthPaymentInteractorFactory(object):
     @staticmethod
     def create():
-        month_payment_repo = MonthPaymentRepoFactory().create()
+        month_payment_repo = MonthPaymentRepoFactory.create()
         user_permission_validator = UserPermissionsValidatorFactory.create()
         return DeleteMonthPaymentInteractor(month_payment_repo, user_permission_validator)
 
@@ -140,9 +141,55 @@ class DeleteMonthPaymentInteractorFactory(object):
 class GetAllMonthPaymentsInteractorFactory(object):
     @staticmethod
     def create():
-        month_payment_repo = MonthPaymentRepoFactory().create()
+        month_payment_repo = MonthPaymentRepoFactory.create()
         user_permission_validator = UserPermissionsValidatorFactory.create()
         return GetAllMonthPaymentsInteractor(month_payment_repo, user_permission_validator)
+
+
+
+class CreateWorkedDayInteractorFactory(object):
+    @staticmethod
+    def create():
+        worked_day_repo = WorkedDayRepoFactory.create()
+        month_payment_repo = MonthPaymentRepoFactory.create()
+        user_permission_validator = UserPermissionsValidatorFactory.create()
+        date_validator = ProjectDateTimeValidatorFactory.create()
+        return CreateWorkedDayInteractor(worked_day_repo, month_payment_repo, user_permission_validator,
+                                         date_validator)
+
+
+class GetWorkedDayInteractorFactory(object):
+    @staticmethod
+    def create():
+        worked_day_repo = WorkedDayRepoFactory.create()
+        user_permission_validator = UserPermissionsValidatorFactory.create()
+        return GetWorkedDayInteractor(worked_day_repo, user_permission_validator)
+
+
+class UpdateWorkedDayInteractorFactory(object):
+    @staticmethod
+    def create():
+        worked_day_repo = WorkedDayRepoFactory.create()
+        user_permission_validator = UserPermissionsValidatorFactory.create()
+        date_validator = ProjectDateTimeValidatorFactory.create()
+        return UpdateWorkedDayInteractor(worked_day_repo, user_permission_validator, date_validator)
+
+
+class DeleteWorkedDayInteractorFactory(object):
+    @staticmethod
+    def create():
+        worked_day_repo = WorkedDayRepoFactory.create()
+        user_permission_validator = UserPermissionsValidatorFactory.create()
+        return DeleteWorkedDayInteractor(worked_day_repo, user_permission_validator)
+
+
+class GetAllWorkedDaysInteractorFactory(object):
+    @staticmethod
+    def create():
+        worked_day_repo = WorkedDayRepoFactory.create()
+        month_payment_repo = MonthPaymentRepoFactory.create()
+        user_permission_validator = UserPermissionsValidatorFactory.create()
+        return GetAllWorkedDaysInteractor(worked_day_repo, month_payment_repo, user_permission_validator)
 
 
 

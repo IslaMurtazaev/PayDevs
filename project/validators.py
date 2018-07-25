@@ -1,6 +1,4 @@
-from time import localtime
-
-from PayDevs.constants import DATE_TIME_FORMAT
+from PayDevs.constants import DATE_TIME_FORMAT, DATE_FORMAT
 from PayDevs.exceptions import NoLoggedException, NoPermissionException, InvalidEntityException
 import datetime
 
@@ -42,10 +40,19 @@ class UserPermissionValidator:
 
 
 class ProjectDateTimeValidator:
-    def vaildate_datetime_format(self, date_string):
+
+    def validate_datetime_format(self, date_string):
         if date_string is None:
             return None
         try:
             return datetime.datetime.strptime(date_string, DATE_TIME_FORMAT)
         except:
             raise InvalidEntityException(source='validator',  code='invalid_format', message="Invalid datetime format")
+
+    def validate_date_format(self, date_string):
+        if date_string is None:
+            return None
+        try:
+            return datetime.datetime.strptime(date_string, DATE_FORMAT)
+        except:
+            raise InvalidEntityException(source='validator',  code='invalid_format', message="Invalid date format")
