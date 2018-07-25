@@ -39,9 +39,8 @@ class CreateProjectInteractor(Interactor):
     def execute(self):
         self.user_permission_validator.validate_permission(self.logged_id)
         self.user_permission_validator.validate_type_of_payment(self.type_of_payment)
-
-        start_date = self.project_date_validator.date_time_format(self.start_date)
-        end_date = self.project_date_validator.date_time_format(self.end_date)
+        start_date = self.project_date_validator.validate_datetime_format(self.start_date)
+        end_date = self.project_date_validator.validate_datetime_format(self.end_date)
 
         project = Project(user_id=self.logged_id,
                           title=self.title,
@@ -302,10 +301,6 @@ class CreateHourPaymentInteractor(Interactor):
         self.user_id = logged_id
         return self
 
-
-    def set_params(self, *args, **kwargs):
-        self.validate_user_project.validate_permission(logged_id=self.user_id)
-
     def execute(self, *args, **kwargs):
         self.validate_user_project.validate_permission(logged_id=self.user_id)
         project = self.project_repo.get(self.project_id)
@@ -438,8 +433,8 @@ class CreateWorkTimeInteractor(Interactor):
         self.validate_user_project.validate_permission(logged_id=self.user_id)
         hour_payment = self.hour_payment_repo.get(self.hour_payment_id)
         self.validate_user_project.validate_permission(hour_payment.project_id, self.project_id)
-        start_work = self.project_date_validator.date_time_format(self.start_work)
-        end_work = self.project_date_validator.date_time_format(self.end_work)
+        start_work = self.project_date_validator.validate_datetime_format(self.start_work)
+        end_work = self.project_date_validator.validate_datetime_format(self.end_work)
         work_time = WorkTime(
             hour_payment_id=self.hour_payment_id,
             start_work=start_work,
@@ -475,9 +470,8 @@ class UpdateWorkTimeInteractor(Interactor):
         start_work = self.start_work if self.start_work is not None else work_time.start_work
         end_work = self.end_work if self.end_work is not None else work_time.end_work
         paid = self.paid if self.paid is not None else work_time.paid
-
-        start_work = self.project_date_validator.date_time_format(start_work)
-        end_work = self.project_date_validator.date_time_format(end_work)
+        start_work = self.project_date_validator.vaildate_datetime_format(start_work)
+        end_work = self.project_date_validator.vaildate_datetime_format(end_work)
 
         work_time_update = WorkTime(
             id=work_time.id,
@@ -541,24 +535,6 @@ class GetAllWorkTimeInteractor(Interactor):
 
 # --------------------------- Month Payment ---------------------------------------- #
 
-class GetMonthPaymentInteractor(Interactor):
-    def __init__(self, month_payment_repo, user_permission_validator):
-        self.month_payment_repo = month_payment_repo
-        self.user_permission_validator = user_permission_validator
-
-    def set_params(self, month_payment_id, project_id, logged_id, *args, **kwargs):
-        self.month_payment_id = month_payment_id
-        self.project_id = project_id
-        self.user_id = logged_id
-        return self
-
-    def execute(self):
-        self.user_permission_validator.validate_permission(self.user_id)
-        month_payment = self.month_payment_repo.get(self.month_payment_id)
-        self.user_permission_validator.validate_permission(self.project_id, month_payment.project_id)
-        return month_payment
-
-
 class CreateMonthPaymentInteractor(Interactor):
     def __init__(self, month_payment_repo, project_repo, user_permission_validator):
         self.month_payment_repo = month_payment_repo
@@ -580,6 +556,24 @@ class CreateMonthPaymentInteractor(Interactor):
             rate=self.rate
         )
         return self.month_payment_repo.create(month_payment)
+
+
+class GetMonthPaymentInteractor(Interactor):
+    def __init__(self, month_payment_repo, user_permission_validator):
+        self.month_payment_repo = month_payment_repo
+        self.user_permission_validator = user_permission_validator
+
+    def set_params(self, month_payment_id, project_id, logged_id, *args, **kwargs):
+        self.month_payment_id = month_payment_id
+        self.project_id = project_id
+        self.user_id = logged_id
+        return self
+
+    def execute(self):
+        self.user_permission_validator.validate_permission(self.user_id)
+        month_payment = self.month_payment_repo.get(self.month_payment_id)
+        self.user_permission_validator.validate_permission(self.project_id, month_payment.project_id)
+        return month_payment
 
 
 class UpdateMonthPaymentInteractor(Interactor):
@@ -616,7 +610,7 @@ class DeleteMonthPaymentInteractor(Interactor):
         return self
 
     def execute(self):
-        self.user_permission_validator.validate_permission(self.user_id)
+        self.user_permission_validator.validate_permission(self.user_id)  # TODO find if user can modify others projects
         month_payment = self.month_payment_repo.get(self.month_payment_id)
         self.user_permission_validator.validate_permission(self.project_id, month_payment.project_id)
         return self.month_payment_repo.delete(month_payment.id)
@@ -639,69 +633,105 @@ class GetAllMonthPaymentsInteractor(Interactor):
 
 # ----------------------- Worked Day ----------------------------------- #
 
-class GetWorkedDayInteractor(Interactor):
-    def __init__(self, work_day_repo, hour_payment_repo, validate_user_project):
-        self.work_day_repo = work_day_repo
-        self.hour_payment_repo = hour_payment_repo
-        self.validate_user_project = validate_user_project
-
-    def set_params(self, worked_day_id, hour_payment_id, logged_id, **kwargs):
-        self.worked_day_id = worked_day_id
-        self.user_id = logged_id
-        self.hour_payment_id = hour_payment_id
-        return self
-
-    def execute(self, *args, **kwargs):
-        self.validate_user_project.validate_permission(logged_id=self.user_id)
-        worked_day = self.hour_payment_repo.get(self.worked_day_id)
-        self.validate_user_project.validate_permission(worked_day.hour_paymnet_id, self.hour_payment_id)
-        return worked_day
-
-
 class CreateWorkedDayInteractor(Interactor):
-    def __init__(self, work_day_repo, month_payment_repo, validate_user_project):
-        self.work_day_repo = work_day_repo
+    def __init__(self, worked_day_repo, month_payment_repo,  user_permission_validator, date_validator):
+        self.worked_day_repo = worked_day_repo
         self.month_payment_repo = month_payment_repo
-        self.validate_user_project = validate_user_project
+        self.user_permission_validator = user_permission_validator
+        self.date_validator = date_validator
 
-    def set_params(self, month_payment_id, day, paid, logged_id,*args, **kwargs):
-        self.month_paymnet_id = month_payment_id
+    def set_params(self, month_payment_id, day, paid, logged_id, *args, **kwargs):
+        self.month_payment_id = month_payment_id
         self.day = day
         self.paid = paid
         self.user_id = logged_id
         return self
 
-    def execute(self, *args, **kwargs):
-        self.validate_user_project.validate_permission(self.user_id)
-        month_paymnet = self.month_payment_repo.get(self.month_paymnet_id)
+    def execute(self):
+        self.user_permission_validator.validate_permission(self.user_id)
+        self.date_validator.validate_date_format(self.day)
+        month_payment = self.month_payment_repo.get(self.month_payment_id)
+
         worked_day = WorkedDay(
-            month_payment_id=month_paymnet.id,
+            month_payment_id=month_payment.id,
             day=self.day,
             paid=self.paid
         )
-        return self.work_day_repo.create(worked_day)
+        return self.worked_day_repo.create(worked_day)
+
+
+class GetWorkedDayInteractor(Interactor):
+    def __init__(self, worked_day_repo, user_permission_validator):
+        self.worked_day_repo = worked_day_repo
+        self.user_permission_validator = user_permission_validator
+
+    def set_params(self, worked_day_id, month_payment_id, logged_id, **kwargs):
+        self.worked_day_id = worked_day_id
+        self.user_id = logged_id
+        self.month_payment_id = month_payment_id
+        return self
+
+    def execute(self, *args, **kwargs):
+        self.user_permission_validator.validate_permission(logged_id=self.user_id)
+        worked_day = self.worked_day_repo.get(self.worked_day_id)
+        self.user_permission_validator.validate_permission(worked_day.month_payment_id, self.month_payment_id)
+        return worked_day
+
+
+class UpdateWorkedDayInteractor(Interactor):
+    def __init__(self, worked_day_repo, user_permission_validator, date_validator):
+        self.worked_day_repo = worked_day_repo
+        self.user_permission_validator = user_permission_validator
+        self.date_validator = date_validator
+
+    def set_params(self, worked_day_id, month_payment_id, logged_id, day=None, paid=None, *args, **kwargs):
+        self.worked_day_id = worked_day_id
+        self.month_payment_id = month_payment_id
+        self.user_id = logged_id
+        self.day = day
+        self.paid = paid
+        return self
+
+    def execute(self, *args, **kwargs):
+        self.user_permission_validator.validate_permission(self.user_id)
+        worked_day = self.worked_day_repo.get(self.worked_day_id)
+        self.user_permission_validator.validate_permission(self.month_payment_id, worked_day.month_payment_id)
+        self.date_validator.validate_date_format(self.day)
+
+        modified_worked_day = WorkedDay(
+            id = worked_day.id,
+            day = self.day if self.day is not None else worked_day.day,
+            paid = self.paid if self.paid is not None else worked_day.paid,
+            month_payment_id = worked_day.month_payment_id
+        )
+
+        return self.worked_day_repo.update(modified_worked_day)
 
 
 class DeleteWorkedDayInteractor(Interactor):
-    def __init__(self, work_day_repo, validate_user_project):
-        self.work_day_repo = work_day_repo
-        self.validate_user_project = validate_user_project
+    def __init__(self, worked_day_repo, user_permission_validator):
+        self.worked_day_repo = worked_day_repo
+        self.user_permission_validator = user_permission_validator
 
-    def set_params(self, worked_day_id, logged_id, *args, **kwargs):
+    def set_params(self, worked_day_id, month_payment_id, logged_id, *args, **kwargs):
         self.worked_day_id = worked_day_id
+        self.month_payment_id = month_payment_id
         self.user_id = logged_id
         return self
 
     def execute(self, *args, **kwargs):
-        self.validate_user_project.validate_permission(self.user_id)
-        return self.work_day_repo.delete(self.worked_day_id)
+        self.user_permission_validator.validate_permission(self.user_id)
+        worked_day = self.worked_day_repo.get(self.worked_day_id)
+        self.user_permission_validator.validate_permission(self.month_payment_id, worked_day.month_payment_id)
+
+        return self.worked_day_repo.delete(self.worked_day_id)
 
 
-class GetAllWorkedDayInteractor(Interactor):
-    def __init__(self, work_day_repo, month_payment_repo, validate_user_project):
-        self.work_day_repo = work_day_repo
-        self.validate_user_project = validate_user_project
+class GetAllWorkedDaysInteractor(Interactor):
+    def __init__(self, worked_day_repo, month_payment_repo, user_permission_validator):
+        self.worked_day_repo = worked_day_repo
         self.month_payment_repo = month_payment_repo
+        self.user_permission_validator = user_permission_validator
 
     def set_params(self, month_payment_id, logged_id, *args, **kwargs):
         self.month_payment_id = month_payment_id
@@ -709,6 +739,6 @@ class GetAllWorkedDayInteractor(Interactor):
         return self
 
     def execute(self, *args, **kwargs):
-        self.validate_user_project.validate_permission(self.user_id)
+        self.user_permission_validator.validate_permission(self.user_id)
         month_payment = self.month_payment_repo.get(self.month_payment_id)
-        return self.work_day_repo.get_all(month_payment.id)
+        return self.worked_day_repo.get_all(month_payment.id)

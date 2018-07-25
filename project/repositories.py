@@ -260,6 +260,17 @@ class MonthPaymentRepo:
 
 
 class WorkedDayRepo:
+
+    def _decode_db_worked_day(self, db_worked_day):
+
+        fileds = {
+            'id': db_worked_day.id,
+            'month_payment_id': db_worked_day.month_payment.id,
+            'day': db_worked_day.day,
+            'paid': db_worked_day.paid
+        }
+        return WorkedDay(**fileds)
+
     def create(self, worked_day):
         db_worked_day = WorkedDayORM.objects.create(
             month_payment_id=worked_day.month_payment_id,
@@ -294,7 +305,7 @@ class WorkedDayRepo:
             db_worked_day = WorkedDayORM.objects.get(id=worked_day_id)
         except WorkedDayORM.DoesNotExist:
             raise EntityDoesNotExistException
-        return self._decode_db_worked_day(db_wored_day=db_worked_day)
+        return self._decode_db_worked_day(db_worked_day)
 
     def get_all(self, month_payment_id):
         try:
@@ -320,17 +331,6 @@ class WorkedDayRepo:
         for db_worked_day in db_worked_days:
             worked_days.append(self._decode_db_worked_day(db_worked_day))
         return worked_days
-
-
-    def _decode_db_worked_day(self, db_wored_day):
-
-        fileds = {
-            'id': db_wored_day.id,
-            'month_payment_id': db_wored_day.month_payment.id,
-            'day': db_wored_day.day,
-            'paid': db_wored_day.paid
-        }
-        return WorkedDay(**fileds)
 
 
 class HourPaymentRepo:

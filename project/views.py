@@ -1,5 +1,5 @@
 from project.serializers import ProjectSerializer, ProjectListSerializer, WorkTaskSerializer, WorkTaskListSerializer, \
-    WorkDaySerializer, WorkDayListSerializer, WorkTimeSerializer, WorkTimeListSerializer, MonthPaymentSerializer, \
+    WorkedDaySerializer, WorkedDayListSerializer, WorkTimeSerializer, WorkTimeListSerializer, MonthPaymentSerializer, \
     MonthPaymentListSerializer, HourPaymentSerializer, HourPaymentListSerializer
 from PayDevs.decorators import serialize_exception
 from PayDevs.constants import StatusCodes
@@ -164,7 +164,6 @@ class GetAllMonthPaymentsView(object):
 
 
 
-
 class WorkedDayView(object):
 
     def __init__(self, get_work_day_interactor):
@@ -174,7 +173,7 @@ class WorkedDayView(object):
     @serialize_exception
     def get(self, *args, **kwargs):
         worked_day = self.work_day_interactor.set_params(**kwargs).execute()
-        body = WorkDaySerializer.serialize(worked_day)
+        body = WorkedDaySerializer.serialize(worked_day)
         status = StatusCodes.OK
         return body, status
 
@@ -182,7 +181,7 @@ class WorkedDayView(object):
     @serialize_exception
     def post(self, *args, **kwargs):
         created_worked_day = self.work_day_interactor.set_params(**kwargs).execute()
-        body = WorkDaySerializer.serialize(created_worked_day)
+        body = WorkedDaySerializer.serialize(created_worked_day)
         status = StatusCodes.CREATED
         return body, status
 
@@ -190,7 +189,7 @@ class WorkedDayView(object):
     @serialize_exception
     def put(self, *args, **kwargs):
         updated_worked_day = self.work_day_interactor.set_params(**kwargs).execute()
-        body = WorkDaySerializer.serialize(updated_worked_day)
+        body = WorkedDaySerializer.serialize(updated_worked_day)
         status = StatusCodes.OK
         return body, status
 
@@ -198,20 +197,20 @@ class WorkedDayView(object):
     @serialize_exception
     def delete(self, *args, **kwargs):
         deleted_worked_day = self.work_day_interactor.set_params(**kwargs).execute()
-        body = WorkDaySerializer.serialize(deleted_worked_day)
+        body = WorkedDaySerializer.serialize(deleted_worked_day)
         status = StatusCodes.OK
         return body, status
 
 
-class GetAllWorkDaysView(object):
+class GetAllWorkedDaysView(object):
 
-    def __init__(self, get_all_work_days_interactor):
-        self.get_all_work_days_interactor = get_all_work_days_interactor
+    def __init__(self, get_all_worked_days_interactor):
+        self.get_all_worked_days_interactor = get_all_worked_days_interactor
 
     @serialize_exception
     def get(self, *args, **kwargs):
-        worked_day = self.get_all_work_days_interactor.set_params(**kwargs).execute()
-        body = WorkDayListSerializer.serialize(worked_day)
+        worked_days = self.get_all_worked_days_interactor.set_params(**kwargs).execute()
+        body = WorkedDayListSerializer.serialize(worked_days)
         status = StatusCodes.OK
         return body, status
 

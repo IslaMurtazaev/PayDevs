@@ -1,4 +1,4 @@
-from account.serializers import UserSerializer, UserListSerializer
+from account.serializers import UserSerializer
 from PayDevs.decorators import serialize_exception
 from PayDevs.constants import StatusCodes
 

@@ -1,5 +1,5 @@
 from account.factories.repo_factories import UserRepoFactory
-from account.factories.token_factories import TokenGenFactory, TokenDecodeFactory
+from account.factories.token_factories import AuthTokenFactory
 from account.factories.validate_factories import HashPasswordFactor, \
     UsernameEmailValidatorFactory
 from account.interactors import GetUsersInteractor, LoginUserInteractor, RegisterUserInteractor, \
@@ -18,7 +18,7 @@ class LoginUserInreractorFactory(object):
     @staticmethod
     def create():
         user_repo_factory = UserRepoFactory().create()
-        get_token = TokenGenFactory()
+        get_token = AuthTokenFactory().create()
         return LoginUserInteractor(user_repo_factory, get_token)
 
 
@@ -38,5 +38,5 @@ class AuthUserInteractorFactory(object):
 
     @staticmethod
     def create():
-        token_decoder = TokenDecodeFactory()
+        token_decoder = AuthTokenFactory().create()
         return AuthUserInteractor(token_decoder)

@@ -1,6 +1,18 @@
 import jwt
 
 
+
+class AuthToken(object):
+    @staticmethod
+    def encode(user, secret_key):
+        return gen_token(user, secret_key)
+
+    @staticmethod
+    def decode(token, secret_key):
+        return token_decoder(token, secret_key)
+
+
+
 def gen_token(user, secret_key):
     payload = {
         'user_id': user.id

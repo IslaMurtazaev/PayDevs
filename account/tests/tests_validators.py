@@ -127,7 +127,7 @@ class EmailForbiddenEmailDomainsValidatorMethodTest(TestCase):
 
 class ValidatorFunctionsTest(TestCase):
     def setUp(self):
-        self.user = User(username='TestMyTest', email='test@mail.ru')
+        self.user = User(username='TestMyTest', email='tests@mail.ru')
 
 
 
@@ -163,7 +163,7 @@ class ValidatorFunctionsTest(TestCase):
             self.assertRegex(str(e), 'Your password is too similar to your other fields.')
 
         try:
-            hashed_password('test@mail.ru', user=self.user).decode()
+            hashed_password('tests@mail.ru', user=self.user).decode()
         except InvalidEntityException as e:
             self.assertRegex(str(e), 'Your password is too similar to your other fields.')
 
@@ -178,11 +178,11 @@ class ValidatorFunctionsTest(TestCase):
             validate_username('23123sdfsdf', user=self.user)
 
     def test_function_validate_email(self):
-        user = User(username='TestMyTest', email='test@mail.ru')
+        user = User(username='TestMyTest', email='tests@mail.ru')
         self.assertIsNone(validate_email('example@amil.ru', user=user))
 
     def test_function_validate_email_except(self):
-        user = User(username='TestMyTest', email='test@mail.ru')
+        user = User(username='TestMyTest', email='tests@mail.ru')
         with self.assertRaises(InvalidEntityException):
             validate_email('exampleamil.ru', user=user)
 
@@ -268,12 +268,12 @@ class UsernameRegexMethodValidator(TestCase):
 
 class UserSerializerTest(TestCase):
     def test_user_serializer(self):
-        user = User(id=1, username='TestName', email='test@gmail.com', password='123456789', is_active=True,
+        user = User(id=1, username='TestName', email='tests@gmail.com', password='123456789', is_active=True,
                     is_staff=False)
         serilalizer = {
             'id': 1,
             'username': 'TestName',
-            'email': 'test@gmail.com',
+            'email': 'tests@gmail.com',
             'is_active': True,
             'is_staff': False,
         }
@@ -311,6 +311,7 @@ class UserListSerializeTest(TestCase):
 
         self.assertEqual(UserListSerializer.model, User)
         self.assertEqual(UserListSerializer.fields, ['id', 'username', 'email'])
+        print(serilalizer[0] == UserListSerializer.serialize(users)[0])
         self.assertListEqual(UserListSerializer.serialize(users), serilalizer)
 
 

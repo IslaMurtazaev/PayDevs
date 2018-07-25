@@ -5,6 +5,8 @@ from PayDevs.exceptions import EntityDoesNotExistException, NoPermissionExceptio
 
 
 DATE_TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ%z"
+DATE_FORMAT = "%Y-%m-%d"
+
 
 @unique
 class StatusCodes(IntEnum):
