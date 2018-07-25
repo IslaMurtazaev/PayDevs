@@ -296,15 +296,16 @@ class CreateHourPaymentInteractor(Interactor):
         self.validate_user_project = validate_user_project
         self.project_repo = project_repo
 
-    def execute(self, project_id, rate, logged_id, *args, **kwargs):
+    def set_params(self, project_id, rate, logged_id, *args, **kwargs):
         self.project_id = project_id
         self.rate = rate
         self.user_id = logged_id
         return self
 
-    def set_params(self, *args, **kwargs):
+    def execute(self, *args, **kwargs):
         self.validate_user_project.validate_pemission(logged_id=self.user_id)
         project = self.project_repo.get(self.project_id)
+        self.validate_user_project.validate_hour_payment(project.type_of_payment)
         self.validate_user_project.validate_pemission(self.user_id, project.user_id)
         hour_payment = HourPayment(
             project_id=project.id,

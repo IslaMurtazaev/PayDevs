@@ -58,15 +58,6 @@ urlpatterns = [
          csrf_exempt(ViewWrapper.as_view(view_factory=delete_task_factory)),
          name='delete_task'),
 
-
-
-    # path('project/<int:id>/task/create/', csrf_exempt(ViewWrapper.as_view(view_factory=create_task_factory)),
-    #      name='create_task'),
-    # path('project/<int:id>/task/all/', ViewWrapper.as_view(view_factory=get_all_tasks_factory),
-    #      name='get_all_tasks'),
-    # path('project/<int:id>/task/<int:id_task>/', ViewWrapper.as_view(view_factory=get_task_factory), name='get_task'),
-    # path('project/<int:id>/task/<int:id_task>/update/', csrf_exempt(ViewWrapper.as_view(view_factory=update_task_factory)),
-    #      name='update_task'),
-    # path('project/<int:id>/task/<int:id_task>/delete/', csrf_exempt(ViewWrapper.as_view(view_factory=delete_task_factory)),
-    #      name='delete_task'),
+    path('project/<int:project_id>/hour_payment/create/',
+         csrf_exempt(ViewWrapper.as_view(view_factory=create_hour_payment_factory)), name='create_hour_payment')
 ]

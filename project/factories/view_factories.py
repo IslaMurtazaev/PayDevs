@@ -1,8 +1,8 @@
 from project.factories.interactor_factories import CreateProjectInteractorFactory, GetProjectInteractorFactory, \
     DeleteProjectInteractorFactory, UpdateProjectInteractorFactory, GetAllProjectsInteractorFactory, \
     CreateTaskInteractorFactory, GetTaskInteractorFactory, UpdateTaskInteractorFactory, DeleteTaskInteractorFactory, \
-    GetAllTaskInteractorFactory
-from project.views import ProjectView, GetAllProjectsView, TaskView, GetAllTasksView
+    GetAllTaskInteractorFactory, CreateHourPaymentInteractorFactory
+from project.views import ProjectView, GetAllProjectsView, TaskView, GetAllTasksView, HourPaymentView
 
 
 def create_project_factory():
@@ -52,7 +52,10 @@ def delete_task_factory():
     return TaskView(get_task_interactor)
 
 def get_all_tasks_factory():
-    get_task_interactor = GetAllTaskInteractorFactory.create()
+    get_task_interactor = GetAllTaskInteractorFactory().create()
     return GetAllTasksView(get_task_interactor)
 
 
+def create_hour_payment_factory():
+    get_hour_payment_interactor = CreateHourPaymentInteractorFactory().create()
+    return HourPaymentView(get_hour_payment_interactor)
