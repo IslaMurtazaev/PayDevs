@@ -1,10 +1,9 @@
 from project.repositories import ProjectRepo, WorkTaskRepo
-from project.views import ProjectView, CreateProjectView, AllProjectsView, TotalView, CreateTaskView, \
-            GetAllTasksView, UpdateProjectView, GetTaskView, UpdateTaskView, DeleteProjectView, DeleteTaskView
-from project.interactors import GetProjectInteractor, CreateProjectInteractor, GetAllProjectsInteractor, \
-            GetTotalInteractor, CreateTaskInteractor, GetAllTasksInteractor, UpdateProjectInteractor, GetTaskInteractor, \
+from project.views import ProjectView, AllProjectsView, TotalView, CreateTaskView, \
+            GetAllTasksView, GetTaskView, UpdateTaskView, DeleteTaskView
+from project.interactors import GetProjectInteractor, CreateProjectInteractor, GetAllProjectsInteractor, CreateTaskInteractor, GetAllTasksInteractor, UpdateProjectInteractor, GetTaskInteractor, \
             UpdateTaskInteractor, DeleteProjectInteractor, DeleteTaskInteractor
-                                 
+
 
 
 #------------------------ Project ---------------------------------------------#
@@ -40,7 +39,7 @@ class CreateProjectInteractorFactory(object):
 
 def create_project_factory():
     create_project_interactor = CreateProjectInteractorFactory.get()
-    return CreateProjectView(create_project_interactor)
+    return ProjectView(create_project_interactor)
 
 
 
@@ -69,16 +68,7 @@ def delete_project_factory():
 
 
 
-class GetAllProjectsInteractorFactory(object):
-    @staticmethod
-    def get():
-        project_repo = ProjectRepoFactory.get()
-        return GetAllProjectsInteractor(project_repo)
 
-
-def get_all_projects_factory():
-    get_all_projects_interactor = GetAllProjectsInteractorFactory.get()
-    return AllProjectsView(get_all_projects_interactor)
 
 
 def update_project_factory():
@@ -92,7 +82,6 @@ class GetTotalInteractorFactory(object):
     @staticmethod
     def get():
         project_repo = ProjectRepoFactory.get()
-        return GetTotalInteractor(project_repo)
 
 
 def get_total_factory():

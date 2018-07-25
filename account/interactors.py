@@ -3,13 +3,10 @@ from PayDevs.exceptions import NoPermissionException, NoLoggedException
 from PayDevs.interactors import Interactor
 
 
-
 class LoginUserInteractor(Interactor):
-    def __init__(self, user_repo, valid_check_password, get_token):
+    def __init__(self, user_repo, get_token):
         self.user_repo = user_repo
-        self.valid_check_password = valid_check_password
         self.get_token = get_token
-
 
     def set_params(self, username, password, secret_key=None, **kwargs):
         self.username = username
@@ -18,24 +15,18 @@ class LoginUserInteractor(Interactor):
         return self
 
     def execute(self, *args, **kwargs):
-        user = self.user_repo.get_user(username=self.username)
-        chpw = self.valid_check_password.check_password(self.password, user.password)
+        user = self.user_repo.get_user_by_username(username=self.username)
+        self.user_repo.check_password(user, self.password)
         token = self.get_token.encode(user, self.secret_key)
-        if not chpw:
-            raise NoPermissionException('Roles do not match')
         user.token = token
         return user
 
 
-
 class RegisterUserInteractor(Interactor):
-
-    def __init__(self, user_repo, validate_username, validate_email, hashed_password):
+    def __init__(self, user_repo, validate_username_email, hashed_password):
         self.user_repo = user_repo
-        self.validate_username = validate_username
-        self.validate_email = validate_email
+        self.validate_username_email = validate_username_email
         self.hashed_password = hashed_password
-
 
     def set_params(self, username, email, password, **kwargs):
         self.username = username
@@ -45,18 +36,21 @@ class RegisterUserInteractor(Interactor):
 
     def execute(self, *args, **kwargs):
         valid_user = User(username=self.username, email=self.email)
-        self.validate_username.validate(username=self.username, user=valid_user)
-        self.validate_email.validate(email=self.email, user=valid_user)
-        self.password = self.hashed_password.hashed(password=self.password, user=valid_user)
-        new_user = self.user_repo.create_default_user(username=self.username)
-        user_update = User(id=new_user.id, username=self.username, email=self.email, password=self.password,
-                           is_active=True)
-        return self.user_repo.update_user(user_update)
+        self._validate(valid_user)
+        user = User(username=self.username, email=self.email, password=self.password,
+                    is_active=True)
+        new_user = self.user_repo.create_user(user=user)
+        # user_update = User(id=new_user.id, username=self.username, email=self.email, password=self.password,
+        #                    is_active=True)
+        return self.user_repo.update_user(new_user)
 
+    def _validate(self, valid_user):
+        self.validate_username_email.validate_username(username=self.username, user=valid_user)
+        self.validate_username_email.validate_email(email=self.email, user=valid_user)
+        self.hashed_password.hashed(password=self.password, user=valid_user)
 
 
 class GetUsersInteractor(Interactor):
-
     def __init__(self, user_repo):
         self.user_repo = user_repo
 
@@ -67,22 +61,10 @@ class GetUsersInteractor(Interactor):
     def execute(self, *args, **kwargs):
         if self.id is None:
             raise NoLoggedException()
-        return self.user_repo.get_user(id=self.id)
-
-
-class GetUsersAllInteractor(Interactor):
-    def __init__(self, user_repo):
-        self.user_repo = user_repo
-
-    def set_params(self, *args, **kwargs):
-        return self
-
-    def execute(self, *args, **kwargs):
-        return self.user_repo.all()
+        return self.user_repo.get_user_by_id(id=self.id)
 
 
 class AuthUserInteractor(Interactor):
-
     def __init__(self, token_decoder):
         self.token_decoder = token_decoder
 
