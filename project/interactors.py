@@ -435,6 +435,7 @@ class CreateWorkTimeInteractor(Interactor):
         self.validate_user_project.validate_permission(hour_payment.project_id, self.project_id)
         start_work = self.project_date_validator.validate_datetime_format(self.start_work)
         end_work = self.project_date_validator.validate_datetime_format(self.end_work)
+
         work_time = WorkTime(
             hour_payment_id=self.hour_payment_id,
             start_work=start_work,
@@ -470,8 +471,8 @@ class UpdateWorkTimeInteractor(Interactor):
         start_work = self.start_work if self.start_work is not None else work_time.start_work
         end_work = self.end_work if self.end_work is not None else work_time.end_work
         paid = self.paid if self.paid is not None else work_time.paid
-        start_work = self.project_date_validator.vaildate_datetime_format(start_work)
-        end_work = self.project_date_validator.vaildate_datetime_format(end_work)
+        start_work = self.project_date_validator.validate_datetime_format(start_work)
+        end_work = self.project_date_validator.validate_datetime_format(end_work)
 
         work_time_update = WorkTime(
             id=work_time.id,
