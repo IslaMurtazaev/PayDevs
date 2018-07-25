@@ -11,7 +11,6 @@ class UserView(object):
     def get(self, *args, **kwargs):
         user = self.get_user_interactor.set_params(id=kwargs['logged_id']).execute()
         body = UserSerializer.serialize(user)
-
         status = StatusCodes.OK
         return body, status
 

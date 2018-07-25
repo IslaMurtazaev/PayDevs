@@ -216,16 +216,6 @@ class MonthPaymentRepo:
         return self._decode_db_month_payment(db_month_payment,
                                              work_day_paid=work_day_paid, last_month_days=last_month_days)
 
-    def get_all(self, project_id, work_day_paid=None, last_month_days=None):
-        try:
-            db_month_payments = MonthPaymentORM.objects.select_related('project').filter(project_id=project_id)
-        except MonthPaymentORM.DoesNotExist:
-            raise EntityDoesNotExistException
-
-        return [self._decode_db_month_payment(db_month_payment,
-                                              work_day_paid=work_day_paid, last_month_days=last_month_days)
-                for db_month_payment in db_month_payments]
-
     def create(self, month_payment, work_day_paid=None, last_month_days=None):
         db_month_payment = MonthPaymentORM.objects.create(
             project_id=month_payment.project_id,
@@ -249,10 +239,20 @@ class MonthPaymentRepo:
             db_month_payment = MonthPaymentORM.objects.get(id=month_payment_id)
         except MonthPaymentORM.DoesNotExist:
             raise EntityDoesNotExistException
-        work_task = self._decode_db_month_payment(db_month_payment,
-                                                  work_day_paid=work_day_paid, last_month_days=last_month_days)
+        month_payment = self._decode_db_month_payment(db_month_payment,
+                                                      work_day_paid=work_day_paid, last_month_days=last_month_days)
         db_month_payment.delete()
-        return work_task
+        return month_payment
+
+    def get_all(self, project_id, work_day_paid=None, last_month_days=None):
+        try:
+            db_month_payments = MonthPaymentORM.objects.select_related('project').filter(project_id=project_id)
+        except MonthPaymentORM.DoesNotExist:
+            raise EntityDoesNotExistException
+
+        return [self._decode_db_month_payment(db_month_payment,
+                                              work_day_paid=work_day_paid, last_month_days=last_month_days)
+                for db_month_payment in db_month_payments]
 
     def _get_worked_days(self, month_payment_id, paid=None, last_month_days=None):
         worked_days = WorkedDayRepo().get_workdays(month_payment_id, paid=paid, last_month_days=last_month_days)

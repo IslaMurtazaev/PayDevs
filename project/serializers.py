@@ -35,6 +35,16 @@ class MonthPaymentListSerializer(DateFormatListSerializer):
     fields = ['id', 'project_id', 'rate']
 
 
+class WorkDaySerializer(DateFormatSerializer):
+    model = WorkedDay
+    fields = ['id', 'day', 'paid']
+
+
+class WorkDayListSerializer(DateFormatListSerializer):
+    model = WorkedDay
+    fields = ['id', 'day', 'paid']
+
+
 
 class HourPaymentSerializer(DateFormatSerializer):
     model = HourPayment
@@ -44,16 +54,6 @@ class HourPaymentSerializer(DateFormatSerializer):
 class HourPaymentListSerializer(DateFormatListSerializer):
     model = HourPayment
     fields = ['id', 'project_id', 'rate']
-
-
-class WorkDaySerializer(DateFormatSerializer):
-    model = WorkedDay
-    fields = ['id', 'day', 'paid']
-
-
-class WorkDayListSerializer(DateFormatListSerializer):
-    model = WorkedDay
-    fields = ['id', 'day', 'paid']
 
 
 

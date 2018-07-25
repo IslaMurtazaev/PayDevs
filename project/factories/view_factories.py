@@ -1,12 +1,14 @@
 from project.factories.interactor_factories import CreateProjectInteractorFactory, GetProjectInteractorFactory, \
     DeleteProjectInteractorFactory, UpdateProjectInteractorFactory, GetAllProjectsInteractorFactory, \
     CreateTaskInteractorFactory, GetTaskInteractorFactory, UpdateTaskInteractorFactory, DeleteTaskInteractorFactory, \
-    GetAllTaskInteractorFactory, CreateHourPaymentInteractorFactory, GetHourPaymentInteractorFactory, \
-    UpdateHourPaymentInteractorFactory, DeleteHourPaymentInteractorFactory, GetAllHourPaymentInteractorFactory, \
-    CreateWorkTimeInteractorFactory, GetWorkTimeInteractorFactory, UpdateWorkTimeInteractorFactory, \
-    DeleteWorkTimeInteractorFactory, GetAllWorkTimeInteractorFactory
-from project.views import ProjectView, GetAllProjectsView, TaskView, GetAllTasksView, HourPaymentView, \
-    GetAllHourPaymentView, WorkTimeView, GetWorkTimeListView
+    GetAllTasksInteractorFactory, GetAllMonthPaymentsInteractorFactory, CreateMonthPaymentInteractorFactory, \
+    GetMonthPaymentInteractorFactory, UpdateMonthPaymentInteractorFactory, DeleteMonthPaymentInteractorFactory, \
+    CreateHourPaymentInteractorFactory, GetHourPaymentInteractorFactory, UpdateHourPaymentInteractorFactory, \
+    DeleteHourPaymentInteractorFactory, GetAllHourPaymentInteractorFactory, CreateWorkTimeInteractorFactory, \
+    GetWorkTimeInteractorFactory, UpdateWorkTimeInteractorFactory, DeleteWorkTimeInteractorFactory, \
+    GetAllWorkTimeInteractorFactory
+from project.views import ProjectView, GetAllProjectsView, TaskView, GetAllTasksView, MonthPaymentView, \
+    GetAllMonthPaymentsView, HourPaymentView, GetAllHourPaymentView, WorkTimeView, GetWorkTimeListView
 
 
 def create_project_factory():
@@ -27,8 +29,6 @@ def delete_project_factory():
 def update_project_factory():
     update_project_interactor = UpdateProjectInteractorFactory.create()
     return ProjectView(update_project_interactor)
-
-
 
 
 def get_projects_all_factory():
@@ -56,8 +56,33 @@ def delete_task_factory():
     return TaskView(get_task_interactor)
 
 def get_all_tasks_factory():
-    get_task_interactor = GetAllTaskInteractorFactory().create()
-    return GetAllTasksView(get_task_interactor)
+    get_all_tasks_interactor = GetAllTasksInteractorFactory.create()
+    return GetAllTasksView(get_all_tasks_interactor)
+
+
+def get_month_payment_factory():
+    get_month_payment_interactor = GetMonthPaymentInteractorFactory.create()
+    return MonthPaymentView(get_month_payment_interactor)
+
+
+def create_month_payment_factory():
+    create_month_payment_interactor = CreateMonthPaymentInteractorFactory.create()
+    return MonthPaymentView(create_month_payment_interactor)
+
+
+def update_month_payment_factory():
+    update_month_payment_interactor = UpdateMonthPaymentInteractorFactory.create()
+    return MonthPaymentView(update_month_payment_interactor)
+
+
+def delete_month_payment_factory():
+    delete_month_payment_interactor = DeleteMonthPaymentInteractorFactory.create()
+    return MonthPaymentView(delete_month_payment_interactor)
+
+
+def get_all_month_payments_factory():
+    get_all_month_payments_interactor = GetAllMonthPaymentsInteractorFactory.create()
+    return GetAllMonthPaymentsView(get_all_month_payments_interactor)
 
 
 def create_hour_payment_factory():

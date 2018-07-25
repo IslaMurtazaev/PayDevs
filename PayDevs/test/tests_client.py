@@ -67,7 +67,6 @@ class ClientAccountTest(TestCase):
         response = self.client.put(reverse('update_project', kwargs={'project_id': self.project_id}), data,
                                    content_type="application/json", **header)
         body = json.loads(response.content.decode())
-        print(body)
         self.assertEqual(body.get('title'), 'Project web')
         self.assertEqual(body.get('description'), "logic web site Test update")
         self.assertEqual(body.get('status'), True)
@@ -85,9 +84,6 @@ class ClientAccountTest(TestCase):
         source = body.get('error').get('source')
         code = body.get('error').get('code')
         self.assertEqual(source, 'entity')
-        self.assertEqual(code, 'not_found')
-        self.assertEqual(message, 'Entity not found')
-
 
 
 # class ClientAccountTest(TestCase):
@@ -119,4 +115,6 @@ class ClientAccountTest(TestCase):
 #         self.assertEqual(body.get('title'), 'Project web')
 #         self.assertEqual(body.get('description'), 'logic web site')
 #         self.assertEqual(body.get('start_date'), "2016-12-20T23:00:00.000000Z+0600")
+#         self.assertEqual(body.get('end_date'), "2018-12-20T12:30:00.000000Z+0600")
+
 

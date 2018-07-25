@@ -328,7 +328,7 @@ class ClientAccountTest(TestCase):
         response = self.client.post(reverse('create_user'), data, content_type="application/json")
 
         body = json.loads(response.content.decode())
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         self.assertEqual(body.get('username'), 'TestUser')
         self.assertEqual(body.get('email'), 'testuser@email.ru')
         self.assertEqual(body.get('is_active'), True)

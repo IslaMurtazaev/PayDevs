@@ -192,11 +192,15 @@ class WorkTask(object):
 class MonthPayment(object):
 
     def __init__(self, id=None, project_id=None, rate=None, work_days=None):
-        self.id = id
+        self._id = id
         self._project_id = project_id
         self._rate = rate
         self._work_days = work_days
 
+
+    @property
+    def id(self):
+        return self._id
 
     @property
     def project_id(self):

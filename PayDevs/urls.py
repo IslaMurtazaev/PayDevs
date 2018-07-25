@@ -32,31 +32,41 @@ urlpatterns = [
     path('project/create', csrf_exempt(ViewWrapper.as_view(view_factory=create_project_factory)), name='create_project'),
 
 
-    path('project/all', ViewWrapper.as_view(view_factory=get_projects_all_factory), name='get_all_projects'),
-    # path('project/total', ViewWrapper.as_view(view_factory=get_total_factory), name='get_total'),
+
 
     path('project/<int:project_id>/', ViewWrapper.as_view(view_factory=get_project_factory), name='get_project'),
     path('project/<int:project_id>/update/', csrf_exempt(ViewWrapper.as_view(view_factory=update_project_factory)),
          name='update_project'),
     path('project/<int:project_id>/delete/', csrf_exempt(ViewWrapper.as_view(view_factory=delete_project_factory)),
          name='delete_project'),
-    # path('project/all', ViewWrapper.as_view(view_factory=get_all_projects_factory), name='get_all_projects'),
-    # path('project/total', ViewWrapper.as_view(view_factory=get_total_factory), name='get_total'),
+    path('project/all', ViewWrapper.as_view(view_factory=get_projects_all_factory), name='get_all_projects'),
+
 
     path('project/<int:project_id>/task/create/', csrf_exempt(ViewWrapper.as_view(view_factory=create_task_factory)),
          name='create_task'),
     path('project/<int:project_id>/task/all/', ViewWrapper.as_view(view_factory=get_all_tasks_factory),
-             name='get_all_tasks'),
+         name='get_all_tasks'),
     path('project/<int:project_id>/task/<int:task_id>/', ViewWrapper.as_view(view_factory=get_task_factory),
          name='get_task'),
-
-
-    path('project/<int:project_id>/task/<int:task_id>/update/',
-         csrf_exempt(ViewWrapper.as_view(view_factory=update_task_factory)),
+    path('project/<int:project_id>/task/<int:task_id>/update/', csrf_exempt(ViewWrapper.as_view(view_factory=update_task_factory)),
          name='update_task'),
-    path('project/<int:project_id>/task/<int:task_id>/delete/',
-         csrf_exempt(ViewWrapper.as_view(view_factory=delete_task_factory)),
+    path('project/<int:project_id>/task/<int:task_id>/delete/', csrf_exempt(ViewWrapper.as_view(view_factory=delete_task_factory)),
          name='delete_task'),
+
+
+    path('project/<int:project_id>/monthpayment/create/', csrf_exempt(ViewWrapper.as_view(view_factory=create_month_payment_factory)),
+         name='create_month_payment'),
+    path('project/<int:project_id>/monthpayment/<int:month_payment_id>/', ViewWrapper.as_view(view_factory=get_month_payment_factory),
+         name='get_month_payment'),
+    path('project/<int:project_id>/monthpayment/<int:month_payment_id>/update/',
+         csrf_exempt(ViewWrapper.as_view(view_factory=update_month_payment_factory)),
+         name='update_month_payment'),
+    path('project/<int:project_id>/monthpayment/<int:month_payment_id>/delete/',
+         csrf_exempt(ViewWrapper.as_view(view_factory=delete_month_payment_factory)),
+         name='delete_month_payment'),
+    path('project/<int:project_id>/monthpayment/all/', ViewWrapper.as_view(view_factory=get_all_month_payments_factory),
+         name='get_all_month_payments'),
+
 
     path('project/<int:project_id>/hour_payment/create/',
          csrf_exempt(ViewWrapper.as_view(view_factory=create_hour_payment_factory)), name='create_hour_payment'),
