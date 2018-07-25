@@ -412,13 +412,15 @@ class GetWorkTimeInteractor(Interactor):
 
 
 class CreateWorkTimeInteractor(Interactor):
-    def __init__(self, work_time_repo, hour_payment_repo, validate_user_project):
+    def __init__(self, work_time_repo, hour_payment_repo, validate_user_project, project_date_validator):
         self.work_time_repo = work_time_repo
         self.hour_payment_repo = hour_payment_repo
         self.validate_user_project = validate_user_project
+        self.project_date_validator = project_date_validator
 
-    def set_params(self, logged_id, hour_payment_id, start_work, end_work, paid, *args, **kwargs):
+    def set_params(self, logged_id, project_id, hour_payment_id, start_work, end_work, paid=False, *args, **kwargs):
         self.user_id = logged_id
+        self.project_id = project_id
         self.hour_payment_id = hour_payment_id
         self.start_work = start_work
         self.end_work = end_work
@@ -427,10 +429,14 @@ class CreateWorkTimeInteractor(Interactor):
 
     def execute(self, *args, **kwargs):
         self.validate_user_project.validate_pemission(logged_id=self.user_id)
+        hour_payment = self.hour_payment_repo.get(self.hour_payment_id)
+        self.validate_user_project.validate_pemission(hour_payment.project_id, self.project_id)
+        start_work = self.project_date_validator.date_time_format(self.start_work)
+        end_work = self.project_date_validator.date_time_format(self.end_work)
         work_time = WorkTime(
             hour_payment_id=self.hour_payment_id,
-            start_work=self.start_work,
-            end_work=self.end_work,
+            start_work=start_work,
+            end_work=end_work,
             paid=self.paid
         )
         return self.work_time_repo.create(work_time)

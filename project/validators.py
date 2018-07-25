@@ -36,6 +36,10 @@ class UserPermissionValidator:
         if type_of_payment != eq_type_of_payment:
             raise InvalidEntityException(source='validate', code='other_type_of_payment',
                                          message="The type of payment for the project must be %s" % eq_type_of_payment)
+
+
+
+
 class ProjectDateTimeValidator:
     def date_time_format(self, date_string):
         if date_string is None:
