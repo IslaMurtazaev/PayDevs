@@ -452,6 +452,7 @@ class WorkTimeRepo:
         db_work_time.paid = work_time.paid
         db_work_time.start_work = work_time.start_work
         db_work_time.end_work = work_time.end_work
+        db_work_time.save()
 
         return self._decode_db_work_time(db_work_time)
 

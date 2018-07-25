@@ -1,5 +1,6 @@
 from time import localtime
 
+from PayDevs.constants import DATE_TIME_FORMAT
 from PayDevs.exceptions import NoLoggedException, NoPermissionException, InvalidEntityException
 import datetime
 
@@ -45,6 +46,6 @@ class ProjectDateTimeValidator:
         if date_string is None:
             return None
         try:
-            return datetime.datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%fZ%z")
+            return datetime.datetime.strptime(date_string, DATE_TIME_FORMAT)
         except:
             raise InvalidEntityException(source='validator',  code='invalid_format', message="Invalid datetime format")

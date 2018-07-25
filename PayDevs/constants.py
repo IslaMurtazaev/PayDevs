@@ -4,6 +4,8 @@ from PayDevs.exceptions import EntityDoesNotExistException, NoPermissionExceptio
     EntityIntegrityException, InvalidEntityException, NoLoggedException
 
 
+DATE_TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ%z"
+
 @unique
 class StatusCodes(IntEnum):
     CONTINUE = 100
@@ -15,6 +17,8 @@ class StatusCodes(IntEnum):
     FORBIDDEN = 403
     NOT_FOUND = 404
     SERVER_ERROR = 500
+
+
 
 
 exception_status_codes = {

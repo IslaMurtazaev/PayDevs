@@ -1,3 +1,4 @@
+from PayDevs.constants import DATE_TIME_FORMAT
 from PayDevs.serializer import BaseSerializer, ListSerializer, DateFormatSerializer, DateFormatListSerializer
 from project.entities import Project, WorkTask, WorkedDay, WorkTime, MonthPayment, HourPayment
 
@@ -57,10 +58,12 @@ class WorkDayListSerializer(DateFormatListSerializer):
 
 
 class WorkTimeSerializer(DateFormatSerializer):
+    format = DATE_TIME_FORMAT
     model = WorkTime
     fields = ['id', 'start_work', 'end_work', 'paid', 'hour_payment_id']
 
 
 class WorkTimeListSerializer(DateFormatListSerializer):
+    format = DATE_TIME_FORMAT
     model = WorkTime
     fields = ['id', 'start_work', 'end_work', 'paid', 'hour_payment_id']
