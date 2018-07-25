@@ -14,7 +14,7 @@ class SerializerTest(TestCase):
 
         self.model = ExampleModel
 
-    def test_baserializer_method_serializer_fields__all__(self):
+    def test_baserializer_method_serialize_fields__all__(self):
         dict_test = {
             'attr1': 2,
             'attr2': 100,
@@ -26,9 +26,9 @@ class SerializerTest(TestCase):
             model = self.model
             fields = '__all__'
 
-        self.assertDictEqual(TestSerializer.serializer(self.model()), dict_test)
+        self.assertDictEqual(TestSerializer.serialize(self.model()), dict_test)
 
-    def test_baserializer_method_serializer_fields_list(self):
+    def test_baserializer_method_serialize_fields_list(self):
         dict_test = {
             'attr1': 2,
             'name': "ExampleClass"
@@ -38,9 +38,9 @@ class SerializerTest(TestCase):
             model = self.model
             fields = ['attr1', 'name']
 
-        self.assertDictEqual(TestSerializer.serializer(self.model()), dict_test)
+        self.assertDictEqual(TestSerializer.serialize(self.model()), dict_test)
 
-    def test_baserializer_method_serializer_exception(self):
+    def test_baserializer_method_serialize_exception(self):
         dict_test = {
             'attr1': 2,
             'name': "ExampleClass"
@@ -51,8 +51,8 @@ class SerializerTest(TestCase):
             fields = ['attr1', 'name', 'attr4']
 
         with self.assertRaises(SerializerException):
-            TestSerializer.serializer(self.model())
+            TestSerializer.serialize(self.model())
         try:
-            TestSerializer.serializer(self.model())
+            TestSerializer.serialize(self.model())
         except SerializerException as e:
             self.assertRegex(str(e), 'attr4')

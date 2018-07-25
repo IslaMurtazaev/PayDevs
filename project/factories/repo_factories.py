@@ -22,7 +22,6 @@ class HourPaymentRepoFactory(object):
 
 
 class WorkTimeRepoFactory(object):
-
     @staticmethod
     def create():
         return WorkTimeRepo()
@@ -39,5 +38,3 @@ class WorkedDayRepoFactory(object):
     @staticmethod
     def create():
         return WorkedDayRepo()
-
-

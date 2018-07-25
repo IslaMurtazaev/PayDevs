@@ -9,7 +9,7 @@ class BaseSerializer(object):
     model = None
 
     @classmethod
-    def serializer(cls, obj):
+    def serialize(cls, obj):
         if cls.model is not obj.__class__:
             raise SerializerException('the obj argument must be an instance of the class model')
         result = dict()
@@ -38,19 +38,20 @@ class BaseSerializer(object):
 class ListSerializer(BaseSerializer):
 
     @classmethod
-    def serializer(cls, list_obj):
+    def serialize(cls, list_obj):
         result = list()
         for obj in list_obj:
-            result.append(super().serializer(obj))
+            result.append(super().serialize(obj))
         return result
+
 
 
 class DateFormatSerializer(BaseSerializer):
     format = "%Y-%m-%e %T%z"
 
     @classmethod
-    def serializer(cls, list_obj):
-        result = super().serializer(list_obj)
+    def serialize(cls, list_obj):
+        result = super().serialize(list_obj)
         for key in result:
             if type(result[key]) == datetime.datetime or type(result[key]) == datetime.date:
                 result[key] = result[key].strftime(cls.format)
@@ -61,20 +62,20 @@ class DateFormatSerializer(BaseSerializer):
 class DateFormatListSerializer(DateFormatSerializer):
 
     @classmethod
-    def serializer(cls, list_obj):
+    def serialize(cls, list_obj):
         result = list()
         for obj in list_obj:
-            result.append(super().serializer(obj))
+            result.append(super().serialize(obj))
         return result
 
 
-class ExampleExceptionSerializer(BaseSerializer):
+class ExceptionSerializer(BaseSerializer):
     model = None
     fields = ['source', 'code']
 
     @classmethod
-    def serializer(cls, exception):
-        ser = super().serializer(exception)
+    def serialize(cls, exception):
+        ser = super().serialize(exception)
         ser['message'] = str(exception)
         body = {
             'error': ser

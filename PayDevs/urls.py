@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 
+
 from PayDevs.views import ViewWrapper
 from account.factories.view_factory import get_user_regist_factories, get_user_login_factories, \
     get_user_factories
@@ -29,13 +30,17 @@ urlpatterns = [
     path('users/', ViewWrapper.as_view(view_factory=get_user_factories), name='get_user'),
 
     path('project/create', csrf_exempt(ViewWrapper.as_view(view_factory=create_project_factory)), name='create_project'),
+
     path('project/all', ViewWrapper.as_view(view_factory=get_projects_all_factory), name='get_all_projects'),
     # path('project/total', ViewWrapper.as_view(view_factory=get_total_factory), name='get_total'),
+
     path('project/<int:project_id>/', ViewWrapper.as_view(view_factory=get_project_factory), name='get_project'),
     path('project/<int:project_id>/update/', csrf_exempt(ViewWrapper.as_view(view_factory=update_project_factory)),
          name='update_project'),
     path('project/<int:project_id>/delete/', csrf_exempt(ViewWrapper.as_view(view_factory=delete_project_factory)),
          name='delete_project'),
+    # path('project/all', ViewWrapper.as_view(view_factory=get_all_projects_factory), name='get_all_projects'),
+    # path('project/total', ViewWrapper.as_view(view_factory=get_total_factory), name='get_total'),
 
     path('project/<int:project_id>/task/create/', csrf_exempt(ViewWrapper.as_view(view_factory=create_task_factory)),
          name='create_task'),
@@ -51,5 +56,16 @@ urlpatterns = [
     path('project/<int:project_id>/task/<int:task_id>/delete/',
          csrf_exempt(ViewWrapper.as_view(view_factory=delete_task_factory)),
          name='delete_task'),
+
+
+    # path('project/<int:id>/task/create/', csrf_exempt(ViewWrapper.as_view(view_factory=create_task_factory)),
+    #      name='create_task'),
+    # path('project/<int:id>/task/all/', ViewWrapper.as_view(view_factory=get_all_tasks_factory),
+    #      name='get_all_tasks'),
+    # path('project/<int:id>/task/<int:id_task>/', ViewWrapper.as_view(view_factory=get_task_factory), name='get_task'),
+    # path('project/<int:id>/task/<int:id_task>/update/', csrf_exempt(ViewWrapper.as_view(view_factory=update_task_factory)),
+    #      name='update_task'),
+    # path('project/<int:id>/task/<int:id_task>/delete/', csrf_exempt(ViewWrapper.as_view(view_factory=delete_task_factory)),
+    #      name='delete_task'),
 
 ]

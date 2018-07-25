@@ -19,7 +19,7 @@ class InvalidEntityException(PayDevsException):
 
 class EntityDoesNotExistException(PayDevsException):
     def __init__(self):
-        super().__init__(source='entity', code='not_fond', message='Entity not font')
+        super().__init__(source='entity', code='not_found', message='Entity not found')
 
 
 class NoLoggedException(PayDevsException):

@@ -2,14 +2,12 @@ from PayDevs.interactors import Interactor
 from project.entities import Project, WorkTask, HourPayment, WorkTime, MonthPayment, WorkedDay
 
 
-# ------------------------------------ Project ---------------------------------------------#
-
-
+# ------------------------ Project ---------------------------------------- #
 
 class GetProjectInteractor(Interactor):
-    def __init__(self, project_repo, validate_user_project):
+    def __init__(self, project_repo, user_permission_validator):
         self.project_repo = project_repo
-        self.validate_user_project = validate_user_project
+        self.user_permission_validator = user_permission_validator
 
     def set_params(self, project_id, logged_id=None, **kwargs):
         self.logged_id = logged_id
@@ -17,14 +15,14 @@ class GetProjectInteractor(Interactor):
         return self
 
     def execute(self):
-        self.validate_user_project.validate_pemission(self.logged_id)
+        self.user_permission_validator.validate_pemission(self.logged_id)
         return self.project_repo.get(logged_id=self.logged_id, project_id=self.project_id)
 
 
 class CreateProjectInteractor(Interactor):
-    def __init__(self, project_repo, validate_user_project, project_date_validator):
+    def __init__(self, project_repo, user_permission_validator, project_date_validator):
         self.project_repo = project_repo
-        self.validate_user_project = validate_user_project
+        self.user_permission_validator = user_permission_validator
         self.project_date_validator = project_date_validator
 
     def set_params(self, logged_id, title, description, type_of_payment, start_date,
@@ -39,8 +37,8 @@ class CreateProjectInteractor(Interactor):
         return self
 
     def execute(self):
-        self.validate_user_project.validate_pemission(self.logged_id)
-        self.validate_user_project.validate_type_of_payment(self.type_of_payment)
+        self.user_permission_validator.validate_pemission(self.logged_id)
+        self.user_permission_validator.validate_type_of_payment(self.type_of_payment)
 
         start_date = self.project_date_validator.date_time_format(self.start_date)
         end_date = self.project_date_validator.date_time_format(self.end_date)
@@ -140,8 +138,6 @@ class ProjectGetTotalInteractor(Interactor):
 
 
 # --------------------------- Work Task ----------------------------------------#
-
-
 
 class GetTaskInteractor(Interactor):
     def __init__(self, work_task_repo, validate_user_project):
@@ -274,6 +270,8 @@ class GetAllTasksInteractor(Interactor):
         return self.work_task_repo.get_all(self.project_id)
 
 
+# ----------------------- Hour Payment ----------------------------------- #
+
 class GetHourPaymentInteractor(Interactor):
     def __init__(self, hour_payment_repo, validate_user_project):
         self.hour_payment_repo = hour_payment_repo
@@ -390,6 +388,8 @@ class GetAllHourPaymentInteractor(Interactor):
         self.validate_user_project.validate_pemission(project.user_id, logged_id)
 
 
+# ---------------------------- Work Time ---------------------------------------- #
+
 class GetWorkTimeInteractor(Interactor):
     def __init__(self, work_time_repo, hour_payment_repo, validate_user_project):
         self.work_time_repo = work_time_repo
@@ -500,10 +500,11 @@ class GetAllWorkTimeInteractor(Interactor):
 
     def execute(self, *args, **kwargs):
         self.validate_user_project.validate_pemission(logged_id=self.user_id)
-
         work_times = self.work_time_repo.get_all(self.hour_payment_id)
         return work_times
 
+
+#--------------------------- Month Payment ----------------------------------------#
 
 class GetMonthPaymentInteractor(Interactor):
     def __init__(self, month_payment_repo, validate_user_project):
@@ -606,13 +607,13 @@ class GetAllMonthPaymentInteractor(Interactor):
         return self.month_payment_repo.delete(month_payments)
 
 
+# ----------------------- Worked Day ----------------------------------- #
 
 class GetWorkedDayInteractor(Interactor):
     def __init__(self, work_day_repo, hour_payment_repo, validate_user_project):
         self.work_day_repo = work_day_repo
         self.hour_payment_repo = hour_payment_repo
         self.validate_user_project = validate_user_project
-
 
     def set_params(self, worked_day_id, hour_payment_id, logged_id, **kwargs):
         self.worked_day_id = worked_day_id
@@ -625,7 +626,6 @@ class GetWorkedDayInteractor(Interactor):
         worked_day = self.hour_payment_repo.get(self.worked_day_id)
         self.validate_user_project.validate_pemission(worked_day.hour_paymnet_id, self.hour_payment_id)
         return worked_day
-
 
 
 class CreateWorkedDayInteractor(Interactor):
@@ -641,7 +641,6 @@ class CreateWorkedDayInteractor(Interactor):
         self.user_id = logged_id
         return self
 
-
     def execute(self, *args, **kwargs):
         self.validate_user_project.validate_pemission(self.user_id)
         month_paymnet = self.month_payment_repo.get(self.month_paymnet_id)
@@ -653,23 +652,19 @@ class CreateWorkedDayInteractor(Interactor):
         return self.work_day_repo.create(worked_day)
 
 
-
 class DeleteWorkedDayInteractor(Interactor):
     def __init__(self, work_day_repo, validate_user_project):
         self.work_day_repo = work_day_repo
         self.validate_user_project = validate_user_project
-
 
     def set_params(self, worked_day_id, logged_id, *args, **kwargs):
         self.worked_day_id = worked_day_id
         self.user_id = logged_id
         return self
 
-
     def execute(self, *args, **kwargs):
         self.validate_user_project.validate_pemission(self.user_id)
         return self.work_day_repo.delete(self.worked_day_id)
-
 
 
 class GetAllWorkedDayInteractor(Interactor):
@@ -687,5 +682,3 @@ class GetAllWorkedDayInteractor(Interactor):
         self.validate_user_project.validate_pemission(self.user_id)
         month_payment = self.month_payment_repo.get(self.month_payment_id)
         return self.work_day_repo.get_all(month_payment.id)
-
-

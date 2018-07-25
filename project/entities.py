@@ -1,3 +1,5 @@
+from PayDevs.exceptions import InvalidEntityException
+
 class Project(object):
     
     def __init__(self, id=None, title=None, description=None, start_date=None, end_date=None,\
@@ -47,6 +49,24 @@ class Project(object):
     def status(self):
         return self._status
 
+
+    # @staticmethod
+    # def get_timestamp(type_of_payment, worked):
+    #     try:
+    #         if (type_of_payment == 'H_P'):
+    #             total = 0
+    #             for worked_time in worked:
+    #                 worked_hours = (worked_time.end_work - worked_time.start_work).seconds / 3600
+    #                 total += worked_hours
+    #             return {'hours': int(total)}
+    #
+    #         elif (type_of_payment == 'M_P'):
+    #             return {'days': len(worked)}
+    #
+    #     except:
+    #         raise InvalidEntityException(source='entities', code='invalid entity',
+    #                                      message="Can't get a timestamp of project")
+
     @property
     def is_mine(self):
         return self._is_mine
@@ -66,7 +86,6 @@ class Project(object):
 
 class HourPayment(object):
 
-
     def __init__(self, id=None, project_id=None, rate=None, work_times=None):
         self._id = id
         self._project_id = project_id
@@ -81,7 +100,6 @@ class HourPayment(object):
     @property
     def project_id(self):
         return self._project_id
-
 
     @property
     def rate(self):
@@ -105,6 +123,7 @@ class WorkTime(object):
         self._end_work = end_work
         self._paid = paid
 
+
     @property
     def id(self):
         return self._id
@@ -124,8 +143,6 @@ class WorkTime(object):
     @property
     def paid(self):
         return self._paid
-
-
 
 
 
@@ -200,8 +217,8 @@ class MonthPayment(object):
 
 class WorkedDay(object):
 
-    def __init__(self, id=None, month_payment_id=None, day=None, paid=False, work_days=None):
-        self._id = id 
+    def __init__(self, id=None, month_payment_id=None, day=None, paid=False):
+        self._id = id
         self._month_payment_id = month_payment_id
         self._day = day
         self._paid = paid
@@ -222,4 +239,3 @@ class WorkedDay(object):
     @property
     def paid(self):
         return self._paid
-

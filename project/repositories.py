@@ -1,5 +1,3 @@
-from account.models import UserORM
-from account.repositories import UserRepo
 from project.entities import Project, WorkTask, MonthPayment, WorkedDay, HourPayment, WorkTime
 from project.models import ProjectORM, HourPaymentORM, MonthPaymentORM, WorkTaskORM, WorkedDayORM, WorkTimeORM
 from PayDevs.exceptions import EntityDoesNotExistException, NoPermissionException
@@ -7,8 +5,8 @@ from PayDevs.exceptions import EntityDoesNotExistException, NoPermissionExceptio
 
 # ------------------------------------------ Project --------------------------------------------#
 
-
 class ProjectRepo(object):
+
     def _decode_db_project(self, db_project, is_mine=False, paid=None, last_month_days=None, boundary=None):
         fileds = {
             'id': db_project.id,
@@ -20,12 +18,12 @@ class ProjectRepo(object):
             'type_of_payment': db_project.type_of_payment,
             'status': db_project.status,
             'is_mine': is_mine,
-            'entity_type_list': self._get_entity_type_list(db_project.id,
-                                                           paid=paid, last_month_days=last_month_days,
+            'entity_type_list': self._get_entity_type_list(db_project.id, paid=paid, last_month_days=last_month_days,
                                                            boundary=boundary)
         }
 
         return Project(**fileds)
+
 
     def get(self, project_id, logged_id=None, paid=None, last_month_days=None, boundary=None):
         try:
@@ -82,8 +80,12 @@ class ProjectRepo(object):
         db_project.type_of_payment = project.type_of_payment
         db_project.start_date = project.start_date
         db_project.end_date = project.end_date
-        db_project.status = project.status
 
+        if project.start_date:
+            db_project.start_date = project.start_date
+        if project.end_date:
+            db_project.end_date = project.end_date
+        db_project.status = project.status
         db_project.save()
 
         return self._decode_db_project(db_project, paid=paid, last_month_days=last_month_days, boundary=boundary)
@@ -122,9 +124,8 @@ class ProjectRepo(object):
 
 # -------------------------- Work Task ----------------------------------------#
 
-
-
 class WorkTaskRepo:
+
     def get(self, work_task_id):
         try:
             db_work_task = WorkTaskORM.objects.get(id=work_task_id)
@@ -151,6 +152,7 @@ class WorkTaskRepo:
             paid=work_task.paid
         )
         return self._decode_db_work_task(db_work_task)
+
 
     def update(self, work_task):
         try:
@@ -191,8 +193,8 @@ class WorkTaskRepo:
 
 # -------------------------- Month Payment ---------------------------------------- #
 
-
 class MonthPaymentRepo:
+
     def _decode_db_month_payment(self, db_month_payment, work_day_paid=None, last_month_days=None):
 
         fileds = {
@@ -319,6 +321,7 @@ class WorkedDayRepo:
             worked_days.append(self._decode_db_worked_day(db_worked_day))
         return worked_days
 
+
     def _decode_db_worked_day(self, db_wored_day):
 
         fileds = {
@@ -331,6 +334,7 @@ class WorkedDayRepo:
 
 
 class HourPaymentRepo:
+
     def get(self, hour_payment_id, work_time_paid=None, work_time_boundary=None):
         try:
             db_hour_payment = HourPaymentORM.objects.select_related('project').get(id=hour_payment_id)

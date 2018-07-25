@@ -34,8 +34,7 @@ class ProjectORM(models.Model):
 class HourPaymentORM(models.Model):
     project = models.ForeignKey(ProjectORM, on_delete=models.CASCADE)
     rate = models.FloatField(default=0)
-    # start_rout_date = models.DateTimeField(default=timezone.now)
-    # end_rout_date = models.DateTimeField(null=True)
+
 
 
 class WorkTimeORM(models.Model):
@@ -52,31 +51,6 @@ class WorkTimeORM(models.Model):
     #         if work_time.is_completed():
     #             val += (work_time.end_work - work_time.start_work).seconds/3600
     #     return val * self.rate
-
-    # def is_range(self):
-    #     if self.project.start_date <= self.start_rout_date < self.end_rout_date:
-    #         result = True
-    #     else:
-    #         result = False
-
-    #     return result
-
-
-
-#     def is_completed(self):
-#         if timezone.now() >= self.end_work:
-#             result = True
-#         else:
-#             result = False
-#         return result
-
-#     def is_range(self):
-#         if self.rate.start_rout_date <= self.start_work < self.end_work:
-#             result = True
-#         else:
-#             result = False
-
-#         return result
 
 
 
@@ -104,28 +78,9 @@ class MonthPaymentORM(models.Model):
     project = models.ForeignKey(ProjectORM, on_delete=models.CASCADE)
     rate = models.FloatField(default=0)
 
-    # def total(self):
-    #     worked_days = self.workday_set.filter(have_worked=True)
-    #     count_worked_day = len([i for i in worked_days if i.is_completed()])
-    #     return self.rate * count_worked_day
 
 
 class WorkedDayORM(models.Model):
     month_payment = models.ForeignKey(MonthPaymentORM, on_delete=models.CASCADE)
     day = models.DateField(default=current_date)
     paid = models.BooleanField(default=False)
-
-#     def is_completed(self):
-#         if self.day < timezone.now().date():
-#             return True
-#         else:
-#             return False
-
-#     def is_range(self):
-#         start_date = self.month_payment.project.start_date.date()
-#         end_date = self.month_payment.project.end_date.date()
-
-#         if start_date <= self.day:
-#             return True
-#         else:
-#             return False
