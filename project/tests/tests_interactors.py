@@ -11,6 +11,7 @@ from project.validators import UserPermissionValidator
 from PayDevs.exceptions import NoLoggedException, NoPermissionException
 
 
+<<<<<<< HEAD
 class GetProjectInteractorTest(TestCase):
 
     def setUp(self):
@@ -72,6 +73,8 @@ class CreateProjectInteractorTest(TestCase):
     #         type_of_payment='T_P',
     #         rate=500).execute()
 
+=======
+>>>>>>> 35a7a417638f48d83839c3a7017cb6718c156ae6
 # class GetProjectInteractorTest(TestCase):
 #
 #     def setUp(self):
@@ -131,5 +134,9 @@ class CreateProjectInteractorTest(TestCase):
 #             title="Test",
 #             description="Description testr",
 #             type_of_payment='T_P',
+<<<<<<< HEAD
 #             rate=500).execute()
 
+=======
+#             rate=500).execute()
+>>>>>>> 35a7a417638f48d83839c3a7017cb6718c156ae6

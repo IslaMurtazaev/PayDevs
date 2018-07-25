@@ -47,17 +47,13 @@ class ProjectView(object):
 
 class GetAllProjectsView(object):
 
+
     def __init__(self, project_interactor):
         self.project_interactor = project_interactor
 
 
     @serialize_exception
     def get(self, *args, **kwargs):
-
-        projects = self.project_interactor.set_params(**kwargs).execute()
-
-        body = ProjectListSerializer.serialize(projects)
-        status = 200
 
         projects = self.project_interactor.set_params(**kwargs).execute()
         body = ProjectListSerializer.serialize(projects)
@@ -119,8 +115,6 @@ class GetAllTasksView(object):
         body = WorkTaskListSerializer.serialize(tasks)
         status = StatusCodes.OK
         return body, status
-
-
 
 
 

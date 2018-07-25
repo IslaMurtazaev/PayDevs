@@ -26,6 +26,7 @@ def update_project_factory():
 
 
 
+
 def get_projects_all_factory():
     get_all_project_interactor = GetAllProjectsInteractorFactory().create()
     return GetAllProjectsView(get_all_project_interactor)
@@ -53,4 +54,5 @@ def delete_task_factory():
 def get_all_tasks_factory():
     get_task_interactor = GetAllTaskInteractorFactory.create()
     return GetAllTasksView(get_task_interactor)
+
 

@@ -1,6 +1,9 @@
 
-
 from project.factories.repo_factories import ProjectRepoFactory, WorkTaskRepoFactory
+from project.factories.validator_factories import UserPermissionsValidatorFactory, ProjectDateTimeValidatorFactory
+
+
+from project.factories.repo_factories import ProjectRepoFactory
 from project.factories.validator_factories import UserPermissionsValidatorFactory, ProjectDateTimeValidatorFactory
 
 from project.interactors import CreateProjectInteractor, UpdateProjectInteractor, DeleteProjectInteractor, \
@@ -40,6 +43,7 @@ class GetProjectInteractorFactory(object):
         project_repo = ProjectRepoFactory.create()
         validate_user_project = UserPermissionsValidatorFactory.create()
         return GetProjectInteractor(project_repo, validate_user_project)
+
 
 
 
@@ -99,4 +103,5 @@ class GetAllTaskInteractorFactory(object):
         validate_user_project = UserPermissionsValidatorFactory.create()
         create_project_repo = ProjectRepoFactory().create()
         return GetAllTasksInteractor(create_task_repo, create_project_repo, validate_user_project)
+
 

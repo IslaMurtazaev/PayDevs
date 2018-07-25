@@ -119,5 +119,4 @@ class ClientAccountTest(TestCase):
 #         self.assertEqual(body.get('title'), 'Project web')
 #         self.assertEqual(body.get('description'), 'logic web site')
 #         self.assertEqual(body.get('start_date'), "2016-12-20T23:00:00.000000Z+0600")
-#         self.assertEqual(body.get('end_date'), "2018-12-20T12:30:00.000000Z+0600")
 
