@@ -1,5 +1,8 @@
 from enum import IntEnum, unique
 
+from PayDevs.exceptions import EntityDoesNotExistException, NoPermissionException, PayDevsException, \
+    EntityIntegrityException, InvalidEntityException, NoLoggedException
+
 
 @unique
 class StatusCodes(IntEnum):
@@ -12,3 +15,12 @@ class StatusCodes(IntEnum):
     FORBIDDEN = 403
     NOT_FOUND = 404
     SERVER_ERROR = 500
+
+
+exception_status_codes = {
+    EntityDoesNotExistException: 404,
+    NoPermissionException: 403,
+    EntityIntegrityException: 409,
+    InvalidEntityException: 422,
+    NoLoggedException: 401,
+}

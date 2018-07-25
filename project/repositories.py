@@ -18,8 +18,7 @@ class ProjectRepo(object):
             'type_of_payment': db_project.type_of_payment,
             'status': db_project.status,
             'is_mine': is_mine,
-            'entity_type_list': self._get_entity_type_list(db_project.id,
-                                                           paid=paid, last_month_days=last_month_days,
+            'entity_type_list': self._get_entity_type_list(db_project.id, paid=paid, last_month_days=last_month_days,
                                                            boundary=boundary)
         }
 
@@ -124,6 +123,7 @@ class ProjectRepo(object):
 # -------------------------- Work Task ----------------------------------------#
 
 class WorkTaskRepo:
+
     def get(self, work_task_id):
         try:
             db_work_task = WorkTaskORM.objects.get(id=work_task_id)

@@ -5,9 +5,9 @@ from project.entities import Project, WorkTask, HourPayment, WorkTime, MonthPaym
 # ------------------------ Project ---------------------------------------- #
 
 class GetProjectInteractor(Interactor):
-    def __init__(self, project_repo, validate_user_project):
+    def __init__(self, project_repo, user_permission_validator):
         self.project_repo = project_repo
-        self.validate_user_project = validate_user_project
+        self.user_permission_validator = user_permission_validator
 
     def set_params(self, project_id, logged_id=None, **kwargs):
         self.logged_id = logged_id
@@ -15,14 +15,14 @@ class GetProjectInteractor(Interactor):
         return self
 
     def execute(self):
-        self.validate_user_project.validate_pemission(self.logged_id)
+        self.user_permission_validator.validate_pemission(self.logged_id)
         return self.project_repo.get(logged_id=self.logged_id, project_id=self.project_id)
 
 
 class CreateProjectInteractor(Interactor):
-    def __init__(self, project_repo, validate_user_project, project_date_validator):
+    def __init__(self, project_repo, user_permission_validator, project_date_validator):
         self.project_repo = project_repo
-        self.validate_user_project = validate_user_project
+        self.user_permission_validator = user_permission_validator
         self.project_date_validator = project_date_validator
 
     def set_params(self, logged_id, title, description, type_of_payment, start_date,
@@ -37,8 +37,8 @@ class CreateProjectInteractor(Interactor):
         return self
 
     def execute(self):
-        self.validate_user_project.validate_pemission(self.logged_id)
-        self.validate_user_project.validate_type_of_payment(self.type_of_payment)
+        self.user_permission_validator.validate_pemission(self.logged_id)
+        self.user_permission_validator.validate_type_of_payment(self.type_of_payment)
 
         start_date = self.project_date_validator.date_time_format(self.start_date)
         end_date = self.project_date_validator.date_time_format(self.end_date)

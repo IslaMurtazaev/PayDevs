@@ -14,32 +14,32 @@ class ProjectView(object):
     @serialize_exception
     def get(self, *args, **kwargs):
         project = self.project_interactors.set_params(*args, **kwargs).execute()
-        body = ProjectSerializer.serializer(project)
-        status = 200
+        body = ProjectSerializer.serialize(project)
+        status = StatusCodes.OK
         return body, status
 
 
     @serialize_exception
     def post(self, *args, **kwargs):
         project = self.project_interactors.set_params(**kwargs).execute()
-        body = ProjectSerializer.serializer(project)
-        status = 201
+        body = ProjectSerializer.serialize(project)
+        status = StatusCodes.CREATED
         return body, status
 
 
     @serialize_exception
     def put(self, *args, **kwargs):
         updated_project = self.project_interactors.set_params(**kwargs).execute()
-        body = ProjectSerializer.serializer(updated_project)
-        status = 200
+        body = ProjectSerializer.serialize(updated_project)
+        status = StatusCodes.OK
         return body, status
 
 
     @serialize_exception
     def delete(self, *args, **kwargs):
         deleted_project = self.project_interactors.set_params(**kwargs).execute()
-        body = ProjectSerializer.serializer(deleted_project)
-        status = 200
+        body = ProjectSerializer.serialize(deleted_project)
+        status = StatusCodes.OK
         return body, status
 
 
@@ -264,33 +264,32 @@ class WorkDayView(object):
     @serialize_exception
     def get(self, *args, **kwargs):
         worked_day = self.work_day_interactor.set_params(**kwargs).execute()
-        body = WorkDaySerializer.serializer(worked_day)
-        status = 200
+        body = WorkDaySerializer.serialize(worked_day)
+        status = StatusCodes.OK
         return body, status
 
 
     @serialize_exception
     def post(self, *args, **kwargs):
         created_worked_day = self.work_day_interactor.set_params(**kwargs).execute()
-        body = WorkDaySerializer.serializer(created_worked_day)
-        status = 201
+        body = WorkDaySerializer.serialize(created_worked_day)
+        status = StatusCodes.CREATED
         return body, status
 
 
     @serialize_exception
     def put(self, *args, **kwargs):
         updated_worked_day = self.work_day_interactor.set_params(**kwargs).execute()
-        body = WorkDaySerializer.serializer(updated_worked_day)
-        status = 201
+        body = WorkDaySerializer.serialize(updated_worked_day)
+        status = StatusCodes.OK
         return body, status
 
 
     @serialize_exception
     def delete(self, *args, **kwargs):
         deleted_worked_day = self.work_day_interactor.set_params(**kwargs).execute()
-
-        body = WorkDaySerializer.serializer(deleted_worked_day)
-        status = 201
+        body = WorkDaySerializer.serialize(deleted_worked_day)
+        status = StatusCodes.OK
         return body, status
 
 
@@ -302,9 +301,8 @@ class GetAllWorkDaysView(object):
     @serialize_exception
     def get(self, *args, **kwargs):
         worked_day = self.get_all_work_days_interactor.set_params(**kwargs).execute()
-
-        body = WorkDayListSerializer.serializer(worked_day)
-        status = 200
+        body = WorkDayListSerializer.serialize(worked_day)
+        status = StatusCodes.OK
         return body, status
 
 
@@ -318,32 +316,32 @@ class WorkTimeView(object):
     @serialize_exception
     def get(self, *args, **kwargs):
         worked_time = self.work_time_interactor.set_params(**kwargs).execute()
-        body = WorkTimeSerializer.serializer(worked_time)
-        status = 200
+        body = WorkTimeSerializer.serialize(worked_time)
+        status = StatusCodes.OK
         return body, status
 
 
     @serialize_exception
     def post(self, *args, **kwargs):
         created_worked_time = self.work_time_interactor.set_params(**kwargs).execute()
-        body = WorkTimeSerializer.serializer(created_worked_time)
-        status = 201
+        body = WorkTimeSerializer.serialize(created_worked_time)
+        status = StatusCodes.CREATED
         return body, status
 
 
     @serialize_exception
     def put(self, *args, **kwargs):
         updated_worked_time = self.work_time_interactor.set_params(**kwargs).execute()
-        body = WorkTimeSerializer.serializer(updated_worked_time)
-        status = 201
+        body = WorkTimeSerializer.serialize(updated_worked_time)
+        status = StatusCodes.OK
         return body, status
 
 
     @serialize_exception
     def delete(self, *args, **kwargs):
         deleted_worked_time = self.work_time_interactor.set_params(**kwargs).execute()
-        body = WorkTimeSerializer.serializer(deleted_worked_time)
-        status = 201
+        body = WorkTimeSerializer.serialize(deleted_worked_time)
+        status = StatusCodes.OK
         return body, status
 
 

@@ -1,5 +1,5 @@
 from project.factories.repo_factories import ProjectRepoFactory
-from project.factories.validate_factories import UserPermissionsValidatorFactory, ProjectDateTimeValidatorFactory
+from project.factories.validator_factories import UserPermissionsValidatorFactory, ProjectDateTimeValidatorFactory
 from project.interactors import CreateProjectInteractor, UpdateProjectInteractor, DeleteProjectInteractor, \
     GetProjectInteractor
 

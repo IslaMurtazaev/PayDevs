@@ -50,7 +50,7 @@ class DateFormatSerializer(BaseSerializer):
     format = "%Y-%m-%e %T%z"
 
     @classmethod
-    def serializer(cls, list_obj):
+    def serialize(cls, list_obj):
         result = super().serialize(list_obj)
         for key in result:
             if type(result[key]) == datetime.datetime or type(result[key]) == datetime.date:
@@ -62,14 +62,14 @@ class DateFormatSerializer(BaseSerializer):
 class DateFormatListSerializer(DateFormatSerializer):
 
     @classmethod
-    def serializer(cls, list_obj):
+    def serialize(cls, list_obj):
         result = list()
         for obj in list_obj:
             result.append(super().serialize(obj))
         return result
 
 
-class ExampleExceptionSerializer(BaseSerializer):
+class ExceptionSerializer(BaseSerializer):
     model = None
     fields = ['source', 'code']
 
