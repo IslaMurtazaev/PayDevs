@@ -295,7 +295,7 @@ class CreateHourPaymentInteractor(Interactor):
         self.validate_user_project = validate_user_project
         self.project_repo = project_repo
 
-    def set_params(self, project_id, rate, logged_id, *args, **kwargs):
+    def set_params(self, project_id, logged_id, rate=None, *args, **kwargs):
         self.project_id = project_id
         self.rate = rate
         self.user_id = logged_id
@@ -420,7 +420,8 @@ class CreateWorkTimeInteractor(Interactor):
         self.validate_user_project = validate_user_project
         self.project_date_validator = project_date_validator
 
-    def set_params(self, logged_id, project_id, hour_payment_id, start_work, end_work, paid=False, *args, **kwargs):
+    def set_params(self, logged_id, project_id, hour_payment_id, start_work=None, end_work=None,
+                   paid=False, *args, **kwargs):
         self.user_id = logged_id
         self.project_id = project_id
         self.hour_payment_id = hour_payment_id
