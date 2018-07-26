@@ -2,6 +2,7 @@ import datetime
 
 from django.test import TestCase
 
+from PayDevs.constants import DATE_TIME_FORMAT
 from account.entities import User
 from account.models import UserORM
 from account.repositories import UserRepo
@@ -10,7 +11,8 @@ from project.interactors import GetProjectInteractor, CreateProjectInteractor, U
 from project.models import ProjectORM
 from project.repositories import ProjectRepo
 from project.validators import UserPermissionValidator, ProjectDateTimeValidator
-from PayDevs.exceptions import NoLoggedException, NoPermissionException, InvalidEntityException
+from PayDevs.exceptions import NoLoggedException, NoPermissionException, InvalidEntityException, \
+    EntityDoesNotExistException
 
 
 class GetProjectInteractorTest(TestCase):
@@ -181,3 +183,45 @@ class UpdateProjectInteractorTest(TestCase):
                                                                  self.project_date_validator)
 
 
+    def test_set_param_execute(self):
+        project = self.project_update_interactor.set_params(
+            logged_id=self.user_orm.id,
+            project_id=self.project_orm.id,
+            title="Update test",
+            description="Test update project interactor",
+            end_date="2018-12-20T12:30:00.000000Z+0600"
+        ).execute()
+        project_orm = ProjectORM.objects.get(id=self.project_orm.id)
+        self.assertEquals(project.id, project_orm.id)
+        self.assertEquals(project.type_of_payment, project_orm.type_of_payment)
+        self.assertEquals(project.title, project_orm.title)
+        self.assertEquals(project.description, project_orm.description)
+        self.assertEquals(project.status, project_orm.status)
+        self.assertEquals(project.end_date, project_orm.end_date)
+
+        self.assertEquals(project_orm.title, "Update test")
+        self.assertEquals(project_orm.description, "Test update project interactor")
+        self.assertEquals(project_orm.end_date, datetime.datetime.strptime("2018-12-20T12:30:00.000000Z+0600",
+                                                                           DATE_TIME_FORMAT))
+
+    def test_set_param_execute_no_logged_exeption(self):
+        with self.assertRaises(NoLoggedException):
+            self.project_update_interactor.set_params(
+                logged_id=None,
+                project_id=self.project_orm.id,
+                title="Update test",
+                description="Test update project interactor",
+                end_date="2018-12-20T12:30:00.000000Z+0600"
+            ).execute()
+
+
+
+    def test_set_param_execute_no_project_exeption(self):
+        with self.assertRaises(EntityDoesNotExistException):
+            self.project_update_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=None,
+                title="Update test",
+                description="Test update project interactor",
+                end_date="2018-12-20T12:30:00.000000Z+0600"
+            ).execute()

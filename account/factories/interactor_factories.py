@@ -2,15 +2,15 @@ from account.factories.repo_factories import UserRepoFactory
 from account.factories.token_factories import AuthTokenFactory
 from account.factories.validate_factories import HashPasswordFactor, \
     UsernameEmailValidatorFactory
-from account.interactors import GetUsersInteractor, LoginUserInteractor, RegisterUserInteractor, \
+from account.interactors import GetUserInteractor, LoginUserInteractor, RegisterUserInteractor, \
     AuthUserInteractor
 
 
-class GetUsersInteractorFactory(object):
+class GetUserInteractorFactory(object):
     @staticmethod
     def create():
         user_repo_factory = UserRepoFactory().create()
-        return GetUsersInteractor(user_repo_factory)
+        return GetUserInteractor(user_repo_factory)
 
 
 

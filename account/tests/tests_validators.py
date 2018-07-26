@@ -268,7 +268,7 @@ class UsernameRegexMethodValidator(TestCase):
 
 class UserSerializerTest(TestCase):
     def test_user_serializer(self):
-        user = User(id=1, username='TestName', email='tests@gmail.com', password='123456789', is_active=True,
+        user = User(id=1, username='TestName', email='tests@gmail.com', is_active=True,
                     is_staff=False)
         serilalizer = {
             'id': 1,
@@ -287,7 +287,7 @@ class UserListSerializeTest(TestCase):
         users = []
         for i in range(3):
             user = User(id=i, username='TestName%d' % i,
-                        email='test%d@gmail.com' % i, password='123456789', is_active=True,
+                        email='test%d@gmail.com' % i, is_active=True,
                         is_staff=False)
             users.append(user)
 

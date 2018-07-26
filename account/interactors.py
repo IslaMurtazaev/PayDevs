@@ -37,12 +37,10 @@ class RegisterUserInteractor(Interactor):
     def execute(self, *args, **kwargs):
         valid_user = User(username=self.username, email=self.email)
         self._validate(valid_user)
-        user = User(username=self.username, email=self.email, password=self.password,
+        user = User(username=self.username, email=self.email,
                     is_active=True)
-        new_user = self.user_repo.create_user(user=user)
-        # user_update = User(id=new_user.id, username=self.username, email=self.email, password=self.password,
-        #                    is_active=True)
-        return self.user_repo.update_user(new_user)
+
+        return self.user_repo.create_user(user=user, password=self.password)
 
     def _validate(self, valid_user):
         self.validate_username_email.validate_username(username=self.username, user=valid_user)
@@ -50,7 +48,7 @@ class RegisterUserInteractor(Interactor):
         self.hashed_password.hashed(password=self.password, user=valid_user)
 
 
-class GetUsersInteractor(Interactor):
+class GetUserInteractor(Interactor):
     def __init__(self, user_repo):
         self.user_repo = user_repo
 
