@@ -4,8 +4,9 @@ from django.test import TestCase, Client
 from django.urls import reverse
 import json
 
+from PayDevs.constants import DATE_TIME_FORMAT
 from account.models import UserORM
-from project.models import HourPaymentORM, ProjectORM
+from project.models import HourPaymentORM, ProjectORM, WorkTimeORM
 
 
 class ClientProjectTest(TestCase):
@@ -173,8 +174,6 @@ class HourPaymentClientTest(TestCase):
         self.assertEqual(body.get('project_id'), self.project_db.id)
         self.assertEqual(body.get('rate'), 300)
 
-
-
     def test_delete_hour_payment(self):
         header = {'HTTP_AUTHORIZATION': self.token}
         response = self.client.delete(reverse('delete_hour_payment', kwargs={'project_id': self.project_db.id,
@@ -187,13 +186,88 @@ class HourPaymentClientTest(TestCase):
         with self.assertRaises(HourPaymentORM.DoesNotExist):
             HourPaymentORM.objects.get(id=self.hour_payment_db.id)
 
-
-
     def test_get_all_hour_payment(self):
         header = {'HTTP_AUTHORIZATION': self.token}
-        response = self.client.get(reverse('get_all_hour_payment', kwargs={'project_id': self.project_db.id,                                                                       }
+        response = self.client.get(reverse('get_all_hour_payment', kwargs={'project_id': self.project_db.id, }
                                            ), content_type="application/json", **header)
         body = json.loads(response.content.decode())
-        print(body)
         self.assertEqual(type(body), list)
         self.assertEqual(len(body), 1)
+
+
+class WorkTimeClientTest(TestCase):
+    def setUp(self):
+        self.user_db = UserORM.objects.create_user(
+            username="TestUser",
+            email='test_user@gmail.com',
+            password='qwert12345'
+        )
+        self.project_db = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='T_P',
+            start_date=datetime.datetime.now(),
+            user=self.user_db
+
+        )
+        self.hour_payment_db = HourPaymentORM.objects.create(
+            project_id=self.project_db.id,
+            rate=500
+        )
+        self.work_time_db = WorkTimeORM.objects.create(
+            hour_payment_id=self.hour_payment_db.id,
+            start_work=datetime.datetime.strptime("2018-07-20T10:00:00.000000Z+0600", DATE_TIME_FORMAT),
+            end_work=datetime.datetime.strptime("2018-07-20T18:30:00.000000Z+0600", DATE_TIME_FORMAT),
+            paid=False,
+        )
+        data = json.dumps({'username': 'TestUser',
+                           'password': 'qwert12345'})
+        response = self.client.post(reverse('login_user'), data, content_type="application/json")
+        body = json.loads(response.content.decode())
+        self.token = body.get('token')
+
+    def test_create_work_time(self):
+        data = json.dumps({
+            "start_work": "2018-12-20T10:00:00.000000Z+0600",
+            "end_work": "2018-12-20T18:30:00.000000Z+0600",
+            "paid": False,
+        })
+        header = {'HTTP_AUTHORIZATION': self.token}
+        response = self.client.post(reverse('create_work_time', kwargs={'project_id': self.project_db.id,
+                                                                        'hour_payment_id': self.hour_payment_db.id
+                                                                        }
+                                            ), data, content_type="application/json", **header)
+        body = json.loads(response.content.decode())
+        self.assertEqual(body.get('hour_payment_id'), self.hour_payment_db.id)
+        self.assertEqual(body.get('paid'), False)
+        self.assertEqual(body.get('start_work'), "2018-12-20T10:00:00.000000Z+0600")
+        self.assertEqual(body.get('end_work'), "2018-12-20T18:30:00.000000Z+0600")
+
+    def test_get_work_time(self):
+        header = {'HTTP_AUTHORIZATION': self.token}
+        response = self.client.get(reverse('get_work_time', kwargs={'project_id': self.project_db.id,
+                                                                    'hour_payment_id': self.hour_payment_db.id,
+                                                                    'work_time_id': self.work_time_db.id
+                                                                    }
+                                           ), content_type="application/json", **header)
+        body = json.loads(response.content.decode())
+        self.assertEqual(body.get('hour_payment_id'), self.hour_payment_db.id)
+        self.assertEqual(body.get('paid'), False)
+        self.assertEqual(body.get('start_work'), "2018-07-20T04:00:00.000000Z+0000")
+        self.assertEqual(body.get('end_work'), "2018-07-20T12:30:00.000000Z+0000")
+
+    def test_update_create_work_time(self):
+        data = json.dumps({
+            "paid": True,
+        })
+        header = {'HTTP_AUTHORIZATION': self.token}
+        response = self.client.put(reverse('update_work_time', kwargs={'project_id': self.project_db.id,
+                                                                       'hour_payment_id': self.hour_payment_db.id,
+                                                                       'work_time_id': self.work_time_db.id
+                                                                       }
+                                           ), data, content_type="application/json", **header)
+
+        body = json.loads(response.content.decode())
+        print(body)
+        self.assertEqual(body.get('hour_payment_id'), self.hour_payment_db.id)
+        self.assertEqual(body.get('paid'), True)

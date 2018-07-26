@@ -471,8 +471,10 @@ class UpdateWorkTimeInteractor(Interactor):
         start_work = self.start_work if self.start_work is not None else work_time.start_work
         end_work = self.end_work if self.end_work is not None else work_time.end_work
         paid = self.paid if self.paid is not None else work_time.paid
-        start_work = self.project_date_validator.validate_datetime_format(start_work)
-        end_work = self.project_date_validator.validate_datetime_format(end_work)
+        if self.start_work is not None:
+            start_work = self.project_date_validator.validate_datetime_format(start_work)
+        if self.end_work is not None:
+            end_work = self.project_date_validator.validate_datetime_format(end_work)
 
         work_time_update = WorkTime(
             id=work_time.id,
@@ -700,10 +702,10 @@ class UpdateWorkedDayInteractor(Interactor):
         self.date_validator.validate_date_format(self.day)
 
         modified_worked_day = WorkedDay(
-            id = worked_day.id,
-            day = self.day if self.day is not None else worked_day.day,
-            paid = self.paid if self.paid is not None else worked_day.paid,
-            month_payment_id = worked_day.month_payment_id
+            id=worked_day.id,
+            day=self.day if self.day is not None else worked_day.day,
+            paid=self.paid if self.paid is not None else worked_day.paid,
+            month_payment_id=worked_day.month_payment_id
         )
 
         return self.worked_day_repo.update(modified_worked_day)
