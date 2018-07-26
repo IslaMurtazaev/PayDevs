@@ -53,9 +53,10 @@ class CreateProjectInteractor(Interactor):
 
 
 class UpdateProjectInteractor(Interactor):
-    def __init__(self, project_repo, validate_user_project):
+    def __init__(self, project_repo, validate_user_project, project_date_validator):
         self.project_repo = project_repo
         self.validate_user_project = validate_user_project
+        self.project_date_validator = project_date_validator
 
     def set_params(self, logged_id, project_id, title=None, description=None, start_date=None,
                    end_date=None, type_of_payment=None, status=None, **kwargs):
@@ -79,6 +80,10 @@ class UpdateProjectInteractor(Interactor):
         type_of_payment = self.type_of_payment if self.type_of_payment is not None else project.type_of_payment
         status = self.status if self.status else project.status
         self.validate_user_project.validate_type_of_payment(type_of_payment)
+        if self.start_date is not None:
+            start_date = self.project_date_validator.validate_datetime_format(start_date)
+        if self.end_date:
+            end_date = self.project_date_validator.validate_datetime_format(end_date)
 
         update_project = Project(
             id=project.id,
@@ -295,7 +300,7 @@ class CreateHourPaymentInteractor(Interactor):
         self.validate_user_project = validate_user_project
         self.project_repo = project_repo
 
-    def set_params(self, project_id, rate, logged_id, *args, **kwargs):
+    def set_params(self, project_id, logged_id, rate=None, *args, **kwargs):
         self.project_id = project_id
         self.rate = rate
         self.user_id = logged_id
@@ -420,7 +425,8 @@ class CreateWorkTimeInteractor(Interactor):
         self.validate_user_project = validate_user_project
         self.project_date_validator = project_date_validator
 
-    def set_params(self, logged_id, project_id, hour_payment_id, start_work, end_work, paid=False, *args, **kwargs):
+    def set_params(self, logged_id, project_id, hour_payment_id, start_work=None, end_work=None,
+                   paid=False, *args, **kwargs):
         self.user_id = logged_id
         self.project_id = project_id
         self.hour_payment_id = hour_payment_id
@@ -471,8 +477,10 @@ class UpdateWorkTimeInteractor(Interactor):
         start_work = self.start_work if self.start_work is not None else work_time.start_work
         end_work = self.end_work if self.end_work is not None else work_time.end_work
         paid = self.paid if self.paid is not None else work_time.paid
-        start_work = self.project_date_validator.validate_datetime_format(start_work)
-        end_work = self.project_date_validator.validate_datetime_format(end_work)
+        if self.start_work is not None:
+            start_work = self.project_date_validator.validate_datetime_format(start_work)
+        if self.end_work is not None:
+            end_work = self.project_date_validator.validate_datetime_format(end_work)
 
         work_time_update = WorkTime(
             id=work_time.id,
@@ -715,13 +723,15 @@ class UpdateWorkedDayInteractor(Interactor):
         self.user_permission_validator.validate_permission(month_payment.project_id, self.project_id)
         worked_day = self.worked_day_repo.get(self.worked_day_id)
         self.user_permission_validator.validate_permission(worked_day.month_payment_id, self.month_payment_id)
-        self.date_validator.validate_date_format(self.day)
+
+        if self.day is not None:
+            self.day = self.date_validator.validate_date_format(self.day)
 
         modified_worked_day = WorkedDay(
-            id = worked_day.id,
-            day = self.day if self.day is not None else worked_day.day,
-            paid = self.paid if self.paid is not None else worked_day.paid,
-            month_payment_id = worked_day.month_payment_id
+            id=worked_day.id,
+            day=self.day if self.day is not None else worked_day.day,
+            paid=self.paid if self.paid is not None else worked_day.paid,
+            month_payment_id=worked_day.month_payment_id
         )
 
         return self.worked_day_repo.update(modified_worked_day)

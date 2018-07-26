@@ -37,12 +37,12 @@ class MonthPaymentListSerializer(DateFormatListSerializer):
 
 class WorkedDaySerializer(DateFormatSerializer):
     model = WorkedDay
-    fields = ['id', 'day', 'paid']
+    fields = ['id', 'day', 'paid', 'month_payment_id']
 
 
 class WorkedDayListSerializer(DateFormatListSerializer):
     model = WorkedDay
-    fields = ['id', 'day', 'paid']
+    fields = ['id', 'day', 'paid', 'month_payment_id']
 
 
 

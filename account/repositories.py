@@ -35,12 +35,12 @@ class UserRepo:
 
         return self._decode_db_user(db_user)
 
-    def create_user(self, user):
+    def create_user(self, user, password=None):
         try:
             db_user = UserORM.objects.create_user(
                 username=user.username,
                 email=user.email,
-                password=user.password,
+                password=password,
                 is_staff=user.is_staff
             )
 
@@ -69,7 +69,6 @@ class UserRepo:
             'email': db_user.email,
             'is_active': db_user.is_active,
             'is_staff': db_user.is_staff,
-            'password': db_user.password
         }
 
         return User(**fileds)

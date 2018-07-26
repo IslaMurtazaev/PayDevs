@@ -5,7 +5,7 @@ from PayDevs.exceptions import EntityDoesNotExistException, InvalidEntityExcepti
 from account.entities import User
 from account.factories.token_factories import AuthTokenFactory
 from account.factories.validate_factories import HashPasswordFactor
-from account.interactors import LoginUserInteractor, RegisterUserInteractor, GetUsersInteractor, AuthUserInteractor
+from account.interactors import LoginUserInteractor, RegisterUserInteractor, GetUserInteractor, AuthUserInteractor
 from account.models import UserORM
 from account.repositories import UserRepo
 from account.validators import UsernameEmailValidator
@@ -99,7 +99,7 @@ class GetUsersInteractorTest(TestCase):
         )
 
     def test_set_params_execute(self):
-        user = GetUsersInteractor(UserRepo()).set_params(id=self.user.id).execute()
+        user = GetUserInteractor(UserRepo()).set_params(id=self.user.id).execute()
         self.assertEqual(user.id, self.user.id)
         self.assertEqual(user.username, self.user.username)
         self.assertEqual(user.email, self.user.email)
@@ -107,7 +107,7 @@ class GetUsersInteractorTest(TestCase):
 
     def test_set_params_execute_excaption(self):
         with self.assertRaises(EntityDoesNotExistException):
-            GetUsersInteractor(UserRepo()).set_params(id=255654).execute()
+            GetUserInteractor(UserRepo()).set_params(id=255654).execute()
 
 
 
