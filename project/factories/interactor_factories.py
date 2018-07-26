@@ -25,7 +25,8 @@ class UpdateProjectInteractorFactory(object):
     def create():
         project_repo = ProjectRepoFactory.create()
         validate_user_project = UserPermissionsValidatorFactory.create()
-        return UpdateProjectInteractor(project_repo, validate_user_project)
+        project_date_time_validator = ProjectDateTimeValidatorFactory.create()
+        return UpdateProjectInteractor(project_repo, validate_user_project, project_date_time_validator)
 
 
 class DeleteProjectInteractorFactory(object):

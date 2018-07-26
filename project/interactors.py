@@ -53,9 +53,10 @@ class CreateProjectInteractor(Interactor):
 
 
 class UpdateProjectInteractor(Interactor):
-    def __init__(self, project_repo, validate_user_project):
+    def __init__(self, project_repo, validate_user_project, project_date_validator):
         self.project_repo = project_repo
         self.validate_user_project = validate_user_project
+        self.project_date_validator = project_date_validator
 
     def set_params(self, logged_id, project_id, title=None, description=None, start_date=None,
                    end_date=None, type_of_payment=None, status=None, **kwargs):
@@ -79,6 +80,10 @@ class UpdateProjectInteractor(Interactor):
         type_of_payment = self.type_of_payment if self.type_of_payment is not None else project.type_of_payment
         status = self.status if self.status else project.status
         self.validate_user_project.validate_type_of_payment(type_of_payment)
+        if self.start_date is not None:
+            start_date = self.project_date_validator.validate_datetime_format(start_date)
+        if self.end_date:
+            end_date = self.project_date_validator.validate_datetime_format(end_date)
 
         update_project = Project(
             id=project.id,

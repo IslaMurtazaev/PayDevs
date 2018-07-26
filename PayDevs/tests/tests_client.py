@@ -98,6 +98,7 @@ class ClientProjectTest(TestCase):
         data = json.dumps({
             "title": "Project web",
             "description": "logic web site Test update",
+            "end_date": "2018-11-20T12:30:00.000000Z+0600"
 
         })
         header = {'HTTP_AUTHORIZATION': self.token}
