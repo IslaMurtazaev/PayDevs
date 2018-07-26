@@ -126,16 +126,18 @@ class UpdateMonthPaymentInteractorFactory(object):
     @staticmethod
     def create():
         month_payment_repo = MonthPaymentRepoFactory.create()
+        project_repo = ProjectRepoFactory.create()
         user_permission_validator = UserPermissionsValidatorFactory.create()
-        return UpdateMonthPaymentInteractor(month_payment_repo, user_permission_validator)
+        return UpdateMonthPaymentInteractor(month_payment_repo, project_repo, user_permission_validator)
 
 
 class DeleteMonthPaymentInteractorFactory(object):
     @staticmethod
     def create():
         month_payment_repo = MonthPaymentRepoFactory.create()
+        project_repo = ProjectRepoFactory.create()
         user_permission_validator = UserPermissionsValidatorFactory.create()
-        return DeleteMonthPaymentInteractor(month_payment_repo, user_permission_validator)
+        return DeleteMonthPaymentInteractor(month_payment_repo, project_repo, user_permission_validator)
 
 
 class GetAllMonthPaymentsInteractorFactory(object):
@@ -152,9 +154,10 @@ class CreateWorkedDayInteractorFactory(object):
     def create():
         worked_day_repo = WorkedDayRepoFactory.create()
         month_payment_repo = MonthPaymentRepoFactory.create()
+        project_repo = ProjectRepoFactory.create()
         user_permission_validator = UserPermissionsValidatorFactory.create()
         date_validator = ProjectDateTimeValidatorFactory.create()
-        return CreateWorkedDayInteractor(worked_day_repo, month_payment_repo, user_permission_validator,
+        return CreateWorkedDayInteractor(worked_day_repo, month_payment_repo, project_repo, user_permission_validator,
                                          date_validator)
 
 
@@ -170,17 +173,22 @@ class UpdateWorkedDayInteractorFactory(object):
     @staticmethod
     def create():
         worked_day_repo = WorkedDayRepoFactory.create()
+        month_payment_repo = MonthPaymentRepoFactory.create()
+        project_repo = ProjectRepoFactory.create()
         user_permission_validator = UserPermissionsValidatorFactory.create()
         date_validator = ProjectDateTimeValidatorFactory.create()
-        return UpdateWorkedDayInteractor(worked_day_repo, user_permission_validator, date_validator)
+        return UpdateWorkedDayInteractor(worked_day_repo, month_payment_repo, project_repo, user_permission_validator,
+                                         date_validator)
 
 
 class DeleteWorkedDayInteractorFactory(object):
     @staticmethod
     def create():
         worked_day_repo = WorkedDayRepoFactory.create()
+        month_payment_repo = MonthPaymentRepoFactory.create()
+        project_repo = ProjectRepoFactory.create()
         user_permission_validator = UserPermissionsValidatorFactory.create()
-        return DeleteWorkedDayInteractor(worked_day_repo, user_permission_validator)
+        return DeleteWorkedDayInteractor(worked_day_repo, month_payment_repo, project_repo, user_permission_validator)
 
 
 class GetAllWorkedDaysInteractorFactory(object):
