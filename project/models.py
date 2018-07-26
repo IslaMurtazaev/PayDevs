@@ -44,15 +44,6 @@ class WorkTimeORM(models.Model):
     paid = models.BooleanField(default=False)
 
 
-    # def total(self):
-    #     work_times = self.worktime_set.filter(start_work__gte=self.start_rout_date, start_work__lte=self.end_rout_date)
-    #     val = 0
-    #     for work_time in work_times:
-    #         if work_time.is_completed():
-    #             val += (work_time.end_work - work_time.start_work).seconds/3600
-    #     return val * self.rate
-
-
 
 
 class WorkTaskORM(models.Model):
