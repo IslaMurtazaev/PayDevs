@@ -7,13 +7,14 @@ from PayDevs.constants import DATE_TIME_FORMAT
 from account.entities import User
 from account.models import UserORM
 from account.repositories import UserRepo
-from project.entities import Project, HourPayment, WorkTime
+from project.entities import Project, HourPayment, WorkTime, WorkTask
 from project.interactors import GetProjectInteractor, CreateProjectInteractor, UpdateProjectInteractor, \
     DeleteProjectInteractor, GetAllProjectsInteractor, GetHourPaymentInteractor, CreateHourPaymentInteractor, \
     UpdateHourPaymentInteractor, DeleteHourPaymentInteractor, GetAllHourPaymentInteractor, GetWorkTimeInteractor, \
-    CreateWorkTimeInteractor, UpdateWorkTimeInteractor, DeleteWorkTimeInteractor, GetAllWorkTimeInteractor
-from project.models import ProjectORM, HourPaymentORM, WorkTimeORM
-from project.repositories import ProjectRepo, HourPaymentRepo, WorkTimeRepo
+    CreateWorkTimeInteractor, UpdateWorkTimeInteractor, DeleteWorkTimeInteractor, GetAllWorkTimeInteractor, \
+    GetTaskInteractor, CreateTaskInteractor, UpdateTaskInteractor, DeleteTaskInteractor, GetAllTasksInteractor
+from project.models import ProjectORM, HourPaymentORM, WorkTimeORM, WorkTaskORM
+from project.repositories import ProjectRepo, HourPaymentRepo, WorkTimeRepo, WorkTaskRepo
 from project.validators import UserPermissionValidator, ProjectDateTimeValidator
 from PayDevs.exceptions import NoLoggedException, NoPermissionException, InvalidEntityException, \
     EntityDoesNotExistException
@@ -1320,6 +1321,502 @@ class GetAllWorkTimeInteractorTest(TestCase):
                 hour_payment_id=self.hour_payment_orm.id
             ).execute()
 
+
+
+
+class GetTaskInteractorTest(TestCase):
+
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.user_orm_2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.project_orm = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.work_task_orm = WorkTaskORM.objects.create(
+            project_id=self.project_orm.id,
+            title="Task Project Test",
+            description="Test Test test",
+            price=300,
+            completed=False,
+            paid=False
+
+        )
+        work_task_repo = WorkTaskRepo()
+        user_project_validate = UserPermissionValidator(UserRepo())
+        self.get_task_interactor = GetTaskInteractor(work_task_repo, user_project_validate)
+
+    def test_set_params_execute(self):
+        work_task = self.get_task_interactor.set_params(
+            logged_id=self.user_orm.id,
+            project_id=self.project_orm.id,
+            task_id=self.work_task_orm.id
+        ).execute()
+        self.assertEqual(work_task.id, self.work_task_orm.id)
+        self.assertEqual(work_task.title, self.work_task_orm.title)
+        self.assertEqual(work_task.description, self.work_task_orm.description)
+        self.assertEqual(work_task.paid, self.work_task_orm.paid),
+        self.assertEqual(work_task.completed, self.work_task_orm.completed)
+
+    def test_set_params_execute_no_logged(self):
+        with self.assertRaises(NoLoggedException):
+            self.get_task_interactor.set_params(
+                logged_id=None,
+                project_id=self.project_orm.id,
+                task_id=self.work_task_orm.id
+            ).execute()
+
+
+    def test_set_params_execute_entity_not_found(self):
+        with self.assertRaises(NoLoggedException):
+            self.get_task_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=None,
+                task_id=self.work_task_orm.id
+            ).execute()
+
+
+
+class CreateTaskInteractorTest(TestCase):
+
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.user_orm_2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.project_orm = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='T_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.project_orm_2 = ProjectORM.objects.create(
+            title='Test Project 2',
+            description='My Test project 2',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm_2.id
+        )
+
+        self.work_task_orm = WorkTaskORM.objects.create(
+            project_id=self.project_orm.id,
+            title="Task Project Test",
+            description="Test Test test",
+            price=300,
+            completed=False,
+            paid=False
+        )
+        work_task_repo = WorkTaskRepo()
+        user_project_validate = UserPermissionValidator(UserRepo())
+        project_repo = ProjectRepo()
+        self.create_task_interactor = CreateTaskInteractor(work_task_repo, project_repo, user_project_validate)
+
+
+
+    def test_set_params_execute(self):
+        created_task = self.create_task_interactor.set_params(
+            logged_id=self.user_orm.id,
+            project_id=self.project_orm.id,
+            title="Test TaskInteractor",
+            description="Test set_params execute",
+            price=500,
+            completed=False,
+            paid=False
+        ).execute()
+
+        task_orm = WorkTaskORM.objects.get(id=created_task.id)
+        self.assertEqual(created_task.project_id, self.project_orm.id)
+        self.assertEqual(created_task.title, "Test TaskInteractor")
+        self.assertEqual(created_task.description, "Test set_params execute")
+        self.assertEqual(created_task.price, 500)
+        self.assertEqual(created_task.completed, False)
+        self.assertEqual(created_task.paid, False)
+
+        self.assertEqual(created_task.project_id, task_orm.project.id)
+        self.assertEqual(created_task.title, task_orm.title)
+        self.assertEqual(created_task.description, task_orm.description)
+        self.assertEqual(created_task.price, task_orm.price)
+        self.assertEqual(created_task.completed, task_orm.completed)
+        self.assertEqual(created_task.paid, task_orm.paid)
+
+    def test_set_params_execute_no_logged(self):
+        with self.assertRaises(NoLoggedException):
+            self.create_task_interactor.set_params(
+                logged_id=None,
+                project_id=self.project_orm.id,
+                title="Test TaskInteractor",
+                description="Test set_params execute",
+                price=500,
+                completed=False,
+                paid=False
+            ).execute()
+
+    def test_set_params_execute_no_pemission(self):
+        with self.assertRaises(NoPermissionException):
+            self.create_task_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=self.project_orm_2.id,
+                title="Test TaskInteractor",
+                description="Test set_params execute",
+                price=500,
+                completed=False,
+                paid=False
+            ).execute()
+
+
+    def test_set_params_execute_type_of_payment_validate(self):
+        project_orm = ProjectORM.objects.create(
+            title='Test Project 2',
+            description='My Test project 2',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        with self.assertRaises(InvalidEntityException):
+            self.create_task_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=project_orm.id,
+                title="Test TaskInteractor",
+                description="Test set_params execute",
+                price=500,
+                completed=False,
+                paid=False
+            ).execute()
+
+        try:
+            self.create_task_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=project_orm.id,
+                title="Test TaskInteractor",
+                description="Test set_params execute",
+                price=500,
+                completed=False,
+                paid=False
+            ).execute()
+
+        except InvalidEntityException as e:
+            self.assertRegex(str(e), "The type of payment for the project must be T_P")
+
+
+
+class UpdateTaskInteractorTest(TestCase):
+
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.user_orm_2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.project_orm = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='T_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.project_orm_2 = ProjectORM.objects.create(
+            title='Test Project 2',
+            description='My Test project 2',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm_2.id
+        )
+
+        self.work_task_orm = WorkTaskORM.objects.create(
+            project_id=self.project_orm.id,
+            title="Task Project Test",
+            description="Test Test test",
+            price=300,
+            completed=False,
+            paid=False
+        )
+        work_task_repo = WorkTaskRepo()
+        user_project_validate = UserPermissionValidator(UserRepo())
+        project_repo = ProjectRepo()
+        self.update_task_interactor = UpdateTaskInteractor(work_task_repo, project_repo, user_project_validate)
+
+
+
+    def test_set_params_execute(self):
+        updated_task = self.update_task_interactor.set_params(
+            logged_id=self.user_orm.id,
+            project_id=self.project_orm.id,
+            task_id=self.work_task_orm.id,
+            title="Task Project Test Update",
+            price=3000,
+            completed=True,
+            paid=True
+        ).execute()
+        self.assertEqual(type(updated_task), WorkTask)
+        self.assertEqual(self.work_task_orm.id, updated_task.id)
+        task_orm = WorkTaskORM.objects.get(id=updated_task.id)
+        self.assertEqual(updated_task.project_id, self.project_orm.id)
+        self.assertEqual(updated_task.title, "Task Project Test Update")
+        self.assertEqual(updated_task.description, "Test Test test")
+        self.assertEqual(updated_task.price, 3000)
+        self.assertEqual(updated_task.paid, True)
+        self.assertEqual(updated_task.completed, True)
+
+        self.assertEqual(updated_task.title, task_orm.title)
+        self.assertEqual(updated_task.description, task_orm.description)
+        self.assertEqual(updated_task.price, task_orm.price)
+        self.assertEqual(updated_task.paid, task_orm.paid)
+        self.assertEqual(updated_task.completed, task_orm.completed)
+
+
+
+    def test_set_params_execute_no_logged(self):
+        with self.assertRaises(NoLoggedException):
+            self.update_task_interactor.set_params(
+                logged_id=None,
+                project_id=self.project_orm.id,
+                task_id=self.work_task_orm.id,
+                title="Task Project Test Update",
+                price=3000,
+                completed=True,
+                paid=True
+            ).execute()
+
+
+    def test_set_params_execute_no_permission(self):
+        with self.assertRaises(NoPermissionException):
+            self.update_task_interactor.set_params(
+                logged_id=self.user_orm_2.id,
+                project_id=self.project_orm.id,
+                task_id=self.work_task_orm.id,
+                title="Task Project Test Update",
+                price=3000,
+                completed=True,
+                paid=True
+            ).execute()
+
+
+    def test_set_params_execute_no_permission_project_id(self):
+        project_orm = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='T_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        with self.assertRaises(NoPermissionException):
+            self.update_task_interactor.set_params(
+                logged_id=self.user_orm_2.id,
+                project_id=project_orm.id,
+                task_id=self.work_task_orm.id,
+                title="Task Project Test Update",
+                price=3000,
+                completed=True,
+                paid=True
+            ).execute()
+
+
+
+
+class DeleteTaskInteractorTest(TestCase):
+
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.user_orm_2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.project_orm = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='T_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.project_orm_2 = ProjectORM.objects.create(
+            title='Test Project 2',
+            description='My Test project 2',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm_2.id
+        )
+
+        self.work_task_orm = WorkTaskORM.objects.create(
+            project_id=self.project_orm.id,
+            title="Task Project Test",
+            description="Test Test test",
+            price=300,
+            completed=False,
+            paid=False
+        )
+        work_task_repo = WorkTaskRepo()
+        user_project_validate = UserPermissionValidator(UserRepo())
+        project_repo = ProjectRepo()
+        self.delete_task_interactor = DeleteTaskInteractor(work_task_repo, project_repo, user_project_validate)
+
+
+    def test_set_params_execute(self):
+        deleted_task = self.delete_task_interactor.set_params(
+            logged_id=self.user_orm.id,
+            project_id=self.project_orm.id,
+            task_id=self.work_task_orm.id
+        ).execute()
+
+        self.assertEqual(type(deleted_task), WorkTask)
+        self.assertEqual(deleted_task.id, self.work_task_orm.id)
+        with self.assertRaises(WorkTaskORM.DoesNotExist):
+            WorkTaskORM.objects.get(id=self.work_task_orm.id)
+
+    def test_set_params_execute_no_logged(self):
+        with self.assertRaises(NoLoggedException):
+            self.delete_task_interactor.set_params(
+                logged_id=None,
+                project_id=self.project_orm.id,
+                task_id=self.work_task_orm.id
+            ).execute()
+
+
+    def test_set_params_execute_no_permission_user(self):
+        with self.assertRaises(NoPermissionException):
+            self.delete_task_interactor.set_params(
+                logged_id=self.user_orm_2.id,
+                project_id=self.project_orm.id,
+                task_id=self.work_task_orm.id
+            ).execute()
+
+
+    def test_set_params_execute_no_permission_project_id(self):
+        with self.assertRaises(NoPermissionException):
+            self.delete_task_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=self.project_orm_2.id,
+                task_id=self.work_task_orm.id
+            ).execute()
+
+
+
+
+class GetAllTaskInteractorTest(TestCase):
+
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.user_orm_2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.project_orm = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='T_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.project_orm_2 = ProjectORM.objects.create(
+            title='Test Project 2',
+            description='My Test project 2',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm_2.id
+        )
+        for i in range(10):
+            WorkTaskORM.objects.create(
+                project_id=self.project_orm.id,
+                title="Task Project Test",
+                description="Test Test test",
+                price=300,
+                completed=False,
+                paid=False
+            )
+        work_task_repo = WorkTaskRepo()
+        user_project_validate = UserPermissionValidator(UserRepo())
+        project_repo = ProjectRepo()
+        self.get_all_task_interactor = GetAllTasksInteractor(work_task_repo, project_repo, user_project_validate)
+
+
+    def test_set_params_execute(self):
+        tasks = self.get_all_task_interactor.set_params(
+            logged_id=self.user_orm.id,
+            project_id=self.project_orm.id
+        ).execute()
+
+        self.assertEqual(type(tasks), list)
+        self.assertEqual(len(tasks), 10)
+        self.assertEqual(type(tasks.pop()), WorkTask)
+        self.assertEqual(type(tasks.pop()), WorkTask)
+
+
+    def test_set_params_execute_no_logged(self):
+        with self.assertRaises(NoLoggedException):
+            self.get_all_task_interactor.set_params(
+                logged_id=None,
+                project_id=self.project_orm.id
+            ).execute()
 
 
 

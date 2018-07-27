@@ -141,6 +141,14 @@ class ProjectGetTotalInteractor(Interactor):
         return project.total
 
 
+class GetTotalProject(Interactor):
+    def set_params(self, *args, **kwargs):
+        pass
+
+    def execute(self, *args, **kwargs):
+        pass
+
+
 # --------------------------- Work Task ----------------------------------------#
 
 class GetTaskInteractor(Interactor):
@@ -201,14 +209,14 @@ class UpdateTaskInteractor(Interactor):
         self.project_repo = project_repo
 
     def set_params(self, logged_id, project_id, task_id, title=None, description=None,
-                   price=None, compledted=None, paid=None, **kwargs):
+                   price=None, completed=None, paid=None, **kwargs):
         self.user_id = logged_id
         self.project_id = project_id
         self.task_id = task_id
         self.title = title
         self.description = description
         self.price = price
-        self.completed = compledted
+        self.completed = completed
         self.paid = paid
         return self
 
