@@ -1,17 +1,21 @@
 import datetime
 
 from django.test import TestCase
+from pytz import UTC
 
 from PayDevs.constants import DATE_TIME_FORMAT
 from account.models import UserORM
 from account.repositories import UserRepo
-from project.entities import Project
+from project.entities import Project, HourPayment, WorkTime
 from project.interactors import GetProjectInteractor, CreateProjectInteractor, UpdateProjectInteractor, \
-    DeleteProjectInteractor, GetAllProjectsInteractor, CreateMonthPaymentInteractor, GetMonthPaymentInteractor, \
-    UpdateMonthPaymentInteractor, DeleteMonthPaymentInteractor, GetAllMonthPaymentsInteractor, GetWorkedDayInteractor, \
-    CreateWorkedDayInteractor, UpdateWorkedDayInteractor, DeleteWorkedDayInteractor, GetAllWorkedDaysInteractor
-from project.models import ProjectORM, MonthPaymentORM, WorkedDayORM
-from project.repositories import ProjectRepo, MonthPaymentRepo, WorkedDayRepo
+    DeleteProjectInteractor, GetAllProjectsInteractor, GetHourPaymentInteractor, CreateHourPaymentInteractor, \
+    UpdateHourPaymentInteractor, DeleteHourPaymentInteractor, GetAllHourPaymentInteractor, GetWorkTimeInteractor, \
+    CreateWorkTimeInteractor, UpdateWorkTimeInteractor, DeleteWorkTimeInteractor, GetAllWorkTimeInteractor, \
+    CreateMonthPaymentInteractor, GetMonthPaymentInteractor, UpdateMonthPaymentInteractor, DeleteMonthPaymentInteractor,\
+    GetAllMonthPaymentsInteractor, GetWorkedDayInteractor, CreateWorkedDayInteractor, UpdateWorkedDayInteractor, \
+    DeleteWorkedDayInteractor, GetAllWorkedDaysInteractor
+from project.models import ProjectORM, HourPaymentORM, WorkTimeORM, MonthPaymentORM, WorkedDayORM
+from project.repositories import ProjectRepo, HourPaymentRepo, WorkTimeRepo, MonthPaymentRepo, WorkedDayRepo
 from project.validators import UserPermissionValidator, ProjectDateTimeValidator, RateValidator
 from PayDevs.exceptions import NoLoggedException, NoPermissionException, InvalidEntityException, \
     EntityDoesNotExistException
@@ -317,33 +321,18 @@ class GetAllProjectsInteractorTest(TestCase):
                 end_date=datetime.datetime.now(),
                 user_id=self.user_orm.id
             )
-
-        # self.project_orm = ProjectORM.objects.create(
-        #     title='Test Project',
-        #     description='My Test project',
-        #     type_of_payment='M_P',
-        #     start_date=datetime.datetime.now() - datetime.timedelta(days=30),
-        #     end_date=datetime.datetime.now(),
-        #     user_id=self.user_orm.id
-        # )
-
         self.project_repo = ProjectRepo()
         self.user_permission_validator = UserPermissionValidator(UserRepo())
         self.project_update_interactor = GetAllProjectsInteractor(self.project_repo,
                                                                   self.user_permission_validator)
 
-
-
-
     def test_set_params_execute(self):
-
         projects = self.project_update_interactor.set_params(
             logged_id=self.user_orm.id,
         ).execute()
         self.assertEqual(type(projects), list)
         self.assertEqual(len(projects), 10)
         self.assertEquals(type(projects.pop()), Project)
-
 
     def test_set_params_execute_no_logged_exception(self):
         with self.assertRaises(NoLoggedException):
@@ -698,4 +687,987 @@ class GetAllMonthPaymentsInteractorTest(TestCase):
             self.month_payment_interactor.set_params(
                 project_id=self.project_orm.id,
                 logged_id=None
+            ).execute()
+
+
+
+class GetHourPaymentInteractorTest(TestCase):
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.user_orm_2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.project_orm = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.hour_payment_orm = HourPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=500
+        )
+
+        hour_payment_repo = HourPaymentRepo()
+        user_project_validate = UserPermissionValidator(UserRepo())
+        self.get_hour_payment_interactor = GetHourPaymentInteractor(hour_payment_repo, user_project_validate)
+
+    def test_set_params_execute(self):
+        hour_payment = self.get_hour_payment_interactor.set_params(
+            logged_id=self.user_orm.id,
+            project_id=self.project_orm.id,
+            hour_payment_id=self.hour_payment_orm.id
+
+        ).execute()
+
+        self.assertEqual(hour_payment.id, self.hour_payment_orm.id),
+        self.assertEqual(hour_payment.rate, self.hour_payment_orm.rate)
+        self.assertEqual(hour_payment.rate, 500)
+
+    def test_execute_entity_not_found_exception(self):
+        with self.assertRaises(EntityDoesNotExistException):
+            self.get_hour_payment_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=self.project_orm.id,
+                hour_payment_id=None
+
+            ).execute()
+
+    def test_execute_entity_no_permission(self):
+        with self.assertRaises(NoPermissionException):
+            self.get_hour_payment_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=self.project_orm.id + 1,
+                hour_payment_id=self.hour_payment_orm.id
+
+            ).execute()
+
+    def test_execute_entity_no_logged_exception(self):
+        with self.assertRaises(NoLoggedException):
+            self.get_hour_payment_interactor.set_params(
+                logged_id=None,
+                project_id=self.project_orm.id,
+                hour_payment_id=self.hour_payment_orm.id
+
+            ).execute()
+
+
+class CreateHourPaymentInteractorTest(TestCase):
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.user_orm_2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.project_orm = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='H_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.project_orm2 = ProjectORM.objects.create(
+            title='Test Project Month Payment',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.hour_payment_orm = HourPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=500
+        )
+
+        hour_payment_repo = HourPaymentRepo()
+        user_project_validate = UserPermissionValidator(UserRepo())
+        project_repo = ProjectRepo()
+        self.create_hour_payment_interactor = CreateHourPaymentInteractor(hour_payment_repo,
+                                                                          project_repo,
+                                                                          user_project_validate
+
+                                                                          )
+
+    def test_set_params_execute(self):
+        create_hour_paymnet = self.create_hour_payment_interactor.set_params(
+            logged_id=self.user_orm.id,
+            project_id=self.project_orm.id,
+            rate=700
+
+        ).execute()
+        hour_payment_orm = HourPaymentORM.objects.get(id=create_hour_paymnet.id)
+        self.assertEquals(create_hour_paymnet.id, hour_payment_orm.id)
+        self.assertEquals(create_hour_paymnet.rate, hour_payment_orm.rate)
+        self.assertEquals(700, hour_payment_orm.rate)
+
+    def test_set_params_execute_validate_type_of_payment(self):
+        with self.assertRaises(InvalidEntityException):
+            self.create_hour_payment_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=self.project_orm2.id,
+                rate=700
+
+            ).execute()
+
+        try:
+            self.create_hour_payment_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=self.project_orm2.id,
+                rate=700
+
+            ).execute()
+        except InvalidEntityException as e:
+            self.assertRegex(str(e), 'The type of payment for the project must be H_P')
+
+    def test_set_params_execute_validate(self):
+        project_orm = ProjectORM.objects.create(
+            title='Test Project Month Payment',
+            description='My Test project',
+            type_of_payment='H_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm_2.id
+        )
+        with self.assertRaises(NoPermissionException):
+            self.create_hour_payment_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=project_orm.id,
+                rate=700
+
+            ).execute()
+
+
+class UpdateHourPaymentInteractorTest(TestCase):
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.user_orm_2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.project_orm = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='H_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.project_orm2 = ProjectORM.objects.create(
+            title='Test Project Month Payment',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.hour_payment_orm = HourPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=500
+        )
+
+        hour_payment_repo = HourPaymentRepo()
+        user_project_validate = UserPermissionValidator(UserRepo())
+        project_repo = ProjectRepo()
+        self.update_hour_payment_interactor = UpdateHourPaymentInteractor(hour_payment_repo,
+                                                                          project_repo,
+                                                                          user_project_validate
+                                                                          )
+
+    def test_set_params_execute(self):
+        updated_hour_payment = self.update_hour_payment_interactor.set_params(
+            logged_id=self.user_orm.id,
+            project_id=self.project_orm.id,
+            hour_payment_id=self.hour_payment_orm.id,
+            rate=1000
+        ).execute()
+        updated_hour_payment_orm = HourPaymentORM.objects.get(id=self.hour_payment_orm.id)
+        self.assertEqual(updated_hour_payment.id, self.hour_payment_orm.id)
+        self.assertEqual(updated_hour_payment.rate, 1000)
+        self.assertEqual(updated_hour_payment_orm.rate, 1000)
+
+    def test_set_params_execute_not_found(self):
+        with self.assertRaises(EntityDoesNotExistException):
+            self.update_hour_payment_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=self.project_orm.id,
+                hour_payment_id=None,
+                rate=1000
+            ).execute()
+
+    def test_set_params_execute_no_permission(self):
+        with self.assertRaises(NoPermissionException):
+            self.update_hour_payment_interactor.set_params(
+                logged_id=self.user_orm_2.id,
+                project_id=self.project_orm.id,
+                hour_payment_id=self.hour_payment_orm.id,
+                rate=1000
+            ).execute()
+
+    def test_set_params_execute_no_logged(self):
+        with self.assertRaises(NoLoggedException):
+            self.update_hour_payment_interactor.set_params(
+                logged_id=None,
+                project_id=self.project_orm.id,
+                hour_payment_id=self.hour_payment_orm.id,
+                rate=1000
+            ).execute()
+
+    def test_set_params_execute_no_permission_project_id(self):
+        with self.assertRaises(NoPermissionException):
+            self.update_hour_payment_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=self.project_orm2.id,
+                hour_payment_id=self.hour_payment_orm.id,
+                rate=1000
+            ).execute()
+
+
+class DeleteHourPaymentInteractorTest(TestCase):
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.user_orm_2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.project_orm = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='H_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.project_orm2 = ProjectORM.objects.create(
+            title='Test Project Month Payment',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.hour_payment_orm = HourPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=500
+        )
+
+        hour_payment_repo = HourPaymentRepo()
+        user_project_validate = UserPermissionValidator(UserRepo())
+        project_repo = ProjectRepo()
+        self.delete_hour_payment_interactor = DeleteHourPaymentInteractor(hour_payment_repo,
+                                                                          project_repo,
+                                                                          user_project_validate
+                                                                          )
+
+    def test_set_params_execute(self):
+        deleted_hour_payment = self.delete_hour_payment_interactor.set_params(
+            logged_id=self.user_orm.id,
+            project_id=self.project_orm.id,
+            hour_payment_id=self.hour_payment_orm.id
+        ).execute()
+        self.assertEqual(deleted_hour_payment.id, self.hour_payment_orm.id)
+        with self.assertRaises(HourPaymentORM.DoesNotExist):
+            HourPaymentORM.objects.get(id=self.hour_payment_orm.id)
+
+    def test_set_params_execute_no_logged(self):
+        with self.assertRaises(NoLoggedException):
+            self.delete_hour_payment_interactor.set_params(
+                logged_id=None,
+                project_id=self.project_orm.id,
+                hour_payment_id=self.hour_payment_orm.id
+            ).execute()
+
+    def test_set_params_execute_no_permission(self):
+        with self.assertRaises(NoPermissionException):
+            self.delete_hour_payment_interactor.set_params(
+                logged_id=self.user_orm_2.id,
+                project_id=self.project_orm.id,
+                hour_payment_id=self.hour_payment_orm.id
+            ).execute()
+
+
+class GetAllHourPaymentInteractorTest(TestCase):
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.user_orm_2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.project_orm = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='H_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.project_orm2 = ProjectORM.objects.create(
+            title='Test Project Month Payment',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.hour_payment_orm = HourPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=500
+        )
+
+        hour_payment_repo = HourPaymentRepo()
+        user_project_validate = UserPermissionValidator(UserRepo())
+        project_repo = ProjectRepo()
+        self.get_all_hour_payment_interactor = GetAllHourPaymentInteractor(hour_payment_repo,
+                                                                           project_repo,
+                                                                           user_project_validate
+                                                                           )
+
+    def test_set_params_execute(self):
+        for i in range(10):
+            HourPaymentORM.objects.create(
+                project_id=self.project_orm2.id,
+                rate=500
+            )
+        hour_payments = self.get_all_hour_payment_interactor.set_params(
+            logged_id=self.user_orm.id,
+            project_id=self.project_orm2.id
+        ).execute()
+
+        self.assertEqual(type(hour_payments), list)
+        self.assertEqual(len(hour_payments), 10)
+        self.assertEqual(type(hour_payments.pop()), HourPayment)
+        self.assertEqual(hour_payments.pop().project_id, self.project_orm2.id)
+
+    def test_set_params_execute_no_logged(self):
+        for i in range(10):
+            HourPaymentORM.objects.create(
+                project_id=self.project_orm2.id,
+                rate=500
+            )
+        with self.assertRaises(NoLoggedException):
+            self.get_all_hour_payment_interactor.set_params(
+                logged_id=None,
+                project_id=self.project_orm2.id
+            ).execute()
+
+
+class GetWorkTimeInteractorTest(TestCase):
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.user_orm_2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.project_orm = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='H_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.project_orm2 = ProjectORM.objects.create(
+            title='Test Project Month Payment',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.hour_payment_orm = HourPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=500
+        )
+
+        self.work_time_orm = WorkTimeORM.objects.create(
+            hour_payment_id=self.hour_payment_orm.id,
+            paid=False,
+            start_work=datetime.datetime.now() - datetime.timedelta(hours=5),
+            end_work=datetime.datetime.now()
+        )
+
+        work_time_repo = WorkTimeRepo()
+        hour_payment_repo = HourPaymentRepo()
+        user_project_validate = UserPermissionValidator(UserRepo())
+        self.get_work_time_interactor = GetWorkTimeInteractor(work_time_repo, hour_payment_repo, user_project_validate)
+
+    def test_set_params_execute(self):
+        work_time = self.get_work_time_interactor.set_params(
+            logged_id=self.user_orm.id,
+            project_id=self.project_orm.id,
+            hour_payment_id=self.hour_payment_orm.id,
+            work_time_id=self.work_time_orm.id
+        ).execute()
+
+        self.assertEqual(work_time.id, self.work_time_orm.id)
+
+        self.assertEqual(work_time.start_work, self.work_time_orm.start_work.replace(tzinfo=UTC))
+        self.assertEqual(work_time.end_work, self.work_time_orm.end_work.replace(tzinfo=UTC))
+        self.assertEqual(work_time.paid, self.work_time_orm.paid)
+        self.assertEqual(work_time.paid, False)
+
+    def test_set_params_execute_no_logged(self):
+        with self.assertRaises(NoLoggedException):
+            self.get_work_time_interactor.set_params(
+                logged_id=None,
+                project_id=self.project_orm.id,
+                hour_payment_id=self.hour_payment_orm.id,
+                work_time_id=self.work_time_orm.id
+            ).execute()
+
+    def test_set_params_execute_no_permission(self):
+        with self.assertRaises(NoPermissionException):
+            self.get_work_time_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=self.project_orm2.id,
+                hour_payment_id=self.hour_payment_orm.id,
+                work_time_id=self.work_time_orm.id
+            ).execute()
+
+    def test_set_params_execute_no_permission_hour_payment_id(self):
+        hour_payment_orm = HourPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=550
+        )
+        with self.assertRaises(NoPermissionException):
+            self.get_work_time_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=self.project_orm.id,
+                hour_payment_id=hour_payment_orm.id,
+                work_time_id=self.work_time_orm.id
+            ).execute()
+
+    def test_set_params_execute_entity_not_found(self):
+        with self.assertRaises(EntityDoesNotExistException):
+            self.get_work_time_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=self.project_orm.id,
+                hour_payment_id=self.hour_payment_orm.id,
+                work_time_id=self.work_time_orm.id + 5000
+            ).execute()
+
+
+class CreateWorkTimeInteractorTest(TestCase):
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.user_orm_2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.project_orm = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='H_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.project_orm2 = ProjectORM.objects.create(
+            title='Test Project Month Payment',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.hour_payment_orm = HourPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=500
+        )
+
+        self.hour_payment_orm2 = HourPaymentORM.objects.create(
+            project_id=self.project_orm2.id,
+            rate=500
+        )
+
+        work_time_repo = WorkTimeRepo()
+        hour_payment_repo = HourPaymentRepo()
+        user_project_validate = UserPermissionValidator(UserRepo())
+        project_date_validate = ProjectDateTimeValidator()
+        self.create_work_time_interactor = CreateWorkTimeInteractor(work_time_repo, hour_payment_repo,
+                                                                    user_project_validate, project_date_validate)
+
+    def test_set_params_execute(self):
+        created_work_time = self.create_work_time_interactor.set_params(
+            logged_id=self.user_orm.id,
+            project_id=self.project_orm.id,
+            hour_payment_id=self.hour_payment_orm.id,
+            start_work="2018-9-20T10:00:00.000000Z+0600",
+            end_work="2018-9-20T18:30:00.000000Z+0600",
+            paid=True
+        ).execute()
+
+        work_time_orm = WorkTimeORM.objects.get(id=created_work_time.id)
+
+        self.assertEqual(work_time_orm.id, created_work_time.id)
+        self.assertEqual(work_time_orm.paid, created_work_time.paid)
+        self.assertEqual(work_time_orm.start_work, created_work_time.start_work)
+        self.assertEqual(work_time_orm.end_work, created_work_time.end_work)
+        self.assertEqual(work_time_orm.hour_payment.id, created_work_time.hour_payment_id)
+
+    def test_set_params_execute_no_logged(self):
+        with self.assertRaises(NoLoggedException):
+            self.create_work_time_interactor.set_params(
+                logged_id=None,
+                project_id=self.project_orm.id,
+                hour_payment_id=self.hour_payment_orm.id,
+                start_work="2018-9-20T10:00:00.000000Z+0600",
+                end_work="2018-9-20T18:30:00.000000Z+0600",
+                paid=True
+            ).execute()
+
+    def test_set_params_execute_no_permission(self):
+        with self.assertRaises(NoPermissionException):
+            self.create_work_time_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=self.project_orm.id,
+                hour_payment_id=self.hour_payment_orm2.id,
+                start_work="2018-9-20T10:00:00.000000Z+0600",
+                end_work="2018-9-20T18:30:00.000000Z+0600",
+                paid=True
+            ).execute()
+
+    def test_set_params_execute_no_date_validate(self):
+        with self.assertRaises(InvalidEntityException):
+            self.create_work_time_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=self.project_orm.id,
+                hour_payment_id=self.hour_payment_orm.id,
+                start_work="2018-9-20T107",
+                end_work="2018-9-20T18:30:00.000000Z+0600",
+                paid=True
+            ).execute()
+
+        try:
+            self.create_work_time_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=self.project_orm.id,
+                hour_payment_id=self.hour_payment_orm.id,
+                start_work="2018-9-20T18:30:00.000000Z+0600",
+                end_work="2018-9-20T107",
+                paid=True
+            ).execute()
+
+        except InvalidEntityException as e:
+            self.assertRegex(str(e), 'Invalid datetime format')
+
+
+class UpdateWorkTimeInteractorTest(TestCase):
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.user_orm_2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.project_orm = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='H_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.project_orm2 = ProjectORM.objects.create(
+            title='Test Project Month Payment',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.hour_payment_orm = HourPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=500
+        )
+
+        self.hour_payment_orm2 = HourPaymentORM.objects.create(
+            project_id=self.project_orm2.id,
+            rate=500
+        )
+
+        self.work_time_orm = WorkTimeORM.objects.create(
+            hour_payment=self.hour_payment_orm,
+            start_work=datetime.datetime.now().replace(hour=10),
+            end_work=datetime.datetime.now().replace(hour=19),
+            paid=False
+        )
+
+        self.work_time_orm2 = WorkTimeORM.objects.create(
+            hour_payment=self.hour_payment_orm2,
+            start_work=datetime.datetime.now().replace(hour=9),
+            end_work=datetime.datetime.now().replace(hour=18),
+            paid=True
+        )
+
+        work_time_repo = WorkTimeRepo()
+        hour_payment_repo = HourPaymentRepo()
+        user_project_validate = UserPermissionValidator(UserRepo())
+        project_date_validate = ProjectDateTimeValidator()
+        project_repo = ProjectRepo()
+        self.update_work_time_interactor = UpdateWorkTimeInteractor(work_time_repo, project_repo, hour_payment_repo,
+                                                                    user_project_validate, project_date_validate)
+
+    def test_set_params_execute(self):
+        update_work_time = self.update_work_time_interactor.set_params(
+            logged_id=self.user_orm.id,
+            project_id=self.project_orm.id,
+            hour_payment_id=self.hour_payment_orm.id,
+            work_time_id=self.work_time_orm.id,
+            start_work="2018-9-20T18:30:00.000000Z+0600",
+            paid=True
+        ).execute()
+
+        self.assertEqual(type(update_work_time), WorkTime)
+        self.assertEqual(update_work_time.start_work,
+                         datetime.datetime.strptime("2018-9-20T18:30:00.000000Z+0600", DATE_TIME_FORMAT).
+                         replace(tzinfo=datetime.timezone(datetime.timedelta(0, 21600))))
+
+        update_work_time_orm = WorkTimeORM.objects.get(id=update_work_time.id)
+        self.assertEqual(update_work_time_orm.paid, True)
+        self.assertEqual(update_work_time_orm.start_work,
+                         datetime.datetime.strptime("2018-9-20T18:30:00.000000Z+0600", DATE_TIME_FORMAT).
+                         replace(tzinfo=datetime.timezone(datetime.timedelta(0, 21600))))
+        self.assertNotEqual(update_work_time_orm.start_work, self.work_time_orm.start_work)
+        self.assertNotEqual(update_work_time_orm.paid, self.work_time_orm.paid)
+        self.assertEqual(update_work_time_orm.end_work, self.work_time_orm.end_work.replace(tzinfo=UTC))
+
+    def test_set_params_execute_no_logged(self):
+        with self.assertRaises(NoLoggedException):
+            self.update_work_time_interactor.set_params(
+                logged_id=None,
+                project_id=self.project_orm.id,
+                hour_payment_id=self.hour_payment_orm.id,
+                work_time_id=self.work_time_orm.id,
+                start_work="2018-9-20T18:30:00.000000Z+0600",
+                paid=True
+            ).execute()
+
+    def test_set_params_execute_no_permission_user(self):
+        with self.assertRaises(NoPermissionException):
+            self.update_work_time_interactor.set_params(
+                logged_id=self.user_orm_2.id,
+                project_id=self.project_orm.id,
+                hour_payment_id=self.hour_payment_orm.id,
+                work_time_id=self.work_time_orm.id,
+                start_work="2018-9-20T18:30:00.000000Z+0600",
+                paid=True
+            ).execute()
+
+    def test_set_params_execute_no_logged_project_id(self):
+        with self.assertRaises(NoPermissionException):
+            self.update_work_time_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=self.project_orm2.id,
+                hour_payment_id=self.hour_payment_orm.id,
+                work_time_id=self.work_time_orm.id,
+                start_work="2018-9-20T18:30:00.000000Z+0600",
+                paid=True
+            ).execute()
+
+    def test_set_params_execute_no_permission_hour_payment_id(self):
+        with self.assertRaises(NoPermissionException):
+            self.update_work_time_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=self.project_orm.id,
+                hour_payment_id=self.hour_payment_orm2.id,
+                work_time_id=self.work_time_orm.id,
+                start_work="2018-9-20T18:30:00.000000Z+0600",
+                paid=True
+            ).execute()
+
+    def test_set_params_execute_entity_not_found(self):
+        with self.assertRaises(EntityDoesNotExistException):
+            self.update_work_time_interactor.set_params(
+                logged_id=self.user_orm.id,
+                project_id=self.project_orm.id,
+                hour_payment_id=self.hour_payment_orm.id,
+                work_time_id=None,
+                start_work="2018-9-20T18:30:00.000000Z+0600",
+                paid=True
+            ).execute()
+
+
+class DeleteWorkTimeInteractorTest(TestCase):
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.user_orm_2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.project_orm = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='H_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.project_orm2 = ProjectORM.objects.create(
+            title='Test Project Month Payment',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.hour_payment_orm = HourPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=500
+        )
+
+        self.hour_payment_orm2 = HourPaymentORM.objects.create(
+            project_id=self.project_orm2.id,
+            rate=500
+        )
+
+        self.work_time_orm = WorkTimeORM.objects.create(
+            hour_payment=self.hour_payment_orm,
+            start_work=datetime.datetime.now().replace(hour=10),
+            end_work=datetime.datetime.now().replace(hour=19),
+            paid=False
+        )
+
+        self.work_time_orm2 = WorkTimeORM.objects.create(
+            hour_payment=self.hour_payment_orm2,
+            start_work=datetime.datetime.now().replace(hour=9),
+            end_work=datetime.datetime.now().replace(hour=18),
+            paid=True
+        )
+
+        work_time_repo = WorkTimeRepo()
+        hour_payment_repo = HourPaymentRepo()
+        user_project_validate = UserPermissionValidator(UserRepo())
+        project_repo = ProjectRepo()
+        self.delete_work_time_interactor = DeleteWorkTimeInteractor(work_time_repo, hour_payment_repo, project_repo,
+                                                                    user_project_validate)
+
+    def test_set_params_execute(self):
+        deleted_work_time = self.delete_work_time_interactor.set_params(
+            logged_id=self.user_orm.id,
+            hour_payment_id=self.hour_payment_orm.id,
+            work_time_id=self.work_time_orm.id
+
+        ).execute()
+
+        self.assertEqual(type(deleted_work_time), WorkTime)
+
+        with self.assertRaises(WorkTimeORM.DoesNotExist):
+            WorkTimeORM.objects.get(id=self.work_time_orm.id)
+
+        with self.assertRaises(WorkTimeORM.DoesNotExist):
+            WorkTimeORM.objects.get(id=deleted_work_time.id)
+
+    def test_set_params_execute_no_logged_exception(self):
+        with self.assertRaises(NoLoggedException):
+            self.delete_work_time_interactor.set_params(
+                logged_id=None,
+                hour_payment_id=self.hour_payment_orm.id,
+                work_time_id=self.work_time_orm.id
+
+            ).execute()
+
+    def test_set_params_execute_permission_user_id(self):
+        with self.assertRaises(NoPermissionException):
+            self.delete_work_time_interactor.set_params(
+                logged_id=self.user_orm_2.id,
+                hour_payment_id=self.hour_payment_orm.id,
+                work_time_id=self.work_time_orm.id
+
+            ).execute()
+
+    def test_set_params_execute_permission_hour_payment(self):
+        with self.assertRaises(NoPermissionException):
+            self.delete_work_time_interactor.set_params(
+                logged_id=self.user_orm.id,
+                hour_payment_id=self.hour_payment_orm2.id,
+                work_time_id=self.work_time_orm.id
+
+            ).execute()
+
+
+class GetAllWorkTimeInteractorTest(TestCase):
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.user_orm_2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+
+        self.project_orm = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='H_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.project_orm2 = ProjectORM.objects.create(
+            title='Test Project Month Payment',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now() - datetime.timedelta(days=30),
+            end_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.hour_payment_orm = HourPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=500
+        )
+
+        self.hour_payment_orm2 = HourPaymentORM.objects.create(
+            project_id=self.project_orm2.id,
+            rate=500
+        )
+
+
+        work_time_repo = WorkTimeRepo()
+        hour_payment_repo = HourPaymentRepo()
+        user_project_validate = UserPermissionValidator(UserRepo())
+        self.get_all_work_time_interactor = GetAllWorkTimeInteractor(work_time_repo, hour_payment_repo,
+                                                                     user_project_validate)
+
+
+    def test_set_params_execute(self):
+        for i in range(10):
+            WorkTimeORM.objects.create(
+                hour_payment=self.hour_payment_orm,
+                start_work=datetime.datetime.now().replace(hour=10) - datetime.timedelta(days=i),
+                end_work=datetime.datetime.now().replace(hour=19) - datetime.timedelta(days=i),
+                paid=False
+            )
+        work_times = self.get_all_work_time_interactor.set_params(
+            logged_id=self.user_orm.id,
+            hour_payment_id=self.hour_payment_orm.id
+        ).execute()
+
+        self.assertEqual(type(work_times), list)
+        self.assertEqual(len(work_times), 10)
+        self.assertEqual(type(work_times.pop()), WorkTime)
+        self.assertEqual(work_times.pop().hour_payment_id, self.hour_payment_orm.id)
+
+
+    def test_set_params_execute_no_logged(self):
+        for i in range(10):
+            WorkTimeORM.objects.create(
+                hour_payment=self.hour_payment_orm,
+                start_work=datetime.datetime.now().replace(hour=10) - datetime.timedelta(days=i),
+                end_work=datetime.datetime.now().replace(hour=19) - datetime.timedelta(days=i),
+                paid=False
+            )
+
+        with self.assertRaises(NoLoggedException):
+            self.get_all_work_time_interactor.set_params(
+                logged_id=None,
+                hour_payment_id=self.hour_payment_orm.id
             ).execute()
