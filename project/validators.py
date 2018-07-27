@@ -56,3 +56,13 @@ class ProjectDateTimeValidator:
             return datetime.datetime.strptime(date_string, DATE_FORMAT)
         except:
             raise InvalidEntityException(source='validator',  code='invalid_format', message="Invalid date format")
+
+class RateValidator:
+    @staticmethod
+    def validate(rate):
+        if rate is None:
+            return None
+        if not isinstance(rate, (int, float)):
+            raise InvalidEntityException(source='validator', code='invalid_rate', message="Invalid type for rate")
+        if rate < 0:
+            raise InvalidEntityException(source='validator', code='invalid_rate', message="Negative rate")
