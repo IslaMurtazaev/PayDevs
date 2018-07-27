@@ -1,6 +1,6 @@
 from project.entities import Project, WorkTask, MonthPayment, WorkedDay, HourPayment, WorkTime
 from project.models import ProjectORM, HourPaymentORM, MonthPaymentORM, WorkTaskORM, WorkedDayORM, WorkTimeORM
-from PayDevs.exceptions import EntityDoesNotExistException, NoPermissionException
+from PayDevs.exceptions import EntityDoesNotExistException, NoPermissionException, InvalidEntityException
 
 
 # ------------------------------------------ Project --------------------------------------------#
@@ -236,6 +236,7 @@ class MonthPaymentRepo:
             project_id=month_payment.project_id,
             rate=month_payment.rate
         )
+
         return self._decode_db_month_payment(db_month_payment)
 
     def update(self, month_payment):
@@ -374,10 +375,13 @@ class HourPaymentRepo:
                 for db_hour_payment in db_hour_payments]
 
     def create(self, hour_payment):
-        db_hour_payment = HourPaymentORM.objects.create(
-            project_id=hour_payment.project_id,
-            rate=hour_payment.rate
-        )
+        try:
+            db_hour_payment = HourPaymentORM.objects.create(
+                project_id=hour_payment.project_id,
+                rate=hour_payment.rate
+            )
+        except:
+            raise InvalidEntityException
         return self._decode_db_hour_payment(db_hour_payment)
 
     def delete(self, hour_payment_id):

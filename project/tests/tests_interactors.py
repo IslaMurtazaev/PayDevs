@@ -3,15 +3,16 @@ import datetime
 from django.test import TestCase
 
 from PayDevs.constants import DATE_TIME_FORMAT
-from account.entities import User
 from account.models import UserORM
 from account.repositories import UserRepo
 from project.entities import Project
 from project.interactors import GetProjectInteractor, CreateProjectInteractor, UpdateProjectInteractor, \
-    DeleteProjectInteractor, GetAllProjectsInteractor
-from project.models import ProjectORM
-from project.repositories import ProjectRepo
-from project.validators import UserPermissionValidator, ProjectDateTimeValidator
+    DeleteProjectInteractor, GetAllProjectsInteractor, CreateMonthPaymentInteractor, GetMonthPaymentInteractor, \
+    UpdateMonthPaymentInteractor, DeleteMonthPaymentInteractor, GetAllMonthPaymentsInteractor, GetWorkedDayInteractor, \
+    CreateWorkedDayInteractor, UpdateWorkedDayInteractor, DeleteWorkedDayInteractor, GetAllWorkedDaysInteractor
+from project.models import ProjectORM, MonthPaymentORM, WorkedDayORM
+from project.repositories import ProjectRepo, MonthPaymentRepo, WorkedDayRepo
+from project.validators import UserPermissionValidator, ProjectDateTimeValidator, RateValidator
 from PayDevs.exceptions import NoLoggedException, NoPermissionException, InvalidEntityException, \
     EntityDoesNotExistException
 
@@ -47,7 +48,7 @@ class GetProjectInteractorTest(TestCase):
         self.assertEqual(project.type_of_payment, self.project_orm.type_of_payment)
         self.assertEqual(project.user_id, self.project_orm.user_id)
 
-    def test_method_set_params_excude_exceptions(self):
+    def test_method_set_params_exclude_exceptions(self):
         with self.assertRaises(NoLoggedException):
             GetProjectInteractor(self.project_repo, self.user_permission_validator).set_params(
                 project_id=self.project_orm.id).execute()
@@ -267,7 +268,7 @@ class DeleteProjectInteractorTest(TestCase):
         self.project_update_interactor = DeleteProjectInteractor(self.project_repo,
                                                                  self.user_permission_validator)
 
-    def test_set_params_execut(self):
+    def test_set_params_execute(self):
         deleted_project = self.project_update_interactor.set_params(
             logged_id=self.user_orm.id,
             project_id=self.project_orm.id
@@ -350,3 +351,351 @@ class GetAllProjectsInteractorTest(TestCase):
                 logged_id=None,
             ).execute()
 
+
+# --------------------------- Month Payment Tests -------------------------------- #
+
+class CreateMonthPaymentInteractorTest(TestCase):
+
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+        )
+        self.project_orm = ProjectORM.objects.create(
+            user_id=self.user_orm.id,
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now()
+        )
+        self.month_payment_orm = MonthPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=100
+        )
+
+        self.project_repo = ProjectRepo()
+        self.month_payment_repo = MonthPaymentRepo()
+        permission_validator = UserPermissionValidator(UserRepo())
+        rate_validator = RateValidator()
+        self.month_payment_interactor = CreateMonthPaymentInteractor(self.month_payment_repo, self.project_repo,
+                                                                     permission_validator, rate_validator)
+
+    def test_method_set_params(self):
+        created_month_payment = self.month_payment_interactor.set_params(
+            project_id=self.project_orm.id,
+            rate=110,
+            logged_id=self.user_orm.id
+        ).execute()
+        created_month_payment_orm = MonthPaymentORM.objects.get(id=created_month_payment.id)
+
+        self.assertEqual(created_month_payment.id, created_month_payment_orm.id)
+        self.assertEqual(created_month_payment.project_id, created_month_payment_orm.project_id)
+        self.assertEqual(created_month_payment.rate, 110)
+
+
+    def test_method_set_params_no_logged_exception(self):
+
+        with self.assertRaises(NoLoggedException):
+            self.month_payment_interactor.set_params(
+                project_id=self.project_orm.id,
+                rate=self.month_payment_orm.rate,
+                logged_id=None
+            ).execute()
+
+
+    def test_method_set_params_no_permission_exception(self):
+
+        with self.assertRaises(NoPermissionException):
+            self.month_payment_interactor.set_params(
+                project_id=self.project_orm.id,
+                rate=self.month_payment_orm.rate,
+                logged_id=self.user_orm.id+10
+            ).execute()
+
+
+    def test_method_set_params_entity_does_not_exist_exception(self):
+
+        with self.assertRaises(EntityDoesNotExistException):
+            self.month_payment_interactor.set_params(
+                project_id=self.project_orm.id+10,
+                rate=self.month_payment_orm.rate,
+                logged_id=self.user_orm.id
+            ).execute()
+
+
+    def test_method_rate_validator_invalid_entity_exception(self):
+
+        with self.assertRaises(InvalidEntityException):
+            self.month_payment_interactor.set_params(
+                project_id=self.project_orm.id,
+                rate="Wrong type",
+                logged_id=self.user_orm.id
+            ).execute()
+
+        with self.assertRaises(InvalidEntityException):
+            self.month_payment_interactor.set_params(
+                project_id=self.project_orm.id,
+                rate=-10,
+                logged_id=self.user_orm.id
+            ).execute()
+
+
+
+class GetMonthPaymentInteractorTest(TestCase):
+
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+        )
+        self.project_orm = ProjectORM.objects.create(
+            user_id=self.user_orm.id,
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now()
+        )
+        self.month_payment_orm = MonthPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=100
+        )
+
+        self.month_payment_repo = MonthPaymentRepo()
+        permission_validator = UserPermissionValidator(UserRepo)
+        self.month_payment_interactor = GetMonthPaymentInteractor(self.month_payment_repo, permission_validator)
+
+
+    def test_method_set_params(self):
+        month_payment = self.month_payment_interactor.set_params(
+            month_payment_id=self.month_payment_orm.id,
+            logged_id=self.user_orm.id
+        ).execute()
+
+        self.assertEqual(month_payment.id, self.month_payment_orm.id)
+        self.assertEqual(month_payment.project_id, self.project_orm.id)
+        self.assertEqual(month_payment.rate, self.month_payment_orm.rate)
+
+
+    def test_method_set_params_no_logged_exception(self):
+
+        with self.assertRaises(NoLoggedException):
+            self.month_payment_interactor.set_params(
+                month_payment_id=self.month_payment_orm.id,
+                logged_id=None
+            ).execute()
+
+
+    def test_method_set_params_entity_does_not_exist_exception(self):
+
+        with self.assertRaises(EntityDoesNotExistException):
+            self.month_payment_interactor.set_params(
+                month_payment_id=self.month_payment_orm.id+10,
+                logged_id=self.user_orm.id
+            ).execute()
+
+
+
+class UpdateMonthPaymentInteractorTest(TestCase):
+
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+        )
+        self.project_orm = ProjectORM.objects.create(
+            user_id=self.user_orm.id,
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now()
+        )
+        self.month_payment_orm = MonthPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=100
+        )
+
+        self.project_repo = ProjectRepo()
+        self.month_payment_repo = MonthPaymentRepo()
+        permission_validator = UserPermissionValidator(UserRepo())
+        rate_validator = RateValidator()
+        self.month_payment_interactor = UpdateMonthPaymentInteractor(self.month_payment_repo, self.project_repo,
+                                                                     permission_validator, rate_validator)
+
+    def test_method_set_params(self):
+        updated_month_payment = self.month_payment_interactor.set_params(
+            month_payment_id=self.month_payment_orm.id,
+            project_id=self.project_orm.id,
+            rate=130,
+            logged_id=self.user_orm.id
+        ).execute()
+
+        self.assertEqual(updated_month_payment.id, self.month_payment_orm.id)
+        self.assertEqual(updated_month_payment.project_id, self.project_orm.id)
+        self.assertEqual(updated_month_payment.rate, 130)
+
+
+    def test_method_set_params_no_logged_exception(self):
+
+        with self.assertRaises(NoLoggedException):
+            self.month_payment_interactor.set_params(
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                rate=self.month_payment_orm.rate,
+                logged_id=None
+            ).execute()
+
+
+    def test_method_set_params_no_permission_exception(self):
+
+        with self.assertRaises(NoPermissionException):
+            self.month_payment_interactor.set_params(
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                rate=self.month_payment_orm.rate,
+                logged_id=self.user_orm.id+10
+            ).execute()
+
+
+    def test_method_set_params_entity_does_not_exist_exception(self):
+
+        with self.assertRaises(EntityDoesNotExistException):
+            self.month_payment_interactor.set_params(
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id+10,
+                rate=self.month_payment_orm.rate,
+                logged_id=self.user_orm.id
+            ).execute()
+
+
+    def test_method_rate_validator_invalid_entity_exception(self):
+
+        with self.assertRaises(InvalidEntityException):
+            self.month_payment_interactor.set_params(
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                rate="Wrong type",
+                logged_id=self.user_orm.id
+            ).execute()
+
+        with self.assertRaises(InvalidEntityException):
+            self.month_payment_interactor.set_params(
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                rate=-10,
+                logged_id=self.user_orm.id
+            ).execute()
+
+
+
+class DeleteMonthPaymentInteractorTest(TestCase):
+
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+        )
+        self.project_orm = ProjectORM.objects.create(
+            user_id=self.user_orm.id,
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now()
+        )
+        self.month_payment_orm = MonthPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=100
+        )
+
+        self.project_repo = ProjectRepo()
+        self.month_payment_repo = MonthPaymentRepo()
+        permission_validator = UserPermissionValidator(UserRepo())
+        self.month_payment_interactor = DeleteMonthPaymentInteractor(self.month_payment_repo, self.project_repo,
+                                                                     permission_validator)
+
+    def test_method_set_params(self):
+        deleted_month_payment = self.month_payment_interactor.set_params(
+            month_payment_id=self.month_payment_orm.id,
+            project_id=self.project_orm.id,
+            logged_id=self.user_orm.id
+        ).execute()
+
+        self.assertEqual(deleted_month_payment.id, self.month_payment_orm.id)
+        self.assertEqual(deleted_month_payment.project_id, self.project_orm.id)
+        self.assertEqual(deleted_month_payment.rate, self.month_payment_orm.rate)
+
+
+    def test_method_set_params_no_logged_exception(self):
+        with self.assertRaises(NoLoggedException):
+            self.month_payment_interactor.set_params(
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                logged_id=None
+            ).execute()
+
+
+    def test_method_set_params_no_permission_exception(self):
+        with self.assertRaises(NoPermissionException):
+            self.month_payment_interactor.set_params(
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                logged_id=self.user_orm.id + 10
+            ).execute()
+
+
+    def test_method_set_params_entity_does_not_exist_exception(self):
+        with self.assertRaises(EntityDoesNotExistException):
+            self.month_payment_interactor.set_params(
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id + 10,
+                logged_id=self.user_orm.id
+            ).execute()
+
+
+
+class GetAllMonthPaymentsInteractorTest(TestCase):
+
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+        )
+        self.project_orm = ProjectORM.objects.create(
+            user_id=self.user_orm.id,
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now()
+        )
+        self.project_orm = MonthPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=100
+        )
+
+        self.month_payment_repo = MonthPaymentRepo()
+        permission_validator = UserPermissionValidator(UserRepo)
+        self.month_payment_interactor = GetAllMonthPaymentsInteractor(self.month_payment_repo, permission_validator)
+
+
+    def test_method_set_params(self):
+        month_payments = self.month_payment_interactor.set_params(
+            project_id=self.project_orm.id,
+            logged_id=self.user_orm.id
+        ).execute()
+
+        self.assertTrue(isinstance(month_payments, list))
+        self.assertEqual(month_payments[0].project_id, self.project_orm.id)
+        self.assertEqual(month_payments[0].rate, self.project_orm.rate)
+
+
+    def test_method_set_params_no_logged_exception(self):
+
+        with self.assertRaises(NoLoggedException):
+            self.month_payment_interactor.set_params(
+                project_id=self.project_orm.id,
+                logged_id=None
+            ).execute()

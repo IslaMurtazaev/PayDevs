@@ -1,6 +1,7 @@
 from project.factories.repo_factories import ProjectRepoFactory, WorkTaskRepoFactory, MonthPaymentRepoFactory, \
     WorkedDayRepoFactory, HourPaymentRepoFactory, WorkTimeRepoFactory
-from project.factories.validator_factories import UserPermissionsValidatorFactory, ProjectDateTimeValidatorFactory
+from project.factories.validator_factories import UserPermissionsValidatorFactory, ProjectDateTimeValidatorFactory, \
+    RateValidatorFactory
 from project.interactors import CreateProjectInteractor, UpdateProjectInteractor, DeleteProjectInteractor, \
     GetProjectInteractor, GetAllProjectsInteractor, CreateTaskInteractor, GetTaskInteractor, UpdateTaskInteractor, \
     DeleteTaskInteractor, GetAllTasksInteractor, CreateMonthPaymentInteractor, GetMonthPaymentInteractor, \
@@ -112,7 +113,8 @@ class CreateMonthPaymentInteractorFactory(object):
         month_payment_repo = MonthPaymentRepoFactory.create()
         project_repo = ProjectRepoFactory.create()
         user_permission_validator = UserPermissionsValidatorFactory.create()
-        return CreateMonthPaymentInteractor(month_payment_repo, project_repo, user_permission_validator)
+        rate_validator = RateValidatorFactory.create()
+        return CreateMonthPaymentInteractor(month_payment_repo, project_repo, user_permission_validator, rate_validator)
 
 
 class GetMonthPaymentInteractorFactory(object):
@@ -129,7 +131,8 @@ class UpdateMonthPaymentInteractorFactory(object):
         month_payment_repo = MonthPaymentRepoFactory.create()
         project_repo = ProjectRepoFactory.create()
         user_permission_validator = UserPermissionsValidatorFactory.create()
-        return UpdateMonthPaymentInteractor(month_payment_repo, project_repo, user_permission_validator)
+        rate_validator = RateValidatorFactory.create()
+        return UpdateMonthPaymentInteractor(month_payment_repo, project_repo, user_permission_validator, rate_validator)
 
 
 class DeleteMonthPaymentInteractorFactory(object):
