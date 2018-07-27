@@ -690,6 +690,563 @@ class GetAllMonthPaymentsInteractorTest(TestCase):
             ).execute()
 
 
+# --------------------------- Worked Day Tests -------------------------------- #
+
+class CreateWorkedDayInteractorTest(TestCase):
+
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+        )
+        self.user_orm2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user2@mail.com',
+            password='qwert12345'
+        )
+        self.project_orm = ProjectORM.objects.create(
+            user_id=self.user_orm.id,
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now()
+        )
+        self.project_orm2 = ProjectORM.objects.create(
+            user_id=self.user_orm.id,
+            title='Test Project2',
+            description='Without any rights',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now()
+        )
+        self.month_payment_orm = MonthPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=100
+        )
+        self.month_payment_orm2 = MonthPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=80
+        )
+        self.worked_day_orm = WorkedDayORM.objects.create(
+            month_payment_id=self.month_payment_orm.id,
+            day=datetime.datetime.today().date(),
+            paid=False
+        )
+
+        self.project_repo = ProjectRepo()
+        self.month_payment_repo = MonthPaymentRepo()
+        self.worked_day_repo = WorkedDayRepo()
+        permission_validator = UserPermissionValidator(UserRepo())
+        date_validator = ProjectDateTimeValidator()
+        self.worked_day_interactor = CreateWorkedDayInteractor(self.worked_day_repo, self.month_payment_repo,
+                                                               self.project_repo, permission_validator,
+                                                               date_validator)
+
+    def test_method_set_params(self):
+        created_worked_day = self.worked_day_interactor.set_params(
+            month_payment_id=self.month_payment_orm.id,
+            project_id=self.project_orm.id,
+            day="1999-08-02",
+            paid=True,
+            logged_id=self.user_orm.id
+        ).execute()
+        created_worked_day_orm = WorkedDayORM.objects.get(id=created_worked_day.id)
+
+        self.assertEqual(created_worked_day.id, created_worked_day_orm.id)
+        self.assertEqual(created_worked_day.month_payment_id, created_worked_day_orm.month_payment_id)
+        self.assertEqual(created_worked_day.paid, created_worked_day_orm.paid)
+        self.assertEqual(created_worked_day.day, "1999-08-02")
+
+
+    def test_method_set_params_no_logged_exception(self):
+
+        with self.assertRaises(NoLoggedException):
+            self.worked_day_interactor.set_params(
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                day="2018-09-01",
+                paid=True,
+                logged_id=None
+            ).execute()
+
+
+    def test_method_set_params_no_permission_exception(self):
+
+        with self.assertRaises(NoPermissionException):
+            self.worked_day_interactor.set_params(
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                day="2018-09-01",
+                paid=True,
+                logged_id=self.user_orm2.id
+            ).execute()
+
+        with self.assertRaises(NoPermissionException):
+            self.worked_day_interactor.set_params(
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm2.id,
+                day="2018-09-01",
+                paid=True,
+                logged_id=self.user_orm.id
+            ).execute()
+
+
+    def test_method_set_params_entity_does_not_exist_exception(self):
+
+        with self.assertRaises(EntityDoesNotExistException):
+            self.worked_day_interactor.set_params(
+                month_payment_id=self.month_payment_orm.id+10,
+                project_id=self.project_orm.id,
+                day="2018-09-01",
+                paid=True,
+                logged_id=self.user_orm.id
+            ).execute()
+
+
+    def test_method_date_validator_invalid_entity_exception(self):
+
+        with self.assertRaises(InvalidEntityException):
+            self.worked_day_interactor.set_params(
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                day="2018-09-00",
+                paid=True,
+                logged_id=self.user_orm.id
+            ).execute()
+
+        with self.assertRaises(InvalidEntityException):
+            self.worked_day_interactor.set_params(
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                day="2018 09 01",
+                paid=True,
+                logged_id=self.user_orm.id
+            ).execute()
+
+
+
+class GetWorkedDayInteractorTest(TestCase):
+
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+        )
+        self.user_orm2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user2@mail.com',
+            password='qwert12345'
+        )
+        self.project_orm = ProjectORM.objects.create(
+            user_id=self.user_orm.id,
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now()
+        )
+        self.month_payment_orm = MonthPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=100
+        )
+        self.worked_day_orm = WorkedDayORM.objects.create(
+            month_payment_id=self.month_payment_orm.id,
+            day=datetime.datetime.today().date(),
+            paid=False
+        )
+
+        self.worked_day_repo = WorkedDayRepo()
+        permission_validator = UserPermissionValidator(UserRepo())
+        self.worked_day_interactor = GetWorkedDayInteractor(self.worked_day_repo, permission_validator)
+
+
+    def test_interactor_methods(self):
+        worked_day = self.worked_day_interactor.set_params(
+            worked_day_id=self.worked_day_orm.id,
+            logged_id=self.user_orm.id
+        ).execute()
+
+        self.assertEqual(worked_day.id, self.worked_day_orm.id)
+        self.assertEqual(worked_day.month_payment_id, self.month_payment_orm.id)
+        self.assertEqual(worked_day.day, self.worked_day_orm.day)
+
+        worked_day = self.worked_day_interactor.set_params(
+            worked_day_id=self.worked_day_orm.id,
+            logged_id=self.user_orm2.id
+        ).execute()
+
+        self.assertEqual(worked_day.id, self.worked_day_orm.id)
+        self.assertEqual(worked_day.month_payment_id, self.month_payment_orm.id)
+        self.assertEqual(worked_day.day, self.worked_day_orm.day)
+
+
+    def test_interactor_methods_no_logged_exception(self):
+
+        with self.assertRaises(NoLoggedException):
+            self.worked_day_interactor.set_params(
+                worked_day_id=self.worked_day_orm.id,
+                logged_id=None
+            ).execute()
+
+
+    def test_interactor_methods_entity_does_not_exist_exception(self):
+
+        with self.assertRaises(EntityDoesNotExistException):
+            self.worked_day_interactor.set_params(
+                worked_day_id=self.worked_day_orm.id+10,
+                logged_id=self.user_orm.id
+            ).execute()
+
+
+
+class UpdateWorkedDayInteractorTest(TestCase):
+
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+        )
+        self.user_orm2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user2@mail.com',
+            password='qwert12345'
+        )
+        self.project_orm = ProjectORM.objects.create(
+            user_id=self.user_orm.id,
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now()
+        )
+        self.project_orm2 = ProjectORM.objects.create(
+            user_id=self.user_orm.id,
+            title='Test Project2',
+            description='Without any rights',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now()
+        )
+        self.month_payment_orm = MonthPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=100
+        )
+        self.month_payment_orm2 = MonthPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=80
+        )
+        self.worked_day_orm = WorkedDayORM.objects.create(
+            month_payment_id=self.month_payment_orm.id,
+            day=datetime.datetime.today().date(),
+            paid=False
+        )
+        self.worked_day_orm2 = WorkedDayORM.objects.create(
+            month_payment_id=self.month_payment_orm2.id,
+            day=datetime.datetime.today().date(),
+            paid=False
+        )
+
+        self.project_repo = ProjectRepo()
+        self.month_payment_repo = MonthPaymentRepo()
+        self.worked_day_repo = WorkedDayRepo()
+        permission_validator = UserPermissionValidator(UserRepo())
+        date_validator = ProjectDateTimeValidator()
+        self.worked_day_interactor = UpdateWorkedDayInteractor(self.worked_day_repo, self.month_payment_repo,
+                                                               self.project_repo, permission_validator,
+                                                               date_validator)
+
+    def test_method_set_params(self):
+        updated_worked_day = self.worked_day_interactor.set_params(
+            worked_day_id = self.worked_day_orm.id,
+            month_payment_id=self.month_payment_orm.id,
+            project_id=self.project_orm.id,
+            day="2018-06-18",
+            logged_id=self.user_orm.id
+        ).execute()
+
+        self.assertEqual(updated_worked_day.id, self.worked_day_orm.id)
+        self.assertEqual(updated_worked_day.month_payment_id, self.month_payment_orm.id)
+        self.assertEqual(updated_worked_day.day.date(), datetime.date(2018, 6, 18))
+
+
+    def test_method_set_params_no_logged_exception(self):
+
+        with self.assertRaises(NoLoggedException):
+            self.worked_day_interactor.set_params(
+                worked_day_id=self.worked_day_orm.id,
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                day="2018-06-18",
+                logged_id=None
+            ).execute()
+
+
+    def test_method_set_params_no_permission_exception(self):
+
+        with self.assertRaises(NoPermissionException):
+            self.worked_day_interactor.set_params(
+                worked_day_id=self.worked_day_orm.id,
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                day="2018-06-18",
+                logged_id=self.user_orm2.id
+            ).execute()
+
+        with self.assertRaises(NoPermissionException):
+            self.worked_day_interactor.set_params(
+                worked_day_id=self.worked_day_orm.id,
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm2.id,
+                day="2018-06-18",
+                logged_id=self.user_orm.id
+            ).execute()
+
+        with self.assertRaises(NoPermissionException):
+            self.worked_day_interactor.set_params(
+                worked_day_id=self.worked_day_orm.id,
+                month_payment_id=self.month_payment_orm2.id,
+                project_id=self.project_orm.id,
+                day="2018-06-18",
+                logged_id=self.user_orm.id
+            ).execute()
+
+        with self.assertRaises(NoPermissionException):
+            self.worked_day_interactor.set_params(
+                worked_day_id=self.worked_day_orm2.id,
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                day="2018-06-18",
+                logged_id=self.user_orm.id
+            ).execute()
+
+    def test_method_set_params_entity_does_not_exist_exception(self):
+
+        with self.assertRaises(EntityDoesNotExistException):
+            self.worked_day_interactor.set_params(
+                worked_day_id=self.worked_day_orm.id+10,
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                day="2018-06-18",
+                logged_id=self.user_orm.id
+            ).execute()
+
+
+    def test_method_date_validator_invalid_entity_exception(self):
+
+        with self.assertRaises(InvalidEntityException):
+            self.worked_day_interactor.set_params(
+                worked_day_id=self.worked_day_orm.id,
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                day="2018 06 18",
+                logged_id=self.user_orm.id
+            ).execute()
+
+        with self.assertRaises(InvalidEntityException):
+            self.worked_day_interactor.set_params(
+                worked_day_id=self.worked_day_orm.id,
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                day="2018-06-18T12:00:00",
+                logged_id=self.user_orm.id
+            ).execute()
+
+
+
+class DeleteWorkedDayInteractorTest(TestCase):
+
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+        )
+        self.user_orm2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user2@mail.com',
+            password='qwert12345'
+        )
+        self.project_orm = ProjectORM.objects.create(
+            user_id=self.user_orm.id,
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now()
+        )
+        self.project_orm2 = ProjectORM.objects.create(
+            user_id=self.user_orm.id,
+            title='Test Project2',
+            description='Without any rights',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now()
+        )
+        self.month_payment_orm = MonthPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=100
+        )
+        self.month_payment_orm2 = MonthPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=80
+        )
+        self.worked_day_orm = WorkedDayORM.objects.create(
+            month_payment_id=self.month_payment_orm.id,
+            day=datetime.date(2018, 6, 18),
+            paid=False
+        )
+        self.worked_day_orm2 = WorkedDayORM.objects.create(
+            month_payment_id=self.month_payment_orm2.id,
+            day=datetime.datetime.today().date(),
+            paid=False
+        )
+
+        self.project_repo = ProjectRepo()
+        self.month_payment_repo = MonthPaymentRepo()
+        self.worked_day_repo = WorkedDayRepo()
+        permission_validator = UserPermissionValidator(UserRepo())
+        self.worked_day_interactor = DeleteWorkedDayInteractor(self.worked_day_repo, self.month_payment_repo,
+                                                               self.project_repo, permission_validator)
+
+    def test_method_set_params(self):
+        deleted_worked_day = self.worked_day_interactor.set_params(
+            worked_day_id=self.worked_day_orm.id,
+            month_payment_id=self.month_payment_orm.id,
+            project_id=self.project_orm.id,
+            logged_id=self.user_orm.id
+        ).execute()
+
+        self.assertEqual(deleted_worked_day.id, self.worked_day_orm.id)
+        self.assertEqual(deleted_worked_day.month_payment_id, self.month_payment_orm.id)
+        self.assertEqual(deleted_worked_day.day, datetime.date(2018, 6, 18))
+
+
+    def test_method_set_params_no_logged_exception(self):
+
+        with self.assertRaises(NoLoggedException):
+            self.worked_day_interactor.set_params(
+                worked_day_id=self.worked_day_orm.id,
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                logged_id=None
+            ).execute()
+
+
+    def test_method_set_params_no_permission_exception(self):
+
+        with self.assertRaises(NoPermissionException):
+            self.worked_day_interactor.set_params(
+                worked_day_id=self.worked_day_orm.id,
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                logged_id=self.user_orm2.id
+            ).execute()
+
+        with self.assertRaises(NoPermissionException):
+            self.worked_day_interactor.set_params(
+                worked_day_id=self.worked_day_orm.id,
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm2.id,
+                logged_id=self.user_orm.id
+            ).execute()
+
+        with self.assertRaises(NoPermissionException):
+            self.worked_day_interactor.set_params(
+                worked_day_id=self.worked_day_orm.id,
+                month_payment_id=self.month_payment_orm2.id,
+                project_id=self.project_orm.id,
+                logged_id=self.user_orm.id
+            ).execute()
+
+        with self.assertRaises(NoPermissionException):
+            self.worked_day_interactor.set_params(
+                worked_day_id=self.worked_day_orm2.id,
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                logged_id=self.user_orm.id
+            ).execute()
+
+    def test_method_set_params_entity_does_not_exist_exception(self):
+
+        with self.assertRaises(EntityDoesNotExistException):
+            self.worked_day_interactor.set_params(
+                worked_day_id=self.worked_day_orm.id+10,
+                month_payment_id=self.month_payment_orm.id,
+                project_id=self.project_orm.id,
+                logged_id=self.user_orm.id
+            ).execute()
+
+
+
+class GetAllWorkedDaysInteractorTest(TestCase):
+
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+        )
+        self.user_orm2 = UserORM.objects.create_user(
+            username='testUser2',
+            email='test_user2@mail.com',
+            password='qwert12345'
+        )
+        self.project_orm = ProjectORM.objects.create(
+            user_id=self.user_orm.id,
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now()
+        )
+        self.month_payment_orm = MonthPaymentORM.objects.create(
+            project_id=self.project_orm.id,
+            rate=100
+        )
+        self.worked_day_orm = WorkedDayORM.objects.create(
+            month_payment_id=self.month_payment_orm.id,
+            day=datetime.datetime.today().date(),
+            paid=False
+        )
+
+        worked_day_repo = WorkedDayRepo()
+        month_payment_repo = MonthPaymentRepo()
+        permission_validator = UserPermissionValidator(UserRepo())
+        self.worked_day_interactor = GetAllWorkedDaysInteractor(worked_day_repo, month_payment_repo,
+                                                                permission_validator)
+
+    def test_interactor_methods(self):
+        worked_days = self.worked_day_interactor.set_params(
+            month_payment_id=self.month_payment_orm.id,
+            logged_id=self.user_orm.id
+        ).execute()
+
+        self.assertTrue(isinstance(worked_days, list))
+        self.assertEqual(worked_days[0].id, self.worked_day_orm.id)
+        self.assertEqual(worked_days[0].month_payment_id, self.month_payment_orm.id)
+        self.assertEqual(worked_days[0].day, self.worked_day_orm.day)
+
+        worked_days = self.worked_day_interactor.set_params(
+            month_payment_id=self.month_payment_orm.id,
+            logged_id=self.user_orm2.id
+        ).execute()
+
+        self.assertTrue(isinstance(worked_days, list))
+        self.assertEqual(worked_days[0].id, self.worked_day_orm.id)
+        self.assertEqual(worked_days[0].month_payment_id, self.month_payment_orm.id)
+        self.assertEqual(worked_days[0].day, self.worked_day_orm.day)
+
+    def test_interactor_methods_no_logged_exception(self):
+        with self.assertRaises(NoLoggedException):
+            self.worked_day_interactor.set_params(
+                month_payment_id=self.month_payment_orm.id,
+                logged_id=None
+            ).execute()
+
+    def test_interactor_methods_entity_does_not_exist_exception(self):
+        with self.assertRaises(EntityDoesNotExistException):
+            self.worked_day_interactor.set_params(
+                month_payment_id=self.month_payment_orm.id + 10,
+                logged_id=self.user_orm.id
+            ).execute()
+
+
 
 class GetHourPaymentInteractorTest(TestCase):
     def setUp(self):
