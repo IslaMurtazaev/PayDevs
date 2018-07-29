@@ -1,5 +1,5 @@
 from PayDevs.exceptions import PayDevsException
-from PayDevs.serializer import ExceptionSerializer
+from PayDevs.serializers import ExceptionSerializer
 from PayDevs.constants import exception_status_codes
 
 

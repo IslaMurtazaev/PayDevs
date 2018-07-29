@@ -128,28 +128,44 @@ class GetAllProjectsInteractor(Interactor):
 
 
 class ProjectGetTotalInteractor(Interactor):
-    def __init__(self, project_repo):
+    def __init__(self, project_repo, validate_user_project):
         self.project_repo = project_repo
+        self.validate_user_project = validate_user_project
 
-    def set_params(self, logged_id, project_id, **kwargs):
+    def set_params(self, logged_id, project_id, end_date=None, paid=False, last_month=None, **kwargs):
         self.user_id = logged_id
         self.project_id = project_id
+        self.project_id = project_id
+        self.last_month = last_month
+        self.paid = paid
+        self.end_date = end_date
         return self
 
     def execute(self):
+        self.validate_user_project.validate_permission(self.user_id)
         project = self.project_repo.get(self.project_id)
-        return project.total
+        self.validate_user_project.validate_permission(self.user_id, project.user_id)
+        # end_work = self.project_date_validator.validate_datetime_format(self.end_work)
+        project = Project(
+            id=project.id,
+            title=project.title,
+            description=project.description,
+            start_date=project.start_date,
+            end_date=self.end_date,
+            status=project.status,
+            type_of_payment=project.type_of_payment,
+            user_id=project.user_id
+        )
+        self.project_repo.update(project)
+        project_total = self.project_repo.get_total_project(self.project_id, paid=self.paid, pay=True)
+        project.username="dfsdfsd"
+        return project_total
 
-
-class GetTotalProject(Interactor):
-    def set_params(self, *args, **kwargs):
-        pass
-
-    def execute(self, *args, **kwargs):
-        pass
 
 
 # --------------------------- Work Task ----------------------------------------#
+
+
 
 class GetTaskInteractor(Interactor):
     def __init__(self, work_task_repo, validate_user_project):

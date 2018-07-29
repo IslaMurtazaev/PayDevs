@@ -26,7 +26,7 @@ class BaseSerializer(object):
             diff_attr = fields.difference(attr_set)
             if diff_attr:
                 raise SerializerException('Class {0} does not have the '
-                                          'attribute {1}'.format(cls.model.__name__, list(diff_attr)[0]))
+                                          'attribute "{1}"'.format(cls.model.__name__, list(diff_attr)[0]))
             for a in attributes:
                 if not (a[0].startswith('__') and a[0].endswith('__')) and (a[0] in fields):
                     result[a[0]] = getattr(obj, a[0])

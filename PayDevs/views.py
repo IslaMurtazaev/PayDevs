@@ -58,6 +58,18 @@ class ViewWrapper(View):
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
 
+    def patch(self, request, *args, **kwargs):
+        kwargs.update(self.params(request))
+        try:
+            json_data = json.loads(str(request.body, encoding='utf-8'))
+        except:
+            json_data = request.POST.dict()
+        kwargs.update(json_data)
+        body, status = self.view_factory().patch(*args, **kwargs)
+        return self.pdf_generator(body)
+
+
+
 
     def auth_get_user(self, request):
         auth_header = request.META.get('HTTP_AUTHORIZATION')
@@ -78,12 +90,12 @@ class ViewWrapper(View):
         p.drawString(200, 800, "Project total report bill")
         for key in body:
             if key == 'type_of_payment':
-                if (body[key] == 'M_P'):
+                if body[key] == 'M_P':
                     body[key] = "Monthly payment"
-                elif (body[key] == 'H_P'):
+                elif body[key] == 'H_P':
                     body[key] = "Hourly payment"
                 else:
-                    body[key] = "Taskly payment"
+                    body[key] = "Tacky payment"
                 p.drawString(150, height, "Type of payment: " + body[key])
             else:
                 p.drawString(150, height, "%s:  %s" % (key.title(), body[key]))

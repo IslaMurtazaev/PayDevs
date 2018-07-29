@@ -1,6 +1,6 @@
 from project.serializers import ProjectSerializer, ProjectListSerializer, WorkTaskSerializer, WorkTaskListSerializer, \
     WorkedDaySerializer, WorkedDayListSerializer, WorkTimeSerializer, WorkTimeListSerializer, MonthPaymentSerializer, \
-    MonthPaymentListSerializer, HourPaymentSerializer, HourPaymentListSerializer
+    MonthPaymentListSerializer, HourPaymentSerializer, HourPaymentListSerializer, ProjectTotalSerializer
 from PayDevs.decorators import serialize_exception
 from PayDevs.constants import StatusCodes
 
@@ -53,6 +53,20 @@ class GetAllProjectsView(object):
     def get(self, *args, **kwargs):
         projects = self.get_all_projects_interactor.set_params(**kwargs).execute()
         body = ProjectListSerializer.serialize(projects)
+        status = StatusCodes.OK
+        return body, status
+
+
+
+class GetTotalProjectsView(object):
+
+    def __init__(self, get_total_projects_interactor):
+        self.get_total_projects_interactor = get_total_projects_interactor
+
+    @serialize_exception
+    def patch(self, *args, **kwargs):
+        projects = self.get_total_projects_interactor.set_params(**kwargs).execute()
+        body = ProjectTotalSerializer.serialize(projects)
         status = StatusCodes.OK
         return body, status
 

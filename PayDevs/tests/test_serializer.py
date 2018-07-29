@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from PayDevs.exceptions import SerializerException
-from PayDevs.serializer import BaseSerializer
+from PayDevs.serializers import BaseSerializer
 
 
 class SerializerTest(TestCase):

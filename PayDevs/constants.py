@@ -29,5 +29,5 @@ exception_status_codes = {
     EntityIntegrityException: 409,
     InvalidEntityException: 422,
     NoLoggedException: 401,
-    SerializerException: 500
+    # SerializerException: 500
 }

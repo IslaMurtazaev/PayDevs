@@ -9,7 +9,7 @@ from project.interactors import CreateProjectInteractor, UpdateProjectInteractor
     CreateHourPaymentInteractor, GetHourPaymentInteractor, UpdateHourPaymentInteractor, DeleteHourPaymentInteractor, \
     GetAllHourPaymentInteractor, CreateWorkTimeInteractor, GetWorkTimeInteractor, UpdateWorkTimeInteractor, \
     DeleteWorkTimeInteractor, GetAllWorkTimeInteractor, GetWorkedDayInteractor, CreateWorkedDayInteractor, \
-    UpdateWorkedDayInteractor, DeleteWorkedDayInteractor, GetAllWorkedDaysInteractor
+    UpdateWorkedDayInteractor, DeleteWorkedDayInteractor, GetAllWorkedDaysInteractor, ProjectGetTotalInteractor
 
 
 class CreateProjectInteractorFactory(object):
@@ -313,3 +313,13 @@ class GetAllWorkTimeInteractorFactory(object):
         create_project_repo = HourPaymentRepoFactory().create()
         return GetAllWorkTimeInteractor(create_hour_payment_repo, create_project_repo,
                                         validate_user_project)
+
+
+
+
+class GetTotalProjectInteractorFactory(object):
+    @staticmethod
+    def create():
+        project_repo = ProjectRepoFactory.create()
+        validate_user_project = UserPermissionsValidatorFactory.create()
+        return ProjectGetTotalInteractor(project_repo, validate_user_project)

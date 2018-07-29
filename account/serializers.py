@@ -1,4 +1,4 @@
-from PayDevs.serializer import BaseSerializer, ListSerializer
+from PayDevs.serializers import BaseSerializer, ListSerializer
 from account.entities import User
 
 

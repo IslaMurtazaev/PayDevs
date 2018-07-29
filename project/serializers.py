@@ -1,11 +1,16 @@
 from PayDevs.constants import DATE_TIME_FORMAT
-from PayDevs.serializer import BaseSerializer, ListSerializer, DateFormatSerializer, DateFormatListSerializer
+from PayDevs.serializers import BaseSerializer, ListSerializer, DateFormatSerializer, DateFormatListSerializer
 from project.entities import Project, WorkTask, WorkedDay, WorkTime, MonthPayment, HourPayment
 
 
 class ProjectSerializer(DateFormatSerializer):
     model = Project
     fields = ['id', 'user_id', 'title', 'description', 'start_date', 'end_date',  'type_of_payment', 'status']
+
+
+class ProjectTotalSerializer(DateFormatSerializer):
+    model = Project
+    fields = ['title', 'description', 'start_date', 'end_date',  'type_of_payment', 'status', 'total']
 
 
 class ProjectListSerializer(DateFormatListSerializer):
