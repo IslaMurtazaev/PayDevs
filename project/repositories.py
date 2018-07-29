@@ -112,7 +112,8 @@ class ProjectRepo(object):
                                                                                    last_month_days=last_month_days,
                                                                                    pay=pay)
         elif db_project.type_of_payment == 'T_P':
-            entity_type_list = WorkTaskRepo().get_work_tasks(project_id=db_project.id, paid=paid, pay=False)
+            entity_type_list = WorkTaskRepo().get_work_tasks(project_id=db_project.id, paid=paid, pay=pay)
+
 
         return entity_type_list
 
@@ -391,8 +392,8 @@ class HourPaymentRepo:
                 project_id=hour_payment.project_id,
                 rate=hour_payment.rate
             )
-        except:
-            raise InvalidEntityException
+        except Exception as e:
+            raise InvalidEntityException(source='entity', code='not_null', message=str(e))
         return self._decode_db_hour_payment(db_hour_payment)
 
     def delete(self, hour_payment_id):
@@ -428,13 +429,17 @@ class HourPaymentRepo:
 
 class WorkTimeRepo:
     def create(self, work_time):
-        db_work_time = WorkTimeORM.objects.create(
-            hour_payment_id=work_time.hour_payment_id,
-            start_work=work_time.start_work,
-            end_work=work_time.end_work,
-            paid=work_time.paid
-        )
-        return self._decode_db_work_time(db_work_time)
+        try:
+            db_work_time = WorkTimeORM.objects.create(
+                hour_payment_id=work_time.hour_payment_id,
+                start_work=work_time.start_work,
+                end_work=work_time.end_work,
+                paid=work_time.paid
+            )
+            return self._decode_db_work_time(db_work_time)
+        except Exception as e:
+            raise InvalidEntityException(source='entity', code='not_null', message=str(e))
+
 
     def get_all(self, hour_payment_id):
         try:

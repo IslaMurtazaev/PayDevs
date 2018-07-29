@@ -1,6 +1,7 @@
 from PayDevs.constants import DATE_TIME_FORMAT, DATE_FORMAT
 from PayDevs.exceptions import NoLoggedException, NoPermissionException, InvalidEntityException
 import datetime
+from  django.utils import timezone
 
 
 class UserPermissionValidator:
@@ -56,6 +57,16 @@ class ProjectDateTimeValidator:
             return datetime.datetime.strptime(date_string, DATE_FORMAT)
         except:
             raise InvalidEntityException(source='validator',  code='invalid_format', message="Invalid date format")
+
+
+    def now_end_date_project(self, type_of_payment):
+        if type_of_payment == 'M_P':
+            return timezone.now().replace(day=1)
+        elif type_of_payment == 'H_P':
+            return timezone.now()
+        else:
+            return None
+
 
 class RateValidator:
     @staticmethod

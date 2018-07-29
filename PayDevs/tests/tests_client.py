@@ -602,6 +602,8 @@ class MonthPaymentClientTest(TestCase):
         self.assertEqual(body[0].get('project_id'), self.db_month_payment.project_id)
         self.assertEqual(body[0].get('rate'), self.db_month_payment.rate)
 
+
+
 class WorkedDayClientTest(TestCase):
     def setUp(self):
         self.client = Client()

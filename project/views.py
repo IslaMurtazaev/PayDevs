@@ -65,8 +65,11 @@ class GetTotalProjectsView(object):
 
     @serialize_exception
     def patch(self, *args, **kwargs):
-        projects = self.get_total_projects_interactor.set_params(**kwargs).execute()
-        body = ProjectTotalSerializer.serialize(projects)
+        project = self.get_total_projects_interactor.set_params(**kwargs).execute()
+        body = ProjectTotalSerializer.serialize(project)
+        body['User'] = project.user
+        if hasattr(project, 'count_task'):
+            body['Count Task'] = project.count_task
         status = StatusCodes.OK
         return body, status
 

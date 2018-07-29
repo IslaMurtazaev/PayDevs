@@ -128,9 +128,11 @@ class GetAllProjectsInteractor(Interactor):
 
 
 class ProjectGetTotalInteractor(Interactor):
-    def __init__(self, project_repo, validate_user_project):
+    def __init__(self, project_repo, user_repo, validate_user_project, project_date_validator):
         self.project_repo = project_repo
         self.validate_user_project = validate_user_project
+        self.user_repo = user_repo
+        self.project_date_validator = project_date_validator
 
     def set_params(self, logged_id, project_id, end_date=None, paid=False, last_month=None, **kwargs):
         self.user_id = logged_id
@@ -145,20 +147,27 @@ class ProjectGetTotalInteractor(Interactor):
         self.validate_user_project.validate_permission(self.user_id)
         project = self.project_repo.get(self.project_id)
         self.validate_user_project.validate_permission(self.user_id, project.user_id)
+        end_date = self.end_date if self.end_date is not None else self.project_date_validator.now_end_date_project(
+            project.type_of_payment
+        )
         # end_work = self.project_date_validator.validate_datetime_format(self.end_work)
         project = Project(
             id=project.id,
             title=project.title,
             description=project.description,
             start_date=project.start_date,
-            end_date=self.end_date,
+            end_date=end_date,
             status=project.status,
             type_of_payment=project.type_of_payment,
             user_id=project.user_id
         )
         self.project_repo.update(project)
         project_total = self.project_repo.get_total_project(self.project_id, paid=self.paid, pay=True)
-        project.username="dfsdfsd"
+        if project_total.type_of_payment == 'T_P':
+            project_total.count_task = len(project_total._entity_type_list)
+        user = self.user_repo.get_user_by_id(self.user_id)
+        project_total.user = user.username
+        print(project_total.total)
         return project_total
 
 
@@ -191,7 +200,7 @@ class CreateTaskInteractor(Interactor):
         self.validate_user_project = validate_user_project
         self.project_repo = project_repo
 
-    def set_params(self, logged_id, project_id, title, description, price, paid=False, completed=False, **kwargs):
+    def set_params(self, logged_id, project_id, title, description, price=0, paid=False, completed=False, **kwargs):
         self.user_id = logged_id
         self.project_id = project_id
         self.title = title

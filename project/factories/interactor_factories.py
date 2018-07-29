@@ -1,3 +1,4 @@
+from account.factories.repo_factories import UserRepoFactory
 from project.factories.repo_factories import ProjectRepoFactory, WorkTaskRepoFactory, MonthPaymentRepoFactory, \
     WorkedDayRepoFactory, HourPaymentRepoFactory, WorkTimeRepoFactory
 from project.factories.validator_factories import UserPermissionsValidatorFactory, ProjectDateTimeValidatorFactory, \
@@ -321,5 +322,7 @@ class GetTotalProjectInteractorFactory(object):
     @staticmethod
     def create():
         project_repo = ProjectRepoFactory.create()
+        user_repo = UserRepoFactory().create()
         validate_user_project = UserPermissionsValidatorFactory.create()
-        return ProjectGetTotalInteractor(project_repo, validate_user_project)
+        project_date_time = ProjectDateTimeValidatorFactory.create()
+        return ProjectGetTotalInteractor(project_repo, user_repo, validate_user_project, project_date_time)
