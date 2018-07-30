@@ -4,18 +4,24 @@ import datetime
 from  django.utils import timezone
 
 
-class UserPermissionValidator:
+class PermissionValidator:
+
     def __init__(self, user_repo):
         self.user_repo = user_repo
 
-    def validate_permission(self, logged_id, user_id=None):
+    @staticmethod
+    def validate(logged_id, user_id=None):
         if logged_id is None:
             raise NoLoggedException
         if user_id is not None and logged_id != user_id:
             raise NoPermissionException
 
 
-    def validate_type_of_payment(self, type_of_payment):
+
+class TypeOfPaymentValidator:
+
+    @staticmethod
+    def validate(type_of_payment):
         if type_of_payment not in ('T_P', 'M_P', 'H_P'):
             raise InvalidEntityException(source='validator',  code='other_type_of_payment',
                                          message="The type of payment must be only one of T_P, H_P and M_P")
@@ -39,10 +45,10 @@ class UserPermissionValidator:
 
 
 
+class DateTimeValidator:
 
-class ProjectDateTimeValidator:
-
-    def validate_datetime_format(self, date_string):
+    @staticmethod
+    def validate_datetime_format(date_string):
         if date_string is None:
             return None
         try:
@@ -50,7 +56,8 @@ class ProjectDateTimeValidator:
         except:
             raise InvalidEntityException(source='validator',  code='invalid_format', message="Invalid datetime format")
 
-    def validate_date_format(self, date_string):
+    @staticmethod
+    def validate_date_format(date_string):
         if date_string is None:
             return None
         try:
@@ -58,8 +65,8 @@ class ProjectDateTimeValidator:
         except:
             raise InvalidEntityException(source='validator',  code='invalid_format', message="Invalid date format")
 
-
-    def now_end_date_project(self, type_of_payment):
+    @staticmethod
+    def now_end_date_project(type_of_payment):
         if type_of_payment == 'M_P':
             return timezone.now().replace(day=1)
         elif type_of_payment == 'H_P':
@@ -69,6 +76,7 @@ class ProjectDateTimeValidator:
 
 
 class RateValidator:
+
     @staticmethod
     def validate(rate):
         if rate is None:

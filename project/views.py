@@ -334,5 +334,3 @@ class GetWorkTimeListView(object):
         body = WorkTimeListSerializer.serialize(worked_time_list)
         status = StatusCodes.OK
         return body, status
-
-

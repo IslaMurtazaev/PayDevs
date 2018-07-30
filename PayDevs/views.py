@@ -17,11 +17,7 @@ class ViewWrapper(View):
         kwargs.update(request.GET.dict())
         kwargs.update(self.params(request))
         body, status = self.view_factory().get(*args, **kwargs)
-
-        if isinstance(body, dict) and body.get('total'):
-            return self.pdf_generator(body)
-        else:
-            return HttpResponse(json.dumps(body), status=status, content_type='application/json')
+        return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
     @json_exception
     def post(self, request, *args, **kwargs):
@@ -39,11 +35,8 @@ class ViewWrapper(View):
         body, status = self.view_factory().put(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
-    @json_exception
     def delete(self, request, *args, **kwargs):
         kwargs.update(self.params(request))
-        json_data = json.loads(str(request.body, encoding='utf-8'))
-        kwargs.update(json_data)
         body, status = self.view_factory().delete(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
