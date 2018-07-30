@@ -201,9 +201,7 @@ class HourPaymentClientTest(TestCase):
 
     def test_get_hour_payment(self):
         header = {'HTTP_AUTHORIZATION': self.token}
-        response = self.client.get(reverse('get_hour_payment', kwargs={'project_id': self.project_db.id,
-                                                                       'hour_payment_id': self.hour_payment_db.id
-                                                                       }
+        response = self.client.get(reverse('get_hour_payment', kwargs={'hour_payment_id': self.hour_payment_db.id}
                                            ), content_type="application/json", **header)
         body = json.loads(response.content.decode())
         self.assertEqual(body.get('id'), self.hour_payment_db.id)
@@ -227,9 +225,7 @@ class HourPaymentClientTest(TestCase):
 
     def test_delete_hour_payment(self):
         header = {'HTTP_AUTHORIZATION': self.token}
-        response = self.client.delete(reverse('delete_hour_payment', kwargs={'project_id': self.project_db.id,
-                                                                             'hour_payment_id': self.hour_payment_db.id
-                                                                             }
+        response = self.client.delete(reverse('delete_hour_payment', kwargs={'hour_payment_id': self.hour_payment_db.id}
                                               ), content_type="application/json", **header)
         body = json.loads(response.content.decode())
         self.assertEqual(body.get('project_id'), self.project_db.id)
@@ -239,7 +235,7 @@ class HourPaymentClientTest(TestCase):
 
     def test_get_all_hour_payment(self):
         header = {'HTTP_AUTHORIZATION': self.token}
-        response = self.client.get(reverse('get_all_hour_payment', kwargs={'project_id': self.project_db.id, }
+        response = self.client.get(reverse('get_all_hour_payments', kwargs={'project_id': self.project_db.id}
                                            ), content_type="application/json", **header)
         body = json.loads(response.content.decode())
         self.assertEqual(type(body), list)
@@ -297,10 +293,7 @@ class WorkTimeClientTest(TestCase):
 
     def test_get_work_time(self):
         header = {'HTTP_AUTHORIZATION': self.token}
-        response = self.client.get(reverse('get_work_time', kwargs={'project_id': self.project_db.id,
-                                                                    'hour_payment_id': self.hour_payment_db.id,
-                                                                    'work_time_id': self.work_time_db.id
-                                                                    }
+        response = self.client.get(reverse('get_work_time', kwargs={'work_time_id': self.work_time_db.id}
                                            ), content_type="application/json", **header)
         body = json.loads(response.content.decode())
         self.assertEqual(body.get('hour_payment_id'), self.hour_payment_db.id)
@@ -331,10 +324,7 @@ class WorkTimeClientTest(TestCase):
     def test_delete_work_time(self):
         header = {'HTTP_AUTHORIZATION': self.token}
         self.assertIsNotNone(WorkTimeORM.objects.get(id=self.work_time_db.id))
-        response = self.client.delete(reverse('delete_work_time', kwargs={'project_id': self.project_db.id,
-                                                                          'hour_payment_id': self.hour_payment_db.id,
-                                                                          'work_time_id': self.work_time_db.id
-                                                                          }
+        response = self.client.delete(reverse('delete_work_time', kwargs={'work_time_id': self.work_time_db.id}
                                               ), content_type="application/json", **header)
         body = json.loads(response.content.decode())
         with self.assertRaises(WorkTimeORM.DoesNotExist):
@@ -344,9 +334,7 @@ class WorkTimeClientTest(TestCase):
     def test_get_all_work_time(self):
         header = {'HTTP_AUTHORIZATION': self.token}
 
-        response = self.client.get(reverse('get_all_work_time', kwargs={'project_id': self.project_db.id,
-                                                                    'hour_payment_id': self.hour_payment_db.id,
-                                                                    }
+        response = self.client.get(reverse('get_all_work_time', kwargs={'hour_payment_id': self.hour_payment_db.id}
                                            ), content_type="application/json", **header)
         body = json.loads(response.content.decode())
         self.assertEqual(type(body), list)
@@ -454,7 +442,6 @@ class MonthPaymentClientTest(TestCase):
 
     def test_get_month_payment(self):
         url_params = {
-            'project_id': self.db_project.id,
             'month_payment_id': self.db_month_payment.id
         }
 
@@ -529,7 +516,6 @@ class MonthPaymentClientTest(TestCase):
 
     def test_delete_month_payment(self):
         url_params = {
-            'project_id': self.db_project.id,
             'month_payment_id': self.db_month_payment.id
         }
 
@@ -556,20 +542,10 @@ class MonthPaymentClientTest(TestCase):
         body = json.loads(response.content.decode())
         error = body.get('error')
         self.assertIsNotNone(error)
-        self.assertEqual(error.get('code'), 'denied')
-        self.assertEqual(error.get('source'), 'permission')
-        self.assertEqual(error.get('message'), 'Permission denied')
+        self.assertEqual(error.get('code'), 'not_found')
+        self.assertEqual(error.get('source'), 'entity')
+        self.assertEqual(error.get('message'), 'Entity not found')
 
-
-        response = self.client.delete(reverse('delete_month_payment', kwargs={'project_id': self.db_project2.id,
-            'month_payment_id': self.db_month_payment.id}), content_type='application/json', **headers)
-        body = json.loads(response.content.decode())
-
-        error = body.get('error')
-        self.assertIsNotNone(error)
-        self.assertEqual(error.get('code'), 'denied')
-        self.assertEqual(error.get('source'), 'permission')
-        self.assertEqual(error.get('message'), 'Permission denied')
 
 
 
@@ -696,8 +672,6 @@ class WorkedDayClientTest(TestCase):
 
     def test_get_worked_day(self):
         url_params = {
-            'project_id': self.db_project.id,
-            'month_payment_id': self.db_month_payment.id,
             'worked_day_id': self.db_worked_day.id
         }
 
@@ -772,8 +746,6 @@ class WorkedDayClientTest(TestCase):
 
     def test_delete_worked_day(self):
         url_params = {
-            'project_id': self.db_project.id,
-            'month_payment_id': self.db_month_payment.id,
             'worked_day_id': self.db_worked_day.id
         }
 
@@ -789,36 +761,15 @@ class WorkedDayClientTest(TestCase):
 
         self.assertEqual(deleted_worked_day.id, body.get('id'))
         self.assertEqual(deleted_worked_day.month_payment_id, body.get('month_payment_id'))
-        self.assertEqual(self.db_worked_day.day,datetime.datetime.strptime(body.get('day'), "%Y-%m-%d %H:%M:%S").date())
+        self.assertEqual(self.db_worked_day.day, datetime.datetime.strptime(body.get('day'), "%Y-%m-%d %H:%M:%S").date())
 
 
         with self.assertRaises(WorkedDayORM.DoesNotExist):
             WorkedDayORM.objects.get(id=deleted_worked_day.id)
 
-        response = self.client.delete(reverse('delete_worked_day', kwargs=url_params),
-                                      content_type='application/json', **{'HTTP_AUTHORIZATION': self.token2})
-        body = json.loads(response.content.decode())
-        error = body.get('error')
-        self.assertIsNotNone(error)
-        self.assertEqual(error.get('code'), 'denied')
-        self.assertEqual(error.get('source'), 'permission')
-        self.assertEqual(error.get('message'), 'Permission denied')
-
-        response = self.client.delete(reverse('delete_worked_day', kwargs={'project_id': self.db_project2.id,
-                'month_payment_id': self.db_month_payment.id, 'worked_day_id': deleted_worked_day.id}),
-                                      content_type='application/json', **headers)
-        body = json.loads(response.content.decode())
-
-        error = body.get('error')
-        self.assertIsNotNone(error)
-        self.assertEqual(error.get('code'), 'denied')
-        self.assertEqual(error.get('source'), 'permission')
-        self.assertEqual(error.get('message'), 'Permission denied')
-
 
     def test_get_all_worked_days(self):
         url_params = {
-            'project_id': self.db_project.id,
             'month_payment_id': self.db_month_payment.id
         }
 

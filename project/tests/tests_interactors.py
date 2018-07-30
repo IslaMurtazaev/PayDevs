@@ -345,7 +345,6 @@ class GetAllProjectsInteractorTest(TestCase):
             ).execute()
 
 
-# --------------------------- Month Payment Tests -------------------------------- #
 
 class CreateMonthPaymentInteractorTest(TestCase):
 
@@ -603,16 +602,13 @@ class DeleteMonthPaymentInteractorTest(TestCase):
             rate=100
         )
 
-        self.project_repo = ProjectRepo()
-        self.month_payment_repo = MonthPaymentRepo()
+        month_payment_repo = MonthPaymentRepo()
         permission_validator = PermissionValidator(UserRepo())
-        self.month_payment_interactor = DeleteMonthPaymentInteractor(self.month_payment_repo, self.project_repo,
-                                                                     permission_validator)
+        self.month_payment_interactor = DeleteMonthPaymentInteractor(month_payment_repo, permission_validator)
 
     def test_method_set_params(self):
         deleted_month_payment = self.month_payment_interactor.set_params(
             month_payment_id=self.month_payment_orm.id,
-            project_id=self.project_orm.id,
             logged_id=self.user_orm.id
         ).execute()
 
@@ -625,25 +621,15 @@ class DeleteMonthPaymentInteractorTest(TestCase):
         with self.assertRaises(NoLoggedException):
             self.month_payment_interactor.set_params(
                 month_payment_id=self.month_payment_orm.id,
-                project_id=self.project_orm.id,
                 logged_id=None
             ).execute()
 
-
-    def test_method_set_params_no_permission_exception(self):
-        with self.assertRaises(NoPermissionException):
-            self.month_payment_interactor.set_params(
-                month_payment_id=self.month_payment_orm.id,
-                project_id=self.project_orm.id,
-                logged_id=self.user_orm.id + 10
-            ).execute()
 
 
     def test_method_set_params_entity_does_not_exist_exception(self):
         with self.assertRaises(EntityDoesNotExistException):
             self.month_payment_interactor.set_params(
-                month_payment_id=self.month_payment_orm.id,
-                project_id=self.project_orm.id + 10,
+                month_payment_id=self.month_payment_orm.id+10,
                 logged_id=self.user_orm.id
             ).execute()
 
@@ -694,7 +680,6 @@ class GetAllMonthPaymentsInteractorTest(TestCase):
             ).execute()
 
 
-# --------------------------- Worked Day Tests -------------------------------- #
 
 class CreateWorkedDayInteractorTest(TestCase):
 
@@ -949,13 +934,13 @@ class UpdateWorkedDayInteractorTest(TestCase):
             paid=False
         )
 
-        self.project_repo = ProjectRepo()
-        self.month_payment_repo = MonthPaymentRepo()
-        self.worked_day_repo = WorkedDayRepo()
+        project_repo = ProjectRepo()
+        month_payment_repo = MonthPaymentRepo()
+        worked_day_repo = WorkedDayRepo()
         permission_validator = PermissionValidator(UserRepo())
         date_validator = DateTimeValidator()
-        self.worked_day_interactor = UpdateWorkedDayInteractor(self.worked_day_repo, self.month_payment_repo,
-                                                               self.project_repo, permission_validator,
+        self.worked_day_interactor = UpdateWorkedDayInteractor(worked_day_repo, month_payment_repo,
+                                                               project_repo, permission_validator,
                                                                date_validator)
 
     def test_method_set_params(self):
@@ -1102,18 +1087,14 @@ class DeleteWorkedDayInteractorTest(TestCase):
             paid=False
         )
 
-        self.project_repo = ProjectRepo()
-        self.month_payment_repo = MonthPaymentRepo()
-        self.worked_day_repo = WorkedDayRepo()
+
+        worked_day_repo = WorkedDayRepo()
         permission_validator = PermissionValidator(UserRepo())
-        self.worked_day_interactor = DeleteWorkedDayInteractor(self.worked_day_repo, self.month_payment_repo,
-                                                               self.project_repo, permission_validator)
+        self.worked_day_interactor = DeleteWorkedDayInteractor(worked_day_repo, permission_validator)
 
     def test_method_set_params(self):
         deleted_worked_day = self.worked_day_interactor.set_params(
             worked_day_id=self.worked_day_orm.id,
-            month_payment_id=self.month_payment_orm.id,
-            project_id=self.project_orm.id,
             logged_id=self.user_orm.id
         ).execute()
 
@@ -1127,53 +1108,15 @@ class DeleteWorkedDayInteractorTest(TestCase):
         with self.assertRaises(NoLoggedException):
             self.worked_day_interactor.set_params(
                 worked_day_id=self.worked_day_orm.id,
-                month_payment_id=self.month_payment_orm.id,
-                project_id=self.project_orm.id,
                 logged_id=None
             ).execute()
 
-
-    def test_method_set_params_no_permission_exception(self):
-
-        with self.assertRaises(NoPermissionException):
-            self.worked_day_interactor.set_params(
-                worked_day_id=self.worked_day_orm.id,
-                month_payment_id=self.month_payment_orm.id,
-                project_id=self.project_orm.id,
-                logged_id=self.user_orm2.id
-            ).execute()
-
-        with self.assertRaises(NoPermissionException):
-            self.worked_day_interactor.set_params(
-                worked_day_id=self.worked_day_orm.id,
-                month_payment_id=self.month_payment_orm.id,
-                project_id=self.project_orm2.id,
-                logged_id=self.user_orm.id
-            ).execute()
-
-        with self.assertRaises(NoPermissionException):
-            self.worked_day_interactor.set_params(
-                worked_day_id=self.worked_day_orm.id,
-                month_payment_id=self.month_payment_orm2.id,
-                project_id=self.project_orm.id,
-                logged_id=self.user_orm.id
-            ).execute()
-
-        with self.assertRaises(NoPermissionException):
-            self.worked_day_interactor.set_params(
-                worked_day_id=self.worked_day_orm2.id,
-                month_payment_id=self.month_payment_orm.id,
-                project_id=self.project_orm.id,
-                logged_id=self.user_orm.id
-            ).execute()
 
     def test_method_set_params_entity_does_not_exist_exception(self):
 
         with self.assertRaises(EntityDoesNotExistException):
             self.worked_day_interactor.set_params(
                 worked_day_id=self.worked_day_orm.id+10,
-                month_payment_id=self.month_payment_orm.id,
-                project_id=self.project_orm.id,
                 logged_id=self.user_orm.id
             ).execute()
 
@@ -1304,15 +1247,6 @@ class GetHourPaymentInteractorTest(TestCase):
                 logged_id=self.user_orm.id,
                 project_id=self.project_orm.id,
                 hour_payment_id=None
-
-            ).execute()
-
-    def test_execute_entity_no_permission(self):
-        with self.assertRaises(NoPermissionException):
-            self.get_hour_payment_interactor.set_params(
-                logged_id=self.user_orm.id,
-                project_id=self.project_orm.id + 1,
-                hour_payment_id=self.hour_payment_orm.id
 
             ).execute()
 
@@ -1565,16 +1499,11 @@ class DeleteHourPaymentInteractorTest(TestCase):
 
         hour_payment_repo = HourPaymentRepo()
         user_project_validate = PermissionValidator(UserRepo())
-        project_repo = ProjectRepo()
-        self.delete_hour_payment_interactor = DeleteHourPaymentInteractor(hour_payment_repo,
-                                                                          project_repo,
-                                                                          user_project_validate
-                                                                          )
+        self.delete_hour_payment_interactor = DeleteHourPaymentInteractor(hour_payment_repo, user_project_validate)
 
     def test_set_params_execute(self):
         deleted_hour_payment = self.delete_hour_payment_interactor.set_params(
             logged_id=self.user_orm.id,
-            project_id=self.project_orm.id,
             hour_payment_id=self.hour_payment_orm.id
         ).execute()
         self.assertEqual(deleted_hour_payment.id, self.hour_payment_orm.id)
@@ -1585,17 +1514,9 @@ class DeleteHourPaymentInteractorTest(TestCase):
         with self.assertRaises(NoLoggedException):
             self.delete_hour_payment_interactor.set_params(
                 logged_id=None,
-                project_id=self.project_orm.id,
                 hour_payment_id=self.hour_payment_orm.id
             ).execute()
 
-    def test_set_params_execute_no_permission(self):
-        with self.assertRaises(NoPermissionException):
-            self.delete_hour_payment_interactor.set_params(
-                logged_id=self.user_orm_2.id,
-                project_id=self.project_orm.id,
-                hour_payment_id=self.hour_payment_orm.id
-            ).execute()
 
 
 class GetAllHourPaymentInteractorTest(TestCase):
@@ -1604,7 +1525,6 @@ class GetAllHourPaymentInteractorTest(TestCase):
             username='testUser',
             email='test_user@mail.com',
             password='qwert12345'
-
         )
 
         self.user_orm_2 = UserORM.objects.create_user(
@@ -1639,11 +1559,7 @@ class GetAllHourPaymentInteractorTest(TestCase):
 
         hour_payment_repo = HourPaymentRepo()
         user_project_validate = PermissionValidator(UserRepo())
-        project_repo = ProjectRepo()
-        self.get_all_hour_payment_interactor = GetAllHourPaymentInteractor(hour_payment_repo,
-                                                                           project_repo,
-                                                                           user_project_validate
-                                                                           )
+        self.get_all_hour_payment_interactor = GetAllHourPaymentInteractor(hour_payment_repo, user_project_validate)
 
     def test_set_params_execute(self):
         for i in range(10):
@@ -1721,15 +1637,12 @@ class GetWorkTimeInteractorTest(TestCase):
         )
 
         work_time_repo = WorkTimeRepo()
-        hour_payment_repo = HourPaymentRepo()
         user_project_validate = PermissionValidator(UserRepo())
-        self.get_work_time_interactor = GetWorkTimeInteractor(work_time_repo, hour_payment_repo, user_project_validate)
+        self.get_work_time_interactor = GetWorkTimeInteractor(work_time_repo, user_project_validate)
 
     def test_set_params_execute(self):
         work_time = self.get_work_time_interactor.set_params(
             logged_id=self.user_orm.id,
-            project_id=self.project_orm.id,
-            hour_payment_id=self.hour_payment_orm.id,
             work_time_id=self.work_time_orm.id
         ).execute()
 
@@ -1749,27 +1662,7 @@ class GetWorkTimeInteractorTest(TestCase):
                 work_time_id=self.work_time_orm.id
             ).execute()
 
-    def test_set_params_execute_no_permission(self):
-        with self.assertRaises(NoPermissionException):
-            self.get_work_time_interactor.set_params(
-                logged_id=self.user_orm.id,
-                project_id=self.project_orm2.id,
-                hour_payment_id=self.hour_payment_orm.id,
-                work_time_id=self.work_time_orm.id
-            ).execute()
 
-    def test_set_params_execute_no_permission_hour_payment_id(self):
-        hour_payment_orm = HourPaymentORM.objects.create(
-            project_id=self.project_orm.id,
-            rate=550
-        )
-        with self.assertRaises(NoPermissionException):
-            self.get_work_time_interactor.set_params(
-                logged_id=self.user_orm.id,
-                project_id=self.project_orm.id,
-                hour_payment_id=hour_payment_orm.id,
-                work_time_id=self.work_time_orm.id
-            ).execute()
 
     def test_set_params_execute_entity_not_found(self):
         with self.assertRaises(EntityDoesNotExistException):
@@ -2102,11 +1995,8 @@ class DeleteWorkTimeInteractorTest(TestCase):
         )
 
         work_time_repo = WorkTimeRepo()
-        hour_payment_repo = HourPaymentRepo()
         user_project_validate = PermissionValidator(UserRepo())
-        project_repo = ProjectRepo()
-        self.delete_work_time_interactor = DeleteWorkTimeInteractor(work_time_repo, hour_payment_repo, project_repo,
-                                                                    user_project_validate)
+        self.delete_work_time_interactor = DeleteWorkTimeInteractor(work_time_repo, user_project_validate)
 
     def test_set_params_execute(self):
         deleted_work_time = self.delete_work_time_interactor.set_params(
@@ -2130,25 +2020,6 @@ class DeleteWorkTimeInteractorTest(TestCase):
                 logged_id=None,
                 hour_payment_id=self.hour_payment_orm.id,
                 work_time_id=self.work_time_orm.id
-
-            ).execute()
-
-    def test_set_params_execute_permission_user_id(self):
-        with self.assertRaises(NoPermissionException):
-            self.delete_work_time_interactor.set_params(
-                logged_id=self.user_orm_2.id,
-                hour_payment_id=self.hour_payment_orm.id,
-                work_time_id=self.work_time_orm.id
-
-            ).execute()
-
-    def test_set_params_execute_permission_hour_payment(self):
-        with self.assertRaises(NoPermissionException):
-            self.delete_work_time_interactor.set_params(
-                logged_id=self.user_orm.id,
-                hour_payment_id=self.hour_payment_orm2.id,
-                work_time_id=self.work_time_orm.id
-
             ).execute()
 
 
@@ -2165,7 +2036,6 @@ class GetAllWorkTimeInteractorTest(TestCase):
             username='testUser2',
             email='test_user@mail.com',
             password='qwert12345'
-
         )
 
         self.project_orm = ProjectORM.objects.create(
@@ -2198,10 +2068,8 @@ class GetAllWorkTimeInteractorTest(TestCase):
 
 
         work_time_repo = WorkTimeRepo()
-        hour_payment_repo = HourPaymentRepo()
         user_project_validate = PermissionValidator(UserRepo())
-        self.get_all_work_time_interactor = GetAllWorkTimeInteractor(work_time_repo, hour_payment_repo,
-                                                                     user_project_validate)
+        self.get_all_work_time_interactor = GetAllWorkTimeInteractor(work_time_repo, user_project_validate)
 
 
     def test_set_params_execute(self):
@@ -2300,11 +2168,11 @@ class GetTaskInteractorTest(TestCase):
 
 
     def test_set_params_execute_entity_not_found(self):
-        with self.assertRaises(NoLoggedException):
+        with self.assertRaises(EntityDoesNotExistException):
             self.get_task_interactor.set_params(
                 logged_id=self.user_orm.id,
-                project_id=None,
-                task_id=self.work_task_orm.id
+                project_id=self.project_orm.id,
+                task_id=None
             ).execute()
 
 
@@ -2622,14 +2490,12 @@ class DeleteTaskInteractorTest(TestCase):
         )
         work_task_repo = WorkTaskRepo()
         user_project_validate = PermissionValidator(UserRepo())
-        project_repo = ProjectRepo()
-        self.delete_task_interactor = DeleteTaskInteractor(work_task_repo, project_repo, user_project_validate)
+        self.delete_task_interactor = DeleteTaskInteractor(work_task_repo, user_project_validate)
 
 
     def test_set_params_execute(self):
         deleted_task = self.delete_task_interactor.set_params(
             logged_id=self.user_orm.id,
-            project_id=self.project_orm.id,
             task_id=self.work_task_orm.id
         ).execute()
 
@@ -2642,25 +2508,6 @@ class DeleteTaskInteractorTest(TestCase):
         with self.assertRaises(NoLoggedException):
             self.delete_task_interactor.set_params(
                 logged_id=None,
-                project_id=self.project_orm.id,
-                task_id=self.work_task_orm.id
-            ).execute()
-
-
-    def test_set_params_execute_no_permission_user(self):
-        with self.assertRaises(NoPermissionException):
-            self.delete_task_interactor.set_params(
-                logged_id=self.user_orm_2.id,
-                project_id=self.project_orm.id,
-                task_id=self.work_task_orm.id
-            ).execute()
-
-
-    def test_set_params_execute_no_permission_project_id(self):
-        with self.assertRaises(NoPermissionException):
-            self.delete_task_interactor.set_params(
-                logged_id=self.user_orm.id,
-                project_id=self.project_orm_2.id,
                 task_id=self.work_task_orm.id
             ).execute()
 
@@ -2674,14 +2521,12 @@ class GetAllTaskInteractorTest(TestCase):
             username='testUser',
             email='test_user@mail.com',
             password='qwert12345'
-
         )
 
         self.user_orm_2 = UserORM.objects.create_user(
             username='testUser2',
             email='test_user@mail.com',
             password='qwert12345'
-
         )
 
         self.project_orm = ProjectORM.objects.create(
@@ -2712,9 +2557,8 @@ class GetAllTaskInteractorTest(TestCase):
             )
         work_task_repo = WorkTaskRepo()
         user_project_validate = PermissionValidator(UserRepo())
-        project_repo = ProjectRepo()
         type_of_payment_validator = TypeOfPaymentValidator()
-        self.get_all_task_interactor = GetAllTasksInteractor(work_task_repo, project_repo, user_project_validate,
+        self.get_all_task_interactor = GetAllTasksInteractor(work_task_repo, user_project_validate,
                                                              type_of_payment_validator)
 
 

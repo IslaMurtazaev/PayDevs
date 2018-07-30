@@ -42,15 +42,12 @@ class DeleteProjectInteractorFactory(object):
         return DeleteProjectInteractor(project_repo, permission_validator)
 
 
-
 class GetProjectInteractorFactory(object):
     @staticmethod
     def create():
         project_repo = ProjectRepoFactory.create()
         permission_validator = PermissionValidatorFactory.create()
         return GetProjectInteractor(project_repo, permission_validator)
-
-
 
 
 class GetAllProjectsInteractorFactory(object):
@@ -61,7 +58,14 @@ class GetAllProjectsInteractorFactory(object):
         return GetAllProjectsInteractor(project_repo, permission_validator)
 
 
-
+class GetTotalProjectInteractorFactory(object):
+    @staticmethod
+    def create():
+        project_repo = ProjectRepoFactory.create()
+        user_repo = UserRepoFactory.create()
+        permission_validator = PermissionValidatorFactory.create()
+        datetime_validator = DateTimeValidatorFactory.create()
+        return ProjectGetTotalInteractor(project_repo, user_repo, permission_validator, datetime_validator)
 
 
 
@@ -99,19 +103,17 @@ class DeleteTaskInteractorFactory(object):
     @staticmethod
     def create():
         task_repo = WorkTaskRepoFactory.create()
-        project_repo = ProjectRepoFactory.create()
         permission_validator = PermissionValidatorFactory.create()
-        return DeleteTaskInteractor(task_repo, project_repo, permission_validator)
+        return DeleteTaskInteractor(task_repo, permission_validator)
 
 
 class GetAllTasksInteractorFactory(object):
     @staticmethod
     def create():
         task_repo = WorkTaskRepoFactory.create()
-        project_repo = ProjectRepoFactory.create()
         permission_validator = PermissionValidatorFactory.create()
         type_of_payment_validator = TypeOfPaymentValidatorFactory.create()
-        return GetAllTasksInteractor(task_repo, project_repo, permission_validator, type_of_payment_validator)
+        return GetAllTasksInteractor(task_repo, permission_validator, type_of_payment_validator)
 
 
 
@@ -148,9 +150,8 @@ class DeleteMonthPaymentInteractorFactory(object):
     @staticmethod
     def create():
         month_payment_repo = MonthPaymentRepoFactory.create()
-        project_repo = ProjectRepoFactory.create()
         permission_validator = PermissionValidatorFactory.create()
-        return DeleteMonthPaymentInteractor(month_payment_repo, project_repo, permission_validator)
+        return DeleteMonthPaymentInteractor(month_payment_repo, permission_validator)
 
 
 class GetAllMonthPaymentsInteractorFactory(object):
@@ -198,10 +199,8 @@ class DeleteWorkedDayInteractorFactory(object):
     @staticmethod
     def create():
         worked_day_repo = WorkedDayRepoFactory.create()
-        month_payment_repo = MonthPaymentRepoFactory.create()
-        project_repo = ProjectRepoFactory.create()
         permission_validator = PermissionValidatorFactory.create()
-        return DeleteWorkedDayInteractor(worked_day_repo, month_payment_repo, project_repo, permission_validator)
+        return DeleteWorkedDayInteractor(worked_day_repo, permission_validator)
 
 
 class GetAllWorkedDaysInteractorFactory(object):
@@ -239,9 +238,8 @@ class GetAllHourPaymentInteractorFactory(object):
     @staticmethod
     def create():
         hour_payment_repo = HourPaymentRepoFactory.create()
-        project_repo = ProjectRepoFactory.create()
         validate_user_project = PermissionValidatorFactory.create()
-        return GetAllHourPaymentInteractor(hour_payment_repo, project_repo, validate_user_project)
+        return GetAllHourPaymentInteractor(hour_payment_repo, validate_user_project)
 
 
 class UpdateHourPaymentInteractorFactory(object):
@@ -258,9 +256,8 @@ class DeleteHourPaymentInteractorFactory(object):
     @staticmethod
     def create():
         hour_payment_repo = HourPaymentRepoFactory.create()
-        project_repo = ProjectRepoFactory.create()
         permission_validator = PermissionValidatorFactory().create()
-        return DeleteHourPaymentInteractor(hour_payment_repo, project_repo, permission_validator)
+        return DeleteHourPaymentInteractor(hour_payment_repo, permission_validator)
 
 
 
@@ -280,10 +277,8 @@ class GetWorkTimeInteractorFactory(object):
     @staticmethod
     def create():
         work_time_repo = WorkTimeRepoFactory.create()
-        hour_payment_repo = HourPaymentRepoFactory.create()
         permission_validator = PermissionValidatorFactory().create()
-        return GetWorkTimeInteractor(work_time_repo, hour_payment_repo,
-                                     permission_validator)
+        return GetWorkTimeInteractor(work_time_repo, permission_validator)
 
 
 class UpdateWorkTimeInteractorFactory(object):
@@ -303,11 +298,8 @@ class DeleteWorkTimeInteractorFactory(object):
     @staticmethod
     def create():
         work_time_repo = WorkTimeRepoFactory.create()
-        hour_payment_repo = HourPaymentRepoFactory.create()
         permission_validator = PermissionValidatorFactory.create()
-        project_repo = ProjectRepoFactory.create()
-        return DeleteWorkTimeInteractor(work_time_repo, hour_payment_repo, project_repo,
-                                        permission_validator)
+        return DeleteWorkTimeInteractor(work_time_repo, permission_validator)
 
 
 
@@ -315,19 +307,5 @@ class GetAllWorkTimeInteractorFactory(object):
     @staticmethod
     def create():
         work_time_repo = WorkTimeRepoFactory.create()
-        hour_payment_repo = HourPaymentRepoFactory.create()
         permission_validator = PermissionValidatorFactory.create()
-        return GetAllWorkTimeInteractor(work_time_repo, hour_payment_repo,
-                                        permission_validator)
-
-
-
-
-class GetTotalProjectInteractorFactory(object):
-    @staticmethod
-    def create():
-        project_repo = ProjectRepoFactory.create()
-        user_repo = UserRepoFactory.create()
-        permission_validator = PermissionValidatorFactory.create()
-        datetime_validator = DateTimeValidatorFactory.create()
-        return ProjectGetTotalInteractor(project_repo, user_repo, permission_validator, datetime_validator)
+        return GetAllWorkTimeInteractor(work_time_repo, permission_validator)
