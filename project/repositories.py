@@ -87,6 +87,18 @@ class ProjectRepo(object):
         db_project = db_project_filter .get(id=project.id)
         return self._decode_db_project(db_project)
 
+    def update_payment_attrs(self, project_id, last_month_days=None, boundary=None, pay=False):
+        try:
+            db_project = ProjectORM.objects.select_related('user').get(id=project_id)
+        except ProjectORM.DoesNotExist:
+            raise EntityDoesNotExistException
+        if db_project.type_of_payment == 'H_P':
+            pass
+        elif db_project.type_of_payment == 'M_P':
+            pass
+        elif db_project.type_of_payment == 'T_P':
+            self.task_repo.update_taks(project_id, pay=pay)
+
     def _get_entity_type_list(self, project_id, paid=False, last_month_days=None, boundary=None, pay=False):
         entity_type_list = []
         try:
@@ -125,6 +137,10 @@ class WorkTaskRepo:
         for db_work_task in db_work_tasks:
             work_tasks.append(self._decode_db_work_task(db_work_task))
         return work_tasks
+
+    def update_taks(self, project_id, **kwargs):
+        WorkTaskORM.objects.filter(project_id=project_id, completed=True).update(**kwargs)
+
 
     def get_all(self, project_id):
         tasks = []
@@ -315,6 +331,13 @@ class WorkedDayRepo:
             worked_days.append(self._decode_db_worked_day(db_worked_day))
         return worked_days
 
+
+    def update_attrs(self, month_payment_id, paid=False, last_month_days=None, **kwargs):
+        if last_month_days is None:
+            WorkedDayORM.objects.filter(month_payment_id=month_payment_id, paid=paid).update(**kwargs)
+        else:
+            WorkedDayORM.objects.filter(month_payment_id=month_payment_id,
+                                        paid=paid, day__lt=last_month_days).update(**kwargs)
 
 class HourPaymentRepo:
     def __init__(self):
