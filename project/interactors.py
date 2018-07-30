@@ -164,7 +164,11 @@ class ProjectGetTotalInteractor(Interactor):
             user_id=project.user_id
         )
         self.project_repo.update(project)
-        project_total = self.project_repo.get_total_project(self.project_id, paid=self.paid, pay=self.pay)
+        boundary = (project.start_date, end_date)
+
+        project_total = self.project_repo.get_total_project(self.project_id,
+                                                            paid=self.paid, pay=self.pay, last_month_days=end_date,
+                                                            boundary=boundary)
         if project_total.type_of_payment == 'T_P':
             project_total.count_task = len(project_total._entity_type_list)
         user = self.user_repo.get_user_by_id(self.user_id)

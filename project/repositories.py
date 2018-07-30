@@ -457,13 +457,14 @@ class WorkTimeRepo:
 
         return self._decode_db_work_time(db_work_time)
 
+
     def get_work_times(self, hour_payment_id, paid=None, boundary=None, pay=False):
         worked_times = []
-
         if paid is None:
             if boundary is None:
                 db_worked_times = WorkTimeORM.objects.filter(hour_payment_id=hour_payment_id)
             else:
+
                 db_worked_times = WorkTimeORM.objects.filter(hour_payment_id=hour_payment_id,
                                                              start_work__gte=boundary[0],
                                                              end_work__lte=boundary[1])
@@ -471,15 +472,20 @@ class WorkTimeRepo:
             if boundary is None:
                 db_worked_times = WorkTimeORM.objects.filter(hour_payment_id=hour_payment_id,
                                                              paid=paid)
+
             else:
+
                 db_worked_times = WorkTimeORM.objects.filter(hour_payment_id=hour_payment_id,
                                                              start_work__gte=boundary[0],
                                                              end_work__lte=boundary[1], paid=paid)
+
+
 
         for db_worked_time in db_worked_times:
             if pay:
                 db_worked_time.paid = True
                 db_worked_time.save()
+
             worked_times.append(WorkTimeRepo()._decode_db_work_time(db_worked_time))
         return worked_times
 

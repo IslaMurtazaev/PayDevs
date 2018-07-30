@@ -28,6 +28,5 @@ exception_status_codes = {
     NoPermissionException: 403,
     EntityIntegrityException: 409,
     InvalidEntityException: 422,
-    NoLoggedException: 401,
-    # SerializerException: 500
+    NoLoggedException: 401
 }
