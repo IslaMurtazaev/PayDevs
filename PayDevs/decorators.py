@@ -40,6 +40,7 @@ def json_exception(method):
                     }
                 }
             status = 400
-        return HttpResponse(json.dumps(body), status=status, content_type='application/json')
+            raise e
+        # return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
     return method_wrapper

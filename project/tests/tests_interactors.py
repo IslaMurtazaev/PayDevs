@@ -12,9 +12,9 @@ from project.interactors import GetProjectInteractor, CreateProjectInteractor, U
     UpdateHourPaymentInteractor, DeleteHourPaymentInteractor, GetAllHourPaymentInteractor, GetWorkTimeInteractor, \
     CreateWorkTimeInteractor, UpdateWorkTimeInteractor, DeleteWorkTimeInteractor, GetAllWorkTimeInteractor, \
     GetTaskInteractor, CreateTaskInteractor, UpdateTaskInteractor, DeleteTaskInteractor, GetAllTasksInteractor, \
-    CreateMonthPaymentInteractor, GetMonthPaymentInteractor, UpdateMonthPaymentInteractor, DeleteMonthPaymentInteractor,\
+    CreateMonthPaymentInteractor, GetMonthPaymentInteractor, UpdateMonthPaymentInteractor, DeleteMonthPaymentInteractor, \
     GetAllMonthPaymentsInteractor, GetWorkedDayInteractor, CreateWorkedDayInteractor, UpdateWorkedDayInteractor, \
-    DeleteWorkedDayInteractor, GetAllWorkedDaysInteractor
+    DeleteWorkedDayInteractor, GetAllWorkedDaysInteractor, ProjectGetTotalInteractor
 
 from project.models import ProjectORM, HourPaymentORM, WorkTimeORM, MonthPaymentORM, WorkedDayORM, WorkTaskORM
 from project.repositories import ProjectRepo, HourPaymentRepo, WorkTimeRepo, MonthPaymentRepo, WorkedDayRepo, WorkTaskRepo
@@ -2580,3 +2580,33 @@ class GetAllTaskInteractorTest(TestCase):
                 logged_id=None,
                 project_id=self.project_orm.id
             ).execute()
+
+
+
+
+class ProjectGetTotalInteractorTest(TestCase):
+    def setUp(self):
+        self.user_orm = UserORM.objects.create_user(
+            username='testUser',
+            email='test_user@mail.com',
+            password='qwert12345'
+
+        )
+        self.project_orm = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now(),
+            user_id=self.user_orm.id
+        )
+
+        self.project_repo = ProjectRepo()
+        self.user_repo = UserRepo()
+        self.user_permission_validator = PermissionValidator(UserRepo())
+        self.type_of_payment_validator = TypeOfPaymentValidator()
+        self.project_date_validator = DateTimeValidator()
+        self.project_interactor = ProjectGetTotalInteractor(self.project_repo, self.user_repo,
+                                                            self.user_permission_validator, self.project_date_validator)
+
+
+
