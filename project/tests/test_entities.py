@@ -1,7 +1,5 @@
 from datetime import datetime, timedelta
-
 from django.test import TestCase
-
 from project.entities import WorkedDay, MonthPayment, WorkTime, HourPayment, WorkTask, Project
 
 
@@ -84,7 +82,7 @@ class ProjectTotalTest(TestCase):
                 id=i,
                 hour_payment_id=1,
                 start_work=datetime.now().replace(hour=10, minute=0, second=0) - timedelta(days=10 - i),
-                end_work=datetime.now().replace(hour=19, minute=00, second=0) - timedelta(days=10 - i),
+                end_work=datetime.now().replace(hour=19, minute=0, second=0) - timedelta(days=10 - i),
                 paid=False
             )
             self.work_times.append(work_time)
@@ -106,6 +104,8 @@ class ProjectTotalTest(TestCase):
             type_of_payment='T_P',
             entity_type_list=self.tasks
         )
+        # for i in project._entity_type_list:
+        #     print(i.price)
 
         self.assertEqual(project.total, 5500)
 

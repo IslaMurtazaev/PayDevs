@@ -60,7 +60,7 @@ class GetTotalProjectInteractorFactory(object):
         project_repo = ProjectRepoFactory.create()
         user_repo = UserRepoFactory.create()
         permission_validator = PermissionValidatorFactory.create()
-        datetime_validator = DateTimeValidatorFactory.create()
+        datetime_validator = FieldValidatorFactory.create()
         return ProjectGetTotalInteractor(project_repo, user_repo, permission_validator, datetime_validator)
 
 
@@ -109,7 +109,7 @@ class GetAllTasksInteractorFactory(object):
         task_repo = WorkTaskRepoFactory.create()
         permission_validator = PermissionValidatorFactory.create()
         field_validator = FieldValidatorFactory.create()
-        return GetAllTasksInteractor(task_repo, project_repo, permission_validator, type_of_payment_validator)
+        return GetAllTasksInteractor(task_repo, permission_validator, field_validator)
 
 
 
@@ -303,5 +303,4 @@ class GetAllWorkTimeInteractorFactory(object):
     def create():
         work_time_repo = WorkTimeRepoFactory.create()
         permission_validator = PermissionValidatorFactory.create()
-        field_validator = FieldValidatorFactory.create()
-        return ProjectGetTotalInteractor(project_repo, user_repo, permission_validator, field_validator)
+        return GetAllWorkTimeInteractor(work_time_repo, permission_validator)

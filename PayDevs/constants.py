@@ -1,4 +1,4 @@
-from enum import IntEnum, Enum unique
+from enum import IntEnum, Enum, unique
 
 from PayDevs.exceptions import EntityDoesNotExistException, NoPermissionException, PayDevsException, \
     EntityIntegrityException, InvalidEntityException, NoLoggedException, SerializerException
@@ -21,8 +21,8 @@ class StatusCodes(IntEnum):
     SERVER_ERROR = 500
 
 
-@unique
-class TypesOfPayment(Enum):
+
+class TypesOfPayment:
     HOUR_PAYMENT = "H_P"
     MONTH_PAYMENT = "M_P"
     TASK_PAYMENT = "T_P"

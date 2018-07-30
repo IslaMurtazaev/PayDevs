@@ -883,6 +883,8 @@ class HouPaymentMethodTest(TestCase):
 
 
 
+
+
 class ProjectRepoTest(TestCase):
     def setUp(self):
         self.user = UserORM.objects.create(
@@ -1151,13 +1153,130 @@ class ProjectRepoTest(TestCase):
 
 
 
+    def test_method_update_payment_attrs_for_task(self):
+        COUNT_TASK = 10
+        project = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='T_P',
+            start_date=datetime.datetime.now(),
+            user_id=self.user.id
+        )
+
+
+
+        for i in range(COUNT_TASK):
+            WorkTaskORM.objects.create(
+                title='Test Work Task',
+                description='Test method create',
+                paid=False,
+                price=100,
+                project_id=project.id,
+                completed=True,
+            )
+        work_tasks = WorkTaskORM.objects.filter(project_id=project.id)
+        for work_task in work_tasks:
+            self.assertEqual(work_task.paid, False)
+        self.project_repo.update_payment_attrs(project.id, paid=True)
+
+        work_tasks = WorkTaskORM.objects.filter(project_id=project.id)
+        for work_task in work_tasks:
+            self.assertEqual(work_task.paid, True)
+        self.project_repo.update_payment_attrs(project.id, paid=False, title='Work Task')
+
+        work_tasks = WorkTaskORM.objects.filter(project_id=project.id)
+        for work_task in work_tasks:
+            self.assertEqual(work_task.paid, False)
+            self.assertEqual(work_task.title, 'Work Task')
 
 
 
 
+    def test_method_update_payment_attrs_for_hour_payment(self):
+        COUNT_HOUR_PAYMENT = 10
+        COUNT_WORK_TIME = 10
+        project = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='H_P',
+            start_date=datetime.datetime.now(),
+            user_id=self.user.id
+        )
+
+
+
+        for i in range(COUNT_HOUR_PAYMENT):
+            hour_payment = HourPaymentORM.objects.create(
+                rate=100,
+                project_id=project.id,
+            )
+            for j in range(COUNT_WORK_TIME):
+                wt = WorkTimeORM.objects.create(
+                    hour_payment_id=hour_payment.id,
+                    start_work=datetime.datetime.now() - timedelta(hours=1) - timedelta(days=j),
+                    end_work=datetime.datetime.now() - timedelta(days=j),
+                    paid=False
+                )
+        hour_payments = HourPaymentORM.objects.filter(project_id=project.id)
+        for hour_payment in hour_payments:
+            work_times = WorkTimeORM.objects.filter(hour_payment_id=hour_payment.id)
+            for work_time in work_times:
+                self.assertEqual(work_time.paid, False)
+
+        self.project_repo.update_payment_attrs(project.id, paid=True)
+
+        hour_payments = HourPaymentORM.objects.filter(project_id=project.id)
+        for hour_payment in hour_payments:
+            work_times = WorkTimeORM.objects.filter(hour_payment_id=hour_payment.id)
+            for work_time in work_times:
+                self.assertEqual(work_time.paid, False)
 
 
 
 
+    def test_method_update_payment_attrs_for_worked_day(self):
+        COUNT_WORK_TIME = 10
+        COUNT_MONTH_PAYMENT = 4
+        project = ProjectORM.objects.create(
+            title='Test Project',
+            description='My Test project',
+            type_of_payment='M_P',
+            start_date=datetime.datetime.now(),
+            user_id=self.user.id
+        )
 
+
+
+        for i in range(COUNT_MONTH_PAYMENT):
+            month_payment = MonthPaymentORM.objects.create(
+                rate=100,
+                project_id=project.id,
+            )
+            for j in range(COUNT_WORK_TIME):
+                WorkedDayORM.objects.create(
+                    month_payment_id=month_payment.id,
+                    paid=False,
+                    day=datetime.datetime.now().date() - timedelta(days=j+i*10)
+                )
+
+        month_payments = MonthPaymentORM.objects.filter(project_id=project.id)
+        for month_payment in month_payments:
+            worked_days = WorkedDayORM.objects.filter(month_payment_id=month_payment.id)
+            for worked_day in worked_days:
+                self.assertEqual(worked_day.paid, False)
+
+
+        self.project_repo.update_payment_attrs(project.id, paid=True)
+        month_payments = MonthPaymentORM.objects.filter(project_id=project.id)
+        for month_payment in month_payments:
+            worked_days = WorkedDayORM.objects.filter(month_payment_id=month_payment.id)
+            for worked_day in worked_days:
+                self.assertEqual(worked_day.paid, True)
+
+
+        WorkedDayORM.objects.filter(paid=True).update(paid=False)
+        self.project_repo.update_payment_attrs(project.id, paid=True,
+                                               last_month_days=datetime.datetime.now().replace(day=1).date())
+        worked_days = WorkedDayORM.objects.filter(paid=True)
+        print(worked_days.count())
 

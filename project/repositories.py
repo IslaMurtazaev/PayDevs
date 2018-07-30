@@ -86,7 +86,7 @@ class ProjectRepo(object):
         db_project = db_project_filter .get(id=project.id)
         return self._decode_db_project(db_project)
 
-    def update_payment_attrs(self, project_id, last_month_days=None, boundary=None, pay=False):
+    def update_payment_attrs(self, project_id, last_month_days=None, boundary=None, **kwargs):
         try:
             db_project = ProjectORM.objects.select_related('user').get(id=project_id)
         except ProjectORM.DoesNotExist:
@@ -94,9 +94,9 @@ class ProjectRepo(object):
         if db_project.type_of_payment == 'H_P':
             pass
         elif db_project.type_of_payment == 'M_P':
-            pass
+            self.mont_payment.update_worked_days_attrs(project_id=project_id, last_month_days=last_month_days, **kwargs)
         elif db_project.type_of_payment == 'T_P':
-            self.task_repo.update_taks(project_id, pay=pay)
+            self.task_repo.update_taks(project_id, **kwargs)
 
     def _get_entity_type_list(self, project_id, paid=False, last_month_days=None, boundary=None, pay=False):
         entity_type_list = []
@@ -257,6 +257,14 @@ class MonthPaymentRepo:
         db_month_payment.delete()
         return month_payment
 
+    def update_worked_days_attrs(self, project_id, last_month_days=None, **kwargs):
+        db_month_payments = MonthPaymentORM.objects.select_related('project').filter(project_id=project_id)
+        for month_payment in db_month_payments:
+            self.worked_day_repo.update_attrs(month_payment.id,
+                                              last_month_days=last_month_days,
+                                              **kwargs)
+
+
     def get_all(self, project_id):
         db_month_payments = MonthPaymentORM.objects.select_related('project').filter(project_id=project_id)
         return [self._decode_db_month_payment(db_month_payment)
@@ -329,12 +337,12 @@ class WorkedDayRepo:
         return worked_days
 
 
-    def update_attrs(self, month_payment_id, paid=False, last_month_days=None, **kwargs):
+    def update_attrs(self, month_payment_id, last_month_days=None, **kwargs):
         if last_month_days is None:
-            WorkedDayORM.objects.filter(month_payment_id=month_payment_id, paid=paid).update(**kwargs)
+            WorkedDayORM.objects.filter(month_payment_id=month_payment_id, paid=False).update(**kwargs)
         else:
             WorkedDayORM.objects.filter(month_payment_id=month_payment_id,
-                                        paid=paid, day__lt=last_month_days).update(**kwargs)
+                                        paid=False, day__lt=last_month_days).update(**kwargs)
 
 class HourPaymentRepo:
     def __init__(self):
