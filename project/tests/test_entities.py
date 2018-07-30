@@ -111,39 +111,39 @@ class ProjectTotalTest(TestCase):
 
 
     def test_project_total_hour_payment(self):
-        hour_paymnets = []
+        hour_payments = []
         for i in range(5):
-            hour_paymnet = HourPayment(
+            hour_payment = HourPayment(
                 id=i,
                 project_id=1,
                 rate=200,
                 work_times=self.work_times
             )
-            hour_paymnets.append(hour_paymnet)
+            hour_payments.append(hour_payment)
 
         project = Project(
             title="Test Project",
             description="Testing project",
             type_of_payment='H_P',
-            entity_type_list=hour_paymnets
+            entity_type_list=hour_payments
         )
         self.assertEqual(project.total, 90000)
 
     def test_project_total_month_payment(self):
-        month_paymnets = []
+        month_payments = []
         for i in range(5):
-            month_paymnet = MonthPayment(
+            month_payment = MonthPayment(
                 id=i,
                 project_id=1,
                 rate=1000,
                 work_days=self.worked_days
             )
-            month_paymnets.append(month_paymnet)
+            month_payments.append(month_payment)
 
         project = Project(
             title="Test Project",
             description="Testing project",
             type_of_payment='M_P',
-            entity_type_list=month_paymnets
+            entity_type_list=month_payments
         )
         self.assertEqual(project.total, 50000)

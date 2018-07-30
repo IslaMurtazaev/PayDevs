@@ -103,7 +103,7 @@ class ClientAccountPasswordValidateTest(TestCase):
         self.assertRegex(message, 'Your password consists of only digits.')
 
 
-    def test_login_password_validate_attribute_similarity_salidator(self):
+    def test_login_password_validate_attribute_similarity_validator(self):
         data = json.dumps({'username': 'sddqweqweq',
                            'email': 'testuser@email.ru',
                            'password': 'sddqweqweq'})

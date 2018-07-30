@@ -3,18 +3,19 @@ from django.db import models
 from django.utils import timezone
 
 from account.models import UserORM
+from PayDevs.constants import TypesOfPayment
 
 
 class ProjectORM(models.Model):
     class Meta:
         verbose_name = "Проект"
         verbose_name_plural = "Проекты"
-
+    
     TYPES_OF_PAYMENT = (
-        ('H_P', 'Почасовая'),
-        ('M_P', 'Помесячная'),
-        ('T_P', 'Позадачная')
-    )
+         (TypesOfPayment.HOUR_PAYMENT, 'Почасовая'),
+         (TypesOfPayment.MONTH_PAYMENT, 'Помесячная'),
+         (TypesOfPayment.TASK_PAYMENT, 'Позадачная')
+        )
 
     title = models.CharField(max_length=200)
     description = models.TextField(null=True)

@@ -1,5 +1,5 @@
 from account.factories.repo_factories import UserRepoFactory
-from project.validators import PermissionValidator, TypeOfPaymentValidator, DateTimeValidator, RateValidator
+from project.validators import PermissionValidator, FieldValidator
 
 
 class PermissionValidatorFactory:
@@ -9,19 +9,9 @@ class PermissionValidatorFactory:
         return PermissionValidator(user_repo)
 
 
-class TypeOfPaymentValidatorFactory:
+class FieldValidatorFactory:
     @staticmethod
     def create():
-        return TypeOfPaymentValidator()
+        return FieldValidator()
 
 
-class DateTimeValidatorFactory:
-    @staticmethod
-    def create():
-        return DateTimeValidator()
-
-
-class RateValidatorFactory:
-    @staticmethod
-    def create():
-        return RateValidator

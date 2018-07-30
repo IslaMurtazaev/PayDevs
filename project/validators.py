@@ -18,10 +18,11 @@ class PermissionValidator:
 
 
 
-class TypeOfPaymentValidator:
+
+class FieldValidator:
 
     @staticmethod
-    def validate(type_of_payment):
+    def validate_type_of_payment(type_of_payment):
         if type_of_payment not in ('T_P', 'M_P', 'H_P'):
             raise InvalidEntityException(source='validator',  code='other_type_of_payment',
                                          message="The type of payment must be only one of T_P, H_P and M_P")
@@ -45,7 +46,7 @@ class TypeOfPaymentValidator:
 
 
 
-class DateTimeValidator:
+
 
     @staticmethod
     def validate_datetime_format(date_string):
@@ -75,10 +76,10 @@ class DateTimeValidator:
             return None
 
 
-class RateValidator:
+
 
     @staticmethod
-    def validate(rate):
+    def validate_rate(rate):
         if rate is None:
             return None
         if not isinstance(rate, (int, float)):

@@ -10,47 +10,13 @@ class User(object):
         self._is_staff = is_staff
 
 
-    @property
-    def id(self):
-        return self._id
-
-    @property
-    def username(self):
-        return self._username
-
-
-    @property
-    def email(self):
-        return self._email
-
-
-    @property
-    def is_active(self):
-        return self._is_active
-
-
-    @property
-    def is_staff(self):
-        return self._is_staff
-
-
-
-
+   
 class TokenUser(object):
 
     def __init__(self, token=None, user_id=None):
         self._token = token
         self._user_id = user_id
 
-
-
-    @property
-    def token(self):
-        return self._token
-
-    @property
-    def user_id(self):
-        return self._user_id
 
     def payload(self):
         return {
