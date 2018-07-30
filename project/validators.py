@@ -38,7 +38,7 @@ class TypeOfPaymentValidator:
 
 
 
-    def _validate_project_payment(self, type_of_payment,eq_type_of_payment):
+    def _validate_project_payment(self, type_of_payment, eq_type_of_payment):
         if type_of_payment != eq_type_of_payment:
             raise InvalidEntityException(source='validate', code='other_type_of_payment',
                                          message="The type of payment for the project must be %s" % eq_type_of_payment)
