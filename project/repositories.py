@@ -3,7 +3,6 @@ from project.models import ProjectORM, HourPaymentORM, MonthPaymentORM, WorkTask
 from PayDevs.exceptions import EntityDoesNotExistException, InvalidEntityException
 
 
-# ------------------------------------------ Project --------------------------------------------#
 
 class ProjectRepo(object):
     def __init__(self):
@@ -107,7 +106,6 @@ class ProjectRepo(object):
         return entity_type_list
 
 
-# -------------------------- Work Task ----------------------------------------#
 
 
 
@@ -182,7 +180,6 @@ class WorkTaskRepo:
         return WorkTask(**fields)
 
 
-# -------------------------- Month Payment ---------------------------------------- #
 
 class MonthPaymentRepo:
     def __init__(self):

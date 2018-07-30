@@ -1,54 +1,22 @@
 from PayDevs.exceptions import InvalidEntityException
+from PayDevs.constants import TypesOfPayment
 
 class Project(object):
     
     def __init__(self, id=None, title=None, description=None, start_date=None, end_date=None,\
                  user_id=None, type_of_payment=None, status=False,  is_mine=False, entity_type_list=None):
-        self._id = id
-        self._title = title
-        self._description = description
-        self._start_date = start_date
-        self._end_date = end_date
-        self._user_id = user_id
-        self._type_of_payment = type_of_payment
-        self._status = status
+        self.id = id
+        self.title = title
+        self.description = description
+        self.start_date = start_date
+        self.end_date = end_date
+        self.user_id = user_id
+        self.type_of_payment = type_of_payment
+        self.status = status
         self._is_mine = is_mine
         self._entity_type_list = entity_type_list
 
         
-
-    @property
-    def id(self):
-        return self._id
-
-    @property
-    def title(self):
-        return self._title
-
-    @property
-    def description(self):
-        return self._description
-    
-    @property
-    def start_date(self):
-        return self._start_date
-
-    @property
-    def end_date(self):
-        return self._end_date
-
-    @property
-    def user_id(self):
-        return self._user_id
-
-    @property
-    def type_of_payment(self):
-        return self._type_of_payment
-
-    @property
-    def status(self):
-        return self._status
-
 
     # @staticmethod
     # def get_timestamp(type_of_payment, worked):
@@ -74,11 +42,11 @@ class Project(object):
     @property
     def total(self):
         result = 0
-        if self._type_of_payment == 'H_P':
+        if self.type_of_payment == TypesOfPayment.HOUR_PAYMENT:
             result = sum(hour_payment.total for hour_payment in self._entity_type_list)
-        elif self._type_of_payment == 'M_P':
+        elif self.type_of_payment == TypesOfPayment.MONTH_PAYMENT:
             result = sum(month_payment.total for month_payment in self._entity_type_list)
-        elif self._type_of_payment == 'T_P':
+        elif self.type_of_payment == TypesOfPayment.TASK_PAYMENT:
             result = sum(task.price for task in self._entity_type_list)
         return result
 
@@ -87,23 +55,11 @@ class Project(object):
 class HourPayment(object):
 
     def __init__(self, id=None, project_id=None, rate=None, work_times=None):
-        self._id = id
-        self._project_id = project_id
-        self._rate = rate
+        self.id = id
+        self.project_id = project_id
+        self.rate = rate
         self._work_times = work_times
 
-
-    @property
-    def id(self):
-        return self._id
-
-    @property
-    def project_id(self):
-        return self._project_id
-
-    @property
-    def rate(self):
-        return self._rate
 
     @property
     def total(self):
@@ -117,99 +73,39 @@ class HourPayment(object):
 class WorkTime(object):
 
     def __init__(self, id=None, hour_payment_id=None, start_work=None, end_work=None, paid=False):
-        self._id = id
-        self._hour_payment_id = hour_payment_id
-        self._start_work = start_work
-        self._end_work = end_work
-        self._paid = paid
+        self.id = id
+        self.hour_payment_id = hour_payment_id
+        self.start_work = start_work
+        self.end_work = end_work
+        self.paid = paid
 
 
-    @property
-    def id(self):
-        return self._id
-
-    @property
-    def hour_payment_id(self):
-        return self._hour_payment_id
-
-    @property
-    def start_work(self):
-        return self._start_work
-
-    @property
-    def end_work(self):
-        return self._end_work
-    
-    @property
-    def paid(self):
-        return self._paid
-
-
-
+   
 
 class WorkTask(object):
 
     def __init__(self, id=None, project_id=None, title=None, description=None, price=0, completed=False, paid=False):
-        self._id = id
-        self._project_id = project_id
-        self._title = title
-        self._description = description
-        self._price = price
-        self._completed = completed
-        self._paid = paid
+        self.id = id
+        self.project_id = project_id
+        self.title = title
+        self.description = description
+        self.price = price
+        self.completed = completed
+        self.paid = paid
 
 
-    @property
-    def id(self):
-        return self._id
-
-    @property
-    def project_id(self):
-        return self._project_id
-
-    @property
-    def title(self):
-        return self._title
-
-    @property
-    def description(self):
-        return self._description
-
-    @property
-    def price(self):
-        return self._price
-
-    @property
-    def completed(self):
-        return self._completed
-
-    @property
-    def paid(self):
-        return self._paid
-
-
+  
 
 class MonthPayment(object):
 
     def __init__(self, id=None, project_id=None, rate=None, work_days=None):
-        self._id = id
-        self._project_id = project_id
-        self._rate = rate
+        self.id = id
+        self.project_id = project_id
+        self.rate = rate
         self._work_days = work_days
 
 
-    @property
-    def id(self):
-        return self._id
-
-    @property
-    def project_id(self):
-        return self._project_id
-
-    @property
-    def rate(self):
-        return self._rate
-
+ 
     @property
     def total(self):
         worked_days = self._work_days
@@ -222,24 +118,10 @@ class MonthPayment(object):
 class WorkedDay(object):
 
     def __init__(self, id=None, month_payment_id=None, day=None, paid=False):
-        self._id = id
-        self._month_payment_id = month_payment_id
-        self._day = day
-        self._paid = paid
+        self.id = id
+        self.month_payment_id = month_payment_id
+        self.day = day
+        self.paid = paid
 
 
-    @property
-    def id(self):
-        return self._id
-
-    @property
-    def month_payment_id(self):
-        return self._month_payment_id
-
-    @property
-    def day(self):
-        return self._day
-
-    @property
-    def paid(self):
-        return self._paid
+   

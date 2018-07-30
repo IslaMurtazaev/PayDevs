@@ -1,9 +1,8 @@
 from account.entities import User
 from PayDevs.exceptions import NoPermissionException, NoLoggedException
-from PayDevs.interactors import Interactor
 
 
-class LoginUserInteractor(Interactor):
+class LoginUserInteractor():
     def __init__(self, user_repo, get_token):
         self.user_repo = user_repo
         self.get_token = get_token
@@ -22,7 +21,7 @@ class LoginUserInteractor(Interactor):
         return user
 
 
-class RegisterUserInteractor(Interactor):
+class RegisterUserInteractor():
     def __init__(self, user_repo, validate_username_email, hashed_password):
         self.user_repo = user_repo
         self.validate_username_email = validate_username_email
@@ -48,7 +47,7 @@ class RegisterUserInteractor(Interactor):
         self.hashed_password.hashed(password=self.password, user=valid_user)
 
 
-class GetUserInteractor(Interactor):
+class GetUserInteractor():
     def __init__(self, user_repo):
         self.user_repo = user_repo
 
@@ -62,7 +61,7 @@ class GetUserInteractor(Interactor):
         return self.user_repo.get_user_by_id(id=self.id)
 
 
-class AuthUserInteractor(Interactor):
+class AuthUserInteractor():
     def __init__(self, token_decoder):
         self.token_decoder = token_decoder
 
