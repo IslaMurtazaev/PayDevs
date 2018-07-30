@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.views import View
 from reportlab.pdfgen import canvas
 
+from PayDevs.decorators import json_exception
 from account.factories.interactor_factories import AuthUserInteractorFactory
 from PayDevs import settings
 
@@ -22,48 +23,34 @@ class ViewWrapper(View):
         else:
             return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
-
+    @json_exception
     def post(self, request, *args, **kwargs):
         kwargs.update(self.params(request))
-        try:
-            json_data = json.loads(str(request.body, encoding='utf-8'))
-        except:
-            json_data = request.POST.dict()
-
+        json_data = json.loads(str(request.body, encoding='utf-8'))
         kwargs.update(json_data)
         body, status = self.view_factory().post(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
-
+    @json_exception
     def put(self, request, *args, **kwargs):
         kwargs.update(self.params(request))
-        try:
-            json_data = json.loads(str(request.body, encoding='utf-8'))
-        except:
-            json_data = request.POST.dict()
-
+        json_data = json.loads(str(request.body, encoding='utf-8'))
         kwargs.update(json_data)
         body, status = self.view_factory().put(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
-
+    @json_exception
     def delete(self, request, *args, **kwargs):
         kwargs.update(self.params(request))
-        try:
-            json_data = json.loads(str(request.body, encoding='utf-8'))
-        except:
-            json_data = request.POST.dict()
+        json_data = json.loads(str(request.body, encoding='utf-8'))
         kwargs.update(json_data)
         body, status = self.view_factory().delete(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
-
+    @json_exception
     def patch(self, request, *args, **kwargs):
         kwargs.update(self.params(request))
-        try:
-            json_data = json.loads(str(request.body, encoding='utf-8'))
-        except:
-            json_data = request.POST.dict()
+        json_data = json.loads(str(request.body, encoding='utf-8'))
         kwargs.update(json_data)
         body, status = self.view_factory().patch(*args, **kwargs)
         return self.pdf_generator(body)

@@ -120,6 +120,6 @@ urlpatterns = [
                  csrf_exempt(ViewWrapper.as_view(view_factory=delete_work_time_factory)), name='delete_work_time'),
 
     path('project/<int:project_id>/total', csrf_exempt(ViewWrapper.as_view(
-        view_factory=get_total_month_payment_factory)))
+        view_factory=get_total_factory)))
 
 ]

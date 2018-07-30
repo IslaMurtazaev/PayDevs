@@ -170,6 +170,6 @@ def delete_work_time_factory():
 
 
 
-def get_total_month_payment_factory():
+def get_total_factory():
     get_project_interactor = GetTotalProjectInteractorFactory.create()
     return GetTotalProjectsView(get_project_interactor)

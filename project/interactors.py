@@ -134,13 +134,14 @@ class ProjectGetTotalInteractor(Interactor):
         self.user_repo = user_repo
         self.project_date_validator = project_date_validator
 
-    def set_params(self, logged_id, project_id, end_date=None, paid=False, last_month=None, **kwargs):
+    def set_params(self, logged_id, project_id, end_date=None, paid=False, last_month=None, pay=True, **kwargs):
         self.user_id = logged_id
         self.project_id = project_id
         self.project_id = project_id
         self.last_month = last_month
         self.paid = paid
         self.end_date = end_date
+        self.pay = pay
         return self
 
     def execute(self):
@@ -162,12 +163,11 @@ class ProjectGetTotalInteractor(Interactor):
             user_id=project.user_id
         )
         self.project_repo.update(project)
-        project_total = self.project_repo.get_total_project(self.project_id, paid=self.paid, pay=True)
+        project_total = self.project_repo.get_total_project(self.project_id, paid=self.paid, pay=self.pay)
         if project_total.type_of_payment == 'T_P':
             project_total.count_task = len(project_total._entity_type_list)
         user = self.user_repo.get_user_by_id(self.user_id)
         project_total.user = user.username
-        print(project_total.total)
         return project_total
 
 
