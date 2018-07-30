@@ -39,11 +39,9 @@ class ViewWrapper(View):
         body, status = self.view_factory().put(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
-    @json_exception
+
     def delete(self, request, *args, **kwargs):
         kwargs.update(self.params(request))
-        json_data = json.loads(str(request.body, encoding='utf-8'))
-        kwargs.update(json_data)
         body, status = self.view_factory().delete(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
