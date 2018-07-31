@@ -277,8 +277,7 @@ class UserSerializerTest(TestCase):
             'is_active': True,
             'is_staff': False,
         }
-        self.assertEqual(UserSerializer.model, User)
-        self.assertEqual(UserSerializer.fields, ['id', 'username', 'email', 'is_active', 'is_staff'])
+
         self.assertDictEqual(UserSerializer.serialize(user), serilalizer)
 
 
@@ -296,21 +295,24 @@ class UserListSerializeTest(TestCase):
                 'id': 0,
                 'username': 'TestName0',
                 'email': 'test0@gmail.com',
+                'is_active': True,
+                'is_staff': False
             },
             {
                 'id': 1,
                 'username': 'TestName1',
                 'email': 'test1@gmail.com',
+                'is_active': True,
+                'is_staff': False
             },
             {
                 'id': 2,
                 'username': 'TestName2',
                 'email': 'test2@gmail.com',
+                'is_active': True,
+                'is_staff': False
             },
         ]
-
-        self.assertEqual(UserListSerializer.model, User)
-        self.assertEqual(UserListSerializer.fields, ['id', 'username', 'email'])
         print(serilalizer[0] == UserListSerializer.serialize(users)[0])
         self.assertListEqual(UserListSerializer.serialize(users), serilalizer)
 
