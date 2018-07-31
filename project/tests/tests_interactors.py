@@ -741,7 +741,7 @@ class CreateWorkedDayInteractorTest(TestCase):
         self.assertEqual(created_worked_day.id, created_worked_day_orm.id)
         self.assertEqual(created_worked_day.month_payment_id, created_worked_day_orm.month_payment_id)
         self.assertEqual(created_worked_day.paid, created_worked_day_orm.paid)
-        self.assertEqual(created_worked_day.day, "1999-08-02")
+        self.assertEqual(created_worked_day.day, datetime.datetime(1999, 8, 2, 0, 0))
 
 
     def test_method_set_params_no_logged_exception(self):

@@ -11,8 +11,8 @@ class ProjectSerializer:
             'user_id': project.user_id,
             'title': project.title,
             'description': project.description,
-            'start_date': project.start_date,
-            'end_date': project.end_date,
+            'start_date': project.start_date.strftime(DATE_TIME_FORMAT),
+            'end_date': project.end_date.strftime(DATE_TIME_FORMAT),
             'type_of_payment': project.type_of_payment,
             'status': project.status
         }
@@ -119,7 +119,7 @@ class WorkTimeSerializer:
     def serialize(work_time):
         return {
             'id': work_time.id,
-            'start_work': work_time.start_date.strftime(DATE_TIME_FORMAT),
+            'start_work': work_time.start_work.strftime(DATE_TIME_FORMAT),
             'end_work': work_time.end_work.strftime(DATE_TIME_FORMAT),
             'paid': work_time.paid,
             'hour_payment_id': work_time.hour_payment_id
@@ -129,4 +129,4 @@ class WorkTimeSerializer:
 class WorkTimeListSerializer:
     @staticmethod
     def serialize(work_times):
-        return [WorkTimeListSerializer.serialize(work_time) for work_time in work_times]
+        return [WorkTimeSerializer.serialize(work_time) for work_time in work_times]

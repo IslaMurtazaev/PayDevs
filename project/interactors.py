@@ -3,7 +3,7 @@ from PayDevs.constants import TypesOfPayment
 
 
 
-class GetProjectInteractor():
+class GetProjectInteractor:
     def __init__(self, project_repo, permission_validator):
         self.project_repo = project_repo
         self.permission_validator = permission_validator
@@ -18,7 +18,7 @@ class GetProjectInteractor():
         return self.project_repo.get(logged_id=self.logged_id, project_id=self.project_id)
 
 
-class CreateProjectInteractor():
+class CreateProjectInteractor:
     def __init__(self, project_repo, permission_validator, field_validator):
         self.project_repo = project_repo
         self.permission_validator = permission_validator
@@ -51,7 +51,7 @@ class CreateProjectInteractor():
         return self.project_repo.create(project)
 
 
-class UpdateProjectInteractor():
+class UpdateProjectInteractor:
     def __init__(self, project_repo, permission_validator, field_validator):
         self.project_repo = project_repo
         self.permission_validator = permission_validator
@@ -739,19 +739,19 @@ class CreateWorkedDayInteractor():
         self.permission_validator.validate(self.user_id)
         project = self.project_repo.get(self.project_id)
         self.permission_validator.validate(project.user_id, self.user_id)
-        self.field_validator.validate_date_format(self.day)
+        day = self.field_validator.validate_date_format(self.day)
         month_payment = self.month_payment_repo.get(self.month_payment_id)
         self.permission_validator.validate(month_payment.project_id, self.project_id)
 
         worked_day = WorkedDay(
             month_payment_id=month_payment.id,
-            day=self.day,
+            day=day,
             paid=self.paid
         )
         return self.worked_day_repo.create(worked_day)
 
 
-class GetWorkedDayInteractor():
+class GetWorkedDayInteractor:
     def __init__(self, worked_day_repo, permission_validator):
         self.worked_day_repo = worked_day_repo
         self.permission_validator = permission_validator

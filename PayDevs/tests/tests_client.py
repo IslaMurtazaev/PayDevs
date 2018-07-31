@@ -71,8 +71,8 @@ class ClientProjectTest(TestCase):
         body = json.loads(response.content.decode())
         self.assertEqual(body.get('title'), 'Project web')
         self.assertEqual(body.get('description'), 'logic web site')
-        self.assertEqual(body.get('start_date'), '2016-12-20 23:00:00+0600')
-        self.assertEqual(body.get('end_date'), '2018-12-20 12:30:00+0600')
+        self.assertEqual(body.get('start_date'), '2016-12-20T23:00:00.000000Z+0600')
+        self.assertEqual(body.get('end_date'), '2018-12-20T12:30:00.000000Z+0600')
         self.assertEqual(body.get('status'), True)
 
 
@@ -655,7 +655,8 @@ class WorkedDayClientTest(TestCase):
 
         self.assertEqual(created_worked_day.id, body.get('id'))
         self.assertEqual(created_worked_day.month_payment_id, body.get('month_payment_id'))
-        self.assertEqual(created_worked_day.day, datetime.datetime.strptime(body.get('day'), "%Y-%m-%d").date())
+        self.assertEqual(created_worked_day.day, datetime.datetime.strptime(body.get('day'),
+                                                                            '%Y-%m-%dT%H:%M:%S.%fZ').date())
         self.assertIsNone(body.get('non_existent_attr'))
 
 
@@ -685,7 +686,8 @@ class WorkedDayClientTest(TestCase):
 
         self.assertEqual(self.db_worked_day.id, body.get('id'))
         self.assertEqual(self.db_worked_day.month_payment_id, body.get('month_payment_id'))
-        self.assertEqual(self.db_worked_day.day,datetime.datetime.strptime(body.get('day'), "%Y-%m-%d %H:%M:%S").date())
+        self.assertEqual(self.db_worked_day.day, datetime.datetime.strptime(body.get('day'),
+                                                                            '%Y-%m-%dT%H:%M:%S.%fZ').date())
 
         response = self.client.get(reverse('get_worked_day', kwargs=url_params),
                                    content_type='application/json', **{'HTTP_AUTHORIZATION': self.token2})
@@ -719,7 +721,7 @@ class WorkedDayClientTest(TestCase):
 
         self.assertEqual(self.db_worked_day.id, body.get('id'))
         self.assertEqual(self.db_worked_day.month_payment_id, body.get('month_payment_id'))
-        self.assertEqual('1999-08- 2 00:00:00', body.get('day'))
+        self.assertEqual('1999-08-02T00:00:00.000000Z', body.get('day'))
         self.assertIsNone(body.get('non_existent_attr'))
 
         response = self.client.put(reverse('update_worked_day', kwargs=url_params), data,
@@ -761,7 +763,7 @@ class WorkedDayClientTest(TestCase):
 
         self.assertEqual(deleted_worked_day.id, body.get('id'))
         self.assertEqual(deleted_worked_day.month_payment_id, body.get('month_payment_id'))
-        self.assertEqual(self.db_worked_day.day, datetime.datetime.strptime(body.get('day'), "%Y-%m-%d %H:%M:%S").date())
+        self.assertEqual(self.db_worked_day.day, datetime.datetime.strptime(body.get('day'), '%Y-%m-%dT%H:%M:%S.%fZ').date())
 
 
         with self.assertRaises(WorkedDayORM.DoesNotExist):
@@ -785,7 +787,7 @@ class WorkedDayClientTest(TestCase):
         self.assertEqual(len(body), 1)
         self.assertEqual(body[0].get('id'), self.db_worked_day.id)
         self.assertEqual(body[0].get('month_payment_id'), self.db_worked_day.month_payment_id)
-        self.assertEqual(datetime.datetime.strptime(body[0].get('day'), "%Y-%m-%d %H:%M:%S").date(),
+        self.assertEqual(datetime.datetime.strptime(body[0].get('day'), '%Y-%m-%dT%H:%M:%S.%fZ').date(),
                          self.db_worked_day.day)
 
         response = self.client.get(reverse('get_all_worked_days', kwargs=url_params),
@@ -795,5 +797,5 @@ class WorkedDayClientTest(TestCase):
         self.assertEqual(len(body), 1)
         self.assertEqual(body[0].get('id'), self.db_worked_day.id)
         self.assertEqual(body[0].get('month_payment_id'), self.db_worked_day.month_payment_id)
-        self.assertEqual(datetime.datetime.strptime(body[0].get('day'), "%Y-%m-%d %H:%M:%S").date(),
+        self.assertEqual(datetime.datetime.strptime(body[0].get('day'), '%Y-%m-%dT%H:%M:%S.%fZ').date(),
                          self.db_worked_day.day)
