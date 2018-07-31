@@ -31,7 +31,7 @@ def json_exception(method):
     def method_wrapper(*args, **kwargs):
         try:
             return method(*args, **kwargs)
-        except Exception as e:
+        except json.JSONDecodeError as e:
             body = {
                 'error': {
                         'source': 'json',
@@ -40,7 +40,9 @@ def json_exception(method):
                     }
                 }
             status = 400
+
+        except Exception as e:
             raise e
-        # return HttpResponse(json.dumps(body), status=status, content_type='application/json')
+        return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
     return method_wrapper

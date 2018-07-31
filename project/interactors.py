@@ -2,7 +2,6 @@ from project.entities import Project, WorkTask, HourPayment, WorkTime, MonthPaym
 from PayDevs.constants import TypesOfPayment
 
 
-
 class GetProjectInteractor:
     def __init__(self, project_repo, permission_validator):
         self.project_repo = project_repo
@@ -72,35 +71,35 @@ class UpdateProjectInteractor:
     def execute(self):
         project = self.project_repo.get(self.project_id)
         self.permission_validator.validate(self.user_id, project.user_id)
-         
+
         if self.title is not None:
             title = self.title
-        else: 
+        else:
             title = project.title
-         
+
         if self.description is not None:
-            description = self.description 
-        else: 
+            description = self.description
+        else:
             description = project.description
-         
+
         if self.start_date is not None:
-            start_date = self.start_date 
-        else: 
+            start_date = self.start_date
+        else:
             start_date = project.start_date
-         
+
         if self.end_date is not None:
             end_date = self.end_date
-        else: 
+        else:
             end_date = project.end_date
-         
+
         if self.type_of_payment is not None:
-            type_of_payment = self.type_of_payment 
-        else: 
+            type_of_payment = self.type_of_payment
+        else:
             type_of_payment = project.type_of_payment
-         
+
         if self.status:
             status = self.status
-        else: 
+        else:
             status = project.status
 
         self.field_validator.validate_type_of_payment(type_of_payment)
@@ -152,11 +151,12 @@ class GetAllProjectsInteractor():
 
 
 class ProjectGetTotalInteractor:
-    def __init__(self, project_repo, user_repo, permission_validator, field_validator):
+    def __init__(self, project_repo, user_repo, permission_validator, field_validator, pdf_creator):
         self.project_repo = project_repo
         self.user_repo = user_repo
         self.permission_validator = permission_validator
         self.field_validator = field_validator
+        self.pdf_creator = pdf_creator
 
     def set_params(self, logged_id, project_id, end_date=None, paid=False, last_month=None, pay=True, **kwargs):
         self.user_id = logged_id
@@ -171,10 +171,10 @@ class ProjectGetTotalInteractor:
         self.permission_validator.validate(self.user_id)
         project = self.project_repo.get(self.project_id)
         self.permission_validator.validate(self.user_id, project.user_id)
-         
+
         if self.end_date is not None:
             end_date = self.end_date
-        else: 
+        else:
             end_date = self.field_validator.now_end_date_project(project.type_of_payment)
         # end_work = self.datetime_validator.validate_datetime_format(self.end_work)
         project = Project(
@@ -191,16 +191,25 @@ class ProjectGetTotalInteractor:
         boundary = (project.start_date, end_date)
 
         project_total = self.project_repo.get_total_project(self.project_id,
-                                                            paid=self.paid, pay=self.pay, last_month_days=end_date,
+                                                            paid=self.paid, last_month_days=end_date,
                                                             boundary=boundary)
+        if self.pay:
+            self.project_repo.update_payment_attrs(self.project_id, last_month_days=end_date,
+                                                   boundary=boundary, paid=True)
         if project_total.type_of_payment == TypesOfPayment.TASK_PAYMENT:
             project_total.count_task = len(project_total._entity_type_list)
         user = self.user_repo.get_user_by_id(self.user_id)
         project_total.user = user.username
-        return project_total
+        if project_total.type_of_payment == TypesOfPayment.HOUR_PAYMENT:
+            project_total.type_of_payment_pdf = 'Hour Payment'
 
+        elif project_total.type_of_payment == TypesOfPayment.MONTH_PAYMENT:
+            project_total.type_of_payment_pdf = 'Month Payment'
 
-
+        elif project_total.type_of_payment == TypesOfPayment.TASK_PAYMENT:
+            project_total.type_of_payment_pdf = 'Task Payment'
+        pdf = self.pdf_creator.create_pdf(project_total)
+        return pdf
 
 
 class GetTaskInteractor():
@@ -216,7 +225,6 @@ class GetTaskInteractor():
     def execute(self):
         self.permission_validator.validate(self.user_id)
         return self.work_task_repo.get(self.task_id)
-
 
 
 class CreateTaskInteractor():
@@ -253,7 +261,7 @@ class CreateTaskInteractor():
         return self.work_task_repo.create(work_task)
 
 
-class UpdateTaskInteractor():
+class UpdateTaskInteractor:
     def __init__(self, work_task_repo, project_repo, permission_validator):
         self.work_task_repo = work_task_repo
         self.project_repo = project_repo
@@ -277,30 +285,30 @@ class UpdateTaskInteractor():
         project = self.project_repo.get(self.project_id)
         self.permission_validator.validate(project.user_id, self.user_id)
         self.permission_validator.validate(project.id, work_task.project_id)
-         
+
         if self.title is not None:
-            title = self.title 
-        else: 
+            title = self.title
+        else:
             title = work_task.title
-         
+
         if self.description is not None:
-            description = self.description 
-        else: 
+            description = self.description
+        else:
             description = work_task.description
-         
+
         if self.price is not None:
             price = self.price
-        else: 
+        else:
             price = work_task.price
-         
+
         if self.completed is not None:
             completed = self.completed
-        else: 
+        else:
             completed = work_task.completed
-         
+
         if self.paid is not None:
             paid = self.paid
-        else: 
+        else:
             paid = work_task.paid
 
         update_work_task = WorkTask(
@@ -313,7 +321,6 @@ class UpdateTaskInteractor():
         )
 
         return self.work_task_repo.update(update_work_task)
-
 
 
 class DeleteTaskInteractor:
@@ -331,11 +338,8 @@ class DeleteTaskInteractor:
         return self.work_task_repo.delete(self.task_id)
 
 
-
-
 class GetAllTasksInteractor:
     def __init__(self, work_task_repo, permission_validator, field_validator):
-
         self.work_task_repo = work_task_repo
         self.permission_validator = permission_validator
         self.field_validator = field_validator
@@ -348,7 +352,6 @@ class GetAllTasksInteractor:
     def execute(self):
         self.permission_validator.validate(self.user_id)
         return self.work_task_repo.get_all(self.project_id)
-
 
 
 class GetHourPaymentInteractor():
@@ -364,7 +367,6 @@ class GetHourPaymentInteractor():
     def execute(self, *args, **kwargs):
         self.permission_validator.validate(logged_id=self.user_id)
         return self.hour_payment_repo.get(self.hour_payment_id)
-
 
 
 class CreateHourPaymentInteractor():
@@ -412,12 +414,12 @@ class UpdateHourPaymentInteractor():
         self._validate(self.user_id)
         hour_payment = self.hour_payment_repo.get(self.hour_payment_id)
         self.permission_validator.validate(self.project_id, hour_payment.project_id)
-         
+
         if self.rate is not None:
             rate = self.rate
         else:
             rate = hour_payment.rate
-       
+
         update_hour_payment = HourPayment(
             id=hour_payment.id,
             rate=rate,
@@ -430,7 +432,6 @@ class UpdateHourPaymentInteractor():
         project = self.project_repo.get(self.project_id)
         self.permission_validator.validate(project.user_id, self.user_id)
         self.field_validator.validate_rate(self.rate)
-
 
 
 class DeleteHourPaymentInteractor:
@@ -448,8 +449,6 @@ class DeleteHourPaymentInteractor:
         return self.hour_payment_repo.delete(self.hour_payment_id)
 
 
-
-
 class GetAllHourPaymentInteractor:
     def __init__(self, hour_payment_repo, permission_validator):
         self.hour_payment_repo = hour_payment_repo
@@ -463,8 +462,6 @@ class GetAllHourPaymentInteractor:
     def execute(self, *args, **kwargs):
         self.permission_validator.validate(logged_id=self.user_id)
         return self.hour_payment_repo.get_all(self.project_id)
-
-
 
 
 class GetWorkTimeInteractor:
@@ -538,21 +535,20 @@ class UpdateWorkTimeInteractor:
         self.permission_validator.validate(logged_id=self.user_id)
         work_time = self.work_time_repo.get(self.work_time_id)
         self._validate(work_time)
-        
+
         if self.start_work is not None:
-            start_work = self.start_work 
-        else: 
+            start_work = self.start_work
+        else:
             start_work = work_time.start_work
 
         if self.end_work is not None:
-            end_work = self.end_work              
+            end_work = self.end_work
         else:
             end_work = work_time.end_work
 
-         
-        if self.paid is not None: 
+        if self.paid is not None:
             paid = self.paid
-        else: 
+        else:
             paid = work_time.paid
 
         if self.start_work is not None:
@@ -568,14 +564,12 @@ class UpdateWorkTimeInteractor:
         )
         return self.work_time_repo.update(work_time_update)
 
-
     def _validate(self, work_time):
         hour_payment = self.hour_payment_repo.get(self.hour_payment_id)
         project = self.project_repo.get(hour_payment.project_id)
         self.permission_validator.validate(work_time.hour_payment_id, self.hour_payment_id)
         self.permission_validator.validate(project.id, self.project_id)
         self.permission_validator.validate(project.user_id, self.user_id)
-
 
 
 class DeleteWorkTimeInteractor:
@@ -594,8 +588,6 @@ class DeleteWorkTimeInteractor:
         return self.work_time_repo.delete(work_time.id)
 
 
-
-
 class GetAllWorkTimeInteractor:
     def __init__(self, work_time_repo, permission_validator):
         self.work_time_repo = work_time_repo
@@ -609,8 +601,6 @@ class GetAllWorkTimeInteractor:
     def execute(self, *args, **kwargs):
         self.permission_validator.validate(logged_id=self.user_id)
         return self.work_time_repo.get_all(self.hour_payment_id)
-
-
 
 
 class CreateMonthPaymentInteractor():
@@ -675,7 +665,6 @@ class UpdateMonthPaymentInteractor():
         self.permission_validator.validate(month_payment.project_id, self.project_id)
         self.field_validator.validate_rate(self.rate)
 
-         
         if self.rate is not None:
             rate = self.rate
         else:
@@ -683,7 +672,6 @@ class UpdateMonthPaymentInteractor():
         month_payment.__setattr__('rate', rate)
 
         return self.month_payment_repo.update(month_payment)
-
 
 
 class DeleteMonthPaymentInteractor:
@@ -715,8 +703,6 @@ class GetAllMonthPaymentsInteractor():
     def execute(self):
         self.permission_validator.validate(self.user_id)
         return self.month_payment_repo.get_all(self.project_id)
-
-
 
 
 class CreateWorkedDayInteractor():
@@ -801,9 +787,8 @@ class UpdateWorkedDayInteractor:
 
         if self.paid is not None:
             paid = self.paid
-        else: 
-            paid = worked_day.paid            
-
+        else:
+            paid = worked_day.paid
 
         modified_worked_day = WorkedDay(id=worked_day.id, day=day, paid=paid,
                                         month_payment_id=worked_day.month_payment_id)

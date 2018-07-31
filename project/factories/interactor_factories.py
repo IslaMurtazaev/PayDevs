@@ -1,4 +1,5 @@
 from account.factories.repo_factories import UserRepoFactory
+from project.factories.pdf_factory import GeneratePdfFactory
 from project.factories.repo_factories import ProjectRepoFactory, WorkTaskRepoFactory, MonthPaymentRepoFactory, \
     WorkedDayRepoFactory, HourPaymentRepoFactory, WorkTimeRepoFactory
 from project.factories.validator_factories import PermissionValidatorFactory, FieldValidatorFactory
@@ -61,7 +62,8 @@ class GetTotalProjectInteractorFactory(object):
         user_repo = UserRepoFactory.create()
         permission_validator = PermissionValidatorFactory.create()
         datetime_validator = FieldValidatorFactory.create()
-        return ProjectGetTotalInteractor(project_repo, user_repo, permission_validator, datetime_validator)
+        pdf_gen = GeneratePdfFactory().create()
+        return ProjectGetTotalInteractor(project_repo, user_repo, permission_validator, datetime_validator, pdf_gen)
 
 
 
