@@ -1213,8 +1213,8 @@ class ProjectRepoTest(TestCase):
             for j in range(COUNT_WORK_TIME):
                 wt = WorkTimeORM.objects.create(
                     hour_payment_id=hour_payment.id,
-                    start_work=datetime.datetime.now() - timedelta(hours=1) - timedelta(days=j),
-                    end_work=datetime.datetime.now() - timedelta(days=j),
+                    start_work=datetime.datetime.now().replace(hour=10, minute=0, second=0) - timedelta(days=j + i*10),
+                    end_work=datetime.datetime.now().replace(hour=18, minute=0, second=0) - timedelta(days=j + i*10),
                     paid=False
                 )
         hour_payments = HourPaymentORM.objects.filter(project_id=project.id)
@@ -1226,10 +1226,18 @@ class ProjectRepoTest(TestCase):
         self.project_repo.update_payment_attrs(project.id, paid=True)
 
         hour_payments = HourPaymentORM.objects.filter(project_id=project.id)
+
         for hour_payment in hour_payments:
             work_times = WorkTimeORM.objects.filter(hour_payment_id=hour_payment.id)
             for work_time in work_times:
-                self.assertEqual(work_time.paid, False)
+                self.assertEqual(work_time.paid, True)
+
+        boundary = (datetime.datetime.now().replace(day=1, hour=10, minute=0, second=0),
+                    datetime.datetime.now().replace(day=28, hour=18, minute=0, second=0))
+        self.project_repo.update_payment_attrs(project.id, paid=False, boundary=boundary)
+
+        work_times = WorkTimeORM.objects.filter(paid=False)
+        self.assertEqual(work_times.count(), 27)
 
 
 
