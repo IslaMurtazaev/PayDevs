@@ -347,8 +347,6 @@ class GetAllTasksInteractor:
 
     def execute(self):
         self.permission_validator.validate(self.user_id)
-        project = self.project_repo.get(self.project_id)
-        self.field_validator.validate_task_payment(project.type_of_payment)
         return self.work_task_repo.get_all(self.project_id)
 
 
