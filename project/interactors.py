@@ -753,13 +753,13 @@ class CreateWorkedDayInteractor:
         self.permission_validator.validate(self.user_id)
         project = self.project_repo.get(self.project_id)
         self.permission_validator.validate(project.user_id, self.user_id)
-        self.field_validator.validate_date_format(self.day)
+        day = self.field_validator.validate_date_format(self.day)
         month_payment = self.month_payment_repo.get(self.month_payment_id)
         self.permission_validator.validate(month_payment.project_id, self.project_id)
 
         worked_day = self.worked_day_entity.create(
             month_payment_id=month_payment.id,
-            day=self.day,
+            day=day,
             paid=self.paid
         )
         return self.worked_day_repo.create(worked_day)
