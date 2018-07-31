@@ -1,4 +1,4 @@
-from enum import IntEnum, Enum unique
+from enum import IntEnum, Enum, unique
 
 from PayDevs.exceptions import EntityDoesNotExistException, NoPermissionException, PayDevsException, \
     EntityIntegrityException, InvalidEntityException, NoLoggedException, SerializerException
