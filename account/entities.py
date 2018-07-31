@@ -3,19 +3,19 @@
 class User(object):
 
     def __init__(self, id=None, username=None, email=None, is_active=False, is_staff=False):
-        self._id = id
-        self._username = username
-        self._email = email
-        self._is_active = is_active
-        self._is_staff = is_staff
+        self.id = id
+        self.username = username
+        self.email = email
+        self.is_active = is_active
+        self.is_staff = is_staff
 
 
    
 class TokenUser(object):
 
     def __init__(self, token=None, user_id=None):
-        self._token = token
-        self._user_id = user_id
+        self.token = token
+        self.user_id = user_id
 
 
     def payload(self):

@@ -16,25 +16,6 @@ class Project(object):
         self._is_mine = is_mine
         self._entity_type_list = entity_type_list
 
-        
-
-    # @staticmethod
-    # def get_timestamp(type_of_payment, worked):
-    #     try:
-    #         if (type_of_payment == 'H_P'):
-    #             total = 0
-    #             for worked_time in worked:
-    #                 worked_hours = (worked_time.end_work - worked_time.start_work).seconds / 3600
-    #                 total += worked_hours
-    #             return {'hours': int(total)}
-    #
-    #         elif (type_of_payment == 'M_P'):
-    #             return {'days': len(worked)}
-    #
-    #     except:
-    #         raise InvalidEntityException(source='entities', code='invalid entity',
-    #                                      message="Can't get a timestamp of project")
-
     @property
     def is_mine(self):
         return self._is_mine
@@ -48,6 +29,7 @@ class Project(object):
             result = sum(month_payment.total for month_payment in self._entity_type_list)
         elif self.type_of_payment == TypesOfPayment.TASK_PAYMENT:
             result = sum(task.price for task in self._entity_type_list)
+
         return result
 
 
