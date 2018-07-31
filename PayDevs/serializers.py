@@ -1,6 +1,7 @@
 import datetime
 import inspect
 
+from PayDevs.constants import DATE_TIME_FORMAT
 from PayDevs.exceptions import SerializerException, PayDevsException, EntityDoesNotExistException
 
 
@@ -47,7 +48,7 @@ class ListSerializer(BaseSerializer):
 
 
 class DateFormatSerializer(BaseSerializer):
-    format = "%Y-%m-%e %T%z"
+    format = DATE_TIME_FORMAT
 
     @classmethod
     def serialize(cls, list_obj):
