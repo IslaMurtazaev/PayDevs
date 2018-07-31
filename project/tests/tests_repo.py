@@ -1241,7 +1241,6 @@ class ProjectRepoTest(TestCase):
 
 
 
-
     def test_method_update_payment_attrs_for_worked_day(self):
         COUNT_WORK_TIME = 10
         COUNT_MONTH_PAYMENT = 4
