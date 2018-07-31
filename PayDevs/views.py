@@ -25,6 +25,12 @@ class ViewWrapper(View):
         json_data = json.loads(str(request.body, encoding='utf-8'))
         kwargs.update(json_data)
         body, status = self.view_factory().post(*args, **kwargs)
+        if body.get('pdf', None):
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="bill.pdf"'
+            response.write(body.get('pdf'))
+            return response
+
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
     @json_exception
@@ -39,20 +45,6 @@ class ViewWrapper(View):
         kwargs.update(self.params(request))
         body, status = self.view_factory().delete(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
-
-    @json_exception
-    def patch(self, request, *args, **kwargs):
-        kwargs.update(self.params(request))
-        json_data = json.loads(str(request.body, encoding='utf-8'))
-        kwargs.update(json_data)
-        body, status = self.view_factory().patch(*args, **kwargs)
-
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="bill.pdf"'
-        response.write(body.get('pdf'))
-        return response
-
-
 
 
     def auth_get_user(self, request):

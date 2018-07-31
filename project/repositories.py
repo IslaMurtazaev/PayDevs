@@ -1,3 +1,4 @@
+from PayDevs.constants import TypesOfPayment
 from project.entities import Project, WorkTask, MonthPayment, WorkedDay, HourPayment, WorkTime
 from project.models import ProjectORM, HourPaymentORM, MonthPaymentORM, WorkTaskORM, WorkedDayORM, WorkTimeORM
 from PayDevs.exceptions import EntityDoesNotExistException, InvalidEntityException
@@ -90,11 +91,11 @@ class ProjectRepo(object):
             db_project = ProjectORM.objects.select_related('user').get(id=project_id)
         except ProjectORM.DoesNotExist:
             raise EntityDoesNotExistException
-        if db_project.type_of_payment == 'H_P':
+        if db_project.type_of_payment == TypesOfPayment.HOUR_PAYMENT:
             self.hour_payment.update_work_time_attrs(project_id=project_id, boundary=boundary, **kwargs)
-        elif db_project.type_of_payment == 'M_P':
+        elif db_project.type_of_payment == TypesOfPayment.MONTH_PAYMENT:
             self.mont_payment.update_worked_days_attrs(project_id=project_id, last_month_days=last_month_days, **kwargs)
-        elif db_project.type_of_payment == 'T_P':
+        elif db_project.type_of_payment == TypesOfPayment.TASK_PAYMENT:
             self.task_repo.update_taks(project_id, **kwargs)
 
     def _get_entity_type_list(self, project_id, paid=False, last_month_days=None, boundary=None, pay=False):
@@ -103,15 +104,15 @@ class ProjectRepo(object):
             db_project = ProjectORM.objects.select_related('user').get(id=project_id)
         except ProjectORM.DoesNotExist:
             raise EntityDoesNotExistException
-        if db_project.type_of_payment == 'H_P':
+        if db_project.type_of_payment == TypesOfPayment.HOUR_PAYMENT:
             entity_type_list = self.hour_payment.get_total_hour_payments(project_id=project_id, work_time_paid=paid,
                                                                          work_time_boundary=boundary, pay=pay)
-        elif db_project.type_of_payment == 'M_P':
+        elif db_project.type_of_payment == TypesOfPayment.MONTH_PAYMENT:
             entity_type_list = self.mont_payment.get_month_payments_by_project_id(project_id=project_id,
                                                                                   paid=paid,
                                                                                   last_month_days=last_month_days,
                                                                                   pay=pay)
-        elif db_project.type_of_payment == 'T_P':
+        elif db_project.type_of_payment == TypesOfPayment.TASK_PAYMENT:
             entity_type_list = self.task_repo.get_work_tasks(project_id=db_project.id, paid=paid, pay=pay)
 
         return entity_type_list

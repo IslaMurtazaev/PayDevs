@@ -64,7 +64,7 @@ class GetTotalProjectsView(object):
         self.get_total_projects_interactor = get_total_projects_interactor
 
     @serialize_exception
-    def patch(self, *args, **kwargs):
+    def post(self, *args, **kwargs):
         pdf = self.get_total_projects_interactor.set_params(**kwargs).execute()
         body = {
             'pdf': pdf
