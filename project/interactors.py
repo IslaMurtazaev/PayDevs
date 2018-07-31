@@ -332,6 +332,7 @@ class DeleteTaskInteractor:
 
 
 
+
 class GetAllTasksInteractor:
     def __init__(self, work_task_repo, permission_validator, field_validator):
 
@@ -429,6 +430,7 @@ class UpdateHourPaymentInteractor():
         project = self.project_repo.get(self.project_id)
         self.permission_validator.validate(project.user_id, self.user_id)
         self.field_validator.validate_rate(self.rate)
+
 
 
 class DeleteHourPaymentInteractor:
@@ -575,6 +577,7 @@ class UpdateWorkTimeInteractor:
         self.permission_validator.validate(project.user_id, self.user_id)
 
 
+
 class DeleteWorkTimeInteractor:
     def __init__(self, work_time_repo, permission_validator):
         self.work_time_repo = work_time_repo
@@ -589,6 +592,7 @@ class DeleteWorkTimeInteractor:
         self.permission_validator.validate(logged_id=self.user_id)
         work_time = self.work_time_repo.get(self.work_time_id)
         return self.work_time_repo.delete(work_time.id)
+
 
 
 
@@ -679,6 +683,7 @@ class UpdateMonthPaymentInteractor():
         month_payment.__setattr__('rate', rate)
 
         return self.month_payment_repo.update(month_payment)
+
 
 
 class DeleteMonthPaymentInteractor:
@@ -798,6 +803,7 @@ class UpdateWorkedDayInteractor:
             paid = self.paid
         else: 
             paid = worked_day.paid            
+
 
         modified_worked_day = WorkedDay(id=worked_day.id, day=day, paid=paid,
                                         month_payment_id=worked_day.month_payment_id)

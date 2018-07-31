@@ -18,7 +18,11 @@ from project.interactors import GetProjectInteractor, CreateProjectInteractor, U
 
 from project.models import ProjectORM, HourPaymentORM, WorkTimeORM, MonthPaymentORM, WorkedDayORM, WorkTaskORM
 from project.repositories import ProjectRepo, HourPaymentRepo, WorkTimeRepo, MonthPaymentRepo, WorkedDayRepo, WorkTaskRepo
+<<<<<<< HEAD
 from project.validators import PermissionValidator
+=======
+from project.validators import PermissionValidator, FieldValidator
+>>>>>>> 4d4c588320aaf75ee28e442ee483f3a830428600
 from PayDevs.exceptions import NoLoggedException, NoPermissionException, InvalidEntityException, \
     EntityDoesNotExistException
 
@@ -78,10 +82,9 @@ class CreateProjectInteractorTest(TestCase):
 
         self.project_repo = ProjectRepo()
         self.user_permission_validator = PermissionValidator(UserRepo())
-        self.type_of_payment_validator = TypeOfPaymentValidator()
-        self.project_date_validator = DateTimeValidator()
+        self.field_validator = FieldValidator()
         self.project_interactor = CreateProjectInteractor(self.project_repo, self.user_permission_validator,
-                                                          self.type_of_payment_validator, self.project_date_validator)
+                                                          self.field_validator)
 
     def test_create_project_set_params_execute(self):
         project = self.project_interactor.set_params(logged_id=self.user_orm.id,
@@ -187,12 +190,10 @@ class UpdateProjectInteractorTest(TestCase):
 
         self.project_repo = ProjectRepo()
         self.user_permission_validator = PermissionValidator(UserRepo())
-        self.type_of_payment_validator = TypeOfPaymentValidator()
-        self.project_date_validator = DateTimeValidator()
+        self.field_validator = FieldValidator()
         self.project_update_interactor = UpdateProjectInteractor(self.project_repo,
                                                                  self.user_permission_validator,
-                                                                 self.type_of_payment_validator,
-                                                                 self.project_date_validator)
+                                                                 self.field_validator)
 
     def test_set_param_execute(self):
         project = self.project_update_interactor.set_params(
@@ -369,9 +370,9 @@ class CreateMonthPaymentInteractorTest(TestCase):
         self.project_repo = ProjectRepo()
         self.month_payment_repo = MonthPaymentRepo()
         permission_validator = PermissionValidator(UserRepo())
-        rate_validator = RateValidator()
+        field_validator = FieldValidator()
         self.month_payment_interactor = CreateMonthPaymentInteractor(self.month_payment_repo, self.project_repo,
-                                                                     permission_validator, rate_validator)
+                                                                     permission_validator, field_validator)
 
     def test_method_set_params(self):
         created_month_payment = self.month_payment_interactor.set_params(
@@ -512,9 +513,9 @@ class UpdateMonthPaymentInteractorTest(TestCase):
         self.project_repo = ProjectRepo()
         self.month_payment_repo = MonthPaymentRepo()
         permission_validator = PermissionValidator(UserRepo())
-        rate_validator = RateValidator()
+        field_validator = FieldValidator()
         self.month_payment_interactor = UpdateMonthPaymentInteractor(self.month_payment_repo, self.project_repo,
-                                                                     permission_validator, rate_validator)
+                                                                     permission_validator, field_validator)
 
     def test_method_set_params(self):
         updated_month_payment = self.month_payment_interactor.set_params(
@@ -726,10 +727,10 @@ class CreateWorkedDayInteractorTest(TestCase):
         self.month_payment_repo = MonthPaymentRepo()
         self.worked_day_repo = WorkedDayRepo()
         permission_validator = PermissionValidator(UserRepo())
-        date_validator = DateTimeValidator()
+        field_validator = FieldValidator()
         self.worked_day_interactor = CreateWorkedDayInteractor(self.worked_day_repo, self.month_payment_repo,
                                                                self.project_repo, permission_validator,
-                                                               date_validator)
+                                                               field_validator)
 
     def test_method_set_params(self):
         created_worked_day = self.worked_day_interactor.set_params(
@@ -938,7 +939,7 @@ class UpdateWorkedDayInteractorTest(TestCase):
         month_payment_repo = MonthPaymentRepo()
         worked_day_repo = WorkedDayRepo()
         permission_validator = PermissionValidator(UserRepo())
-        date_validator = DateTimeValidator()
+        date_validator = FieldValidator()
         self.worked_day_interactor = UpdateWorkedDayInteractor(worked_day_repo, month_payment_repo,
                                                                project_repo, permission_validator,
                                                                date_validator)
@@ -954,7 +955,7 @@ class UpdateWorkedDayInteractorTest(TestCase):
 
         self.assertEqual(updated_worked_day.id, self.worked_day_orm.id)
         self.assertEqual(updated_worked_day.month_payment_id, self.month_payment_orm.id)
-        self.assertEqual(updated_worked_day.day.date(), datetime.date(2018, 6, 18))
+        self.assertEqual(updated_worked_day.day, datetime.date(2018, 6, 18))
 
 
     def test_method_set_params_no_logged_exception(self):
@@ -1302,14 +1303,11 @@ class CreateHourPaymentInteractorTest(TestCase):
         hour_payment_repo = HourPaymentRepo()
         user_project_validate = PermissionValidator(UserRepo())
         project_repo = ProjectRepo()
-        type_of_payment_validator = TypeOfPaymentValidator()
-        rate_validator = RateValidator()
+        field_validator = FieldValidator()
         self.create_hour_payment_interactor = CreateHourPaymentInteractor(hour_payment_repo,
                                                                           project_repo,
                                                                           user_project_validate,
-                                                                          type_of_payment_validator,
-                                                                          rate_validator
-                                                                          )
+                                                                          field_validator)
 
     def test_set_params_execute(self):
         create_hour_paymnet = self.create_hour_payment_interactor.set_params(
@@ -1402,7 +1400,7 @@ class UpdateHourPaymentInteractorTest(TestCase):
         hour_payment_repo = HourPaymentRepo()
         user_project_validate = PermissionValidator(UserRepo())
         project_repo = ProjectRepo()
-        rate_validator = RateValidator()
+        rate_validator = FieldValidator()
         self.update_hour_payment_interactor = UpdateHourPaymentInteractor(hour_payment_repo,
                                                                           project_repo,
                                                                           user_project_validate,
@@ -1721,7 +1719,7 @@ class CreateWorkTimeInteractorTest(TestCase):
         work_time_repo = WorkTimeRepo()
         hour_payment_repo = HourPaymentRepo()
         user_project_validate = PermissionValidator(UserRepo())
-        project_date_validate = DateTimeValidator()
+        project_date_validate = FieldValidator()
         self.create_work_time_interactor = CreateWorkTimeInteractor(work_time_repo, hour_payment_repo,
                                                                     user_project_validate, project_date_validate)
 
@@ -1851,7 +1849,7 @@ class UpdateWorkTimeInteractorTest(TestCase):
         work_time_repo = WorkTimeRepo()
         hour_payment_repo = HourPaymentRepo()
         user_project_validate = PermissionValidator(UserRepo())
-        project_date_validate = DateTimeValidator()
+        project_date_validate = FieldValidator()
         project_repo = ProjectRepo()
         self.update_work_time_interactor = UpdateWorkTimeInteractor(work_time_repo, project_repo, hour_payment_repo,
                                                                     user_project_validate, project_date_validate)
@@ -2223,7 +2221,7 @@ class CreateTaskInteractorTest(TestCase):
         work_task_repo = WorkTaskRepo()
         user_project_validate = PermissionValidator(UserRepo())
         project_repo = ProjectRepo()
-        type_of_payment_validator = TypeOfPaymentValidator()
+        type_of_payment_validator = FieldValidator()
         self.create_task_interactor = CreateTaskInteractor(work_task_repo, project_repo, user_project_validate,
                                                            type_of_payment_validator)
 
@@ -2557,9 +2555,8 @@ class GetAllTaskInteractorTest(TestCase):
             )
         work_task_repo = WorkTaskRepo()
         user_project_validate = PermissionValidator(UserRepo())
-        type_of_payment_validator = TypeOfPaymentValidator()
-        self.get_all_task_interactor = GetAllTasksInteractor(work_task_repo, user_project_validate,
-                                                             type_of_payment_validator)
+        field_validator = FieldValidator()
+        self.get_all_task_interactor = GetAllTasksInteractor(work_task_repo, user_project_validate, field_validator)
 
 
     def test_set_params_execute(self):
@@ -2603,10 +2600,9 @@ class ProjectGetTotalInteractorTest(TestCase):
         self.project_repo = ProjectRepo()
         self.user_repo = UserRepo()
         self.user_permission_validator = PermissionValidator(UserRepo())
-        self.type_of_payment_validator = TypeOfPaymentValidator()
-        self.project_date_validator = DateTimeValidator()
+        self.field_validator = FieldValidator()
         self.project_interactor = ProjectGetTotalInteractor(self.project_repo, self.user_repo,
-                                                            self.user_permission_validator, self.project_date_validator)
+                                                            self.user_permission_validator, self.field_validator)
 
 
 
