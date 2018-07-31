@@ -18,11 +18,7 @@ from project.interactors import GetProjectInteractor, CreateProjectInteractor, U
 
 from project.models import ProjectORM, HourPaymentORM, WorkTimeORM, MonthPaymentORM, WorkedDayORM, WorkTaskORM
 from project.repositories import ProjectRepo, HourPaymentRepo, WorkTimeRepo, MonthPaymentRepo, WorkedDayRepo, WorkTaskRepo
-<<<<<<< HEAD
-from project.validators import PermissionValidator
-=======
 from project.validators import PermissionValidator, FieldValidator
->>>>>>> 4d4c588320aaf75ee28e442ee483f3a830428600
 from PayDevs.exceptions import NoLoggedException, NoPermissionException, InvalidEntityException, \
     EntityDoesNotExistException
 
