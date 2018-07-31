@@ -6,7 +6,7 @@ from pytz import UTC
 from PayDevs.constants import DATE_TIME_FORMAT
 from account.models import UserORM
 from account.repositories import UserRepo
-from project.entities import Project, HourPayment, WorkTime, WorkTask
+from project.entities import Project, HourPayment, MonthPayment, WorkedDay, WorkTime, WorkTask
 from project.interactors import GetProjectInteractor, CreateProjectInteractor, UpdateProjectInteractor, \
     DeleteProjectInteractor, GetAllProjectsInteractor, GetHourPaymentInteractor, CreateHourPaymentInteractor, \
     UpdateHourPaymentInteractor, DeleteHourPaymentInteractor, GetAllHourPaymentInteractor, GetWorkTimeInteractor, \
@@ -16,6 +16,8 @@ from project.interactors import GetProjectInteractor, CreateProjectInteractor, U
     GetAllMonthPaymentsInteractor, GetWorkedDayInteractor, CreateWorkedDayInteractor, UpdateWorkedDayInteractor, \
     DeleteWorkedDayInteractor, GetAllWorkedDaysInteractor, ProjectGetTotalInteractor
 
+from project.factories.entity_factory import ProjectEntity, MonthPaymentEntity, WorkedDayEntity, HourPaymentEntity, \
+    WorkTimeEntity, WorkTaskEntity
 from project.models import ProjectORM, HourPaymentORM, WorkTimeORM, MonthPaymentORM, WorkedDayORM, WorkTaskORM
 from project.repositories import ProjectRepo, HourPaymentRepo, WorkTimeRepo, MonthPaymentRepo, WorkedDayRepo, WorkTaskRepo
 from project.validators import PermissionValidator, FieldValidator
@@ -77,9 +79,10 @@ class CreateProjectInteractorTest(TestCase):
         )
 
         self.project_repo = ProjectRepo()
+        project_entity = ProjectEntity
         self.user_permission_validator = PermissionValidator(UserRepo())
         self.field_validator = FieldValidator()
-        self.project_interactor = CreateProjectInteractor(self.project_repo, self.user_permission_validator,
+        self.project_interactor = CreateProjectInteractor(self.project_repo, project_entity, self.user_permission_validator,
                                                           self.field_validator)
 
     def test_create_project_set_params_execute(self):
@@ -185,9 +188,10 @@ class UpdateProjectInteractorTest(TestCase):
         )
 
         self.project_repo = ProjectRepo()
+        project_entity = ProjectEntity
         self.user_permission_validator = PermissionValidator(UserRepo())
         self.field_validator = FieldValidator()
-        self.project_update_interactor = UpdateProjectInteractor(self.project_repo,
+        self.project_update_interactor = UpdateProjectInteractor(self.project_repo, project_entity,
                                                                  self.user_permission_validator,
                                                                  self.field_validator)
 
@@ -365,10 +369,12 @@ class CreateMonthPaymentInteractorTest(TestCase):
 
         self.project_repo = ProjectRepo()
         self.month_payment_repo = MonthPaymentRepo()
+        month_payment_entity = MonthPaymentEntity
         permission_validator = PermissionValidator(UserRepo())
         field_validator = FieldValidator()
         self.month_payment_interactor = CreateMonthPaymentInteractor(self.month_payment_repo, self.project_repo,
-                                                                     permission_validator, field_validator)
+                                                                     month_payment_entity, permission_validator,
+                                                                     field_validator)
 
     def test_method_set_params(self):
         created_month_payment = self.month_payment_interactor.set_params(
@@ -508,10 +514,12 @@ class UpdateMonthPaymentInteractorTest(TestCase):
 
         self.project_repo = ProjectRepo()
         self.month_payment_repo = MonthPaymentRepo()
+        month_payment_entity = MonthPaymentEntity()
         permission_validator = PermissionValidator(UserRepo())
         field_validator = FieldValidator()
         self.month_payment_interactor = UpdateMonthPaymentInteractor(self.month_payment_repo, self.project_repo,
-                                                                     permission_validator, field_validator)
+                                                                     month_payment_entity, permission_validator,
+                                                                     field_validator)
 
     def test_method_set_params(self):
         updated_month_payment = self.month_payment_interactor.set_params(
@@ -722,10 +730,11 @@ class CreateWorkedDayInteractorTest(TestCase):
         self.project_repo = ProjectRepo()
         self.month_payment_repo = MonthPaymentRepo()
         self.worked_day_repo = WorkedDayRepo()
+        worked_day_entity = WorkedDayEntity()
         permission_validator = PermissionValidator(UserRepo())
         field_validator = FieldValidator()
         self.worked_day_interactor = CreateWorkedDayInteractor(self.worked_day_repo, self.month_payment_repo,
-                                                               self.project_repo, permission_validator,
+                                                               self.project_repo, worked_day_entity, permission_validator,
                                                                field_validator)
 
     def test_method_set_params(self):
@@ -934,10 +943,11 @@ class UpdateWorkedDayInteractorTest(TestCase):
         project_repo = ProjectRepo()
         month_payment_repo = MonthPaymentRepo()
         worked_day_repo = WorkedDayRepo()
+        worked_day_entity = WorkedDayEntity()
         permission_validator = PermissionValidator(UserRepo())
         date_validator = FieldValidator()
         self.worked_day_interactor = UpdateWorkedDayInteractor(worked_day_repo, month_payment_repo,
-                                                               project_repo, permission_validator,
+                                                               project_repo, worked_day_entity, permission_validator,
                                                                date_validator)
 
     def test_method_set_params(self):
@@ -1299,9 +1309,11 @@ class CreateHourPaymentInteractorTest(TestCase):
         hour_payment_repo = HourPaymentRepo()
         user_project_validate = PermissionValidator(UserRepo())
         project_repo = ProjectRepo()
+        hour_payment_entity = HourPaymentEntity()
         field_validator = FieldValidator()
         self.create_hour_payment_interactor = CreateHourPaymentInteractor(hour_payment_repo,
                                                                           project_repo,
+                                                                          hour_payment_entity,
                                                                           user_project_validate,
                                                                           field_validator)
 
@@ -1396,9 +1408,11 @@ class UpdateHourPaymentInteractorTest(TestCase):
         hour_payment_repo = HourPaymentRepo()
         user_project_validate = PermissionValidator(UserRepo())
         project_repo = ProjectRepo()
+        hour_payment_entity = HourPaymentEntity()
         rate_validator = FieldValidator()
         self.update_hour_payment_interactor = UpdateHourPaymentInteractor(hour_payment_repo,
                                                                           project_repo,
+                                                                          hour_payment_entity,
                                                                           user_project_validate,
                                                                           rate_validator
                                                                           )
@@ -1714,9 +1728,10 @@ class CreateWorkTimeInteractorTest(TestCase):
 
         work_time_repo = WorkTimeRepo()
         hour_payment_repo = HourPaymentRepo()
+        work_time_entity = WorkTimeEntity()
         user_project_validate = PermissionValidator(UserRepo())
         project_date_validate = FieldValidator()
-        self.create_work_time_interactor = CreateWorkTimeInteractor(work_time_repo, hour_payment_repo,
+        self.create_work_time_interactor = CreateWorkTimeInteractor(work_time_repo, hour_payment_repo, work_time_entity,
                                                                     user_project_validate, project_date_validate)
 
     def test_set_params_execute(self):
@@ -1843,12 +1858,14 @@ class UpdateWorkTimeInteractorTest(TestCase):
         )
 
         work_time_repo = WorkTimeRepo()
+        project_repo = ProjectRepo()
         hour_payment_repo = HourPaymentRepo()
+        work_time_entity = WorkTimeEntity()
         user_project_validate = PermissionValidator(UserRepo())
         project_date_validate = FieldValidator()
-        project_repo = ProjectRepo()
         self.update_work_time_interactor = UpdateWorkTimeInteractor(work_time_repo, project_repo, hour_payment_repo,
-                                                                    user_project_validate, project_date_validate)
+                                                                    work_time_entity, user_project_validate,
+                                                                    project_date_validate)
 
     def test_set_params_execute(self):
         update_work_time = self.update_work_time_interactor.set_params(
@@ -2216,10 +2233,11 @@ class CreateTaskInteractorTest(TestCase):
         )
         work_task_repo = WorkTaskRepo()
         user_project_validate = PermissionValidator(UserRepo())
+        work_task_entity = WorkTaskEntity()
         project_repo = ProjectRepo()
         type_of_payment_validator = FieldValidator()
-        self.create_task_interactor = CreateTaskInteractor(work_task_repo, project_repo, user_project_validate,
-                                                           type_of_payment_validator)
+        self.create_task_interactor = CreateTaskInteractor(work_task_repo, project_repo, work_task_entity,
+                                                           user_project_validate, type_of_payment_validator)
 
 
 
@@ -2355,9 +2373,11 @@ class UpdateTaskInteractorTest(TestCase):
             paid=False
         )
         work_task_repo = WorkTaskRepo()
-        user_project_validate = PermissionValidator(UserRepo())
         project_repo = ProjectRepo()
-        self.update_task_interactor = UpdateTaskInteractor(work_task_repo, project_repo, user_project_validate)
+        work_task_entity = WorkTaskEntity
+        user_project_validate = PermissionValidator(UserRepo())
+        self.update_task_interactor = UpdateTaskInteractor(work_task_repo, project_repo, work_task_entity,
+                                                           user_project_validate)
 
 
 
@@ -2595,10 +2615,8 @@ class ProjectGetTotalInteractorTest(TestCase):
 
         self.project_repo = ProjectRepo()
         self.user_repo = UserRepo()
+        project_entity = ProjectEntity()
         self.user_permission_validator = PermissionValidator(UserRepo())
         self.field_validator = FieldValidator()
-        self.project_interactor = ProjectGetTotalInteractor(self.project_repo, self.user_repo,
+        self.project_interactor = ProjectGetTotalInteractor(self.project_repo, self.user_repo, project_entity,
                                                             self.user_permission_validator, self.field_validator)
-
-
-
