@@ -71,17 +71,19 @@ class DateFormatListSerializer(DateFormatSerializer):
 
 
 
-class ExceptionSerializer(BaseSerializer):
+class ExceptionSerializer:
 
     model = None
     fields = ['source', 'code']
 
-    @classmethod
-    def serialize(cls, exception):
-        ser = super().serialize(exception)
-        ser['message'] = str(exception)
+    @staticmethod
+    def serialize(exception):
         body = {
-            'error': ser
+            'error': {
+                'source': exception.source,
+                'code': exception.code,
+                'message': str(exception)
+            }
         }
         return body
 
