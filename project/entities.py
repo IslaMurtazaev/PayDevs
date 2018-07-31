@@ -1,4 +1,3 @@
-from PayDevs.exceptions import InvalidEntityException
 from PayDevs.constants import TypesOfPayment
 
 class Project(object):
@@ -104,6 +103,3 @@ class WorkedDay(object):
         self.month_payment_id = month_payment_id
         self.day = day
         self.paid = paid
-
-
-   
