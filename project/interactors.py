@@ -147,6 +147,7 @@ class GetAllProjectsInteractor:
 
     def execute(self):
         self.permission_validator.validate(self.user_id)
+
         return self.project_repo.get_all(self.user_id)
 
 
@@ -212,6 +213,8 @@ class ProjectGetTotalInteractor:
             project_total.type_of_payment_pdf = 'Task Payment'
         pdf = self.pdf_creator.create_pdf(project_total)
         return pdf
+
+
 
 class GetTaskInteractor:
     def __init__(self, work_task_repo, permission_validator):

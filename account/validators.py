@@ -82,7 +82,7 @@ def validate(value, user=None, validators=None):
         except Exception as error:
             errors.append(error)
     if errors:
-        raise InvalidEntityException(source='validate', code='not_allowed', message=str(errors))
+        raise InvalidEntityException(source='validate', code='not_allowed', message=str(errors[0]))
 
 
 

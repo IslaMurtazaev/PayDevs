@@ -4,7 +4,7 @@ from PayDevs.exceptions import EntityDoesNotExistException, NoPermissionExceptio
     EntityIntegrityException, InvalidEntityException, NoLoggedException, SerializerException
 
 
-DATE_TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ%z"
+DATE_TIME_FORMAT = "%Y-%m-%dT%H:%M:%S%z"  # "%Y-%m-%dT%H:%M:%S.%fZ%z"
 DATE_FORMAT = "%Y-%m-%d"
 
 
