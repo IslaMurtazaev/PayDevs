@@ -90,7 +90,7 @@ class CreateProjectInteractorTest(TestCase):
                                                      title='Test Project',
                                                      description='Description',
                                                      type_of_payment='T_P',
-                                                     start_date='2018-12-20T12:30:00.000000Z+0600',
+                                                     start_date='2018-12-20T12:30:00+0600',
                                                      status=True
                                                      ).execute()
         project_orm = ProjectORM.objects.get(id=project.id)
@@ -109,7 +109,7 @@ class CreateProjectInteractorTest(TestCase):
                                                title='Test Project',
                                                description='Description',
                                                type_of_payment='HDDSASD',
-                                               start_date='2018-12-20T12:30:00.000000Z+0600',
+                                               start_date='2018-12-20T12:30:00+0600',
                                                status=True
                                                ).execute()
 
@@ -118,7 +118,7 @@ class CreateProjectInteractorTest(TestCase):
                                                title='Test Project',
                                                description='Description',
                                                type_of_payment='HDDSASD',
-                                               start_date='2018-12-20T12:30:00.000000Z+0600',
+                                               start_date='2018-12-20T12:30:00+0600',
                                                status=True
                                                ).execute()
 
@@ -145,7 +145,7 @@ class CreateProjectInteractorTest(TestCase):
                                                title='Test Project',
                                                description='Description',
                                                type_of_payment='H_P',
-                                               start_date='2018-12-20T12:30:00.000000Z+0600',
+                                               start_date='2018-12-20T12:30:00+0600',
                                                status=True
                                                ).execute()
 
@@ -154,7 +154,7 @@ class CreateProjectInteractorTest(TestCase):
                                                title='Test Project',
                                                description='Description',
                                                type_of_payment='H_P',
-                                               start_date='2018-12-20T12:30:00.000000Z+0600',
+                                               start_date='2018-12-20T12:30:00+0600',
                                                status=True
                                                ).execute()
 
@@ -201,7 +201,7 @@ class UpdateProjectInteractorTest(TestCase):
             project_id=self.project_orm.id,
             title="Update test",
             description="Test update project interactor",
-            end_date="2018-12-20T12:30:00.000000Z+0600"
+            end_date="2018-12-20T12:30:00+0600"
         ).execute()
         project_orm = ProjectORM.objects.get(id=self.project_orm.id)
         self.assertEquals(project.id, project_orm.id)
@@ -213,7 +213,7 @@ class UpdateProjectInteractorTest(TestCase):
 
         self.assertEquals(project_orm.title, "Update test")
         self.assertEquals(project_orm.description, "Test update project interactor")
-        self.assertEquals(project_orm.end_date, datetime.datetime.strptime("2018-12-20T12:30:00.000000Z+0600",
+        self.assertEquals(project_orm.end_date, datetime.datetime.strptime("2018-12-20T12:30:00+0600",
                                                                            DATE_TIME_FORMAT))
 
     def test_set_param_execute_no_logged_exception(self):
@@ -1739,8 +1739,8 @@ class CreateWorkTimeInteractorTest(TestCase):
             logged_id=self.user_orm.id,
             project_id=self.project_orm.id,
             hour_payment_id=self.hour_payment_orm.id,
-            start_work="2018-9-20T10:00:00.000000Z+0600",
-            end_work="2018-9-20T18:30:00.000000Z+0600",
+            start_work="2018-9-20T10:00:00+0600",
+            end_work="2018-9-20T18:30:00+0600",
             paid=True
         ).execute()
 
@@ -1758,8 +1758,8 @@ class CreateWorkTimeInteractorTest(TestCase):
                 logged_id=None,
                 project_id=self.project_orm.id,
                 hour_payment_id=self.hour_payment_orm.id,
-                start_work="2018-9-20T10:00:00.000000Z+0600",
-                end_work="2018-9-20T18:30:00.000000Z+0600",
+                start_work="2018-9-20T10:00:00+0600",
+                end_work="2018-9-20T18:30:00+0600",
                 paid=True
             ).execute()
 
@@ -1769,8 +1769,8 @@ class CreateWorkTimeInteractorTest(TestCase):
                 logged_id=self.user_orm.id,
                 project_id=self.project_orm.id,
                 hour_payment_id=self.hour_payment_orm2.id,
-                start_work="2018-9-20T10:00:00.000000Z+0600",
-                end_work="2018-9-20T18:30:00.000000Z+0600",
+                start_work="2018-9-20T10:00:00+0600",
+                end_work="2018-9-20T18:30:00+0600",
                 paid=True
             ).execute()
 
@@ -1781,7 +1781,7 @@ class CreateWorkTimeInteractorTest(TestCase):
                 project_id=self.project_orm.id,
                 hour_payment_id=self.hour_payment_orm.id,
                 start_work="2018-9-20T107",
-                end_work="2018-9-20T18:30:00.000000Z+0600",
+                end_work="2018-9-20T18:30:00+0600",
                 paid=True
             ).execute()
 
@@ -1790,7 +1790,7 @@ class CreateWorkTimeInteractorTest(TestCase):
                 logged_id=self.user_orm.id,
                 project_id=self.project_orm.id,
                 hour_payment_id=self.hour_payment_orm.id,
-                start_work="2018-9-20T18:30:00.000000Z+0600",
+                start_work="2018-9-20T18:30:00+0600",
                 end_work="2018-9-20T107",
                 paid=True
             ).execute()
@@ -1873,19 +1873,19 @@ class UpdateWorkTimeInteractorTest(TestCase):
             project_id=self.project_orm.id,
             hour_payment_id=self.hour_payment_orm.id,
             work_time_id=self.work_time_orm.id,
-            start_work="2018-9-20T18:30:00.000000Z+0600",
+            start_work="2018-9-20T18:30:00+0600",
             paid=True
         ).execute()
 
         self.assertEqual(type(update_work_time), WorkTime)
         self.assertEqual(update_work_time.start_work,
-                         datetime.datetime.strptime("2018-9-20T18:30:00.000000Z+0600", DATE_TIME_FORMAT).
+                         datetime.datetime.strptime("2018-9-20T18:30:00+0600", DATE_TIME_FORMAT).
                          replace(tzinfo=datetime.timezone(datetime.timedelta(0, 21600))))
 
         update_work_time_orm = WorkTimeORM.objects.get(id=update_work_time.id)
         self.assertEqual(update_work_time_orm.paid, True)
         self.assertEqual(update_work_time_orm.start_work,
-                         datetime.datetime.strptime("2018-9-20T18:30:00.000000Z+0600", DATE_TIME_FORMAT).
+                         datetime.datetime.strptime("2018-9-20T18:30:00+0600", DATE_TIME_FORMAT).
                          replace(tzinfo=datetime.timezone(datetime.timedelta(0, 21600))))
         self.assertNotEqual(update_work_time_orm.start_work, self.work_time_orm.start_work)
         self.assertNotEqual(update_work_time_orm.paid, self.work_time_orm.paid)
@@ -1898,7 +1898,7 @@ class UpdateWorkTimeInteractorTest(TestCase):
                 project_id=self.project_orm.id,
                 hour_payment_id=self.hour_payment_orm.id,
                 work_time_id=self.work_time_orm.id,
-                start_work="2018-9-20T18:30:00.000000Z+0600",
+                start_work="2018-9-20T18:30:00+0600",
                 paid=True
             ).execute()
 
@@ -1909,7 +1909,7 @@ class UpdateWorkTimeInteractorTest(TestCase):
                 project_id=self.project_orm.id,
                 hour_payment_id=self.hour_payment_orm.id,
                 work_time_id=self.work_time_orm.id,
-                start_work="2018-9-20T18:30:00.000000Z+0600",
+                start_work="2018-9-20T18:30:00+0600",
                 paid=True
             ).execute()
 
@@ -1920,7 +1920,7 @@ class UpdateWorkTimeInteractorTest(TestCase):
                 project_id=self.project_orm2.id,
                 hour_payment_id=self.hour_payment_orm.id,
                 work_time_id=self.work_time_orm.id,
-                start_work="2018-9-20T18:30:00.000000Z+0600",
+                start_work="2018-9-20T18:30:00+0600",
                 paid=True
             ).execute()
 
@@ -1931,7 +1931,7 @@ class UpdateWorkTimeInteractorTest(TestCase):
                 project_id=self.project_orm.id,
                 hour_payment_id=self.hour_payment_orm2.id,
                 work_time_id=self.work_time_orm.id,
-                start_work="2018-9-20T18:30:00.000000Z+0600",
+                start_work="2018-9-20T18:30:00+0600",
                 paid=True
             ).execute()
 
@@ -1942,7 +1942,7 @@ class UpdateWorkTimeInteractorTest(TestCase):
                 project_id=self.project_orm.id,
                 hour_payment_id=self.hour_payment_orm.id,
                 work_time_id=None,
-                start_work="2018-9-20T18:30:00.000000Z+0600",
+                start_work="2018-9-20T18:30:00+0600",
                 paid=True
             ).execute()
 

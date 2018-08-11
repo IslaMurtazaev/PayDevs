@@ -547,7 +547,7 @@ class MonthPaymentTest(TestCase):
         worked_days = self.month_payment_repo._get_worked_days(month_payment2.id,
                                                                last_month_days=timezone.now().date())
         self.assertEqual(type(worked_days), list)
-        self.assertEqual(len(worked_days), 10)
+        self.assertEqual(len(worked_days), 5)
 
 
 
@@ -1237,7 +1237,7 @@ class ProjectRepoTest(TestCase):
         self.project_repo.update_payment_attrs(project.id, paid=False, boundary=boundary)
 
         work_times = WorkTimeORM.objects.filter(paid=False)
-        self.assertEqual(work_times.count(), 27)
+        self.assertEqual(work_times.count(), 10)
 
 
 
