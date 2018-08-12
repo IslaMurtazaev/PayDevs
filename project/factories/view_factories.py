@@ -35,27 +35,27 @@ def update_project_factory():
 
 
 def get_projects_all_factory():
-    get_all_project_interactor = GetAllProjectsInteractorFactory().create()
+    get_all_project_interactor = GetAllProjectsInteractorFactory.create()
     return GetAllProjectsView(get_all_project_interactor)
 
 
 def create_task_factory():
-    create_task_interactor = CreateTaskInteractorFactory().create()
+    create_task_interactor = CreateTaskInteractorFactory.create()
     return TaskView(create_task_interactor)
 
 
 def get_task_factory():
-    get_task_interactor = GetTaskInteractorFactory().create()
+    get_task_interactor = GetTaskInteractorFactory.create()
     return TaskView(get_task_interactor)
 
 
 def update_task_factory():
-    get_task_interactor = UpdateTaskInteractorFactory().create()
+    get_task_interactor = UpdateTaskInteractorFactory.create()
     return TaskView(get_task_interactor)
 
 
 def delete_task_factory():
-    get_task_interactor = DeleteTaskInteractorFactory().create()
+    get_task_interactor = DeleteTaskInteractorFactory.create()
     return TaskView(get_task_interactor)
 
 def get_all_tasks_factory():
