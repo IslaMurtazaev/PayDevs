@@ -1,0 +1,25 @@
+{
+  "name": "front_end_pay_devs",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.18.0",
+    "react": "^16.4.2",
+    "react-axios": "^2.0.0",
+    "react-dom": "^16.4.2",
+    "react-redux": "^5.0.7",
+    "react-redux-form": "^1.16.9",
+    "react-router": "^3.2.1",
+    "react-router-redux": "^4.0.8",
+    "react-scripts": "1.1.4",
+    "redux": "^4.0.0",
+    "redux-devtools-extension": "^2.13.5",
+    "redux-thunk": "^2.3.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}

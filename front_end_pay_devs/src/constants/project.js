@@ -1,0 +1,5 @@
+
+export const ProjectConstant = {
+    ADD_ALL_PROJECTS: "ADD_ALL_PROJECTS",
+    CLEAR_ALL_PROJECTS: "CLEAR_ALL_PROJECTS"
+}

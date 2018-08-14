@@ -1,6 +1,4 @@
-from PayDevs.constants import DATE_TIME_FORMAT
-from PayDevs.serializers import BaseSerializer, ListSerializer, DateFormatSerializer, DateFormatListSerializer
-from project.entities import Project, WorkTask, WorkedDay, WorkTime, MonthPayment, HourPayment
+from PayDevs.constants import DATE_TIME_FORMAT, DATE_FORMAT
 
 
 class ProjectSerializer:
@@ -11,8 +9,8 @@ class ProjectSerializer:
             'user_id': project.user_id,
             'title': project.title,
             'description': project.description,
-            'start_date': project.start_date.strftime(DATE_TIME_FORMAT),
-            'end_date': project.end_date.strftime(DATE_TIME_FORMAT),
+            'start_date': project.start_date.strftime(DATE_TIME_FORMAT) if project.start_date else None,
+            'end_date': project.end_date.strftime(DATE_TIME_FORMAT) if project.end_date else None,
             'type_of_payment': project.type_of_payment,
             'status': project.status
         }
@@ -27,8 +25,8 @@ class ProjectTotalSerializer:
             'user_id': project.user_id,
             'title': project.title,
             'description': project.description,
-            'start_date': project.start_date.strftime(DATE_TIME_FORMAT),
-            'end_date': project.end_date.strftime(DATE_TIME_FORMAT),
+            'start_date': project.start_date.strftime(DATE_TIME_FORMAT) if project.start_date else None,
+            'end_date': project.end_date.strftime(DATE_TIME_FORMAT) if project.end_date else None,
             'type_of_payment': project.type_of_payment,
             'status': project.status,
             'total': project.total
@@ -84,7 +82,7 @@ class WorkedDaySerializer:
     def serialize(worked_day):
         return {
             'id': worked_day.id,
-            'day': worked_day.day.strftime(DATE_TIME_FORMAT),
+            'day': worked_day.day.strftime(DATE_FORMAT) if worked_day.day else None,
             'paid': worked_day.paid,
             'month_payment_id': worked_day.month_payment_id
         }
@@ -119,8 +117,8 @@ class WorkTimeSerializer:
     def serialize(work_time):
         return {
             'id': work_time.id,
-            'start_work': work_time.start_work.strftime(DATE_TIME_FORMAT),
-            'end_work': work_time.end_work.strftime(DATE_TIME_FORMAT),
+            'start_work': work_time.start_work.strftime(DATE_TIME_FORMAT) if work_time.start_work else None,
+            'end_work': work_time.end_work.strftime(DATE_TIME_FORMAT) if work_time.end_work else None,
             'paid': work_time.paid,
             'hour_payment_id': work_time.hour_payment_id
         }

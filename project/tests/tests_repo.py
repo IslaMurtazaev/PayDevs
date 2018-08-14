@@ -1285,5 +1285,4 @@ class ProjectRepoTest(TestCase):
         self.project_repo.update_payment_attrs(project.id, paid=True,
                                                last_month_days=datetime.datetime.now().replace(day=1).date())
         worked_days = WorkedDayORM.objects.filter(paid=True)
-        print(worked_days.count())
 
