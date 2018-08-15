@@ -12,8 +12,7 @@ class ProjectItem extends Component{
 
     render(){
         let project = this.props.project
-        
-
+        if(!project) return <Redirect from='/project/:id' to="/"/>
         return (
             <div>
                 <h2>{project.title}</h2>
