@@ -14,7 +14,7 @@ function authentication(username, password) {
             UserService.login(username, password).then((user) =>
                 {
                     dispatch({type: UserConstant.LOGIN_USER, user});
-                    history.push('projects');
+                    history.push('/');
                 },
                 error =>{
                     if(error.response)
@@ -33,14 +33,16 @@ function sign_up(username, email, password) {
     return dispatch=>{
             UserService.create_user(username, email, password).then((user) =>
                 {
-                    dispatch({type: UserConstant.LOGIN_USER, user});
-                    history.push('projects');
+                    
+                    dispatch({type: UserConstant.LOGIN_USER, user});      
+                    history.push('/');
                 },
                 error =>{
                     if(error.response)
                         dispatch({type: UserConstant.LOGIN_ERROR, error: error.response.data});
                     else
                         dispatch({type: UserConstant.LOGIN_ERROR, error: error});
+                    
                 }    
           
             )

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {userActions} from '../actions/user'
 import { Form, Control } from 'react-redux-form';
-
 import {Link} from 'react-router-dom'
 
 
@@ -26,6 +25,7 @@ class LoginUser extends Component {
             this.props.onLoginUser(values.username, values.password);
             this.setState({password_req: false, user_req: false})
             
+            
 
         }else if (!values.username) {
             this.setState({user_req: true})
@@ -36,14 +36,18 @@ class LoginUser extends Component {
     
 
   render() {
-    console.log(this.props.user);
+    // console.log(this.props.user);
     const {user_req, password_req} = this.state;
+    const error = this.props.error;
+    
     return (
       <div>
           <Link to="sign_up">Sign Up</Link>
+
         <Form model="login.user_form"
               onSubmit={(val) => this.handleSubmit(val)}
               name="myForm">   
+              {error && <div>{error.error.message}</div>}
             <div>
                 <label>Username</label>
                 <Control.text model="login.user_form.username" />
@@ -64,7 +68,8 @@ class LoginUser extends Component {
 
 export default connect(
     (state) => ({
-      user: state.user
+      user: state.user,
+      error: state.user.error
     }),
     dispatch => ({
         onLoginUser:(username, password) => {

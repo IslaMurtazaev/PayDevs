@@ -11,6 +11,7 @@ export default function projects(state=initialState, action){
     }else if(action.type === ProjectConstant.CLEAR_ALL_PROJECTS){
         return []
     }
+    
     return state;
     
   
