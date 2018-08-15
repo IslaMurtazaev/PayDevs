@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {userActions} from '../actions/user';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import {history} from '../index';
 class SignUp extends Component {
     constructor(props){

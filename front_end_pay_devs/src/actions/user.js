@@ -1,5 +1,6 @@
 import {UserService} from '../service/user';
 import {UserConstant} from '../constants/user';
+import {history} from '../index'
 
 export const userActions = {
     authentication,
@@ -13,6 +14,7 @@ function authentication(username, password) {
             UserService.login(username, password).then((user) =>
                 {
                     dispatch({type: UserConstant.LOGIN_USER, user});
+                    history.push('projects');
                 },
                 error =>{
                     if(error.response)
@@ -32,6 +34,7 @@ function sign_up(username, email, password) {
             UserService.create_user(username, email, password).then((user) =>
                 {
                     dispatch({type: UserConstant.LOGIN_USER, user});
+                    history.push('projects');
                 },
                 error =>{
                     if(error.response)

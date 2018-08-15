@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {userActions} from '../actions/user'
 import { Form, Control } from 'react-redux-form';
-import {history} from '../index'
-import {Link} from 'react-router'
+
+import {Link} from 'react-router-dom'
 
 
 
@@ -25,7 +25,7 @@ class LoginUser extends Component {
         if(values.username && values.password){
             this.props.onLoginUser(values.username, values.password);
             this.setState({password_req: false, user_req: false})
-            history.push('projects');
+            
 
         }else if (!values.username) {
             this.setState({user_req: true})

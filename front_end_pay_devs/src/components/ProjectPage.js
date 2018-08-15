@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 import { projectActions } from '../actions/project';
 
 
@@ -9,10 +9,7 @@ class ProjectPage extends Component {
   onClick(){
     this.props.onGetAllProjects();
   }
-  componentWillUnmount() {
-   
-    this.props.onClearProjects();
-  }
+  
 
   render() {
     const {user, error} = this.props.user;
