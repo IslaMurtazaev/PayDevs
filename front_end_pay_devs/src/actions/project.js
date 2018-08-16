@@ -32,10 +32,13 @@ function deleteProject(id) {
 
 function create(project) {
   return dispatch => {
-    projectService.create(project).then(project => {
-        dispatch({ type: ProjectConstant.CREATE_PROJECT, project});
-        history.push("/");
-      }).catch(error=>{
+    projectService
+      .create(project)
+      .then(project => {
+        dispatch({ type: ProjectConstant.CREATE_PROJECT, project });
+        history.push(`/project/${project.id}`);
+      })
+      .catch(error => {
         alert(error);
       });
   };
