@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {projectActions} from '../actions/project'
-
+import {Redirect} from "react-router";
 
 
 class ProjectItem extends Component{

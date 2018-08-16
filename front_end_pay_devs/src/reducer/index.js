@@ -1,20 +1,25 @@
-import {combineReducers} from 'redux';
-import {routerReducer} from 'react-router-redux';
-import { combineForms } from 'react-redux-form';
+import { combineReducers } from "redux";
+import { routerReducer } from "react-router-redux";
+import { combineForms } from "react-redux-form";
 
-import user from './user'
-import projects from './project'
+import user from "./user";
+import project from "./project";
+import projects from "./projects";
 
 const initialUser = {
-  username: '',
-  password: '',
+  username: "",
+  password: ""
 };
 
 export default combineReducers({
-    login:combineForms({
-        user_form: initialUser,
-      }, 'login'),
-    routing: routerReducer,
-    user,
-    projects
-})
+  login: combineForms(
+    {
+      user_form: initialUser
+    },
+    "login"
+  ),
+  routing: routerReducer,
+  user,
+  project,
+  projects
+});
