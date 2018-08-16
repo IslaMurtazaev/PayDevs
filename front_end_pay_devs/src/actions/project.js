@@ -49,7 +49,7 @@ const FileDownload = require('react-file-download');
 function getTotal(id){
   return dispatch => {
     projectService.getTotal(id).then((data) => {
-      FileDownload(data, 'report.pdf')
+      FileDownload(data, 'total.pdf')
       dispatch({ type: ProjectConstant.GET_TOTAL });
       history.push("/");
     });
