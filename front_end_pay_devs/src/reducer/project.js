@@ -1,6 +1,6 @@
 import { ProjectConstant } from "../constants/project";
 
-const initialState = [];
+const initialState = {};
 
 export default function projects(state = initialState, action) {
   switch(action.type) {

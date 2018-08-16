@@ -10,7 +10,8 @@ class ProjectItem extends Component {
 
   render() {
     let project = this.props.project;
-    if (!project) return <Redirect from="/project/:id" to="/" />;
+    console.log(Object.keys(project).length)
+    if (!Object.keys(project).length) return <Redirect from="/project/:id" to="/" />;
 
     let type_of_payment;
     switch(project.type_of_payment) {
