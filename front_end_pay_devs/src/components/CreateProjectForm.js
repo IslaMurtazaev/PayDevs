@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import FormikProject from "./FormikProject";
 import { projectActions } from "../actions/project";
 import { connect } from "react-redux";

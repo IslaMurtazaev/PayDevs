@@ -8,6 +8,7 @@ export default function projects(state = initialState, action) {
       return [...action.projects];
     case ProjectConstant.CLEAR_ALL_PROJECTS:
       return [];
+    default:
+      return state; 
   }
-  return state;
 }

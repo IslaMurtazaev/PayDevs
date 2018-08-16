@@ -23,7 +23,9 @@ class ProjectItem extends Component {
         break;
       case "T_P":
         type_of_payment = "Taskly";
-        break
+        break;
+      default:
+        break;
     }
     return (
         <div className="container">
