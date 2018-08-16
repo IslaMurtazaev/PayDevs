@@ -4,7 +4,8 @@ import { authHeader } from "./helpers";
 export const projectService = {
   get_all,
   deleteProject,
-  create
+  create,
+  getTotal
 };
 
 const BASE_URL = "http://127.0.0.1:8000/api/project/";
@@ -42,6 +43,21 @@ function create(project) {
     headers: headres,
     data: project
   }).then(res => {
+    return res.data;
+  });
+}
+
+
+function getTotal(id){
+  const headres = authHeader();
+  const fetch_url = `${BASE_URL}${id}/total`;
+  return axios({
+    method: "post",
+    url: fetch_url,
+    headers: headres,
+    data: {}
+  }).then(res => {
+    
     return res.data;
   });
 }

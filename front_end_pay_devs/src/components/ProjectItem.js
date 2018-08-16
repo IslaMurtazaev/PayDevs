@@ -8,9 +8,12 @@ class ProjectItem extends Component {
     this.props.onGetAllProjects(id);
   }
 
+  onClickTotal(id){
+    this.props.onGetTotal(id);
+  }
+
   render() {
     let project = this.props.project;
-    console.log(Object.keys(project).length)
     if (!Object.keys(project).length) return <Redirect from="/project/:id" to="/" />;
 
     let type_of_payment;
@@ -41,6 +44,9 @@ class ProjectItem extends Component {
         ) : null}
         <h4>Type of payment: {type_of_payment}</h4>
         <h4>Status: {project.status ? "" : "not"} active</h4>
+        <button className="btn btn-danger" onClick={this.onClickTotal.bind(this, project.id)}>
+          Total
+        </button>
         <button className="btn btn-danger" onClick={this.onClick.bind(this, project.id)}>
           DELETE PROJECT
         </button>
@@ -63,6 +69,9 @@ export default connect(
   dispatch => ({
     onGetAllProjects: id => {
       dispatch(projectActions.deleteProject(id));
+    },
+    onGetTotal:(id)=>{
+      dispatch(projectActions.getTotal(id));
     }
   })
 )(ProjectItem);
