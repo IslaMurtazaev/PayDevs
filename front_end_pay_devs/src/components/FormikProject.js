@@ -21,7 +21,7 @@ const ProjectInput = ({ values, errors, touched, setFieldValue }) => {
         name="description"
         type="text"
         className="form-control"
-        placeholder={"description..."}
+        placeholder="description..."
       />
 
       <label>Start-date: </label>
@@ -71,6 +71,7 @@ const ProjectInput = ({ values, errors, touched, setFieldValue }) => {
 
 const FormikProject = withFormik({
   mapPropsToValues({
+    id,
     title,
     description,
     start_date,
@@ -79,10 +80,11 @@ const FormikProject = withFormik({
     status
   }) {
     return {
+      id: id || null,
       title: title || "",
       description: description || "",
-      start_date: start_date || new Date(),
-      end_date: end_date || new Date(),
+      start_date: start_date && new Date(start_date) || new Date(),
+      end_date: end_date && new Date(end_date) || new Date(),
       type_of_payment: type_of_payment || "M_P",
       status: status || true
     };

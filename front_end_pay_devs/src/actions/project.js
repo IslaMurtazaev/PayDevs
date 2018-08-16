@@ -6,7 +6,8 @@ export const projectActions = {
   getAll,
   clearAll,
   deleteProject,
-  create
+  create,
+  update
 };
 
 function getAll() {
@@ -37,6 +38,20 @@ function create(project) {
       .then(project => {
         dispatch({ type: ProjectConstant.CREATE_PROJECT, project });
         history.push(`/project/${project.id}`);
+      })
+      .catch(error => {
+        alert(error);
+      });
+  };
+}
+
+function update(project) {
+  return dispatch => {
+    projectService
+      .update(project)
+      .then(project => {
+        dispatch({ type: ProjectConstant.UPDATE_PROJECT, project });
+        history.push("/");
       })
       .catch(error => {
         alert(error);

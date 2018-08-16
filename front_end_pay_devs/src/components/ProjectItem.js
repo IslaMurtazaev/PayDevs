@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { projectActions } from "../actions/project";
 import { Redirect } from "react-router";
+import { NavLink } from "react-router-dom";
+import { history } from "../index";
 
 class ProjectItem extends Component {
   onClick(id) {
@@ -10,11 +12,11 @@ class ProjectItem extends Component {
 
   render() {
     let project = this.props.project;
-    console.log(Object.keys(project).length)
-    if (!Object.keys(project).length) return <Redirect from="/project/:id" to="/" />;
+    if (!Object.keys(project).length)
+      return <Redirect from="/project/:id" to="/" />;
 
     let type_of_payment;
-    switch(project.type_of_payment) {
+    switch (project.type_of_payment) {
       case "M_P":
         type_of_payment = "Monthly";
         break;
@@ -27,8 +29,9 @@ class ProjectItem extends Component {
       default:
         break;
     }
+
     return (
-        <div className="container">
+      <div className="container">
         <h3>Title: {project.title}</h3>
         {project.description ? (
           <h4>Description: {project.description}</h4>
@@ -41,8 +44,14 @@ class ProjectItem extends Component {
         ) : null}
         <h4>Type of payment: {type_of_payment}</h4>
         <h4>Status: {project.status ? "" : "not"} active</h4>
-        <button className="btn btn-danger" onClick={this.onClick.bind(this, project.id)}>
-          DELETE PROJECT
+
+        <NavLink name="Islam" to={`${history.location.pathname}/update`}><button className="btn btn-warning">Update project</button></NavLink>
+ 
+        <button
+          className="btn btn-danger"
+          onClick={this.onClick.bind(this, project.id)}
+        >
+          Delete project
         </button>
       </div>
     );
