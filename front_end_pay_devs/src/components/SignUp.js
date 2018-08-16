@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {userActions} from '../actions/user';
 import {Link} from 'react-router-dom';
-import {history} from '../index';
+
+
 class SignUp extends Component {
     constructor(props){
         super(props);
@@ -26,11 +27,11 @@ class SignUp extends Component {
 
         this.setState({ submitted: true });
         const { username, email, password } = this.state;
-        console.log(username, email, password)
+        // console.log(username, email, password)
         if(username && email && password){
             this.props.onSignUpUser(username, email, password)
             this.setState({username: '', email: '', password: ''})
-            history.push('projects')
+            
         }
 
         
@@ -39,11 +40,13 @@ class SignUp extends Component {
 
     render() {
         const { username, password, email } = this.state;
-        console.log(this.props.user)
+        const error = this.props.error;
+        // console.log(this.props.user)
         return (
         <div>   
             <Link to="login">Login</Link>
             <form name="form" onSubmit={this.handleSubmit}>
+            {error && <div>{error.error.message}</div>}
                     <div >
                         <label htmlFor="username">Username: </label>
                         <input type="text" className="form-control" name="username" value={username} onChange={this.handleChange} />
@@ -68,6 +71,7 @@ class SignUp extends Component {
 export default connect(
     (state) => ({
       user: state.user,
+      error: state.user.error,
     }),
     dispatch => ({
         onSignUpUser:(username, email, password) => {
