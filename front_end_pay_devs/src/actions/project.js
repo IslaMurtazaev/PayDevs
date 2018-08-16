@@ -7,7 +7,8 @@ export const projectActions = {
   clearAll,
   deleteProject,
   create,
-  update
+  update,
+  getTotal
 };
 
 function getAll() {
@@ -56,5 +57,16 @@ function update(project) {
       .catch(error => {
         alert(error);
       });
+  };
+}
+
+const FileDownload = require("react-file-download");
+function getTotal(id) {
+  return dispatch => {
+    projectService.getTotal(id).then(data => {
+      FileDownload(data, "total.pdf");
+      dispatch({ type: ProjectConstant.GET_TOTAL });
+      history.push("/");
+    });
   };
 }

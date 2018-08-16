@@ -10,6 +10,10 @@ class ProjectItem extends Component {
     this.props.onGetAllProjects(id);
   }
 
+  onClickTotal(id) {
+    this.props.onGetTotal(id);
+  }
+
   render() {
     let project = this.props.project;
     if (!Object.keys(project).length)
@@ -45,13 +49,21 @@ class ProjectItem extends Component {
         <h4>Type of payment: {type_of_payment}</h4>
         <h4>Status: {project.status ? "" : "not"} active</h4>
 
-        <NavLink name="Islam" to={`${history.location.pathname}/update`}><button className="btn btn-warning">Update project</button></NavLink>
- 
+        <NavLink name="Islam" to={`${history.location.pathname}/update`}>
+          <button className="btn btn-warning">Update project</button>
+        </NavLink>
+
         <button
           className="btn btn-danger"
           onClick={this.onClick.bind(this, project.id)}
         >
           Delete project
+        </button>
+        <button
+          className="btn btn-danger"
+          onClick={this.onClickTotal.bind(this, project.id)}
+        >
+          Total
         </button>
       </div>
     );
@@ -72,6 +84,9 @@ export default connect(
   dispatch => ({
     onGetAllProjects: id => {
       dispatch(projectActions.deleteProject(id));
+    },
+    onGetTotal: id => {
+      dispatch(projectActions.getTotal(id));
     }
   })
 )(ProjectItem);

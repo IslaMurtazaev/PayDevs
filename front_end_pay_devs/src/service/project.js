@@ -5,7 +5,8 @@ export const projectService = {
   get_all,
   deleteProject,
   create,
-  update
+  update,
+  getTotal
 };
 
 const BASE_URL = "http://127.0.0.1:8000/api/project/";
@@ -54,4 +55,19 @@ function update(project) {
     headers: headres,
     data: project
   }).then(res => res.data);
+}
+
+
+function getTotal(id){
+  const headres = authHeader();
+  const fetch_url = `${BASE_URL}${id}/total`;
+  return axios({
+    method: "post",
+    url: fetch_url,
+    headers: headres,
+    data: {}
+  }).then(res => {
+    
+    return res.data;
+  });
 }
