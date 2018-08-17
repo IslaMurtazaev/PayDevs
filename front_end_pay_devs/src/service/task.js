@@ -4,7 +4,8 @@ import { authHeader } from "./helpers";
 export const taskService = {
     create,
     getAll,
-    taksDelete
+    taksDelete,
+    update
   };
 
 
@@ -46,4 +47,18 @@ function taksDelete(taksId) {
       let task = res.data;
       return task ;
     });
+  }
+
+  function update(values){
+   
+    const headres = authHeader();
+  const fetch_url = `${BASE_URL}${values.projectId}/task/${values.id}/update/`;
+  return axios({
+      method: "put",
+      url: fetch_url,
+      headers: headres,
+      data: values
+  }).then(res => {
+      return res.data;
+  });
   }

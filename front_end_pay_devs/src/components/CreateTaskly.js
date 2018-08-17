@@ -4,8 +4,7 @@ import { tasklyActions } from "../actions/taskly";
 import { connect } from "react-redux";
 
 const CreateTasklyForm = (props) => {
-    let project = props.project;
-    console.log(project)
+    
     return (
       <div>
         <h1>Create a new Project</h1>

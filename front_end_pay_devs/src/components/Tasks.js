@@ -19,7 +19,7 @@ class Tasks extends Component {
   render() {
     const tasks = this.props.tasks
     const { project } = this.props;
-    console.log(project)
+    
 
     return (
       <div>
