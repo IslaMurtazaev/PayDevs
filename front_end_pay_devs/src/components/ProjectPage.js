@@ -28,8 +28,8 @@ class ProjectPage extends Component {
             </li>
           ))}
         </ul>
-        <Link className="link" to={"createproject"}>New project</Link>
-      </div>
+        <Link className="link" to={"/project/create"}>New project</Link>
+       </div>
     );
   }
 }

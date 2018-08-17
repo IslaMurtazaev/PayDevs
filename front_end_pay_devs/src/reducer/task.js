@@ -1,11 +1,11 @@
-import { ProjectConstant } from "../constants/project";
+import { TaksConstant } from "../constants/task";
 
 const initialState = {};
 
 export default function projects(state = initialState, action) {
   switch(action.type) {
-    case ProjectConstant.CREATE_PROJECT:
-      return action.project;
+    case TaksConstant.CREATE_TASK:
+      return action.task;
     default:
       return state;
   }

@@ -1,16 +1,21 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { projectActions } from "../actions/project";
-import { Redirect } from "react-router";
+import { Redirect, Link } from "react-router-dom";
 
 class ProjectItem extends Component {
   onClick(id) {
     this.props.onGetAllProjects(id);
   }
 
+  onClickTotal(id){
+    this.props.onGetTotal(id);
+  }
+
   render() {
     let project = this.props.project;
-    if (!project) return <Redirect from="/project/:id" to="/" />;
+    
+    if (!Object.keys(project).length) return <Redirect from="/project/:id" to="/" />;
 
     let type_of_payment;
     switch(project.type_of_payment) {
@@ -22,7 +27,9 @@ class ProjectItem extends Component {
         break;
       case "T_P":
         type_of_payment = "Taskly";
-        break
+        break;
+      default:
+        break;
     }
     return (
         <div className="container">
@@ -38,6 +45,14 @@ class ProjectItem extends Component {
         ) : null}
         <h4>Type of payment: {type_of_payment}</h4>
         <h4>Status: {project.status ? "" : "not"} active</h4>
+      
+        <button className="btn btn-danger" onClick={this.onClickTotal.bind(this, project.id)}>
+          Total
+        </button>
+        <button className="btn btn-danger"><Link to={`/project/${project.id}/${type_of_payment}/create`}>
+          Create {type_of_payment}</Link>
+        </button>
+        
         <button className="btn btn-danger" onClick={this.onClick.bind(this, project.id)}>
           DELETE PROJECT
         </button>
@@ -60,6 +75,9 @@ export default connect(
   dispatch => ({
     onGetAllProjects: id => {
       dispatch(projectActions.deleteProject(id));
+    },
+    onGetTotal:(id)=>{
+      dispatch(projectActions.getTotal(id));
     }
   })
 )(ProjectItem);

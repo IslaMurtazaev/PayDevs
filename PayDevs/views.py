@@ -25,6 +25,7 @@ class ViewWrapper(View):
         json_data = json.loads(str(request.body, encoding='utf-8'))
         kwargs.update(json_data)
         body, status = self.view_factory().post(*args, **kwargs)
+        print(kwargs)
         if body.get('pdf', None):
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'attachment; filename="bill.pdf"'

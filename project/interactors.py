@@ -97,7 +97,7 @@ class UpdateProjectInteractor:
         else:
             type_of_payment = project.type_of_payment
 
-        if self.status:
+        if self.status is not None:
             status = self.status
         else:
             status = project.status
@@ -196,6 +196,7 @@ class ProjectGetTotalInteractor:
         project_total = self.project_repo.get_total_project(self.project_id,
                                                             paid=self.paid, last_month_days=end_date,
                                                             boundary=boundary)
+
         if self.pay:
             self.project_repo.update_payment_attrs(self.project_id, last_month_days=end_date,
                                                    boundary=boundary, paid=True)

@@ -22,8 +22,6 @@ class PdfGen:
         height -= 25
         p.drawString(150, height, "%s:  %s" % ("End date project", project.end_date))
         height -= 25
-        p.drawString(150, height, "%s:  %s" % ("End date project", project.end_date))
-        height -= 25
         p.drawString(150, height, "%s:  %s" % ("Total", project.total))
         height -= 25
         p.showPage()
