@@ -6,6 +6,8 @@ import user from "./user";
 import project from "./project";
 import projects from "./projects";
 import {task, tasks} from './task';
+import monthPayment from "./monthPayment";
+import monthPayments from "./monthPayments";
 
 const initialUser = {
   username: "",
@@ -24,5 +26,7 @@ export default combineReducers({
   project,
   projects,
   task,
-  tasks
+  tasks,
+  monthPayment,
+  monthPayments
 });

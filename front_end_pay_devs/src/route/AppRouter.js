@@ -11,6 +11,7 @@ import { history } from "../index";
 import CreateProjectForm from "../components/Project/CreateProjectForm";
 import UpdateProjectForm from "../components/Project/UpdateProjectForm";
 import CreateTasklyForm from "../components/Task/CreateTaskly";
+import CreateMonthPaymentForm from "../components/MonthPayment/CreateMonthPaymentForm";
 import NotFound from "../components/NotFound";
 import UpdateTaskForm from "../components/Task/UpdateTaskForm"
 
@@ -25,6 +26,7 @@ class AppRouter extends Component {
           <PrivateRoute path="/project/create" component={CreateProjectForm} />
           <PrivateRoute path="/project/:id/Taskly/:taskId/update" component={UpdateTaskForm}/>
           <PrivateRoute path="/project/:id/Taskly/create" component={CreateTasklyForm}/>
+          <PrivateRoute path="/project/:id/Monthly/create" component={CreateMonthPaymentForm} />
           <PrivateRoute path="/project/:id/update" component={UpdateProjectForm} />
           <PrivateRoute path="/project/:id" component={ProjectItem} />
           <Route component={NotFound} />

@@ -5,6 +5,7 @@ import { Redirect, Link, NavLink } from "react-router-dom";
 import { history } from "../../index";
 import Tasks from '../../components/Task/Tasks'
 import HourPayments from '../../components/HourPayment/HourPayments'
+import MonthRates from "../MonthPayment/MonthRates";
 
 class ProjectItem extends Component {
   onClick(id) {
@@ -26,7 +27,7 @@ class ProjectItem extends Component {
     switch (project.type_of_payment) {
       case "M_P":
         type_of_payment = "Monthly";
-        sessionsType = <div>Month rates list</div>
+        sessionsType = <MonthRates projectId={project.id} />
         break;
       case "H_P":
         type_of_payment = "Hourly";
@@ -65,11 +66,6 @@ class ProjectItem extends Component {
           Total
         </button>
 
-        <button className="btn btn-danger">
-          <Link to={`/project/${project.id}/${type_of_payment}/create`}>
-            Create {type_of_payment.toLowerCase()} session
-          </Link>
-        </button>
 
         <button
           className="btn btn-danger"
@@ -79,6 +75,11 @@ class ProjectItem extends Component {
         </button>
 
         {sessionsType}
+        <button className="btn btn-danger">
+          <Link to={`/project/${project.id}/${type_of_payment}/create`}>
+            Create {type_of_payment.toLowerCase()} {type_of_payment === "Taskly" ? "task" : "rate"}
+          </Link>
+        </button>
       </div>
     );
   }
