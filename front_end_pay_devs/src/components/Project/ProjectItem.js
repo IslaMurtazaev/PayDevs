@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { projectActions } from "../actions/project";
+import { projectActions } from "../../actions/project";
 import { Redirect, Link, NavLink } from "react-router-dom";
-import { history } from "../index";
-import Tasks from '../components/Tasks'
+import { history } from "../../index";
+import Tasks from '../../components/Task/Tasks'
+import HourPayments from '../../components/HourPayment/HourPayments'
 
 class ProjectItem extends Component {
   onClick(id) {
@@ -29,7 +30,7 @@ class ProjectItem extends Component {
         break;
       case "H_P":
         type_of_payment = "Hourly";
-        sessionsType = <div>Hour rates list</div>
+        sessionsType = <HourPayments project={project}/>
         break;
       case "T_P":
         type_of_payment = "Taskly";

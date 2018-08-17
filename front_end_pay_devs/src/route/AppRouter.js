@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import { Router, Route, Switch } from "react-router-dom";
 
-import LoginUser from "../components/LoginUser";
-import ProjectPage from "../components/ProjectPage";
-import SignUp from "../components/SignUp";
-import ProjectItem from "../components/ProjectItem";
+import LoginUser from "../components/Auth/LoginUser";
+import ProjectPage from "../components/Project/ProjectPage";
+import SignUp from "../components/Auth/SignUp";
+import ProjectItem from "../components/Project/ProjectItem";
 import { PrivateRoute } from "./PrivateRoute";
 
 import { history } from "../index";
-import CreateProjectForm from "../components/CreateProjectForm";
-import UpdateProjectForm from "../components/UpdateProjectForm";
-import CreateTasklyForm from "../components/CreateTaskly";
+import CreateProjectForm from "../components/Project/CreateProjectForm";
+import UpdateProjectForm from "../components/Project/UpdateProjectForm";
+import CreateTasklyForm from "../components/Task/CreateTaskly";
 import NotFound from "../components/NotFound";
-import UpdateTaskForm from "../components/UpdateTaskForm"
+import UpdateTaskForm from "../components/Task/UpdateTaskForm"
 
 class AppRouter extends Component {
   render() {

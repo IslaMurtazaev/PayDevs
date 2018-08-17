@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import {tasklyActions} from '../actions/taskly';
-import TaskItem from './TaskItem'
+import {tasklyActions} from '../../actions/taskly';
 
 
 
-class Tasks extends Component {
+
+class HourPayments extends Component {
   onClick() {
     this.props.onGetAllProjects();
   }
@@ -17,19 +17,16 @@ class Tasks extends Component {
   }
 
   render() {
-    const tasks = this.props.tasks
+    
     const { project } = this.props;
+    console.log(project)
     
 
     return (
       <div>
+          
         <ul>
-          {tasks.map(task=>
-            <li key={task.id}>
-                <TaskItem task={task} onDelete={this.props.onDeleteTasks} projectId={project.id}/>
-            </li>
-
-          )}
+          
         </ul>
       </div>
     );
@@ -42,7 +39,7 @@ const mapStateToProps = (state) => {
     // );
     
     return {
-      tasks: state.tasks
+      hoursPayments: state.hoursPayments
     };
   };
 
@@ -60,4 +57,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Tasks);
+)(HourPayments);

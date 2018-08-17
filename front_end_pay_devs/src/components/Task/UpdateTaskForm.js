@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import FormikTaskly from "../forms/FormikTaskly"
-import {tasklyActions} from '../actions/taskly';
+import FormikTaskly from "../../forms/FormikTaskly"
+import {tasklyActions} from '../../actions/taskly';
 import { Redirect } from "react-router-dom";
 
 

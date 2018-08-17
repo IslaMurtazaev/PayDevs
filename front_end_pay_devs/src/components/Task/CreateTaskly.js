@@ -1,13 +1,13 @@
 import React from 'react';
-import FormikTaskly from "../forms/FormikTaskly";
-import { tasklyActions } from "../actions/taskly";
+import FormikTaskly from "../../forms/FormikTaskly";
+import { tasklyActions } from "../../actions/taskly";
 import { connect } from "react-redux";
 
 const CreateTasklyForm = (props) => {
     
     return (
       <div>
-        <h1>Create a new Project</h1>
+        <h1>Create a new Taskly</h1>
         <FormikTaskly onSubmit={props.createTaskly} />
       </div>
     );
