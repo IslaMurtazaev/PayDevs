@@ -7,6 +7,7 @@ export const projectActions = {
   clearAll,
   deleteProject,
   create,
+  update,
   getTotal
 };
 
@@ -45,11 +46,25 @@ function create(project) {
   };
 }
 
-const FileDownload = require('react-file-download');
-function getTotal(id){
+function update(project) {
   return dispatch => {
-    projectService.getTotal(id).then((data) => {
-      FileDownload(data, 'report.pdf')
+    projectService
+      .update(project)
+      .then(project => {
+        dispatch({ type: ProjectConstant.UPDATE_PROJECT, project });
+        history.push("/");
+      })
+      .catch(error => {
+        alert(error);
+      });
+  };
+}
+
+const FileDownload = require("react-file-download");
+function getTotal(id) {
+  return dispatch => {
+    projectService.getTotal(id).then(data => {
+      FileDownload(data, "report.pdf");
       dispatch({ type: ProjectConstant.GET_TOTAL });
       history.push("/");
     });

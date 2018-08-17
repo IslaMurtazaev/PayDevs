@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { projectActions } from "../actions/project";
-import { Redirect, Link } from "react-router-dom";
+import { Redirect, Link, NavLink } from "react-router-dom";
+import { history } from "../index";
 
 class ProjectItem extends Component {
   onClick(id) {
@@ -46,15 +47,19 @@ class ProjectItem extends Component {
         <h4>Type of payment: {type_of_payment}</h4>
         <h4>Status: {project.status ? "" : "not"} active</h4>
       
+        <NavLink to={`${history.location.pathname}/update`}>
+          <button className="btn btn-warning">Update project</button>
+        </NavLink>
+
         <button className="btn btn-danger" onClick={this.onClickTotal.bind(this, project.id)}>
           Total
         </button>
         <button className="btn btn-danger"><Link to={`/project/${project.id}/${type_of_payment}/create`}>
-          Create {type_of_payment}</Link>
+          Create {type_of_payment.toLowerCase()} session</Link>
         </button>
         
         <button className="btn btn-danger" onClick={this.onClick.bind(this, project.id)}>
-          DELETE PROJECT
+          Delete project
         </button>
       </div>
     );
