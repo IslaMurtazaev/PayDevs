@@ -5,7 +5,6 @@ export const projectService = {
   get_all,
   deleteProject,
   create,
-  update,
   getTotal
 };
 
@@ -26,7 +25,7 @@ function get_all() {
 function deleteProject(id) {
   let headers = authHeader();
   return axios({
-    method: "delete",
+    method: "get",
     url: `${BASE_URL}${id}/delete`,
     headers: headers
   }).then(res => {
@@ -43,18 +42,9 @@ function create(project) {
     url: fetch_url,
     headers: headres,
     data: project
-  }).then(res => res.data);
-}
-
-function update(project) {
-  const headres = authHeader();
-  const fetch_url = `${BASE_URL}${project.id}/update/`;
-  return axios({
-    method: "put",
-    url: fetch_url,
-    headers: headres,
-    data: project
-  }).then(res => res.data);
+  }).then(res => {
+    return res.data;
+  });
 }
 
 
@@ -65,7 +55,7 @@ function getTotal(id){
     method: "post",
     url: fetch_url,
     headers: headres,
-    data: {}
+    data: {paid: false}
   }).then(res => {
     
     return res.data;

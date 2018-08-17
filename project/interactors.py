@@ -196,6 +196,7 @@ class ProjectGetTotalInteractor:
         project_total = self.project_repo.get_total_project(self.project_id,
                                                             paid=self.paid, last_month_days=end_date,
                                                             boundary=boundary)
+
         if self.pay:
             self.project_repo.update_payment_attrs(self.project_id, last_month_days=end_date,
                                                    boundary=boundary, paid=True)

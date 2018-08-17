@@ -128,6 +128,7 @@ class WorkTaskRepo:
 
     def get_work_tasks(self, project_id, paid=False, pay=False):
         work_tasks = []
+
         db_work_tasks = WorkTaskORM.objects.filter(project_id=project_id, paid=paid, completed=True)
         for db_work_task in db_work_tasks:
             work_tasks.append(self._decode_db_work_task(db_work_task))

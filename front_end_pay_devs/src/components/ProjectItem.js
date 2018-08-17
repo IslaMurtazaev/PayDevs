@@ -1,26 +1,24 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { projectActions } from "../actions/project";
-import { Redirect } from "react-router";
-import { NavLink } from "react-router-dom";
-import { history } from "../index";
+import { Redirect, Link } from "react-router-dom";
 
 class ProjectItem extends Component {
   onClick(id) {
     this.props.onGetAllProjects(id);
   }
 
-  onClickTotal(id) {
+  onClickTotal(id){
     this.props.onGetTotal(id);
   }
 
   render() {
     let project = this.props.project;
-    if (!Object.keys(project).length)
-      return <Redirect from="/project/:id" to="/" />;
+    
+    if (!Object.keys(project).length) return <Redirect from="/project/:id" to="/" />;
 
     let type_of_payment;
-    switch (project.type_of_payment) {
+    switch(project.type_of_payment) {
       case "M_P":
         type_of_payment = "Monthly";
         break;
@@ -33,9 +31,8 @@ class ProjectItem extends Component {
       default:
         break;
     }
-
     return (
-      <div className="container">
+        <div className="container">
         <h3>Title: {project.title}</h3>
         {project.description ? (
           <h4>Description: {project.description}</h4>
@@ -48,22 +45,16 @@ class ProjectItem extends Component {
         ) : null}
         <h4>Type of payment: {type_of_payment}</h4>
         <h4>Status: {project.status ? "" : "not"} active</h4>
-
-        <NavLink name="Islam" to={`${history.location.pathname}/update`}>
-          <button className="btn btn-warning">Update project</button>
-        </NavLink>
-
-        <button
-          className="btn btn-danger"
-          onClick={this.onClick.bind(this, project.id)}
-        >
-          Delete project
-        </button>
-        <button
-          className="btn btn-danger"
-          onClick={this.onClickTotal.bind(this, project.id)}
-        >
+      
+        <button className="btn btn-danger" onClick={this.onClickTotal.bind(this, project.id)}>
           Total
+        </button>
+        <button className="btn btn-danger"><Link to={`/project/${project.id}/${type_of_payment}/create`}>
+          Create {type_of_payment}</Link>
+        </button>
+        
+        <button className="btn btn-danger" onClick={this.onClick.bind(this, project.id)}>
+          DELETE PROJECT
         </button>
       </div>
     );
@@ -85,7 +76,7 @@ export default connect(
     onGetAllProjects: id => {
       dispatch(projectActions.deleteProject(id));
     },
-    onGetTotal: id => {
+    onGetTotal:(id)=>{
       dispatch(projectActions.getTotal(id));
     }
   })

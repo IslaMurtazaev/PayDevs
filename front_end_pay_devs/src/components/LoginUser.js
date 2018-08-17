@@ -39,7 +39,7 @@ class LoginUser extends Component {
           onSubmit={val => this.handleSubmit(val)}
           name="myForm"
         >
-          {error && <div>{error.message}</div>}
+          {error && <div> error: {error.error.message}</div>}
           <div>
             <label>Username</label>
             <Control.text model="login.user_form.username" />
