@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { projectActions } from "../actions/project";
 import { Redirect, Link, NavLink } from "react-router-dom";
 import { history } from "../index";
+import Tasks from '../components/Tasks'
 
 class ProjectItem extends Component {
   onClick(id) {
@@ -32,7 +33,7 @@ class ProjectItem extends Component {
         break;
       case "T_P":
         type_of_payment = "Taskly";
-        sessionsType = <div>Tasks list</div>
+        sessionsType = <Tasks project={project}/>
         break;
       default:
         break;

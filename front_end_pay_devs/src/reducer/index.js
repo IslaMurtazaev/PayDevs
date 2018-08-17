@@ -5,6 +5,7 @@ import { combineForms } from "react-redux-form";
 import user from "./user";
 import project from "./project";
 import projects from "./projects";
+import {task, tasks} from './task';
 
 const initialUser = {
   username: "",
@@ -21,5 +22,7 @@ export default combineReducers({
   routing: routerReducer,
   user,
   project,
-  projects
+  projects,
+  task,
+  tasks
 });

@@ -1,11 +1,26 @@
-import { TaksConstant } from "../constants/task";
+import { TaskConstant } from "../constants/task";
 
-const initialState = {};
+const initialStateTask = {};
 
-export default function projects(state = initialState, action) {
+export function task(state = initialStateTask, action) {
   switch(action.type) {
-    case TaksConstant.CREATE_TASK:
+    case TaskConstant.CREATE_TASK:
       return action.task;
+    case TaskConstant.GET_TASK:
+      return action.task;
+    default:
+      return state;
+  }
+}
+
+const initialStateTasks = [];
+
+export function tasks(state = initialStateTasks, action) {
+  switch(action.type) {
+    case TaskConstant.GET_ALL_TASK:
+      return action.tasks;
+    case TaskConstant.DELETE_TASK:
+      return state.filter(task=>task.id !== action.task.id);
     default:
       return state;
   }
