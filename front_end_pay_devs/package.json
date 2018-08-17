@@ -28,5 +28,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "react-svg": "^5.0.17",
+    "react-svg-loader": "^2.1.0"
   }
 }

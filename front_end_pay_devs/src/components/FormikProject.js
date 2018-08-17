@@ -19,7 +19,7 @@ const ProjectInput = ({ values, errors, touched, setFieldValue }) => {
       <label>Description: </label>
       <Field
         name="description"
-        type="text"
+        type="textarea"
         className="form-control"
         placeholder={"description..."}
       />

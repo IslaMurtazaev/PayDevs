@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { userActions } from "../actions/user";
 import { Form, Control } from "react-redux-form";
 import { Link } from "react-router-dom";
+import logo from './favicon.png';
+
 
 class LoginUser extends Component {
   constructor(props) {
@@ -32,29 +34,34 @@ class LoginUser extends Component {
 
     return (
       <div>
-        <Link to="sign_up">Sign Up</Link>
-
-        <Form
+        <h2>Login</h2>
+        <Form className="loginForm"
           model="login.user_form"
           onSubmit={val => this.handleSubmit(val)}
           name="myForm"
         >
           {error && <div>{error.message}</div>}
           <div>
-            <label>Username</label>
+            <label>Username</label><br/>
             <Control.text model="login.user_form.username" />
             {user_req && <div className="help-block">Username is required</div>}
           </div>
           <div>
-            <label>Password</label>
-            <Control.password model="login.user_form.password" />
+            <label>Password</label><br/>
+            <Control.password model="login.user_form.password" /><br/>
             {password_req && (
               <div className="help-block">Username is required</div>
             )}
-            <button>Login</button>
+            <button className="btn btn-primary">Login</button>
           </div>
         </Form>
-      </div>
+        <div className="signUpLink">
+        <img src={logo} />          
+        <span className="projectName">PayDevs</span>
+          <span className="join"> Join us </span>
+          <Link className="link" to="sign_up">Sign Up</Link>
+        </div>      
+        </div>
     );
   }
 }

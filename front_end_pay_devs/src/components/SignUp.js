@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { userActions } from "../actions/user";
 import { Link } from "react-router-dom";
+import logo from './favicon.png';
 
 class SignUp extends Component {
   constructor(props) {
@@ -32,12 +33,14 @@ class SignUp extends Component {
     }
   }
 
+  
   render() {
     const { username, password, email } = this.state;
     const error = this.props.error;
     return (
       <div>
-        <Link to="login">Login</Link>
+        <h2>Sign Up</h2>
+        <div className="signUpForm">
         <form name="form" onSubmit={this.handleSubmit}>
           {error && <div>{error.error.message}</div>}
           <div>
@@ -69,11 +72,19 @@ class SignUp extends Component {
               value={password}
               onChange={this.handleChange}
             />
-          </div>
+           </div>
           <div className="form-group">
             <button className="btn btn-primary">Sign Up</button>
-          </div>
-        </form>
+
+            </div>
+          </form>
+        </div> 
+        <div className="loginLink">
+        <img src={logo} />          
+        <span className="projectName">PayDevs</span>
+          <span>Already have an account? </span>
+          <Link className="link" to="login">Login</Link>
+        </div>
       </div>
     );
   }

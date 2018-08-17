@@ -20,15 +20,15 @@ class ProjectPage extends Component {
       <div>
         {user && <div> Username: {user.username}</div>}
         {user && <div> Email: {user.email}</div>}
-        {user && <Link to="/login">Logout</Link>}
+        {user && <Link className="link" to="/login">Logout</Link>}
         <ul>
           {projects.map(project => (
             <li key={project.id}>
-              <Link to={`/project/${project.id}`}>{project.title}</Link>
+              <Link className="link" to={`/project/${project.id}`}>{project.title}</Link>
             </li>
           ))}
         </ul>
-        <Link to={"createproject"}>New project</Link>
+        <Link className="link" to={"createproject"}>New project</Link>
       </div>
     );
   }
