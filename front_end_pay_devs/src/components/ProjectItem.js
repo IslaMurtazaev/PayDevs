@@ -9,31 +9,36 @@ class ProjectItem extends Component {
     this.props.onGetAllProjects(id);
   }
 
-  onClickTotal(id){
+  onClickTotal(id) {
     this.props.onGetTotal(id);
   }
 
   render() {
     let project = this.props.project;
-    
-    if (!Object.keys(project).length) return <Redirect from="/project/:id" to="/" />;
 
+    if (!Object.keys(project).length)
+      return <Redirect from="/project/:id" to="/" />;
+
+    let sessionsType;
     let type_of_payment;
-    switch(project.type_of_payment) {
+    switch (project.type_of_payment) {
       case "M_P":
         type_of_payment = "Monthly";
+        sessionsType = <div>Month rates list</div>
         break;
       case "H_P":
         type_of_payment = "Hourly";
+        sessionsType = <div>Hour rates list</div>
         break;
       case "T_P":
         type_of_payment = "Taskly";
+        sessionsType = <div>Tasks list</div>
         break;
       default:
         break;
     }
     return (
-        <div className="container">
+      <div className="container">
         <h3>Title: {project.title}</h3>
         {project.description ? (
           <h4>Description: {project.description}</h4>
@@ -46,21 +51,32 @@ class ProjectItem extends Component {
         ) : null}
         <h4>Type of payment: {type_of_payment}</h4>
         <h4>Status: {project.status ? "" : "not"} active</h4>
-      
+
         <NavLink to={`${history.location.pathname}/update`}>
           <button className="btn btn-warning">Update project</button>
         </NavLink>
 
-        <button className="btn btn-danger" onClick={this.onClickTotal.bind(this, project.id)}>
+        <button
+          className="btn btn-danger"
+          onClick={this.onClickTotal.bind(this, project.id)}
+        >
           Total
         </button>
-        <button className="btn btn-danger"><Link to={`/project/${project.id}/${type_of_payment}/create`}>
-          Create {type_of_payment.toLowerCase()} session</Link>
+
+        <button className="btn btn-danger">
+          <Link to={`/project/${project.id}/${type_of_payment}/create`}>
+            Create {type_of_payment.toLowerCase()} session
+          </Link>
         </button>
-        
-        <button className="btn btn-danger" onClick={this.onClick.bind(this, project.id)}>
+
+        <button
+          className="btn btn-danger"
+          onClick={this.onClick.bind(this, project.id)}
+        >
           Delete project
         </button>
+
+        {sessionsType}
       </div>
     );
   }
@@ -81,7 +97,7 @@ export default connect(
     onGetAllProjects: id => {
       dispatch(projectActions.deleteProject(id));
     },
-    onGetTotal:(id)=>{
+    onGetTotal: id => {
       dispatch(projectActions.getTotal(id));
     }
   })
