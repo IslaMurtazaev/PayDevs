@@ -21,11 +21,7 @@ class AppRouter extends Component {
           <Route path="/login" component={LoginUser} />
           <Route path="/sign_up" component={SignUp} />
           <PrivateRoute path="/project/create" component={CreateProjectForm} />
-          <PrivateRoute
-            path="/project/:id/update"
-            component={UpdateProjectForm}
-            name={"islam"}
-          />
+          <PrivateRoute path="/project/:id/update" component={UpdateProjectForm} />
           <PrivateRoute path="/project/:id" component={ProjectItem} />
         </Switch>
       </Router>

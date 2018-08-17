@@ -97,7 +97,7 @@ class UpdateProjectInteractor:
         else:
             type_of_payment = project.type_of_payment
 
-        if self.status:
+        if self.status is not None:
             status = self.status
         else:
             status = project.status
