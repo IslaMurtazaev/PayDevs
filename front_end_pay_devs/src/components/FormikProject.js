@@ -3,7 +3,6 @@ import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 import DateTimePicker from "react-datetime-picker";
 
-
 const ProjectInput = ({ values, errors, touched, setFieldValue }) => {
   return (
     <Form className="form-group" style={{ margin: 10 }}>
@@ -83,10 +82,10 @@ const FormikProject = withFormik({
       id: id || null,
       title: title || "",
       description: description || "",
-      start_date: start_date && new Date(start_date) || new Date(),
-      end_date: end_date && new Date(end_date) || new Date(),
+      start_date: (start_date && new Date(start_date)) || new Date(),
+      end_date: (end_date && new Date(end_date)) || new Date(),
       type_of_payment: type_of_payment || "M_P",
-      status: status || true
+      status: (status === false ? false : true )
     };
   },
   validationSchema: Yup.object().shape({
