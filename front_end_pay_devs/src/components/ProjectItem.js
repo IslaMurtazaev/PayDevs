@@ -13,6 +13,23 @@ class ProjectItem extends Component {
     this.props.onGetTotal(id);
   }
 
+  viewPayments(type_of_payment) {
+    switch(type_of_payment) {
+      case "Monthly":
+        return <div>A</div>
+        
+      case "Hourly":
+        return <div>B</div>
+        
+      case "Taskly":
+        return <div>C</div>
+        
+      default:
+        break;
+    }
+    
+  }
+
   render() {
     let project = this.props.project;
     
@@ -61,6 +78,8 @@ class ProjectItem extends Component {
         <button className="btn btn-danger" onClick={this.onClick.bind(this, project.id)}>
           Delete project
         </button>
+
+        {this.viewPayments(type_of_payment)}
       </div>
     );
   }
