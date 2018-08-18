@@ -19,7 +19,7 @@ class ProjectItem extends Component {
   render() {
     let project = this.props.project;
 
-    if (!Object.keys(project).length)
+    if (!project)
       return <Redirect from="/project/:id" to="/" />;
 
     let sessionsType;
@@ -87,10 +87,10 @@ class ProjectItem extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   let project = state.projects.find(
-    product => product.id === Number(ownProps.match.params.id)
+    project => project.id === Number(ownProps.match.params.id)
   );
   return {
-    project: project ? project : state.project
+    project
   };
 };
 

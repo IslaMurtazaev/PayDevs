@@ -5,7 +5,6 @@ import { combineForms } from "react-redux-form";
 import user from "./user";
 import projects from "./projects";
 import {task, tasks} from './task';
-import monthPayment from "./monthPayment";
 import monthPayments from "./monthPayments";
 
 const initialUser = {
@@ -25,6 +24,5 @@ export default combineReducers({
   projects,
   task,
   tasks,
-  monthPayment,
   monthPayments
 });

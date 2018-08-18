@@ -14,6 +14,7 @@ class MonthRates extends Component {
     if (this.props.monthPayments.length === 0) {
       return null;
     }
+
     return (
       <div>
         <h3>Select one of your current rates</h3>
