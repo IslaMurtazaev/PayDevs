@@ -2,30 +2,26 @@ import React from "react";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 
-const WorkedDayInput = ({ values, errors, touched, setFieldValue }) => {
+const WorkedDayInput = ({ values, errors, touched }) => {
   return (
     <Form className="form-group" style={{ margin: 10 }}>
-      <label>Date: </label>
-      <div>
-        {touched.day && errors.day && <p>{errors.day}</p>}
-      </div>
-      <div>
-        <DateTimePicker
-          name="day"
-          type="date"
-          value={values.day}
-          onChange={value => setFieldValue("day", value)}
-        />
-      </div>
+      <div>{touched.day && errors.day && <p>{errors.day}</p>}</div>
 
-      <label>
-        Date2:
-        <Field name="day" type="date" />
-      </label>
+      <div>
+        <label>
+          Date:
+          <Field className="form-control" name="day" type="date" />
+        </label>
+      </div>
 
       <label>
         Paid:
-        <Field name="paid" type="checkbox" checked={values.paid} />
+        <Field
+          className="form-control"
+          name="paid"
+          type="checkbox"
+          checked={values.paid}
+        />
       </label>
 
       <button className="btn btn-primary form-control" type="submit">
@@ -35,20 +31,16 @@ const WorkedDayInput = ({ values, errors, touched, setFieldValue }) => {
   );
 };
 
-const FormikProject = withFormik({
-  mapPropsToValues({
-    id,
-    day,
-    paid
-  }) {
+const FormikWorkedDay = withFormik({
+  mapPropsToValues({ id, day, paid }) {
     return {
       id: id || null,
       day: (day && new Date(day)) || new Date(),
-      paid: (paid === false ? false : true )
+      paid: paid === true ? true : false
     };
   },
   validationSchema: Yup.object().shape({
-    day: Yup.date().required("Date is required"),
+    day: Yup.date().required("Date is required")
   }),
   handleSubmit(values, { props }) {
     props.onSubmit(values);
