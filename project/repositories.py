@@ -112,6 +112,7 @@ class ProjectRepo(object):
                                                                                   paid=paid,
                                                                                   last_month_days=last_month_days,
                                                                                   pay=pay)
+
         elif db_project.type_of_payment == TypesOfPayment.TASK_PAYMENT:
             entity_type_list = self.task_repo.get_work_tasks(project_id=db_project.id, paid=paid, pay=pay)
 
