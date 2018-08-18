@@ -7,27 +7,25 @@ const WorkedDayInput = ({ values, errors, touched, setFieldValue }) => {
     <Form className="form-group" style={{ margin: 10 }}>
       <label>Date: </label>
       <div>
-        {touched.start_date && errors.start_date && <p>{errors.start_date}</p>}
+        {touched.day && errors.day && <p>{errors.day}</p>}
       </div>
       <div>
         <DateTimePicker
-          name="start_date"
+          name="day"
           type="date"
           value={values.day}
-          onChange={value => setFieldValue("start_date", value)}
+          onChange={value => setFieldValue("day", value)}
         />
       </div>
 
-      <label>Type of payment: </label>
-      <Field component="select" name="type_of_payment" className="form-control">
-        <option value="M_P">Monthly</option>
-        <option value="H_P">Hourly</option>
-        <option value="T_P">Taskly</option>
-      </Field>
+      <label>
+        Date2:
+        <Field name="day" type="date" />
+      </label>
 
       <label>
         Paid:
-        <Field name="paid" type="checkbox" checked={values.status} />
+        <Field name="paid" type="checkbox" checked={values.paid} />
       </label>
 
       <button className="btn btn-primary form-control" type="submit">
@@ -45,22 +43,16 @@ const FormikProject = withFormik({
   }) {
     return {
       id: id || null,
-      title: title || "",
-      description: description || "",
-      start_date: (start_date && new Date(start_date)) || new Date(),
-      end_date: (end_date && new Date(end_date)) || new Date(),
-      type_of_payment: type_of_payment || "M_P",
-      status: (status === false ? false : true )
+      day: (day && new Date(day)) || new Date(),
+      paid: (paid === false ? false : true )
     };
   },
   validationSchema: Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    start_date: Yup.date().required("Start-date is required"),
-    end_date: Yup.date().required("End-date is required")
+    day: Yup.date().required("Date is required"),
   }),
   handleSubmit(values, { props }) {
     props.onSubmit(values);
   }
-})(ProjectInput);
+})(WorkedDayInput);
 
-export default FormikProject;
+export default FormikWorkedDay;

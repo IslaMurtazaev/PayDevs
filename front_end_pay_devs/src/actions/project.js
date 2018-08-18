@@ -52,7 +52,7 @@ function update(project) {
       .update(project)
       .then(project => {
         dispatch({ type: ProjectConstant.UPDATE_PROJECT, project });
-        history.push("/");
+        history.push(`/project/${project.id}`);
       })
       .catch(error => {
         alert(error);

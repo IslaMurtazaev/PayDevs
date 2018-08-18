@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { projectActions } from "../../actions/project";
-import { Redirect, Link, NavLink } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import { history } from "../../index";
 import Tasks from '../../components/Task/Tasks'
 import HourPayments from '../../components/HourPayment/HourPayments'
@@ -55,9 +55,9 @@ class ProjectItem extends Component {
         <h4>Type of payment: {type_of_payment}</h4>
         <h4>Status: {project.status ? "" : "not"} active</h4>
 
-        <NavLink to={`${history.location.pathname}/update`}>
+        <Link to={`${history.location.pathname}/update`}>
           <button className="btn btn-warning">Update project</button>
-        </NavLink>
+        </Link>
 
         <button
           className="btn btn-danger"
@@ -77,7 +77,7 @@ class ProjectItem extends Component {
         {sessionsType}
         <button className="btn btn-danger">
           <Link to={`/project/${project.id}/${type_of_payment}/create`}>
-            Create {type_of_payment.toLowerCase()} {type_of_payment === "Taskly" ? "task" : "rate"}
+            Create new {type_of_payment === "Taskly" ? "task" : `${type_of_payment.toLowerCase()} rate`}
           </Link>
         </button>
       </div>
