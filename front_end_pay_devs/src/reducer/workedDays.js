@@ -9,7 +9,12 @@ export default function workedDays(state = initialState, action) {
     case workedDayActionTypes.CREATE_WORKED_DAY:
       return state.concat([action.workedDay]);
     case workedDayActionTypes.REMOVE_WORKED_DAY:
-      return state.filter(workedDay => workedDay.id !== action.workedDayId)
+      return state.filter(workedDay => workedDay.id !== action.workedDayId);
+    case workedDayActionTypes.UPDATE_WORKED_DAY:
+      return state.map(
+        workedDay =>
+          workedDay.id === action.workedDay.id ? action.workedDay : workedDay
+      );
     default:
       return state;
   }

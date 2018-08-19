@@ -20,11 +20,14 @@ class WorkedDays extends Component {
             <WorkedDay
               key={workedDay.id}
               workedDay={workedDay}
-              onRemove={this.props.removeWorkedDay}
+              projectId={+this.props.match.params.id}
+              monthPaymentId={+this.props.match.params.monthPaymentId}
             />
           ))}
         </div>
-        <Link to={`/project/${this.props.match.params.id}/Monthly/${this.props.match.params.monthPaymentId}/workedDay/create`}>Create new Worked day</Link>
+        <Link to={`${this.props.location.pathname}/create`}>
+          Create new Worked day
+        </Link>
       </div>
     );
   }
@@ -37,8 +40,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchersToProps = (dispatch, ownProps) => ({
-  getAllWorkedDays: () => dispatch(workedDayActions.getAll(+ownProps.match.params.monthPaymentId)),
-  removeWorkedDay: workedDayId => dispatch(workedDayActions.remove(workedDayId))
+  getAllWorkedDays: () =>
+    dispatch(workedDayActions.getAll(+ownProps.match.params.monthPaymentId))
 });
 
 export default connect(
