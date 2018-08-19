@@ -69,11 +69,11 @@ class FieldValidator:
     @staticmethod
     def now_end_date_project(type_of_payment):
         if type_of_payment == 'M_P':
-            return timezone.now().date()
+            return timezone.now().replace(day=1)
         elif type_of_payment == 'H_P':
             return timezone.now()
         else:
-            return None
+            return timezone.now()
 
 
 
