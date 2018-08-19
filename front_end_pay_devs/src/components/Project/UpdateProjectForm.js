@@ -1,6 +1,6 @@
 import React from "react";
-import FormikProject from "../forms/FormikProject";
-import { projectActions } from "../actions/project";
+import FormikProject from "../../forms/FormikProject";
+import { projectActions } from "../../actions/project";
 import { connect } from "react-redux";
 
 const UpdateProjectForm = props => {

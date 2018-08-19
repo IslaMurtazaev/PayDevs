@@ -73,7 +73,7 @@ class FieldValidator:
         elif type_of_payment == 'H_P':
             return timezone.now()
         else:
-            return None
+            return timezone.now()
 
 
 

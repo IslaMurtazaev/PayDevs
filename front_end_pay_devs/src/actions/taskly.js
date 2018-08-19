@@ -5,7 +5,8 @@ import {history} from '../index';
 export const tasklyActions = {
     create,
     getAll,
-    taksDelete
+    taksDelete,
+    update
   };
   
 
@@ -39,3 +40,18 @@ export const tasklyActions = {
       });
     };
   }
+
+  function update(values){
+    return dispatch => {
+      taskService
+          .update(values)
+          .then(task => {
+            dispatch({ type: TaskConstant.CREATE_TASK, task });
+            history.push(`/project/${values.projectId}`)
+          })
+          .catch(error => {
+            alert(error);
+          });
+      }
+    }
+  

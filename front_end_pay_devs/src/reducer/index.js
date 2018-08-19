@@ -3,9 +3,10 @@ import { routerReducer } from "react-router-redux";
 import { combineForms } from "react-redux-form";
 
 import user from "./user";
-import project from "./project";
 import projects from "./projects";
 import {task, tasks} from './task';
+import monthPayments from "./monthPayments";
+import workedDays from "./workedDays";
 
 const initialUser = {
   username: "",
@@ -21,8 +22,9 @@ export default combineReducers({
   ),
   routing: routerReducer,
   user,
-  project,
   projects,
   task,
-  tasks
+  tasks,
+  monthPayments,
+  workedDays
 });

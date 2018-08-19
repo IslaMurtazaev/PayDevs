@@ -53,6 +53,8 @@ const TasklyInput = ({ values, errors, touched, setFieldValue }) => {
 
 const FormikTaskly = withFormik({
   mapPropsToValues({
+    id,
+    projectId,
     title,
     description,
     price,
@@ -64,7 +66,9 @@ const FormikTaskly = withFormik({
       description: description || "",
       price: price || 0,
       paid: paid || false,
-      completed: completed || false
+      completed: completed || false,
+      projectId: projectId,
+      id: id
 
     };
   },
