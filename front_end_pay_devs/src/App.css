@@ -132,8 +132,20 @@ label {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 40px 40px 0 rgba(0, 0, 0, 0.19);
 }
 
+.logoutLink {
+  margin-left: 0px;
+  margin-top: -40;;
+  background-color:  #e7ecf0cc;
+  padding-top: 0%;
+  padding-left: 4%;
+  padding-right: 0%;
+  height: 70px;
+  width: 100%;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 40px 40px 0 rgba(0, 0, 0, 0.19);
+}
+
 .projectName {
-  padding-right: 580px; 
+  padding-right: 582px; 
   font-size: 45px;
   font-family: "Times New Roman", Times, serif;
   font-weight: 700;
@@ -141,10 +153,10 @@ label {
 
 }
 
+
 img {
   padding-block-end: 2%;
-  padding-right: 1%;
-
+  padding-right: 10px;
 }
 
 span {
@@ -157,3 +169,7 @@ span {
   padding-right: 11px; 
   padding-left: 148px; 
 }
+
+
+
+

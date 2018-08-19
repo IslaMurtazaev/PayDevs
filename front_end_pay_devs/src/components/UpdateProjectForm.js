@@ -1,5 +1,5 @@
 import React from "react";
-import FormikProject from "./FormikProject";
+import FormikProject from "../forms/FormikProject";
 import { projectActions } from "../actions/project";
 import { connect } from "react-redux";
 

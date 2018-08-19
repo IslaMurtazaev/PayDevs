@@ -2,7 +2,9 @@ import axios from "axios";
 import { authHeader } from "./helpers";
 
 export const taskService = {
-    create
+    create,
+    getAll,
+    taksDelete
   };
 
 
@@ -20,3 +22,28 @@ return axios({
     return res.data;
 });
 }
+
+
+function getAll(projectId) {
+  let headers = authHeader();
+  return axios({
+    method: "get",
+    url: `${BASE_URL}${projectId}/task/all/`,
+    headers: headers
+  }).then(res => {
+    let projects = res.data;
+    return projects;
+  });
+}
+
+function taksDelete(taksId) {
+    let headers = authHeader();
+    return axios({
+      method: "delete",
+      url: `${BASE_URL}task/${taksId}/delete`,
+      headers: headers
+    }).then(res => {
+      let task = res.data;
+      return task ;
+    });
+  }

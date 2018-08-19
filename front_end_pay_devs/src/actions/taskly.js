@@ -4,6 +4,8 @@ import {history} from '../index';
 
 export const tasklyActions = {
     create,
+    getAll,
+    taksDelete
   };
   
 
@@ -18,5 +20,22 @@ export const tasklyActions = {
         .catch(error => {
           alert(error);
         });
+    };
+  }
+
+  function getAll(projectId) {
+    return dispatch => {
+      taskService.getAll(projectId).then(tasks => {
+        dispatch({ type: TaskConstant.GET_ALL_TASK, tasks });
+      });
+    };
+  }
+  
+
+  function taksDelete(taksId) {
+    return dispatch => {
+      taskService.taksDelete(taksId).then(task => {
+        dispatch({ type: TaskConstant.DELETE_TASK, task});
+      });
     };
   }

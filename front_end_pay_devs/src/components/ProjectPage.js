@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { projectActions } from "../actions/project";
+import logo from './icons/favicon.png';
 
 class ProjectPage extends Component {
   onClick() {
@@ -18,9 +19,14 @@ class ProjectPage extends Component {
 
     return (
       <div>
+        <div className="logoutLink">
+          <img src={logo} />          
+          <span className="projectName">PayDevs</span>
+          {user && <Link className="link" to="/login">Logout</Link>}
+        </div>
         {user && <div> Username: {user.username}</div>}
         {user && <div> Email: {user.email}</div>}
-        {user && <Link className="link" to="/login">Logout</Link>}
+       
         <ul>
           {projects.map(project => (
             <li key={project.id}>
@@ -28,9 +34,9 @@ class ProjectPage extends Component {
             </li>
           ))}
         </ul>
-        <Link className="link" to={"/project/create"}>New project</Link>
+        <Link className="link" to="/project/create">New project</Link>
        </div>
-    );
+);
   }
 }
 

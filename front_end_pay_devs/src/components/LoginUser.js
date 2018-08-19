@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { userActions } from "../actions/user";
 import { Form, Control } from "react-redux-form";
 import { Link } from "react-router-dom";
-import logo from './favicon.png';
+import logo from './icons/favicon.png';
 
 
 class LoginUser extends Component {
@@ -40,7 +40,7 @@ class LoginUser extends Component {
           onSubmit={val => this.handleSubmit(val)}
           name="myForm"
         >
-          {error && <div> error: {error.error.message}</div>}
+          {error && <div>{error.message}</div>}
           <div>
             <label>Username</label><br/>
             <Control.text model="login.user_form.username" />
@@ -58,7 +58,7 @@ class LoginUser extends Component {
         <div className="signUpLink">
         <img src={logo} />          
         <span className="projectName">PayDevs</span>
-          <span className="join"> Join us </span>
+          <span className="join">Join us </span>
           <Link className="link" to="sign_up">Sign Up</Link>
         </div>      
         </div>
