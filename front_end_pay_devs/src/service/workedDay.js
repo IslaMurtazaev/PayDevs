@@ -6,7 +6,8 @@ import { API_URL } from "../constants/host";
 export default {
   create,
   getAll,
-  remove
+  remove,
+  update
 };
 
 function create(projectId, monthPaymentId, values) {
@@ -18,7 +19,8 @@ function create(projectId, monthPaymentId, values) {
     headers: headres,
     data: values
   }).then(res => {
-    return res.data;
+    let workedDay = res.data;
+    return workedDay;
   });
 }
 
@@ -34,11 +36,25 @@ function getAll(monthPaymentId) {
   });
 }
 
-function remove(workedDayID) {
+function remove(workedDayId) {
   let headers = authHeader();
   return axios({
     method: "delete",
-    url: `${API_URL}project/worked_day${workedDayID}/delete/`,
-    headers: headers,
-  })
+    url: `${API_URL}project/worked_day/${workedDayId}/delete/`,
+    headers: headers
+  });
+}
+
+function update(projectId, monthPaymentId, workedDayId, values) {
+  const headres = authHeader();
+  const fetch_url = `${API_URL}project/${projectId}/month_payment/${monthPaymentId}/worked_day/${workedDayId}/update/`;
+  return axios({
+    method: "put",
+    url: fetch_url,
+    headers: headres,
+    data: values
+  }).then(res => {
+    let updatedWorkedDay = res.data;
+    return updatedWorkedDay;
+  });
 }

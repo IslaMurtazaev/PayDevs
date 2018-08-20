@@ -5,7 +5,8 @@ import { history } from "../index";
 export default {
   create,
   getAll,
-  remove
+  remove,
+  update
 };
 
 function create(projectId, monthPaymentId, values) {
@@ -14,9 +15,11 @@ function create(projectId, monthPaymentId, values) {
       .create(projectId, monthPaymentId, values)
       .then(workedDay => {
         dispatch({ type: workedDayActionTypes.CREATE_WORKED_DAY, workedDay });
-        history.push(`/project/${projectId}/Monthly/${monthPaymentId}/workedDays`);
+        history.push(
+          `/project/${projectId}/Monthly/${monthPaymentId}/workedDay`
+        );
       });
-  };                                              
+  };
 }
 
 function getAll(monthPaymentId) {
@@ -30,7 +33,20 @@ function getAll(monthPaymentId) {
 function remove(workedDayId) {
   return dispatch => {
     workedDayService.remove(workedDayId).then(response => {
-      dispatch({ type: workedDayActionTypes.REMOVE_WORKED_DAY });
+      dispatch({ type: workedDayActionTypes.REMOVE_WORKED_DAY, workedDayId });
+    });
+  };
+}
+
+function update(projectId, monthPaymentId, workedDayId, values) {
+  return dispatch => {
+    workedDayService
+    .update(projectId, monthPaymentId, workedDayId, values)
+    .then(workedDay => {
+      dispatch({ type: workedDayActionTypes.UPDATE_WORKED_DAY, workedDay });
+      history.push(
+        `/project/${projectId}/Monthly/${monthPaymentId}/workedDay`
+      );
     });
   };
 }
