@@ -21,20 +21,25 @@ class ProjectPage extends Component {
       <div>
         <div className="logoutLink">
           <img src={logo} />          
-          <span className="projectName">PayDevs</span>
+          <span className="paydevs1">PayDevs</span>
           {user && <Link className="link" to="/login">Logout</Link>}
         </div>
-        {user && <div> Username: {user.username}</div>}
-        {user && <div> Email: {user.email}</div>}
-       
-        <ul>
+        <div className="user">
+        {user && <div className="username"> {user.username}</div>}
+        {user && <div className="email">{user.email}</div>}
+        </div>
+        <h3 className="projects">Projects</h3>
+       <div className="projectList">
           {projects.map(project => (
+            <div className="projectInfo">
             <li key={project.id}>
-              <Link className="link" to={`/project/${project.id}`}>{project.title}</Link>
-            </li>
+              <Link className="projectLink" to={`/project/${project.id}`}>{project.title}</Link>
+            </li> <br/>              
+            <p>{project.start_date}</p>
+            </div>
           ))}
-        </ul>
-        <Link className="link" to="/project/create">New project</Link>
+        <Link className="newProjectLink" to="/project/create">New project</Link>
+        </div>
        </div>
 );
   }

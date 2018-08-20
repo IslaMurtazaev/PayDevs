@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { userActions } from "../../actions/user";
 import { Link } from "react-router-dom";
-import logo from './icons/favicon.png';
+import logo from '../icons/favicon.png';
 
 class SignUp extends Component {
   constructor(props) {
@@ -39,6 +39,12 @@ class SignUp extends Component {
     const error = this.props.error;
     return (
       <div>
+                <div className="loginLink">
+        <img src={logo} />          
+        <span className="paydevs">PayDevs</span>
+          <span>Already have an account? </span>
+          <Link className="link" to="login">Login</Link>
+        </div>
         <h2>Sign Up</h2>
         <div className="signUpForm">
         <form name="form" onSubmit={this.handleSubmit}>
@@ -79,12 +85,7 @@ class SignUp extends Component {
             </div>
           </form>
         </div> 
-        <div className="loginLink">
-        <img src={logo} />          
-        <span className="projectName">PayDevs</span>
-          <span>Already have an account? </span>
-          <Link className="link" to="login">Login</Link>
-        </div>
+
       </div>
     );
   }

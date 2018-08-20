@@ -1,31 +1,23 @@
 
 h2{
-  height: 50px;
-  font-stretch: extra-expanded;
-  font-size: 42px;
+  height: 20px;
+  font-size: 40px;
   font-weight: bold;
-  padding-top: 10px;
-  margin: 2%;
-  margin-top: 145px;
-  margin-left: 470px;
+  margin-top: 40px;
+  margin-left: 480px;
   color: rgb(36, 36, 53);
-  text-align: left;
   padding-block-start: 1px;
   padding-left: 3%;
-  padding-block-end: 30px;
+  padding-block-end: 5px;
   text-shadow: 1px 1px 3px;
 
 }
 
 body {
-  padding-block-start: 0%;
-  padding-left: 0%;
-  padding-right: 0%;
   padding-block-end: 2%;
   background-image: radial-gradient(rgb(95, 184, 243), 
   rgb(73, 73, 71));
   background-size: 100%;
-  background-repeat: repeat-x;
   background-attachment: fixed;
 
 }
@@ -41,20 +33,20 @@ button{
 
 .signUpForm {
   margin-left: 35%;
-  margin-top: 3%;
+  margin-top: 55px;
   border-radius: 5px;
   background-color: #dbe2ec;
   padding-top: 1%;
   padding-left: 4%;
   padding-right: 5%;
-  height: 350px;
+  height: 370px;
   width: 350px;
-  box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.2), 0 40px 40px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.322), 0 40px 40px 0 rgba(0, 0, 0, 0.199);
 }
 
   .loginForm {
   margin-left: 35%;
-  margin-top: 3%;
+  margin-top: 55px;
   border-radius: 5px;
   background-color: #dbe2ec;
   padding-top: 1%;
@@ -82,18 +74,16 @@ input {
   color: white;
   background-color: rgb(59, 137, 240);
   width: 100px;
-  padding: 5px 20px;
-  padding-bottom: 0px;
+  padding: 5px 2px;
   text-align: center;
   display: inline-block;
   border-radius: 5px;
   margin-left: 2px;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.19);
-
-
 }
 
-Description {
+
+.description {
   width: 100%;
   height: 150px;
   padding: 12px 20px;
@@ -110,26 +100,26 @@ label {
 
 .loginLink {
   margin-left: 0px;
-  margin-top: -582px;
+  margin-top: 0px;
   background-color:  #e7ecf0cc;
   padding-top: 0%;
   padding-left: 4%;
   padding-right: 0%;
   height: 70px;
   width: 100%;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 40px 40px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.247), 0 10px 10px 0 rgba(0, 0, 0, 0.19);
 }
 
 .signUpLink {
   margin-left: 0px;
-  margin-top: -491.9px;
+  margin-top: 0px;
   background-color:  #e7ecf0cc;
   padding-top: 0%;
   padding-left: 4%;
   padding-right: 0%;
   height: 70px;
   width: 100%;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 40px 40px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.247), 0 10px 10px 0 rgba(0, 0, 0, 0.19);
 }
 
 .logoutLink {
@@ -141,11 +131,20 @@ label {
   padding-right: 0%;
   height: 70px;
   width: 100%;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 40px 40px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.247), 0 10px 10px 0 rgba(0, 0, 0, 0.19);
 }
 
-.projectName {
-  padding-right: 582px; 
+.paydevs {
+  padding-right: 570px; 
+  font-size: 45px;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 700;
+  text-shadow: 1px 1px 1px;
+
+}
+
+.paydevs1 {
+  padding-right: 800px; 
   font-size: 45px;
   font-family: "Times New Roman", Times, serif;
   font-weight: 700;
@@ -169,6 +168,76 @@ span {
   padding-right: 11px; 
   padding-left: 148px; 
 }
+
+
+
+.projectLink {
+  color: rgb(12, 38, 56);
+  font-size: 30px;
+}
+
+.user {
+  height: 80px;
+}
+
+.username {
+  margin-left: 40%;
+  font-size: 40px;
+  padding-block-start: 30px;
+  font-weight: 200;
+  color: rgba(15, 15, 39, 0.842);
+  font-family: Arial, Helvetica, sans-serif;
+  text-shadow: 1px 1px 1px;
+
+  
+}
+
+.email {
+  margin-left: 40%;
+  font-weight: 200;
+  color: rgba(26, 26, 90, 0.829);
+  font-size: 20px;
+}
+
+.projects {
+  padding-block-start: 30px;
+  width: 400px;
+  height: 35px;
+  margin-left: 5%;
+  color: rgb(4, 20, 32);
+  font-size: 30px;
+  font-family: Impact, fantasy ;
+ }
+
+ .projectList {
+  margin-top: 35px;
+  width: 1050px;
+  margin-left: 5%;
+  border-block-start: 1px solid rgba(0, 0, 0, 0.548);
+}
+
+.projectInfo {
+  border: 0.5px solid rgba(0, 0, 0, 0.397);
+  border-radius: 5px;
+  width: 1000px;
+  padding-block-start: 10px;
+  padding-inline-start: 10px;
+  background-color:#dbe2ec;
+}
+
+
+
+li {
+  float: left;
+  display: table-row;
+}
+
+.newProjectLink {
+  font-size: 30px;
+}
+
+
+
 
 
 

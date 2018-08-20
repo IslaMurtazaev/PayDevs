@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { userActions } from "../../actions/user";
 import { Form, Control } from "react-redux-form";
 import { Link } from "react-router-dom";
-import logo from './icons/favicon.png';
+import logo from '../icons/favicon.png';
 
 
 class LoginUser extends Component {
@@ -34,6 +34,12 @@ class LoginUser extends Component {
 
     return (
       <div>
+          <div className="signUpLink">
+        <img src={logo} />          
+        <span className="paydevs">PayDevs</span>
+          <span className="join">Join us </span>
+          <Link className="link" to="sign_up">Sign Up</Link>
+        </div> 
         <h2>Login</h2>
         <Form className="loginForm"
           model="login.user_form"
@@ -55,12 +61,7 @@ class LoginUser extends Component {
             <button className="btn btn-primary">Login</button>
           </div>
         </Form>
-        <div className="signUpLink">
-        <img src={logo} />          
-        <span className="projectName">PayDevs</span>
-          <span className="join">Join us </span>
-          <Link className="link" to="sign_up">Sign Up</Link>
-        </div>      
+     
         </div>
     );
   }
