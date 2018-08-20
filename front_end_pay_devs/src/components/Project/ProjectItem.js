@@ -42,44 +42,49 @@ class ProjectItem extends Component {
     }
     return (
       <div className="container">
-        <h3>Title: {project.title}</h3>
+      
+      <h1 className="projectTitle">{project.title}</h1>
+        <div className="properties">
         {project.description ? (
-          <h4>Description: {project.description}</h4>
+          <h4 ><span className="property">Description:</span> {project.description}</h4>
         ) : null}
         {project.start_date ? (
-          <h4>Start-date: {new Date(project.start_date).toDateString()}</h4>
+          <h4><span className="property">Start date:</span>{new Date(project.start_date).toDateString()}</h4>
         ) : null}
         {project.end_date ? (
-          <h4>End-date: {new Date(project.end_date).toDateString()}</h4>
+          <h4><span className="property">End date:</span>{new Date(project.end_date).toDateString()}</h4>
         ) : null}
-        <h4>Type of payment: {type_of_payment}</h4>
-        <h4>Status: {project.status ? "" : "not"} active</h4>
+        <h4><span className="property">Type of payment:</span> {type_of_payment}</h4>
+        <h4><span className="property">Status:</span>{project.status ? "" : "not"} active</h4>
+        </div>
 
-        <Link to={`${history.location.pathname}/update`}>
-          <button className="btn btn-warning">Update project</button>
-        </Link>
+        <div  className="btn-group-horizontal ">
 
-        <button
-          className="btn btn-danger"
-          onClick={this.onClickTotal.bind(this, project.id)}
-        >
+        <button type = "button" className="btn btn-success btn-lg"
+          onClick={this.onClickTotal.bind(this, project.id)}>
           Total
         </button>
+        
+        <Link to={`${history.location.pathname}/update`}>
+          <button type = "button" className="btn btn-primary btn-lg">
+            Update project
+          </button>
+        </Link>
 
+          <button type="button" className="btn btn-danger btn-lg"
+            onClick={this.onClick.bind(this, project.id)}>
+            Delete project
+          </button>
+          </div>
 
-        <button
-          className="btn btn-danger"
-          onClick={this.onClick.bind(this, project.id)}
-        >
-          Delete project
-        </button>
-
+          <div className="session">
         {sessionsType}
         <button className="btn btn-danger">
           <Link to={`/project/${project.id}/${type_of_payment}/create`}>
             Create new {type_of_payment === "Taskly" ? "task" : `${type_of_payment.toLowerCase()} rate`}
           </Link>
         </button>
+        </div>
       </div>
     );
   }

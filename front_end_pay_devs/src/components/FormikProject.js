@@ -5,7 +5,8 @@ import DateTimePicker from "react-datetime-picker";
 
 const ProjectInput = ({ values, errors, touched, setFieldValue }) => {
   return (
-    <Form className="form-group" style={{ margin: 10 }}>
+    <div>
+    <Form className="form-group" >
       <label>Title: </label>
       <div>{touched.title && errors.title && <p>{errors.title}</p>}</div>
       <Field
@@ -19,7 +20,7 @@ const ProjectInput = ({ values, errors, touched, setFieldValue }) => {
       <Field
         name="description"
         type="textarea"
-        className="form-control"
+        className="description"
         placeholder="description..."
       />
 
@@ -31,6 +32,7 @@ const ProjectInput = ({ values, errors, touched, setFieldValue }) => {
         <DateTimePicker
           name="start_date"
           type="datetime"
+          className="dateTime"
           value={values.start_date}
           onChange={value => setFieldValue("start_date", value)}
         />
@@ -60,11 +62,12 @@ const ProjectInput = ({ values, errors, touched, setFieldValue }) => {
         Active:
         <Field name="status" type="checkbox" checked={values.status} />
       </label>
-
-      <button className="btn btn-primary form-control" type="submit">
+    </Form>
+    <br/>
+    <button className="btn btn-primary form-control" type="submit">
         submit
       </button>
-    </Form>
+    </div>
   );
 };
 

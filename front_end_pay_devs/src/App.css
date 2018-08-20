@@ -24,8 +24,9 @@ body {
 
 button{
   margin-top: 30px;
-  margin-right: 30px;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 8px 10px 0 rgba(0, 0, 0, 0.19);
+  margin-right: -19px;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.479);
+  border-radius: 5px;
 }
 
 
@@ -83,19 +84,10 @@ input {
 }
 
 
-.description {
-  width: 100%;
-  height: 150px;
-  padding: 12px 20px;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  background-color: #f8f8f8;
-  resize: none;
-}
+
 
 label {
-  padding-top: 20px;
+  padding-top: 25px;
 }
 
 .loginLink {
@@ -144,11 +136,20 @@ label {
 }
 
 .paydevs1 {
-  padding-right: 800px; 
+  padding-right: 780px; 
   font-size: 45px;
   font-family: "Times New Roman", Times, serif;
   font-weight: 700;
-  text-shadow: 1px 1px 1px;
+  color: rgba(0, 0, 0, 0.842);
+  text-shadow: 1px 1px 1px rgba(24, 23, 23, 0.849);
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  color: rgba(0, 0, 0, 0.733);
+  text-shadow: 0px 0px 1px rgba(24, 23, 23, 0.849);
+  text-decoration: none;
 
 }
 
@@ -172,7 +173,7 @@ span {
 
 
 .projectLink {
-  color: rgb(12, 38, 56);
+  color: rgba(8, 12, 15, 0.87);
   font-size: 30px;
 }
 
@@ -195,50 +196,141 @@ span {
 .email {
   margin-left: 40%;
   font-weight: 200;
-  color: rgba(26, 26, 90, 0.829);
+  color: rgba(7, 7, 26, 0.829);
   font-size: 20px;
 }
 
-.projects {
-  padding-block-start: 30px;
-  width: 400px;
-  height: 35px;
-  margin-left: 5%;
-  color: rgb(4, 20, 32);
-  font-size: 30px;
-  font-family: Impact, fantasy ;
- }
+
+
+
+ul li a {
+  display: inline;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 900;
+}
+
 
  .projectList {
-  margin-top: 35px;
+  margin-top: 0px;
   width: 1050px;
   margin-left: 5%;
-  border-block-start: 1px solid rgba(0, 0, 0, 0.548);
+  padding-block-start: 10px;
+  border-radius: 4px;
+  border-block-start: 1px solid rgba(5, 55, 99, 0.63);
+  background-color:#dbe2ec;
+  box-shadow: 0 1px 20px 0 rgba(0, 0, 0, 0.438), 0 5px 1px 0 rgba(0, 0, 0, 0.288);
+  border-top-right-radius: 0px;
 }
 
 .projectInfo {
-  border: 0.5px solid rgba(0, 0, 0, 0.397);
-  border-radius: 5px;
-  width: 1000px;
-  padding-block-start: 10px;
-  padding-inline-start: 10px;
-  background-color:#dbe2ec;
+  border-block-end: 1px solid rgba(0, 0, 0, 0.425);
+  box-shadow:  0px 1px #0a1d3334;
+  width: 960px;
 }
 
-
-
-li {
-  float: left;
-  display: table-row;
+p {
+  font-size: 12px;
+  text-align: left;
 }
 
 .newProjectLink {
-  font-size: 30px;
+  font-size: 21px;
+  text-decoration: none;
+  color: white;
+  background-color: rgba(15, 115, 165, 0.993);
+  width: 160px;
+  padding: 5px 2px;
+  text-align: center;
+  display: inline-block;
+  margin-left: 950px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  margin-top: 45px;
+  padding-block-start: 0px;
+
+}
+
+h1 {
+  color: rgba(0, 0, 0, 0.719);
+  text-align: center;
+  padding-block-start: 20px;
+  padding-block-end: 20px;
+  text-shadow: 1px 1px 1px;
+  font-size: 40px;
+}
+
+.container {
+  margin-top: 25px;
 }
 
 
 
 
+.form-control {
+  width: 400px;
 
+}
 
+.form-group {
+  position: relative;
+  left: 27%;
+  margin-top: 70px;
+  border-radius: 5px;
+  background-color: #dbe2ec;
+  padding-left: 4%;
+  padding-right: 3%;
+  height: 530px;
+  width: 520px;
+  box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2), 0 10px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+.btn  {
+margin-left: 5%;
+margin-bottom: 40px;
+margin-top: 10%;
+box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.568);
+}
+
+.projectTitle {
+  margin-right: 100px;
+  padding-top: 5px;
+  text-decoration:  underline dotted rgba(168, 172, 175, 0.212);
+}
+
+.properties {
+  background-color: rgba(250, 235, 215, 0.507);
+  width: 600px;
+  border-radius: 5px;
+  padding: 5px 20px;
+  box-shadow: 1px 1px 1px ;
+  margin-left: 150px;
+}
+
+.property {
+  font-weight: 800;
+}
+
+.btn-group-horizontal {
+flex-direction: row;
+margin-left: 35%;
+margin-top: -25px;
+}
+
+.session {
+  border-block-start: 1px solid #3a3c3fd0;
+}
+
+.monthlyHeader {
+  font-weight: 800;
+  color: rgba(1, 1, 12, 0.884)
+}
+
+.rate {
+  color: rgba(47, 221, 28, 0.842);
+}
+
+.removeRate {
+  margin-left: 40%;
+}
 

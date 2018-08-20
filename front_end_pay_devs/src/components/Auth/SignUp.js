@@ -39,12 +39,6 @@ class SignUp extends Component {
     const error = this.props.error;
     return (
       <div>
-                <div className="loginLink">
-        <img src={logo} />          
-        <span className="paydevs">PayDevs</span>
-          <span>Already have an account? </span>
-          <Link className="link" to="login">Login</Link>
-        </div>
         <h2>Sign Up</h2>
         <div className="signUpForm">
         <form name="form" onSubmit={this.handleSubmit}>

@@ -18,8 +18,10 @@ class LoginUser extends Component {
   }
 
   handleSubmit(values) {
+
     if (values.username && values.password) {
       this.props.onLoginUser(values.username, values.password);
+      console.log(values)
       this.setState({ password_req: false, user_req: false });
     } else if (!values.username) {
       this.setState({ user_req: true });
@@ -34,12 +36,7 @@ class LoginUser extends Component {
 
     return (
       <div>
-          <div className="signUpLink">
-        <img src={logo} />          
-        <span className="paydevs">PayDevs</span>
-          <span className="join">Join us </span>
-          <Link className="link" to="sign_up">Sign Up</Link>
-        </div> 
+         
         <h2>Login</h2>
         <Form className="loginForm"
           model="login.user_form"

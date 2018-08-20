@@ -17,7 +17,7 @@ class MonthRates extends Component {
 
     return (
       <div>
-        <h3>Select one of your current rates</h3>
+        <h3 className="monthlyHeader">Select one of your current rates:</h3>
         <div>
           {this.props.monthPayments.map(monthPayment => (
             <MonthRate

@@ -17,11 +17,15 @@ import UpdateTaskForm from "../components/Task/UpdateTaskForm"
 import CreateWorkedDayForm from "../components/WorkedDay/CreateWorkedDayForm";
 import UpdateWorkedDayForm from "../components/WorkedDay/UpdateWorkedDayForm";
 import AllWorkedDays from "../components/WorkedDay/AllWorkedDays";
+import NavBar from "../components/NavBar";
+
 
 class AppRouter extends Component {
   render() {
     return (
       <Router history={history}>
+      <div>
+        <NavBar />
         <Switch>
           <PrivateRoute exact path="/" component={ProjectPage} />
           <Route path="/login" component={LoginUser} />
@@ -37,6 +41,7 @@ class AppRouter extends Component {
           <PrivateRoute path="/project/:id" component={ProjectItem} />
           <Route component={NotFound} />
         </Switch>
+          </div>
       </Router>
     );
   }

@@ -2,7 +2,6 @@ import React from 'react';
 import FormikProject from "../forms/FormikProject";
 import { projectActions } from "../actions/project";
 import { connect } from "react-redux";
-import logo from './icons/favicon.png';
 
 
 const CreateProjectForm = (props) => {
