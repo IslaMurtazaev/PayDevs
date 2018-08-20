@@ -13,12 +13,14 @@ import UpdateProjectForm from "../components/Project/UpdateProjectForm";
 import CreateTasklyForm from "../components/Task/CreateTaskly";
 import CreateMonthPaymentForm from "../components/MonthPayment/CreateMonthPaymentForm";
 import NotFound from "../components/NotFound";
-import UpdateTaskForm from "../components/Task/UpdateTaskForm"
+import UpdateTaskForm from "../components/Task/UpdateTaskForm";
 import CreateWorkedDayForm from "../components/WorkedDay/CreateWorkedDayForm";
 import UpdateWorkedDayForm from "../components/WorkedDay/UpdateWorkedDayForm";
-import AllWorkedDays from "../components/WorkedDay/AllWorkedDays";
-import CreateHourPayment from "../components/HourPayment/CreateHourPayment"
-import UpdateHourlyForm from "../components/HourPayment/UpdateHourlyForm"
+import WorkedDays from "../components/WorkedDay/WorkedDays";
+import CreateHourPayment from "../components/HourPayment/CreateHourPayment";
+import UpdateHourlyForm from "../components/HourPayment/UpdateHourlyForm";
+import WorkTimes from "../components/WorkTime/WorkTimes";
+import UpdateWorkTimeForm from "../components/WorkTime/UpdateWorkTimeForm";
 
 class AppRouter extends Component {
   render() {
@@ -33,10 +35,12 @@ class AppRouter extends Component {
           <PrivateRoute path="/project/:id/Taskly/create" component={CreateTasklyForm}/>
           <PrivateRoute path="/project/:id/Monthly/create" component={CreateMonthPaymentForm} />
           <PrivateRoute path="/project/:id/Monthly/:monthPaymentId/workedDay/create" component={CreateWorkedDayForm} />
-          <PrivateRoute path="/project/:id/Hourly/create" component={CreateHourPayment}/>
-          <PrivateRoute path="/project/:id/Hourly/:hourPaymentId/update" component={UpdateHourlyForm}/>
           <PrivateRoute path="/project/:id/Monthly/:monthPaymentId/workedDay/:workedDayId/update" component={UpdateWorkedDayForm} />
-          <PrivateRoute path="/project/:id/Monthly/:monthPaymentId/workedDay" component={AllWorkedDays} />
+          <PrivateRoute path="/project/:id/Monthly/:monthPaymentId/workedDay" component={WorkedDays} />
+          <PrivateRoute path="/project/:id/Hourly/create" component={CreateHourPayment} />
+          <PrivateRoute path="/project/:id/Hourly/:hourPaymentId/update" component={UpdateHourlyForm} />
+          <PrivateRoute path="/project/:id/Hourly/:hourPaymentId/workTime/:workTimeId/update" component={UpdateWorkTimeForm} />
+          <PrivateRoute path="/project/:id/Hourly/:hourPaymentId/workTime" component={WorkTimes} />
           <PrivateRoute path="/project/:id/update" component={UpdateProjectForm} />
           <PrivateRoute path="/project/:id" component={ProjectItem} />
           <Route component={NotFound} />
