@@ -3,7 +3,8 @@ import {WorkTimeConstant} from '../constants/workTime'
 // import {history} from '../index';
 
 export const workTimeActions = {
-    create
+    create,
+    getAll
 };
 
 function create(workTime) {
@@ -18,4 +19,13 @@ function create(workTime) {
             alert(error);
         });
     };
-    }
+}
+
+
+function getAll(projectId, hourPaymentId) {
+return dispatch => {
+    workTimeService.getAll(projectId, hourPaymentId).then(workTimes => {
+        dispatch({ type: WorkTimeConstant.GET_ALL, workTimes });
+        });
+    };
+}

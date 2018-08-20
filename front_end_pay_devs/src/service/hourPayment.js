@@ -6,7 +6,8 @@ const BASE_URL = "http://127.0.0.1:8000/api/project/";
 export const hourPaymentService = {
     getAll,
     create,
-    deleteHour
+    deleteHour,
+    update
 };
 
 function create(hourPayment) {
@@ -33,6 +34,8 @@ function getAll(projectId) {
       return projects;
     });
   }
+
+
   function deleteHour(hourId) {
     let headers = authHeader();
     return axios({
@@ -44,4 +47,19 @@ function getAll(projectId) {
       return task ;
     });
   }
+
+function update(values){
+  
+  const headres = authHeader();
+  const fetch_url = `${BASE_URL}${values.projectId}/hour_payment/${values.id}/update/`;
+  return axios({
+      method: "put",
+      url: fetch_url,
+      headers: headres,
+      data: values
+  }).then(res => {
+    
+      return res.data;
+  });
+}
  
