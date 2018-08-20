@@ -14,7 +14,7 @@ class HourPaymnetItem extends Component {
         return (
             <div>
                 <div>Rate: {hourPaymnet.rate}</div>
-                <button><Link to={`/project/${projectId}/Taskly/${hourPaymnet.id}/update`}>UPDATE</Link></button>
+                <button><Link to={`/project/${projectId}/Hourly/${hourPaymnet.id}/update`}>UPDATE</Link></button>
                 <button onClick={this.onClickDelete.bind(this, hourPaymnet.id)}>DELETE</button>
             </div>
         );
