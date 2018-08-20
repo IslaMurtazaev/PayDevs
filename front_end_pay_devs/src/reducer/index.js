@@ -5,6 +5,7 @@ import { combineForms } from "react-redux-form";
 import user from "./user";
 import projects from "./projects";
 import {task, tasks} from './task';
+import {hourPayment, hourPayments} from './hourPayment';
 import monthPayments from "./monthPayments";
 import workedDays from "./workedDays";
 
@@ -26,5 +27,7 @@ export default combineReducers({
   task,
   tasks,
   monthPayments,
-  workedDays
+  workedDays,
+  hourPayment,
+  hourPayments
 });

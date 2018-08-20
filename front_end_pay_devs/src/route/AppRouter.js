@@ -16,6 +16,7 @@ import NotFound from "../components/NotFound";
 import UpdateTaskForm from "../components/Task/UpdateTaskForm"
 import CreateWorkedDayForm from "../components/WorkedDay/CreateWorkedDayForm";
 import AllWorkedDays from "../components/WorkedDay/AllWorkedDays";
+import CreateHourPayment from "../components/HourPayment/CreateHourPayment"
 
 class AppRouter extends Component {
   render() {
@@ -31,6 +32,7 @@ class AppRouter extends Component {
           <PrivateRoute path="/project/:id/Taskly/create" component={CreateTasklyForm}/>
           <PrivateRoute path="/project/:id/Monthly/create" component={CreateMonthPaymentForm} />
           <PrivateRoute path="/project/:id/Monthly/:monthPaymentId/workedDay/create" component={CreateWorkedDayForm} />
+          <PrivateRoute path="/project/:id/Hourly/create" component={CreateHourPayment}/>
           <PrivateRoute path="/project/:id/update" component={UpdateProjectForm} />
           <PrivateRoute path="/project/:id" component={ProjectItem} />
           <Route component={NotFound} />
