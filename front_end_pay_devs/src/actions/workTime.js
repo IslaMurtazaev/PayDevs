@@ -1,10 +1,11 @@
 import { workTimeService } from "../service/workTime";
-import {WorkTimeConstant} from '../constants/workTime'
+import {workTimeConstant} from '../constants/workTime'
 // import {history} from '../index';
 
 export const workTimeActions = {
     create,
-    getAll
+    getAll,
+    deleteWork
 };
 
 function create(workTime) {
@@ -12,7 +13,7 @@ function create(workTime) {
         workTimeService
         .create(workTime)
         .then(workTime => {
-            dispatch({ type: WorkTimeConstant.CREATE, workTime });
+            dispatch({ type: workTimeConstant.CREATE, workTime });
             
         })
         .catch(error => {
@@ -22,10 +23,18 @@ function create(workTime) {
 }
 
 
-function getAll(projectId, hourPaymentId) {
+function getAll(hourPaymentId) {
 return dispatch => {
-    workTimeService.getAll(projectId, hourPaymentId).then(workTimes => {
-        dispatch({ type: WorkTimeConstant.GET_ALL, workTimes });
+    workTimeService.getAll(hourPaymentId).then(workTimes => {
+        dispatch({ type: workTimeConstant.GET_ALL, workTimes });
         });
     };
 }
+
+function deleteWork(workId) {
+    return dispatch => {
+        workTimeService.deleteWork(workId).then(workTime => {
+        dispatch({ type: workTimeConstant.DELETE, workTime});
+      });
+    };
+  }

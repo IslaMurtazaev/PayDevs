@@ -20,7 +20,7 @@ class HourPayments extends Component {
   render() {
     
     const { hourPayments} = this.props;
-    console.log(hourPayments)
+    
     const { project } = this.props;
     
 

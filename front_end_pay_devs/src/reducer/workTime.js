@@ -1,5 +1,5 @@
 
-import { workTimeConstant } from "../constants/workTime";
+import { workTimeConstant } from "../constants/workTime"
 
 const initialStateHour = {};
 
@@ -22,6 +22,8 @@ export function workTimes(state = initialStateworkTimes, action) {
       return action.workTimes;
     case workTimeConstant.DELETE:
       return state.filter(workTime=>workTime.id !== action.workTime.id);
+    case workTimeConstant.CREATE:
+      return [...state, action.workTime];
     default:
       return state;
   }

@@ -8,6 +8,7 @@ import {task, tasks} from './task';
 import {hourPayment, hourPayments} from './hourPayment';
 import monthPayments from "./monthPayments";
 import workedDays from "./workedDays";
+import {workTime, workTimes} from "./workTime";
 
 const initialUser = {
   username: "",
@@ -29,5 +30,7 @@ export default combineReducers({
   monthPayments,
   workedDays,
   hourPayment,
-  hourPayments
+  hourPayments,
+  workTime,
+  workTimes
 });

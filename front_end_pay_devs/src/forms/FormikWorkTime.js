@@ -12,10 +12,10 @@ const WorkInput = ({ values, errors, touched, setFieldValue }) => {
       </div>
       <div>
         <DateTimePicker
-          name="start_date"
+          name="start_work"
           type="datetime"
-          value={values.start_date}
-          onChange={value => setFieldValue("start_date", value)}
+          value={values.start_work}
+          onChange={value => setFieldValue("start_work", value)}
         />
       </div>
 
@@ -25,10 +25,10 @@ const WorkInput = ({ values, errors, touched, setFieldValue }) => {
       </div>
       <div>
         <DateTimePicker
-          name="end_date"
+          name="end_work"
           type="datetime"
-          value={values.end_date}
-          onChange={value => setFieldValue("end_date", value)}
+          value={values.end_work}
+          onChange={value => setFieldValue("end_work", value)}
         />
       </div>
       <label>
@@ -54,8 +54,8 @@ const FormikProject = withFormik({
   }) {
     return {
       id: id || null,
-      start_work: (start_work ) || new Date(),
-      end_work: (end_work ) || new Date(),
+      start_work: (start_work && new Date(start_work)) || new Date(),
+      end_work: (end_work && new Date(end_work)) || new Date(),
       projectId: projectId,
       hourPaymentId: hourPaymentId,
       paid: paid,

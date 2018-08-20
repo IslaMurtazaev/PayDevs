@@ -25,7 +25,7 @@ return dispatch => {
     .create(hourPayment)
     .then(hourPayment => {
         dispatch({ type: HourPaymentConstant.CREATE, hourPayment });
-        // history.push(`/project/${hourPayment.projectId}`)
+        history.push(`/project/${hourPayment.projectId}`)
         
     })
     .catch(error => {

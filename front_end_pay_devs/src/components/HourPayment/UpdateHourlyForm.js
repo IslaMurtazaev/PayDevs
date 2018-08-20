@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import FormikHourPayment from "../../forms/FormikHourPayment"
 import {hourPaymentActions} from '../../actions/hourPayment';
 import { Redirect } from "react-router-dom";
+import WorkTimes from "../WorkTime/WorkTimes"
 
 
 const UpdateHourlyForm = props => {
@@ -18,6 +19,7 @@ const UpdateHourlyForm = props => {
           rate = {hourPayment.rate}
           onSubmit={props.updateHourPayment} 
           />
+          <WorkTimes hourPayment={hourPayment} projectId={hourPayment.project_id}></WorkTimes>
     </div>
     );
 };

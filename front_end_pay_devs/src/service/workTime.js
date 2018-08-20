@@ -5,7 +5,8 @@ const BASE_URL = "http://127.0.0.1:8000/api/project/";
 
 export const workTimeService = {
     create,
-    getAll
+    getAll,
+    deleteWork
 };
 
 function create(workTime) {
@@ -22,14 +23,27 @@ return axios({
 }
 
 
-function getAll(projectId, hourPaymentId) {
+function getAll(hourPaymentId) {
     let headers = authHeader();
     return axios({
       method: "get",
-      url: `${BASE_URL}${projectId}/hour_payment/${hourPaymentId}/work_time/all`,
+      url: `${BASE_URL}hour_payment/${hourPaymentId}/work_time/all`,
       headers: headers
     }).then(res => {
       let projects = res.data;
       return projects;
+    });
+  }
+
+
+  function deleteWork(workId) {
+    let headers = authHeader();
+    return axios({
+      method: "delete",
+      url: `${BASE_URL}work_time/${workId}/delete`,
+      headers: headers
+    }).then(res => {
+      let task = res.data;
+      return task ;
     });
   }

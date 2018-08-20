@@ -1,17 +1,18 @@
 import React, {Component} from 'react';
 import { connect } from "react-redux";
 import FormikHourPayment from "../../forms/FormikHourPayment";
-import FormikWorkTime from "../../forms/FormikWorkTime";
+// import FormikWorkTime from "../../forms/FormikWorkTime";
 import { hourPaymentActions} from "../../actions/hourPayment";
-import {workTimeActions } from "../../actions/workTime"
+import {Link, Redirect} from "react-router-dom";
 
 
 class CreateHourPayment extends Component {
 
   render(){
       let project = this.props.project;
-      let hourPayment = this.props.hourPayment;
-      console.log(hourPayment)
+      if (!Object.keys(project).length)
+      return <Redirect from="/project/:id" to="/" />;
+      
       
       return (
           <div>
@@ -20,11 +21,8 @@ class CreateHourPayment extends Component {
           projectId={project.id}
           onSubmit={this.props.createHourPayment} 
           />
-          {/* {Object.keys(hourPayment).length && <FormikWorkTime onSubmit={this.props.createWorkTime} 
-          projectId={project.id} 
-          hourPaymentId = {this.props.hourPayment.id}
-          /> */}
-        }
+          <Link to="">Create Work Time</Link>
+            
           </div>
       );
     }
@@ -37,7 +35,7 @@ const mapStateToProps = (state, ownProps) => {
     );
     return {
       hourPayment: state.hourPayment,
-      workTimes: state.workTimes.find(workTime => workTime.hour_payment_id === state.hourPayment.id),
+      // workTimes: state.workTimes.find(workTime => workTime.hour_payment_id === state.hourPayment.id),
       project,
     };
   };
@@ -45,10 +43,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => {
   return {
     createHourPayment: values => dispatch(hourPaymentActions.create(values)),
-    createWorkTime: values => {
-      dispatch(workTimeActions.create(values))
-    },
-    onGetAll: (projectId, hourPaymentId) => dispatch(workTimeActions.getAll(projectId, hourPaymentId))
+    
+    
   };
 };
 

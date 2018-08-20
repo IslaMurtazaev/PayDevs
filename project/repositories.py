@@ -456,9 +456,11 @@ class WorkTimeRepo:
             db_worked_times = WorkTimeORM.objects.filter(hour_payment_id=hour_payment_id,
                                                          paid=paid)
         else:
+
             db_worked_times = WorkTimeORM.objects.filter(hour_payment_id=hour_payment_id,
                                                          start_work__gte=boundary[0],
                                                          end_work__lte=boundary[1], paid=paid)
+
 
         for db_worked_time in db_worked_times:
             worked_times.append(self._decode_db_work_time(db_worked_time))
