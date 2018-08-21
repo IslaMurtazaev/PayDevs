@@ -4,8 +4,8 @@ import { projectActions } from "../../actions/project";
 import { Redirect, Link } from "react-router-dom";
 import { history } from "../../index";
 import Tasks from '../../components/Task/Tasks'
-import HourPayments from '../../components/HourPayment/HourPayments'
-import MonthRates from "../MonthPayment/MonthRates";
+import HourPayments from '../../components/HourPayment/HourlyRates'
+import MonthRates from "../MonthPayment/MonthlyRates";
 
 class ProjectItem extends Component {
   onClick(id) {

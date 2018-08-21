@@ -13,18 +13,16 @@ const CreateWorkedDayForm = props => {
   );
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    createWorkedDay: values =>
-      dispatch(
-        workedDayActions.create(
-          +ownProps.match.params.id,
-          +ownProps.match.params.monthPaymentId,
-          values
-        )
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  createWorkedDay: values =>
+    dispatch(
+      workedDayActions.create(
+        ownProps.projectId,
+        ownProps.monthPaymentId,
+        values
       )
-  };
-};
+    )
+});
 
 export default connect(
   null,

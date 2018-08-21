@@ -2,11 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import monthPaymentActions from "../../actions/monthPayment";
-import MonthRate from "./MonthRate";
+import MonthRate from "./MonthlyRate";
 
 class MonthRates extends Component {
-  constructor(props) {
-    super(props);
+  componentDidMount() {
     this.props.getAllMonthPayments(this.props.projectId);
   }
 
@@ -18,12 +17,12 @@ class MonthRates extends Component {
     return (
       <div>
         <h3 className="monthlyHeader">Select one of your current rates:</h3>
+        <h3>Select one of your current rates:</h3>
         <div>
           {this.props.monthPayments.map(monthPayment => (
             <MonthRate
               key={monthPayment.id}
-              id={monthPayment.id}
-              rate={monthPayment.rate}
+              monthPayment={monthPayment}
               onRemove={monthPaymentId =>
                 this.props.removeMonthPayment(monthPaymentId)
               }

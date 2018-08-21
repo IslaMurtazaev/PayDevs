@@ -1,40 +1,52 @@
 import { workTimeService } from "../service/workTime";
-import {workTimeConstant} from '../constants/workTime'
-// import {history} from '../index';
+import { workTimeConstant } from "../constants/workTime";
+import { history } from "../index";
 
-export const workTimeActions = {
-    create,
-    getAll,
-    deleteWork
+export default {
+  create,
+  getAll,
+  update,
+  remove
 };
 
-function create(workTime) {
-    return dispatch => {
-        workTimeService
-        .create(workTime)
-        .then(workTime => {
-            dispatch({ type: workTimeConstant.CREATE, workTime });
-            
-        })
-        .catch(error => {
-            alert(error);
-        });
-    };
+function create(values) {
+  return dispatch => {
+    workTimeService
+      .create(values)
+      .then(workTime => {
+        dispatch({ type: workTimeConstant.CREATE, workTime });
+      })
+      .catch(error => {
+        alert(error);
+      });
+  };
 }
-
 
 function getAll(hourPaymentId) {
-return dispatch => {
+  return dispatch => {
     workTimeService.getAll(hourPaymentId).then(workTimes => {
-        dispatch({ type: workTimeConstant.GET_ALL, workTimes });
-        });
-    };
+      dispatch({ type: workTimeConstant.GET_ALL, workTimes });
+    });
+  };
 }
 
-function deleteWork(workId) {
+function update(projectId, hourPaymentId, workTimeId, values) {
     return dispatch => {
-        workTimeService.deleteWork(workId).then(workTime => {
-        dispatch({ type: workTimeConstant.DELETE, workTime});
+      workTimeService
+      .update(projectId, hourPaymentId, workTimeId, values)
+      .then(workTime => {
+        dispatch({ type: workTimeConstant.UPDATE, workTime });
+        history.push(
+          `/project/${projectId}/Hourly/${hourPaymentId}/workTime`
+        );
       });
     };
   }
+
+function remove(workTimeId) {
+  return dispatch => {
+    workTimeService.remove(workTimeId).then(workTime => {
+      dispatch({ type: workTimeConstant.REMOVE, workTime });
+    });
+  };
+}

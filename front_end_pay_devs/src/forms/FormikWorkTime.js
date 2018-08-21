@@ -5,7 +5,6 @@ import DateTimePicker from "react-datetime-picker";
 const WorkInput = ({ values, errors, touched, setFieldValue }) => {
   return (
     <Form className="form-group" style={{ margin: 10 }}>
-      <label>Title: </label>
       <label>Start-work: </label>
       <div>
         {touched.start_date && errors.start_date && <p>{errors.start_date}</p>}
@@ -33,7 +32,7 @@ const WorkInput = ({ values, errors, touched, setFieldValue }) => {
       </div>
       <label>
         Paid:
-        <Field name="paid" type="checkbox" checked={values.status} />
+        <Field name="paid" type="checkbox" checked={values.paid} />
       </label>
 
       <button className="btn btn-primary form-control" type="submit">

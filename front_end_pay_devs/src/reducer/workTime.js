@@ -20,7 +20,7 @@ export function workTimes(state = initialStateworkTimes, action) {
   switch(action.type) {
     case workTimeConstant.GET_ALL:
       return action.workTimes;
-    case workTimeConstant.DELETE:
+    case workTimeConstant.REMOVE:
       return state.filter(workTime=>workTime.id !== action.workTime.id);
     case workTimeConstant.CREATE:
       return [...state, action.workTime];

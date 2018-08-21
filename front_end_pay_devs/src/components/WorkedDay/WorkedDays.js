@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 
 import workedDayActions from "../../actions/workedDay";
 import WorkedDay from "./WorkedDay";
+import CreateWorkedDayForm from "./CreateWorkedDayForm";
 
 class WorkedDays extends Component {
-  constructor(props) {
-    super(props);
+  componentDidMount() {
+    console.log("Props in worked Day", this.props);
     this.props.getAllWorkedDays();
   }
 
@@ -25,9 +25,10 @@ class WorkedDays extends Component {
             />
           ))}
         </div>
-        <Link to={`${this.props.location.pathname}/create`}>
-          Create new Worked day
-        </Link>
+
+        <hr />
+
+        <CreateWorkedDayForm projectId={+this.props.match.params.id} monthPaymentId={+this.props.match.params.monthPaymentId} />
       </div>
     );
   }
