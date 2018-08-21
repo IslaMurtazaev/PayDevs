@@ -20,7 +20,6 @@ function create(projectId, values) {
   return dispatch => {
     monthPaymentService.create(projectId, values).then(monthPayment => {
       dispatch({ type: monthPaymentActionTypes.CREATE, monthPayment })
-      history.push(`/project/${projectId}`)
     })
   }
 }

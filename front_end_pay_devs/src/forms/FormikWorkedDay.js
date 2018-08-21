@@ -42,8 +42,9 @@ const FormikWorkedDay = withFormik({
   validationSchema: Yup.object().shape({
     day: Yup.date().required("Date is required")
   }),
-  handleSubmit(values, { props }) {
+  handleSubmit(values, { props, resetForm }) {
     props.onSubmit(values);
+    resetForm();
   }
 })(WorkedDayInput);
 

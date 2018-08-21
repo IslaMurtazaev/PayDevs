@@ -7,14 +7,13 @@ import CreateWorkedDayForm from "./CreateWorkedDayForm";
 
 class WorkedDays extends Component {
   componentDidMount() {
-    console.log("Props in worked Day", this.props);
     this.props.getAllWorkedDays();
   }
 
   render() {
     return (
       <div>
-        <h3>Your Worked Days</h3>
+        {this.props.workedDays.length > 0 && <h3>Your Worked Days</h3>}
         <div>
           {this.props.workedDays.map(workedDay => (
             <WorkedDay

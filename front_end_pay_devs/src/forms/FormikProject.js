@@ -85,7 +85,7 @@ const FormikProject = withFormik({
       start_date: (start_date && new Date(start_date)) || new Date(),
       end_date: (end_date && new Date(end_date)) || new Date(),
       type_of_payment: type_of_payment || "M_P",
-      status: (status === false ? false : true )
+      status: status === false ? false : true
     };
   },
   validationSchema: Yup.object().shape({
@@ -93,8 +93,9 @@ const FormikProject = withFormik({
     start_date: Yup.date().required("Start-date is required"),
     end_date: Yup.date().required("End-date is required")
   }),
-  handleSubmit(values, { props }) {
+  handleSubmit(values, { props, resetForm }) {
     props.onSubmit(values);
+    resetForm();
   }
 })(ProjectInput);
 

@@ -2,9 +2,7 @@ import React from "react";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 
-
-
-const TasklyInput = ({ values, errors, touched, setFieldValue }) => {
+const TasklyInput = ({ values, errors, touched, setValues }) => {
   return (
     <Form className="form-group" style={{ margin: 10 }}>
       <label>Title: </label>
@@ -15,35 +13,37 @@ const TasklyInput = ({ values, errors, touched, setFieldValue }) => {
         className="form-control"
         placeholder="title..."
       />
-      <div></div>
+      <div />
       <label>Description: </label>
-      <div></div>
+      <div />
       <Field
         name="description"
         type="text"
         className="form-control"
         placeholder={"description..."}
       />
-      <div></div>
-      <label>Prijece: </label>
-      <div></div>
+      <div />
+      <label>Price: </label>
+      <div />
       <Field
         name="price"
         type="number"
         className="form-control"
         placeholder={"price..."}
       />
-      
-    <div></div>
-      <label> Paid: 
+
+      <div />
+      <label>
+        {" "}
+        Paid:
         <Field name="paid" type="checkbox" checked={values.paid} />
       </label>
-      <div></div>
+      <div />
       <label>
         Completed:
         <Field name="completed" type="checkbox" checked={values.completed} />
       </label>
-      <div></div>
+      <div />
       <button className="btn btn-primary form-control" type="submit">
         submit
       </button>
@@ -69,16 +69,14 @@ const FormikTaskly = withFormik({
       completed: completed || false,
       projectId: projectId,
       id: id
-
     };
   },
   validationSchema: Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    
+    title: Yup.string().required("Title is required")
   }),
-  handleSubmit(values, { props }) {
-
+  handleSubmit(values, { props, resetForm }) {
     props.onSubmit(values);
+    resetForm();
   }
 })(TasklyInput);
 

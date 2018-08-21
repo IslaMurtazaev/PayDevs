@@ -15,7 +15,7 @@ class WorkTimes extends Component {
 
     return (
       <div>
-        <h3>Your Worked Hours</h3>
+        {workTimes.length > 0 && <h3>Your Worked Hours</h3>}
         <div>
           {workTimes.map(workTime => (
             <WorkTime

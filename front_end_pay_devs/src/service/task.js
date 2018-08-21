@@ -4,7 +4,7 @@ import { authHeader } from "./helpers";
 export const taskService = {
     create,
     getAll,
-    taksDelete,
+    remove,
     update
   };
 
@@ -37,7 +37,7 @@ function getAll(projectId) {
   });
 }
 
-function taksDelete(taksId) {
+function remove(taksId) {
     let headers = authHeader();
     return axios({
       method: "delete",

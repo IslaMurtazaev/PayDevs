@@ -1,61 +1,57 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import {tasklyActions} from '../../actions/taskly';
-import TaskItem from './TaskItem'
-
-
+import { tasklyActions } from "../../actions/taskly";
+import TaskItem from "./TaskItem";
+import CreateTask from "./CreateTask";
 
 class Tasks extends Component {
-  onClick() {
-    this.props.onGetAllProjects();
-  }
-
   componentDidMount() {
-    const { project } = this.props;
-    this.props.onGetAllTasks(project.id);
+    this.props.getAllTasks(this.props.project.id);
   }
 
   render() {
-    const tasks = this.props.tasks
-    const { project } = this.props;
-    
+    const { tasks, project } = this.props;
 
     return (
       <div>
-        <ul>
-          {tasks.map(task=>
-            <li key={task.id}>
-                <TaskItem task={task} onDelete={this.props.onDeleteTasks} projectId={project.id}/>
-            </li>
+        {tasks.length > 0 && <h2>Your tasks</h2>}
 
-          )}
-        </ul>
+        <div>
+          {tasks.map(task => (
+            <TaskItem
+              key={task.id}
+              task={task}
+              onDelete={this.props.removeTask}
+              projectId={project.id}
+            />
+          ))}
+        </div>
+
+        <hr />
+
+        <CreateTask projectId={project.id} />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-    // let project = state.projects.find(
-    //   product => product.id === Number(ownProps.match.params.id)
-    // );
-    
-    return {
-      tasks: state.tasks
-    };
+const mapStateToProps = state => {
+  return {
+    tasks: state.tasks
   };
+};
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        onGetAllTasks: (projectId) => {
-            dispatch(tasklyActions.getAll(projectId))
-        },
-        onDeleteTasks: (taskId) => {
-            dispatch(tasklyActions.taksDelete(taskId))
-        }
+const mapDispatchToProps = dispatch => {
+  return {
+    getAllTasks: projectId => {
+      dispatch(tasklyActions.getAll(projectId));
+    },
+    removeTask: taskId => {
+      dispatch(tasklyActions.remove(taskId));
     }
-}
+  };
+};
 
 export default connect(
   mapStateToProps,

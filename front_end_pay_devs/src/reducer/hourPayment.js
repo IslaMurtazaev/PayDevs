@@ -17,6 +17,8 @@ const initialStateTasks = [];
 
 export function hourPayments(state = initialStateTasks, action) {
   switch(action.type) {
+    case HourPaymentConstant.CREATE:
+      return state.concat([action.hourPayment]);
     case HourPaymentConstant.GET_ALL:
       return action.hourPayments;
     case HourPaymentConstant.DELETE:
