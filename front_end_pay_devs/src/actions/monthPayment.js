@@ -1,6 +1,6 @@
 import monthPaymentActionTypes from "../constants/monthPayment";
 import monthPaymentService from "../service/monthPayment";
-import { history } from "../index";
+
 
 export default {
   getAll,
