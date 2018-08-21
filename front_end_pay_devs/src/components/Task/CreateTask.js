@@ -15,7 +15,7 @@ const CreateTaskForm = props => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     createTaskly: values =>
-      dispatch(tasklyActions.create(values))
+      dispatch(tasklyActions.create(values, ownProps.projectId))
   };
 };
 
