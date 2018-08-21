@@ -1,6 +1,8 @@
 import workedDayActionTypes from "../constants/workedDay";
 import workedDayService from "../service/workedDay";
 import { history } from "../index";
+import {handleError} from "../service/helpers"
+
 
 export default {
   create,
@@ -18,7 +20,7 @@ function create(projectId, monthPaymentId, values) {
         history.push(
           `/project/${projectId}/Monthly/${monthPaymentId}/workedDay`
         );
-      });
+      }).catch(error => handleError(error));
   };
 }
 
@@ -34,7 +36,7 @@ function remove(workedDayId) {
   return dispatch => {
     workedDayService.remove(workedDayId).then(response => {
       dispatch({ type: workedDayActionTypes.REMOVE_WORKED_DAY, workedDayId });
-    });
+    }).catch(error => handleError(error));
   };
 }
 
@@ -46,7 +48,7 @@ function update(projectId, monthPaymentId, workedDayId, values) {
       dispatch({ type: workedDayActionTypes.UPDATE_WORKED_DAY, workedDay });
       history.push(
         `/project/${projectId}/Monthly/${monthPaymentId}/workedDay`
-      );
+      ).catch(error => handleError(error));
     });
   };
 }

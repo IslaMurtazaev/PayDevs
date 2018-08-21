@@ -1,6 +1,8 @@
 import { taskService } from "../service/task";
 import {TaskConstant} from '../constants/task'
 import {history} from '../index';
+import {handleError} from "../service/helpers"
+
 
 export const tasklyActions = {
     create,
@@ -17,9 +19,7 @@ export const tasklyActions = {
         .then(task => {
           dispatch({ type: TaskConstant.CREATE_TASK, task });
         })
-        .catch(error => {
-          alert(error);
-        });
+        .catch(error => handleError(error));
     };
   }
 
@@ -27,7 +27,7 @@ export const tasklyActions = {
     return dispatch => {
       taskService.getAll(projectId).then(tasks => {
         dispatch({ type: TaskConstant.GET_ALL_TASK, tasks });
-      });
+      }).catch(error => handleError(error));
     };
   }
   
@@ -36,7 +36,7 @@ export const tasklyActions = {
     return dispatch => {
       taskService.remove(taksId).then(task => {
         dispatch({ type: TaskConstant.DELETE_TASK, task});
-      });
+      }).catch(error => handleError(error));
     };
   }
 
@@ -45,12 +45,10 @@ export const tasklyActions = {
       taskService
           .update(values)
           .then(task => {
-            dispatch({ type: TaskConstant.CREATE_TASK, task });
+            dispatch({ type: TaskConstant.UPDATE_TASK, task });
             history.push(`/project/${values.projectId}`)
           })
-          .catch(error => {
-            alert(error);
-          });
+          .catch(error => handleError(error));
       }
     }
   

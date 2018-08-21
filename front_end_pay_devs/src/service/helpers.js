@@ -7,3 +7,12 @@ export function authHeader() {
         return {};
     }
 }
+
+
+export function handleError(error){
+    if(error.response){
+        alert(error.response.data.error.message)
+      }else{
+        alert(error.response.data.error.message)
+      }
+}
