@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 
 import monthPaymentActions from "../../actions/monthPayment";
 import MonthRate from "./MonthlyRate";
+import CreateMonthPaymentForm from "./CreateMonthPaymentForm";
 
 class MonthRates extends Component {
   componentDidMount() {
@@ -10,14 +11,9 @@ class MonthRates extends Component {
   }
 
   render() {
-    if (this.props.monthPayments.length === 0) {
-      return null;
-    }
-
     return (
       <div>
-        <h3 className="monthlyHeader">Select one of your current rates:</h3>
-        <h3>Select one of your current rates:</h3>
+        {this.props.monthPayments.length > 0 && <h3 className="monthlyHeader">Select one of your current rates:</h3>}
         <div>
           {this.props.monthPayments.map(monthPayment => (
             <MonthRate
@@ -29,6 +25,10 @@ class MonthRates extends Component {
             />
           ))}
         </div>
+
+        <hr />
+
+        <CreateMonthPaymentForm projectId={this.props.projectId}  />
       </div>
     );
   }

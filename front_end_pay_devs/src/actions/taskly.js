@@ -5,7 +5,7 @@ import {history} from '../index';
 export const tasklyActions = {
     create,
     getAll,
-    taksDelete,
+    remove,
     update
   };
   
@@ -16,7 +16,6 @@ export const tasklyActions = {
         .create(task, projectId)
         .then(task => {
           dispatch({ type: TaskConstant.CREATE_TASK, task });
-          history.push(`/project/${projectId}`)
         })
         .catch(error => {
           alert(error);
@@ -33,9 +32,9 @@ export const tasklyActions = {
   }
   
 
-  function taksDelete(taksId) {
+  function remove(taksId) {
     return dispatch => {
-      taskService.taksDelete(taksId).then(task => {
+      taskService.remove(taksId).then(task => {
         dispatch({ type: TaskConstant.DELETE_TASK, task});
       });
     };

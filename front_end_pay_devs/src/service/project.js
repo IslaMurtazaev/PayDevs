@@ -3,7 +3,7 @@ import { authHeader } from "./helpers";
 
 export const projectService = {
   get_all,
-  deleteProject,
+  remove,
   create,
   update,
   getTotal
@@ -23,7 +23,7 @@ function get_all() {
   });
 }
 
-function deleteProject(id) {
+function remove(id) {
   let headers = authHeader();
   return axios({
     method: "delete",

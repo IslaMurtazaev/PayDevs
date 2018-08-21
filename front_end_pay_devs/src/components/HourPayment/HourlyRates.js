@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 
 import { hourPaymentActions } from "../../actions/hourPayment";
 import HourlyRate from "./HourlyRate";
+import CreateHourPayment from "./CreateHourPayment";
 
 class HourPayments extends Component {
   componentDidMount() {
@@ -10,25 +11,25 @@ class HourPayments extends Component {
   }
 
   render() {
-    const { hourPayments, project } = this.props;
-
-    if (hourPayments.length === 0) {
-      return null;
-    }
+    const { hourPayments, project, removeHourPayment } = this.props;
 
     return (
       <div>
-        <h3>Select one of your current rates:</h3>
+        { hourPayments.length > 0 && <h3>Select one of your current rates:</h3> }
         <div>
           {hourPayments.map(hourPayment => (
             <HourlyRate
               key={hourPayment.id}
               projectId={project.id}
               hourPayment={hourPayment}
-              onRemove={this.props.removeHourPayment}
+              onRemove={removeHourPayment}
             />
           ))}
         </div>
+
+        <hr />
+
+        <CreateHourPayment projectId={project.id} />
       </div>
     );
   }

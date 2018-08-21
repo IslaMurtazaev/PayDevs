@@ -5,7 +5,7 @@ import { history } from "../index";
 export const projectActions = {
   getAll,
   clearAll,
-  deleteProject,
+  remove,
   create,
   update,
   getTotal
@@ -23,9 +23,9 @@ function clearAll() {
   return { type: ProjectConstant.CLEAR_ALL_PROJECTS };
 }
 
-function deleteProject(id) {
+function remove(id) {
   return dispatch => {
-    projectService.deleteProject(id).then(() => {
+    projectService.remove(id).then(() => {
       dispatch({ type: ProjectConstant.DELETE_PROJECT });
       history.push("/");
     });
@@ -66,7 +66,7 @@ function getTotal(id) {
     projectService.getTotal(id).then(data => {
       FileDownload(data, "total.pdf");
       dispatch({ type: ProjectConstant.GET_TOTAL });
-      history.push("/");
+      history.push(`/project/${id}`);
     });
   };
 }

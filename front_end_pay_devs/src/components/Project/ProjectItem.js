@@ -3,39 +3,30 @@ import { connect } from "react-redux";
 import { projectActions } from "../../actions/project";
 import { Redirect, Link } from "react-router-dom";
 import { history } from "../../index";
-import Tasks from '../../components/Task/Tasks'
-import HourPayments from '../../components/HourPayment/HourlyRates'
+import Tasks from "../../components/Task/Tasks";
+import HourPayments from "../../components/HourPayment/HourlyRates";
 import MonthRates from "../MonthPayment/MonthlyRates";
 
 class ProjectItem extends Component {
-  onClick(id) {
-    this.props.onGetAllProjects(id);
-  }
-
-  onClickTotal(id) {
-    this.props.onGetTotal(id);
-  }
-
   render() {
     let project = this.props.project;
 
-    if (!project)
-      return <Redirect from="/project/:id" to="/" />;
+    if (!project) return <Redirect from="/project/:id" to="/" />;
 
     let sessionsType;
     let type_of_payment;
     switch (project.type_of_payment) {
       case "M_P":
         type_of_payment = "Monthly";
-        sessionsType = <MonthRates projectId={project.id} />
+        sessionsType = <MonthRates projectId={project.id} />;
         break;
       case "H_P":
         type_of_payment = "Hourly";
-        sessionsType = <HourPayments project={project}/>
+        sessionsType = <HourPayments project={project} />;
         break;
       case "T_P":
         type_of_payment = "Taskly";
-        sessionsType = <Tasks project={project}/>
+        sessionsType = <Tasks project={project} />;
         break;
       default:
         break;
@@ -61,8 +52,8 @@ class ProjectItem extends Component {
         <div  className="btn-group-horizontal ">
 
         <button type = "button" className="btn btn-success btn-lg"
-          onClick={this.onClickTotal.bind(this, project.id)}>
-          Total
+          onClick={() => this.props.getTotal(project.id)}>
+         Total
         </button>
         
         <Link to={`${history.location.pathname}/update`}>
@@ -72,21 +63,28 @@ class ProjectItem extends Component {
         </Link>
 
           <button type="button" className="btn btn-danger btn-lg"
-            onClick={this.onClick.bind(this, project.id)}>
+            onClick={() => this.props.removeProject(project.id)}>
             Delete project
           </button>
           </div>
+          
 
           <div className="session">
-        {sessionsType}
-        <button className="btn btn-danger">
+
+  {sessionsType}
+        {/* <button className="btn btn-success">
           <Link to={`/project/${project.id}/${type_of_payment}/create`}>
-            Create new {type_of_payment === "Taskly" ? "task" : `${type_of_payment.toLowerCase()} rate`}
+            Create new 
+            {type_of_payment === " Taskly"
+              ? "task"
+              : ` ${type_of_payment.toLowerCase()} rate`}
           </Link>
         </button>
         </div>
+        </button> */}
       </div>
-    );
+      );</div> 
+      )
   }
 }
 
@@ -102,10 +100,10 @@ const mapStateToProps = (state, ownProps) => {
 export default connect(
   mapStateToProps,
   dispatch => ({
-    onGetAllProjects: id => {
-      dispatch(projectActions.deleteProject(id));
+    removeProject: id => {
+      dispatch(projectActions.remove(id));
     },
-    onGetTotal: id => {
+    getTotal: id => {
       dispatch(projectActions.getTotal(id));
     }
   })

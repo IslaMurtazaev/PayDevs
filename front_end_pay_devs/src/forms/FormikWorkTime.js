@@ -57,13 +57,12 @@ const FormikProject = withFormik({
       end_work: (end_work && new Date(end_work)) || new Date(),
       projectId: projectId,
       hourPaymentId: hourPaymentId,
-      paid: paid,
-      
-
+      paid: paid
     };
   },
-  handleSubmit(values, { props }) {
+  handleSubmit(values, { props, resetForm }) {
     props.onSubmit(values);
+    resetForm();
   }
 })(WorkInput);
 

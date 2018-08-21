@@ -28,7 +28,6 @@ const MonthPaymentInput = ({ errors, touched }) => {
 const FormikMonthPayment = withFormik({
   mapPropsToValues({ id, rate, projectId }) {
     return {
-      // id: id || null,
       rate: rate || 0,
       projectId: projectId || null
     };
@@ -36,8 +35,9 @@ const FormikMonthPayment = withFormik({
   validationSchema: Yup.object().shape({
     rate: Yup.number().required("Rate is required")
   }),
-  handleSubmit(values, { props }) {
+  handleSubmit(values, { props, resetForm }) {
     props.onSubmit(values.projectId, values);
+    resetForm();
   }
 })(MonthPaymentInput);
 

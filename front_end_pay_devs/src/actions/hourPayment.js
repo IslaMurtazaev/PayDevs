@@ -23,11 +23,9 @@ function create(hourPayment) {
       .create(hourPayment)
       .then(hourPayment => {
         dispatch({ type: HourPaymentConstant.CREATE, hourPayment });
-        history.push(`/project/${hourPayment.projectId}`);
-      })
-      .catch(error => {
-        alert(error);
-      });
+      }, error => alert({...error}.response.data.error.message));
+      // .catch(error => {
+      // });
   };
 }
 

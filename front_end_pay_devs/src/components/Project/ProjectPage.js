@@ -5,12 +5,8 @@ import { projectActions } from "../../actions/project";
 import logo from '../icons/favicon.png';
 
 class ProjectPage extends Component {
-  onClick() {
-    this.props.onGetAllProjects();
-  }
-
   componentDidMount() {
-    this.props.onGetAllProjects();
+    this.props.getAllProjects();
   }
 
   render() {
@@ -55,11 +51,8 @@ export default connect(
     projects: state.projects
   }),
   dispatch => ({
-    onGetAllProjects: () => {
+    getAllProjects: () => {
       dispatch(projectActions.getAll());
-    },
-    onClearProjects: () => {
-      dispatch(projectActions.clearAll());
     }
   })
 )(ProjectPage);
