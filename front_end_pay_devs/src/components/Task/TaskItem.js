@@ -14,6 +14,7 @@ class TaskItem extends Component {
         <h4>{task.title}</h4>
         <h4>Description: {task.description}</h4>
         <h4>Price: {task.price}</h4>
+        <h4>{task.completed ? "Completed" : "Uncompleted"}</h4>
         <button>
           <Link to={`/project/${projectId}/Taskly/${task.id}/update`}>
             Update

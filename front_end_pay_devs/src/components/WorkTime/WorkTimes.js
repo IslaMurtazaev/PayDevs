@@ -30,7 +30,7 @@ class WorkTimes extends Component {
 
         <hr />
 
-        <h3>Create a new Work Time</h3>
+        <h4>Create a new Work Time</h4>
         <FormikWorkTime
           onSubmit={this.props.createWorkTime}
           projectId={+this.props.match.params.id}

@@ -7,11 +7,11 @@ import CreateTask from "./CreateTask";
 
 class Tasks extends Component {
   componentDidMount() {
-    this.props.getAllTasks(this.props.project.id);
+    this.props.getAllTasks(this.props.projectId);
   }
 
   render() {
-    const { tasks, project } = this.props;
+    const { tasks, projectId } = this.props;
 
     return (
       <div>
@@ -23,14 +23,14 @@ class Tasks extends Component {
               key={task.id}
               task={task}
               onDelete={this.props.removeTask}
-              projectId={project.id}
+              projectId={projectId}
             />
           ))}
         </div>
 
         <hr />
 
-        <CreateTask projectId={project.id} />
+        <CreateTask projectId={projectId} />
       </div>
     );
   }

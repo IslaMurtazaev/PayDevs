@@ -5,6 +5,7 @@ import {handleError} from "../service/helpers"
 
 
 export const projectActions = {
+  get,
   getAll,
   clearAll,
   remove,
@@ -12,6 +13,14 @@ export const projectActions = {
   update,
   getTotal
 };
+
+function get(projectId) {
+  return dispatch => {
+    projectService.get(projectId).then(project => {
+      dispatch({ type: ProjectConstant.GET_PROJECT, project });
+    });
+  };
+}
 
 function getAll() {
   return dispatch => {

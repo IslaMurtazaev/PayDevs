@@ -2,6 +2,7 @@ import axios from "axios";
 import { authHeader } from "./helpers";
 
 export const projectService = {
+  get,
   get_all,
   remove,
   create,
@@ -10,6 +11,18 @@ export const projectService = {
 };
 
 const BASE_URL = "http://127.0.0.1:8000/api/project/";
+
+function get(projectId) {
+  let headers = authHeader();
+  return axios({
+    method: "get",
+    url: `${BASE_URL}${projectId}/`,
+    headers: headers
+  }).then(res => {
+    let project = res.data;
+    return project;
+  });
+}
 
 function get_all() {
   let headers = authHeader();

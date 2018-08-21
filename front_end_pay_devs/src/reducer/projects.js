@@ -1,8 +1,15 @@
 import { ProjectConstant } from "../constants/project";
 
-const initialState = [];
+export function project(state = {}, action) {
+  switch (action.type) {
+    case ProjectConstant.GET_PROJECT:
+      return action.project
+    default:
+      return state;
+  }
+}
 
-export default function projects(state = initialState, action) {
+export function projects(state = [], action) {
   switch (action.type) {
     case ProjectConstant.ADD_ALL_PROJECTS:
       return [...action.projects];

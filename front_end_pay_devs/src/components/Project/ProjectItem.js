@@ -8,6 +8,10 @@ import HourPayments from "../../components/HourPayment/HourlyRates";
 import MonthRates from "../MonthPayment/MonthlyRates";
 
 class ProjectItem extends Component {
+  componentDidMount() {
+    this.props.getProject();
+  }
+
   render() {
     let project = this.props.project;
 
@@ -22,11 +26,11 @@ class ProjectItem extends Component {
         break;
       case "H_P":
         type_of_payment = "Hourly";
-        sessionsType = <HourPayments project={project} />;
+        sessionsType = <HourPayments projectId={project.id} />;
         break;
       case "T_P":
         type_of_payment = "Taskly";
-        sessionsType = <Tasks project={project} />;
+        sessionsType = <Tasks projectId={project.id} />;
         break;
       default:
         break;
@@ -65,36 +69,30 @@ class ProjectItem extends Component {
         </button>
 
         {sessionsType}
-        {/* <button className="btn btn-success">
-          <Link to={`/project/${project.id}/${type_of_payment}/create`}>
-            Create new 
-            {type_of_payment === " Taskly"
-              ? "task"
-              : ` ${type_of_payment.toLowerCase()} rate`}
-          </Link>
-        </button> */}
       </div>
     );
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  let project = state.projects.find(
-    project => project.id === Number(ownProps.match.params.id)
-  );
-  return {
-    project
-  };
-};
+const mapStateToProps = (state, ownProps) => ({
+  project: state.project
+    ? state.project
+    : state.projects.find(project => project.id === +ownProps.match.params.id)
+});
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  removeProject: id => {
+    dispatch(projectActions.remove(id));
+  },
+  getTotal: id => {
+    dispatch(projectActions.getTotal(id));
+  },
+  getProject: () => {
+    dispatch(projectActions.get(+ownProps.match.params.id));
+  }
+});
 
 export default connect(
   mapStateToProps,
-  dispatch => ({
-    removeProject: id => {
-      dispatch(projectActions.remove(id));
-    },
-    getTotal: id => {
-      dispatch(projectActions.getTotal(id));
-    }
-  })
+  mapDispatchToProps
 )(ProjectItem);
