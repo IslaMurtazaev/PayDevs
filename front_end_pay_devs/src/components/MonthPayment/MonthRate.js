@@ -7,12 +7,11 @@ const MonthRate = props => {
     <div>
       <Link to={`${history.location.pathname}/Monthly/${props.id}/workedDay`}>
         <span className="rate">
-         <li> {props.rate}
-          /per day
-         </li>
+          {props.rate}
+          /per day _____
         </span>
       </Link>
-      <button className="removeRate" onClick={() => props.onRemove(props.id)}>Remove rate</button>
+      <button className="removeRate" onClick={() => props.onRemove(props.id)}>X</button>
     </div>
   );
 };

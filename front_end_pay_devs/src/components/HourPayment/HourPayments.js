@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import {tasklyActions} from '../../actions/taskly';
+import {hourPaymentActions} from '../../actions/hourPayment';
+import HourPaymnetItem from './HourPaymentItem';
 
 
 
@@ -13,43 +14,48 @@ class HourPayments extends Component {
 
   componentDidMount() {
     const { project } = this.props;
-    this.props.onGetAllTasks(project.id);
+    this.props.onGetAllhourPayment(project.id);
   }
 
   render() {
     
+    const { hourPayments} = this.props;
+    
     const { project } = this.props;
-    console.log(project)
     
 
     return (
       <div>
-          
         <ul>
-          
+          {hourPayments.map(hourPaymnet=>(
+            <li key={hourPaymnet.id}>
+                <HourPaymnetItem hourPaymnet={hourPaymnet}  
+                projectId={project.id} 
+                onDelete={this.props.onDeletehourPayment}/>
+            </li>)
+          )
+          }
         </ul>
+          
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => {
-    // let project = state.projects.find(
-    //   product => product.id === Number(ownProps.match.params.id)
-    // );
     
     return {
-      hoursPayments: state.hoursPayments
+      hourPayments: state.hourPayments
     };
   };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onGetAllTasks: (projectId) => {
-            dispatch(tasklyActions.getAll(projectId))
+        onGetAllhourPayment: (projectId) => {
+            dispatch(hourPaymentActions.getAll(projectId))
         },
-        onDeleteTasks: (taskId) => {
-            dispatch(tasklyActions.taksDelete(taskId))
+        onDeletehourPayment: (hourId) => {
+            dispatch(hourPaymentActions.deleteHour(hourId))
         }
     }
 }

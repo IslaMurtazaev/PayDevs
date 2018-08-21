@@ -2,11 +2,12 @@ import React from "react";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 import DateTimePicker from "react-datetime-picker";
+// import "../App.css";
 
 const ProjectInput = ({ values, errors, touched, setFieldValue }) => {
   return (
     <div>
-    <Form className="form-group" >
+    <Form >
       <label>Title: </label>
       <div>{touched.title && errors.title && <p>{errors.title}</p>}</div>
       <Field

@@ -26,8 +26,8 @@ class ClientProjectTest(TestCase):
         data = json.dumps({
             "title": "Project 1",
             "description": "Test tests",
-            "start_date": "2016-12-20T23:00:00+0600",
-            "end_date": "2018-12-20T12:30:00+0600",
+            "start_date": "2016-12-20T23:00:00.000Z",
+            "end_date": "2018-12-20T12:30:00.000Z",
             "type_of_payment": "H_P",
 
         })
@@ -61,8 +61,8 @@ class ClientProjectTest(TestCase):
         data = json.dumps({
             "title": "Project web",
             "description": "logic web site",
-            "start_date": "2016-12-20T23:00:00+0600",
-            "end_date": "2018-12-20T12:30:00+0600",
+            "start_date": "2016-12-20T23:00:00.000Z",
+            "end_date": "2018-12-20T12:30:00.000Z",
             "type_of_payment": "H_P",
 
         })
@@ -71,8 +71,8 @@ class ClientProjectTest(TestCase):
         body = json.loads(response.content.decode())
         self.assertEqual(body.get('title'), 'Project web')
         self.assertEqual(body.get('description'), 'logic web site')
-        self.assertEqual(body.get('start_date'), '2016-12-20T23:00:00+0600')
-        self.assertEqual(body.get('end_date'), '2018-12-20T12:30:00+0600')
+        self.assertEqual(body.get('start_date'), '2016-12-20T23:00:00.000000Z')
+        self.assertEqual(body.get('end_date'), '2018-12-20T12:30:00.000000Z')
         self.assertEqual(body.get('status'), True)
 
 
@@ -80,8 +80,8 @@ class ClientProjectTest(TestCase):
         data = json.dumps({
             "title": "Project web",
             "description": "logic web site",
-            "start_date": "2016-12-20T23:00:00+0600",
-            "end_date": "2018-12-20T12:30:00+0600",
+            "start_date": "2016-12-20T23:00:00.000Z",
+            "end_date": "2018-12-20T12:30:00.000Z",
             "type_of_payment": "H_P",
 
         })
@@ -99,7 +99,8 @@ class ClientProjectTest(TestCase):
         data = json.dumps({
             "title": "Project web",
             "description": "logic web site Test update",
-            "end_date": "2018-11-20T12:30:00+0600"
+            "end_date": "2018-11-20T12:30:00.000Z",
+            "status": True
 
         })
         header = {'HTTP_AUTHORIZATION': self.token}
@@ -147,8 +148,8 @@ class HourPaymentClientTest(TestCase):
         data = json.dumps({
             "title": "Project 1",
             "description": "Test tests",
-            "start_date": "2016-12-20T23:00:00+0600",
-            "end_date": "2018-12-20T12:30:00+0600",
+            "start_date": "2016-12-20T23:00:00.000Z",
+            "end_date": "2018-12-20T12:30:00.000Z",
             "type_of_payment": "H_P",
 
         })
@@ -264,8 +265,8 @@ class WorkTimeClientTest(TestCase):
         )
         self.work_time_db = WorkTimeORM.objects.create(
             hour_payment_id=self.hour_payment_db.id,
-            start_work=datetime.datetime.strptime("2018-07-20T10:00:00+0600", DATE_TIME_FORMAT),
-            end_work=datetime.datetime.strptime("2018-07-20T18:30:00+0600", DATE_TIME_FORMAT),
+            start_work=datetime.datetime.strptime("2018-07-20T10:00:00.000Z", DATE_TIME_FORMAT),
+            end_work=datetime.datetime.strptime("2018-07-20T18:30:00.000Z", DATE_TIME_FORMAT),
             paid=False,
         )
         data = json.dumps({'username': 'TestUser',
@@ -276,8 +277,8 @@ class WorkTimeClientTest(TestCase):
 
     def test_create_work_time(self):
         data = json.dumps({
-            "start_work": "2018-12-20T10:00:00+0600",
-            "end_work": "2018-12-20T18:30:00+0600",
+            "start_work": "2018-12-20T10:00:00.000Z",
+            "end_work": "2018-12-20T18:30:00.000Z",
             "paid": False,
         })
         header = {'HTTP_AUTHORIZATION': self.token}
@@ -288,8 +289,8 @@ class WorkTimeClientTest(TestCase):
         body = json.loads(response.content.decode())
         self.assertEqual(body.get('hour_payment_id'), self.hour_payment_db.id)
         self.assertEqual(body.get('paid'), False)
-        self.assertEqual(body.get('start_work'), "2018-12-20T10:00:00+0600")
-        self.assertEqual(body.get('end_work'), "2018-12-20T18:30:00+0600")
+        self.assertEqual(body.get('start_work'), "2018-12-20T10:00:00.000000Z")
+        self.assertEqual(body.get('end_work'), "2018-12-20T18:30:00.000000Z")
 
     def test_get_work_time(self):
         header = {'HTTP_AUTHORIZATION': self.token}
@@ -298,8 +299,8 @@ class WorkTimeClientTest(TestCase):
         body = json.loads(response.content.decode())
         self.assertEqual(body.get('hour_payment_id'), self.hour_payment_db.id)
         self.assertEqual(body.get('paid'), False)
-        self.assertEqual(body.get('start_work'), "2018-07-20T04:00:00+0000")
-        self.assertEqual(body.get('end_work'), "2018-07-20T12:30:00+0000")
+        self.assertEqual(body.get('start_work'), "2018-07-20T10:00:00.000000Z")
+        self.assertEqual(body.get('end_work'), "2018-07-20T18:30:00.000000Z")
 
     def test_update_create_work_time(self):
         data = json.dumps({

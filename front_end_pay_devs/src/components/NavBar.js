@@ -7,9 +7,9 @@ import { authHeader } from "../service/helpers";
 
 const NavBar = () => {
     return (
-        <div className="logoutLink">
+        <div className="navbar">
             <img src={logo} />          
-            <span><Link  className="paydevs1" to= '/'>PayDevs</Link></span>        
+            <span><Link  className="paydevs1" to= '/'>PayDevs</Link></span>
             {authHeader() ? <Link className="link" to="/login">Logout</Link> : <Link className="link" to="/sign_up">Sign up</Link>}
             {}
         </div>
