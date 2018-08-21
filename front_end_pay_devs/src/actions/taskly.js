@@ -10,10 +10,10 @@ export const tasklyActions = {
   };
   
 
-  function create(task) {
+  function create(task, projectId) {
     return dispatch => {
       taskService
-        .create(task)
+        .create(task, projectId)
         .then(task => {
           dispatch({ type: TaskConstant.CREATE_TASK, task });
         })
