@@ -320,10 +320,7 @@ margin-top: -25px;
 
 }
 
-.rateHeader {
-  font-weight: 800;
-  color: rgba(1, 1, 12, 0.829)
-}
+
 
 .rate {
   color: rgba(10, 33, 138, 0.897);
@@ -346,7 +343,7 @@ margin-top: -25px;
 }
 
 .task-form {
-  margin-left: 360px;
+  margin-left: 300px;
   left: 0px;
   margin-top: 30px;
   border-radius: 5px;
@@ -365,7 +362,7 @@ margin-top: -25px;
 }
 
 .worked-day-form {
-  margin-left: 350px;
+  margin-left: 300px;
   margin-top: 20px;
   border-radius: 6px;
   background-color: #dbe2ec;
@@ -391,7 +388,7 @@ margin-top: -25px;
 
 .worked {
   width: 250px;
-  height: 100px;
+  height: 150px;
   padding-left: 25px;
   background-color: #dbe2ec9d;
   border-radius: 6px;
@@ -431,6 +428,12 @@ margin-top: -25px;
 
 h3{
   padding-left: 430px;
+}
+
+.rateHeader {
+  font-weight: 800;
+  color: rgba(1, 1, 12, 0.829);
+  margin-left: -430px;
 }
 
 .updateButton {

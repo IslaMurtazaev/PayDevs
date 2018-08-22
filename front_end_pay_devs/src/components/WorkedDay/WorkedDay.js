@@ -7,8 +7,8 @@ import workedDayActions from "../../actions/workedDay";
 const WorkedDay = props => {
   return (
     <div className="worked">
-      <span><b>Date:</b> {props.workedDay.day}</span>
-      <span>{props.workedDay.paid || "not"} <b>paid</b></span>
+      <h4><b>Date:</b> {props.workedDay.day}</h4>
+      <h4>{props.workedDay.paid || "not"} <b>paid</b></h4>
       <div className="button-group-horizontal">
        <Link 
         to={`/project/${props.projectId}/Monthly/${
