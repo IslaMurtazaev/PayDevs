@@ -4,7 +4,7 @@ import * as Yup from "yup";
 
 const WorkedDayInput = ({ values, errors, touched }) => {
   return (
-    <Form className="worked-day-form" style={{ margin: 10 }}>
+    <Form className="worked-day-form">
       <div>{touched.day && errors.day && <p>{errors.day}</p>}</div>
 
       <div>

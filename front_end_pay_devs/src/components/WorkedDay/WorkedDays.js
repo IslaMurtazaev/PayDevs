@@ -14,7 +14,7 @@ class WorkedDays extends Component {
     return (
       <div>
         {this.props.workedDays.length > 0 && <h3><b>Your Worked Days</b></h3>}
-        <div className="worked">
+        <div>
           {this.props.workedDays.map(workedDay => (
             <WorkedDay
               key={workedDay.id}

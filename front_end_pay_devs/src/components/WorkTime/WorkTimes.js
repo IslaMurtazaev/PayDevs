@@ -16,7 +16,7 @@ class WorkTimes extends Component {
     return (
       <div>
         {workTimes.length > 0 && <h3><b>Your Worked Hours</b></h3>}
-        <div className="worked">
+        <div>
           {workTimes.map(workTime => (
             <WorkTime
               key={workTime.id}

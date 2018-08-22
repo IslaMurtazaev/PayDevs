@@ -37,11 +37,11 @@ function getAll(projectId) {
   });
 }
 
-function remove(taksId) {
+function remove(taskId) {
     let headers = authHeader();
     return axios({
       method: "delete",
-      url: `${BASE_URL}task/${taksId}/delete`,
+      url: `${BASE_URL}task/${taskId}/delete`,
       headers: headers
     }).then(res => {
       let task = res.data;

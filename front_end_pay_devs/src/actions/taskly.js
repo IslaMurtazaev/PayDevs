@@ -32,9 +32,9 @@ export const tasklyActions = {
   }
   
 
-  function remove(taksId) {
+  function remove(taskId) {
     return dispatch => {
-      taskService.remove(taksId).then(task => {
+      taskService.remove(taskId).then(task => {
         dispatch({ type: TaskConstant.DELETE_TASK, task});
       }).catch(error => handleError(error));
     };

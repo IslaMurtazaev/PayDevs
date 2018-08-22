@@ -35,6 +35,7 @@ class ProjectItem extends Component {
       default:
         break;
     }
+    
     return (
       <div className="container">
       
@@ -61,7 +62,7 @@ class ProjectItem extends Component {
         </button>
         
         <Link to={`${history.location.pathname}/update`}>
-          <button type = "button" className="btn btn-primary btn-lg">
+          <button type = "button" className="btn btn-warning btn-lg">
             Update project
           </button>
         </Link>
@@ -78,7 +79,7 @@ class ProjectItem extends Component {
 
         {sessionsType}
       </div>
-      );</div> 
+      </div> 
       )
   }
 }

@@ -4,21 +4,21 @@ import { Link } from "react-router-dom";
 const WorkTimeItem = props => {
   const { projectId, hourPaymentId, workTime, onRemove } = props;
   return (
-    <div className="container">
-    <li>
-      <span><b>Start Work:</b> {new Date(workTime.start_work).toLocaleString()} </span>
-      <span><b>End Work:</b> {new Date(workTime.end_work).toLocaleString()}</span>
-      <span>{workTime.paid || "not"} <b>paid</b></span>
-      <Link className="button-group-horizontal"
+    <div className="workedTime">
+      <h4><b>Start Work:</b> {new Date(workTime.start_work).toLocaleString()} </h4>
+      <h4><b>End Work:</b> {new Date(workTime.end_work).toLocaleString()}</h4>
+      <h4>{workTime.paid || "not"} <b>paid</b></h4>
+      <div className="button-group-horizontal">
+      <Link 
         to={`/project/${projectId}/Hourly/${hourPaymentId}/workTime/${
           workTime.id
         }/update`}  
       >
-        <button>Update</button>
+        <button className="updateButton btn btn-warning" type="button">Update</button>
       </Link>
-      <button onClick={() => onRemove(workTime.id)}>Delete</button>
-      </li>
-    </div> 
+      <button type="button" className="btn btn-danger" onClick={() => onRemove(workTime.id)}>Delete</button>
+      </div>
+         </div> 
   );
 };
 

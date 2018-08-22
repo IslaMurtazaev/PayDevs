@@ -2,9 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { userActions } from "../../actions/user";
 import { Form, Control } from "react-redux-form";
-import { Link } from "react-router-dom";
-import logo from '../icons/favicon.png';
-
 
 class LoginUser extends Component {
   constructor(props) {

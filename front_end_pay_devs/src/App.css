@@ -12,6 +12,8 @@ h2{
   text-shadow: 1px 1px 3px;
 
 }
+
+
 .authHeader {
   height: 20px;
   font-size: 40px;
@@ -138,7 +140,6 @@ a:hover {
   color: rgba(0, 0, 0, 0.733);
   text-shadow: 0px 0px 1px rgba(24, 23, 23, 0.849);
   text-decoration: none;
-
 }
 
 
@@ -262,8 +263,8 @@ h1 {
 
 .form-group {
   position: relative;
-  left: 27%;
-  margin-top: 70px;
+  left: 28%;
+  margin-top: 30px;
   border-radius: 5px;
   background-color: #dbe2ec;
   padding-left: 4%;
@@ -345,7 +346,7 @@ margin-top: -25px;
 }
 
 .task-form {
-  position: relative;
+  margin-left: 360px;
   left: 0px;
   margin-top: 30px;
   border-radius: 5px;
@@ -364,10 +365,9 @@ margin-top: -25px;
 }
 
 .worked-day-form {
-  position: relative;
-  top: 15px;
-  margin-top: 70px;
-  border-radius: 5px;
+  margin-left: 350px;
+  margin-top: 20px;
+  border-radius: 6px;
   background-color: #dbe2ec;
   padding-left: 4%;
   padding-right: 6%;
@@ -377,9 +377,9 @@ margin-top: -25px;
 }
 
 .worked-time-form {
-  position: relative;
+  margin-left: 330px;
   top: 15px;
-  margin-top: 10px;
+  margin-top: 35px;
   border-radius: 5px;
   background-color: #dbe2ec;
   padding-left: 4%;
@@ -390,30 +390,53 @@ margin-top: -25px;
 }
 
 .worked {
-  border-block-end: 3px dotted;
-  padding-block-end: 30px;
-  width: 680px;
+  width: 250px;
+  height: 100px;
+  padding-left: 25px;
+  background-color: #dbe2ec9d;
+  border-radius: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  margin-left: 45px;
+  margin-top: 20px;
+  display: inline-block;
 }
 
 .tasks {
-  border-block-end: 3px dotted;
-  padding-block-end: 30px;
-  width: 680px;
+  width: 300px;
+  height: 260px;
+  padding-top: 20px;
+  padding-left: 25px;
+  padding-left: 20px;
+
+  background-color: #dbe2ec9d;
+  border-radius: 6px;
+  margin-bottom: 25px;
+  margin-left: 45px;
+  margin-top: 10px;
+  display: inline-block;
+}
+
+.workedTime {
+  width: 350px;
+  padding-top: 10px;
+  padding-left: 25px;
+  background-color: #dbe2ec9d;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  margin-left: 45px;
+  margin-top: 20px;
+  display: inline-block;
 }
 
 h3{
-  padding-left: 30px;
+  padding-left: 430px;
 }
 
-.button-group-horizontal {
-flex-direction: row;
-margin-left: 1%;
-padding-top: 0px;
-padding: 5px 25px 1px 1px; 
+.updateButton {
+  margin-right: 1px; 
 }
 
-
-
-  .updateButton {
-    padding-right: 30px; 
-  }
+.reactLink {
+  color: #ffffff;
+}
