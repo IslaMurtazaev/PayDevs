@@ -15,8 +15,8 @@ class WorkTimes extends Component {
 
     return (
       <div>
-        {workTimes.length > 0 && <h3>Your Worked Hours</h3>}
-        <div>
+        {workTimes.length > 0 && <h3><b>Your Worked Hours</b></h3>}
+        <div className="worked">
           {workTimes.map(workTime => (
             <WorkTime
               key={workTime.id}
@@ -28,9 +28,8 @@ class WorkTimes extends Component {
           ))}
         </div>
 
-        <hr />
 
-        <h3>Create a new Work Time</h3>
+        <h3><b>Create a new Work Time</b></h3>
         <FormikWorkTime
           onSubmit={this.props.createWorkTime}
           projectId={+this.props.match.params.id}

@@ -9,12 +9,12 @@ const HourPaymnetRate = props => {
       <Link
         to={`${history.location.pathname}/Hourly/${hourPayment.id}/workTime`}
       >
-        <h3>
+        <span className="rate">
           {hourPayment.rate}
-          /per hour
-        </h3>
+          /per hour _____
+        </span>
       </Link>
-      <button onClick={() => onRemove(hourPayment.id)}>Remove rate</button>
+      <button className="removeRate" onClick={() => onRemove(hourPayment.id)}>X</button>
     </div>
   );
 };

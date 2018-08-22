@@ -7,9 +7,9 @@ import workedDayActions from "../../actions/workedDay";
 const WorkedDay = props => {
   return (
     <div className="container">
-      <h5>Date: {props.workedDay.day}</h5>
-      <h5>{props.workedDay.paid || "not"} paid</h5>
-      <Link
+      <span><b>Date:</b> {props.workedDay.day}</span>
+      <span>{props.workedDay.paid || "not"} <b>paid</b></span>
+      <Link className="button-group-horizontal"
         to={`/project/${props.projectId}/Monthly/${
           props.monthPaymentId
         }/workedDay/${props.workedDay.id}/update`}
@@ -17,7 +17,7 @@ const WorkedDay = props => {
         <button>Update</button>
       </Link>
       <button onClick={props.removeWorkedDay}>Delete</button>
-    </div>
+    </div> 
   );
 };
 

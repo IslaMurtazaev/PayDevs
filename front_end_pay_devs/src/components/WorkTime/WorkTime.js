@@ -5,18 +5,20 @@ const WorkTimeItem = props => {
   const { projectId, hourPaymentId, workTime, onRemove } = props;
   return (
     <div className="container">
-      <h5>Start Work: {new Date(workTime.start_work).toLocaleString()}</h5>
-      <h5>End Work: {new Date(workTime.end_work).toLocaleString()}</h5>
-      <h5>{workTime.paid || "not"} paid</h5>
-      <Link
+    <li>
+      <span><b>Start Work:</b> {new Date(workTime.start_work).toLocaleString()} </span>
+      <span><b>End Work:</b> {new Date(workTime.end_work).toLocaleString()}</span>
+      <span>{workTime.paid || "not"} <b>paid</b></span>
+      <Link className="button-group-horizontal"
         to={`/project/${projectId}/Hourly/${hourPaymentId}/workTime/${
           workTime.id
-        }/update`}
+        }/update`}  
       >
         <button>Update</button>
       </Link>
       <button onClick={() => onRemove(workTime.id)}>Delete</button>
-    </div>
+      </li>
+    </div> 
   );
 };
 

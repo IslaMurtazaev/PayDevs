@@ -49,7 +49,7 @@ class ProjectItem extends Component {
         <h4><span className="property">Status:</span>{project.status ? "" : "not"} active</h4>
         </div>
 
-        <div  className="btn-group-horizontal ">
+        <div  className="btn-group-horizontal">
 
         <button type = "button" className="btn btn-success btn-lg"
           onClick={() => this.props.getTotal(project.id)}>

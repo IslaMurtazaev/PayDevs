@@ -5,7 +5,7 @@ import DateTimePicker from "react-datetime-picker";
 
 const ProjectInput = ({ values, errors, touched, setFieldValue }) => {
   return (
-    <Form className="form-group" style={{ margin: 10 }}>
+    <Form className="form-group" >
       <label>Title: </label>
       <div>{touched.title && errors.title && <p>{errors.title}</p>}</div>
       <Field

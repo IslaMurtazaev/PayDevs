@@ -15,7 +15,7 @@ class Tasks extends Component {
 
     return (
       <div>
-        {tasks.length > 0 && <h2>Your tasks</h2>}
+        {tasks.length > 0 && <h3 className="taskHeader">Your tasks</h3>}
 
         <div>
           {tasks.map(task => (
@@ -28,7 +28,6 @@ class Tasks extends Component {
           ))}
         </div>
 
-        <hr />
 
         <CreateTask projectId={project.id} />
       </div>

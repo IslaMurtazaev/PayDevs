@@ -7,7 +7,7 @@ const MonthRate = props => {
     <div>
       <Link to={`${history.location.pathname}/Monthly/${props.monthPayment.id}/workedDay`}>
         <span className="rate">
-          {props.rate}
+          {props.monthPayment.rate}
           /per day _____
         </span>
       </Link>

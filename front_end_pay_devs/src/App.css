@@ -1,10 +1,10 @@
 
 h2{
   height: 20px;
-  font-size: 40px;
+  font-size: 30px;
   font-weight: bold;
   margin-top: 40px;
-  margin-left: 480px;
+  margin-left: 410px;
   color: rgb(36, 36, 53);
   padding-block-start: 1px;
   padding-left: 3%;
@@ -224,20 +224,20 @@ p {
   border-top-right-radius: 4px;
   margin-top: 45px;
   padding-block-start: 0px;
-
 }
 
 h1 {
   color: rgba(0, 0, 0, 0.719);
   text-align: center;
   padding-block-start: 20px;
-  padding-block-end: 20px;
+  padding-block-end: 10px;
   text-shadow: 1px 1px 1px;
   font-size: 40px;
 }
 
 .container {
   margin-top: 25px;
+  font-size: 12px;
 }
 
 
@@ -304,9 +304,10 @@ margin-top: -25px;
   margin-left: 30px;
   margin-right: 30px;
   margin-top: 30px;
+
 }
 
-.monthlyHeader {
+.rateHeader {
   font-weight: 800;
   color: rgba(1, 1, 12, 0.829)
 }
@@ -326,3 +327,81 @@ margin-top: -25px;
   box-shadow: 0px 0px 0px 0px;
 }
 
+.rate-form {
+  height: 100px;
+  width: 100px;
+}
+
+.task-form {
+  position: relative;
+  left: 0px;
+  margin-top: 30px;
+  border-radius: 5px;
+  background-color: #dbe2ec;
+  padding-left: 4%;
+  padding-right: 6%;
+  height: 460px;
+  width: 530px;
+  box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2), 0 10px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+.taskHeader {
+  font-weight: 800;
+  color: rgba(24, 24, 26, 0.664);
+  text-shadow: 1px  0px rgba(0, 0, 0, 0.582);
+}
+
+.worked-day-form {
+  position: relative;
+  top: 15px;
+  margin-top: 70px;
+  border-radius: 5px;
+  background-color: #dbe2ec;
+  padding-left: 4%;
+  padding-right: 6%;
+  height: 265px;
+  width: 530px;
+  box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2), 0 10px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+.worked-time-form {
+  position: relative;
+  top: 15px;
+  margin-top: 10px;
+  border-radius: 5px;
+  background-color: #dbe2ec;
+  padding-left: 4%;
+  padding-right: 6%;
+  height: 365px;
+  width: 530px;
+  box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2), 0 10px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+.worked {
+  border-block-end: 3px dotted;
+  padding-block-end: 30px;
+  width: 80px;
+}
+
+.tasks {
+  border-block-end: 3px dotted;
+  padding-block-end: 30px;
+  width: 680px;
+}
+
+h3{
+  padding-left: 30px;
+}
+
+.button-group-horizontal {
+flex-direction: row;
+margin-left: 1%;
+padding-top: 0px;
+padding: 5px 25px 1px 1px; 
+}
+
+
+
+  .updateButton {
+    padding-right: 30px; 
+  }

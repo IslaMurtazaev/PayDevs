@@ -13,7 +13,7 @@ class MonthRates extends Component {
   render() {
     return (
       <div>
-        {this.props.monthPayments.length > 0 && <h3 className="monthlyHeader">Select one of your current rates:</h3>}
+        {this.props.monthPayments.length > 0 && <h3 className="rateHeader">Select one of your current rates:</h3>}
         <div>
           {this.props.monthPayments.map(monthPayment => (
             <MonthRate
@@ -26,7 +26,6 @@ class MonthRates extends Component {
           ))}
         </div>
 
-        <hr />
 
         <CreateMonthPaymentForm projectId={this.props.projectId}  />
       </div>

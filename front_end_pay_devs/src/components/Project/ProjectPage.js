@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { projectActions } from "../../actions/project";
-import logo from '../icons/favicon.png';
 
 class ProjectPage extends Component {
   componentDidMount() {

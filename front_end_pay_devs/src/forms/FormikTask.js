@@ -4,7 +4,7 @@ import * as Yup from "yup";
 
 const TasklyInput = ({ values, errors, touched, setValues }) => {
   return (
-    <Form className="form-group" style={{ margin: 10 }}>
+    <Form className="task-form">
       <label>Title: </label>
       <div>{touched.title && errors.title && <p>{errors.title}</p>}</div>
       <Field

@@ -15,7 +15,7 @@ class HourPayments extends Component {
 
     return (
       <div>
-        { hourPayments.length > 0 && <h3>Select one of your current rates:</h3> }
+        { hourPayments.length > 0 && <h3 className="rateHeader">Select one of your current rates:</h3> }
         <div>
           {hourPayments.map(hourPayment => (
             <HourlyRate
@@ -26,8 +26,6 @@ class HourPayments extends Component {
             />
           ))}
         </div>
-
-        <hr />
 
         <CreateHourPayment projectId={project.id} />
       </div>

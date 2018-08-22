@@ -3,9 +3,9 @@ import { withFormik, Form, Field } from "formik";
 
 const HourPaymentInput = ({ errors, touched }) => {
   return (
-    <Form className="form-group" style={{ margin: 10 }}>
+    <Form className="rate-form">
       <div>{touched.rate && errors.rate && <p>{errors.rate}</p>}</div>
-      <label>Rate: </label>
+      <label> New rate: </label>
       <div />
       <Field
         name="rate"

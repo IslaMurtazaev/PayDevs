@@ -3,16 +3,20 @@ import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 
 const MonthPaymentInput = ({ errors, touched }) => {
+
+
+
   return (
-    <Form className="form-group" style={{ margin: 10 }}>
+    <Form className="rate-form">
       <div>
         {touched.rate && errors.rate && <p>error.rate</p>}
         <label>
-          Rate:
+          New rate:
           <Field
             name="rate"
             type="number"
             className="form-control"
+            
             placeholder={"rate..."}
           />
         </label>

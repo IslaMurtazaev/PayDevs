@@ -7,7 +7,7 @@ import workTimeActions from "../../actions/workTime";
 const UpdateWorkTimeForm = props => {
   return (
     <div>
-      <h1>Update Work Time</h1>
+      <h2>Update Work Time</h2>
       <FormikWorkTime
         id={props.workTime.id}
         start_work={props.workTime.start_work}

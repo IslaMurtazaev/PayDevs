@@ -10,17 +10,18 @@ class TaskItem extends Component {
     const { task, projectId } = this.props;
 
     return (
-      <div>
-        <h4>{task.title}</h4>
-        <h4>Description: {task.description}</h4>
-        <h4>Price: {task.price}</h4>
-        <button>
-          <Link to={`/project/${projectId}/Taskly/${task.id}/update`}>
+      <div className="tasks">
+        <h4><b>Title:</b>{task.title}</h4>
+        <h4><b>Description:</b> {task.description}</h4>
+        <h4><b>Price:</b> {task.price}</h4>
+        <button type="button">
+          <Link className="updateButton" to={`/project/${projectId}/Taskly/${task.id}/update`}>
             Update
           </Link>
         </button>
-        <button onClick={this.onClickDelete.bind(this, task.id)}>Delete</button>
-      </div>
+        <button type="button"  
+         onClick={this.onClickDelete.bind(this, task.id)}>Delete</button>
+        </div>
     );
   }
 }

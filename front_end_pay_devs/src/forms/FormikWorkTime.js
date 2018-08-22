@@ -4,7 +4,7 @@ import DateTimePicker from "react-datetime-picker";
 
 const WorkInput = ({ values, errors, touched, setFieldValue }) => {
   return (
-    <Form className="form-group" style={{ margin: 10 }}>
+    <Form className="worked-time-form" >
       <label>Start-work: </label>
       <div>
         {touched.start_date && errors.start_date && <p>{errors.start_date}</p>}

@@ -13,8 +13,8 @@ class WorkedDays extends Component {
   render() {
     return (
       <div>
-        {this.props.workedDays.length > 0 && <h3>Your Worked Days</h3>}
-        <div>
+        {this.props.workedDays.length > 0 && <h3><b>Your Worked Days</b></h3>}
+        <div className="worked">
           {this.props.workedDays.map(workedDay => (
             <WorkedDay
               key={workedDay.id}
@@ -24,8 +24,6 @@ class WorkedDays extends Component {
             />
           ))}
         </div>
-
-        <hr />
 
         <CreateWorkedDayForm projectId={+this.props.match.params.id} monthPaymentId={+this.props.match.params.monthPaymentId} />
       </div>

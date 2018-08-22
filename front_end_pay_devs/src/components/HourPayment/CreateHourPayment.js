@@ -12,7 +12,6 @@ class CreateHourPayment extends Component {
 
     return (
       <div>
-        <h4>Create a new hour rate</h4>
         <FormikHourPayment
           projectId={project.id}
           onSubmit={this.props.createHourPayment}
