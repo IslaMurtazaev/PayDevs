@@ -10,7 +10,8 @@ const NavBar = () => {
         <div className="navbar">
             <img src={logo} />          
             <span><Link  className="paydevs1" to= '/'>PayDevs</Link></span>
-            {authHeader() ? <Link className="link" to="/login">Logout</Link> : <Link className="link" to="/sign_up">Sign up</Link>}
+            {authHeader() ? <Link className="link" to="/sign_up">Sign up</Link> : <Link className="link" to="/login">Login</Link>}
+            <Link className="link" to="/login">Logout</Link>
             {}
         </div>
     );

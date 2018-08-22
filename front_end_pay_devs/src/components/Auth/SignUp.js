@@ -39,7 +39,7 @@ class SignUp extends Component {
     const error = this.props.error;
     return (
       <div>
-        <h2>Sign Up</h2>
+        <h2 className="authHeader">Sign Up</h2>
         <div className="signUpForm">
         <form name="form" onSubmit={this.handleSubmit}>
           {error && <div>{error.error.message}</div>}
@@ -73,10 +73,8 @@ class SignUp extends Component {
               onChange={this.handleChange}
             />
            </div>
-          <div className="form-group">
             <button className="btn btn-primary">Sign Up</button>
 
-            </div>
           </form>
         </div> 
 

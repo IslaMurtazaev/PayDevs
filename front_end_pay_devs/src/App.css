@@ -12,6 +12,18 @@ h2{
   text-shadow: 1px 1px 3px;
 
 }
+.authHeader {
+  height: 20px;
+  font-size: 40px;
+  font-weight: bold;
+  margin-top: 40px;
+  margin-left: 470px;
+  color: rgb(36, 36, 53);
+  padding-block-start: 1px;
+  padding-left: 3%;
+  padding-block-end: 5px;
+  text-shadow: 1px 1px 3px;
+}
 
 body {
   padding-block-end: 2%;
@@ -33,7 +45,7 @@ button{
 
 
 .signUpForm {
-  margin-left: 35%;
+  margin-left: 27%;
   margin-top: 55px;
   border-radius: 5px;
   background-color: #dbe2ec;
@@ -41,7 +53,7 @@ button{
   padding-left: 4%;
   padding-right: 5%;
   height: 370px;
-  width: 350px;
+  width: 500px;
   box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.322), 0 40px 40px 0 rgba(0, 0, 0, 0.199);
 }
 
@@ -112,7 +124,7 @@ label {
 }
 
 .paydevs1 {
-  padding-right: 780px; 
+  padding-right: 700px; 
   font-size: 45px;
   font-family: "Times New Roman", Times, serif;
   font-weight: 700;
@@ -380,7 +392,7 @@ margin-top: -25px;
 .worked {
   border-block-end: 3px dotted;
   padding-block-end: 30px;
-  width: 80px;
+  width: 680px;
 }
 
 .tasks {
