@@ -1,8 +1,11 @@
 import { projectService } from "../service/project";
 import { ProjectConstant } from "../constants/project";
 import { history } from "../index";
+import {handleError} from "../service/helpers"
+
 
 export const projectActions = {
+  get,
   getAll,
   clearAll,
   remove,
@@ -10,6 +13,14 @@ export const projectActions = {
   update,
   getTotal
 };
+
+function get(projectId) {
+  return dispatch => {
+    projectService.get(projectId).then(project => {
+      dispatch({ type: ProjectConstant.GET_PROJECT, project });
+    });
+  };
+}
 
 function getAll() {
   return dispatch => {
@@ -28,7 +39,7 @@ function remove(id) {
     projectService.remove(id).then(() => {
       dispatch({ type: ProjectConstant.DELETE_PROJECT });
       history.push("/");
-    });
+    }).catch(error => handleError(error));
   };
 }
 
@@ -40,9 +51,7 @@ function create(project) {
         dispatch({ type: ProjectConstant.CREATE_PROJECT, project });
         history.push(`/project/${project.id}`);
       })
-      .catch(error => {
-        alert(error);
-      });
+      .catch(error => handleError(error));
   };
 }
 
@@ -54,9 +63,7 @@ function update(project) {
         dispatch({ type: ProjectConstant.UPDATE_PROJECT, project });
         history.push(`/project/${project.id}`);
       })
-      .catch(error => {
-        alert(error);
-      });
+      .catch(error => handleError(error));
   };
 }
 

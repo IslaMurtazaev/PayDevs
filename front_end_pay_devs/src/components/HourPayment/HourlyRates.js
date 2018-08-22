@@ -7,11 +7,11 @@ import CreateHourPayment from "./CreateHourPayment";
 
 class HourPayments extends Component {
   componentDidMount() {
-    this.props.getAllHourPayments(this.props.project.id);
+    this.props.getAllHourPayments(this.props.projectId);
   }
 
   render() {
-    const { hourPayments, project, removeHourPayment } = this.props;
+    const { hourPayments, projectId, removeHourPayment } = this.props;
 
     return (
       <div>
@@ -20,15 +20,15 @@ class HourPayments extends Component {
           {hourPayments.map(hourPayment => (
             <HourlyRate
               key={hourPayment.id}
-              projectId={project.id}
+              projectId={projectId}
               hourPayment={hourPayment}
               onRemove={removeHourPayment}
             />
           ))}
         </div>
 
-        <CreateHourPayment projectId={project.id} />
-      </div>
+        <CreateHourPayment projectId={projectId} />
+    </div>
     );
   }
 }

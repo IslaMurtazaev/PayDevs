@@ -1,33 +1,23 @@
-import React, { Component } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import FormikHourPayment from "../../forms/FormikHourPayment";
 import { hourPaymentActions } from "../../actions/hourPayment";
-import { Redirect } from "react-router-dom";
 
-class CreateHourPayment extends Component {
-  render() {
-    let project = this.props.project;
-    if (!Object.keys(project).length)
-      return <Redirect from="/project/:id" to="/" />;
 
-    return (
-      <div>
-        <FormikHourPayment
-          projectId={project.id}
-          onSubmit={this.props.createHourPayment}
-        />
-      </div>
-    );
-  }
-}
-
-const mapStateToProps = (state, ownProps) => {
-  let project = state.projects.find(
-    project => project.id === ownProps.projectId
+const CreateHourPayment = props => {
+  return (
+    <div>
+      <FormikHourPayment
+        projectId={props.projectId}
+        onSubmit={props.createHourPayment}
+      />
+    </div>
   );
+};
+
+const mapStateToProps = state => {
   return {
     hourPayment: state.hourPayment,
-    project
   };
 };
 

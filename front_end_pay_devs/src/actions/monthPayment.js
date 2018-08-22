@@ -1,6 +1,7 @@
 import monthPaymentActionTypes from "../constants/monthPayment";
 import monthPaymentService from "../service/monthPayment";
-import { history } from "../index";
+import {handleError} from "../service/helpers"
+
 
 export default {
   getAll,
@@ -20,7 +21,10 @@ function create(projectId, values) {
   return dispatch => {
     monthPaymentService.create(projectId, values).then(monthPayment => {
       dispatch({ type: monthPaymentActionTypes.CREATE, monthPayment })
-    })
+    }).catch(error=>{
+      handleError(error);
+    });
+    
   }
 }
 
@@ -28,6 +32,6 @@ function remove(monthPaymentId) {
   return dispatch => {
     monthPaymentService.remove(monthPaymentId).then(response => {
       dispatch({ type: monthPaymentActionTypes.REMOVE, monthPaymentId })
-    })
+    }).catch(error => handleError(error))
   }
 }

@@ -35,7 +35,7 @@ const FormikWorkedDay = withFormik({
   mapPropsToValues({ id, day, paid }) {
     return {
       id: id || null,
-      day: day || null,
+      day: day || "",
       paid: paid === true ? true : false
     };
   },

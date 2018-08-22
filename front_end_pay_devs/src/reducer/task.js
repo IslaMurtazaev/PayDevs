@@ -18,7 +18,9 @@ const initialStateTasks = [];
 export function tasks(state = initialStateTasks, action) {
   switch(action.type) {
     case TaskConstant.CREATE_TASK:
-      return state.concat([action.task]);
+      return [...state, action.task];
+    case TaskConstant.UPDATE_TASK:
+      return [...(state.filter(task=>task.id !== action.task.id)), action.task];
     case TaskConstant.GET_ALL_TASK:
       return action.tasks;
     case TaskConstant.DELETE_TASK:

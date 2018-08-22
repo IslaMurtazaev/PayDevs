@@ -1,6 +1,8 @@
 import { workTimeService } from "../service/workTime";
 import { workTimeConstant } from "../constants/workTime";
 import { history } from "../index";
+import {handleError} from "../service/helpers"
+
 
 export default {
   create,
@@ -16,9 +18,7 @@ function create(values) {
       .then(workTime => {
         dispatch({ type: workTimeConstant.CREATE, workTime });
       })
-      .catch(error => {
-        alert(error);
-      });
+      .catch(error => handleError(error));
   };
 }
 
@@ -39,7 +39,7 @@ function update(projectId, hourPaymentId, workTimeId, values) {
         history.push(
           `/project/${projectId}/Hourly/${hourPaymentId}/workTime`
         );
-      });
+      }).catch(error => handleError(error));
     };
   }
 
@@ -47,6 +47,6 @@ function remove(workTimeId) {
   return dispatch => {
     workTimeService.remove(workTimeId).then(workTime => {
       dispatch({ type: workTimeConstant.REMOVE, workTime });
-    });
+    }).catch(error => handleError(error));
   };
 }
