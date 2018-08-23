@@ -31,7 +31,13 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "enzyme": "^3.4.4",
+    "enzyme-adapter-react-16": "^1.2.0",
+    "enzyme-to-json": "^3.3.4",
+    "jest": "^23.5.0",
+    "react-addons-test-utils": "^15.6.2",
     "react-svg": "^5.0.17",
-    "react-svg-loader": "^2.1.0"
+    "react-svg-loader": "^2.1.0",
+    "react-test-renderer": "^16.4.2"
   }
 }
