@@ -4,8 +4,8 @@ import {shallow} from 'enzyme'
 
 describe("<TaskItem />", () =>{
     it("renders 1 <TaskItem />", () =>{
-        const component = shallow(<TaskItem/>);
-        console.log(component.find('button').className)
-        // expect(component).toHaveLength(1);
+        const task = {title: "Task number 1", description: "Test a ", price: 500}
+        const component = shallow(<TaskItem task={task}/>);
+        expect(component).toHaveLength(1);
     });
 });

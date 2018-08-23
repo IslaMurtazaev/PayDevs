@@ -45,7 +45,7 @@
   },
   "jest": {
     "collectCoverage": true,
-    "coverageDirectory": "D:/Projects/python/it_attractor/PayDevs/PayDevs/front_end_pay_devs",
+    "coverageDirectory": "./test/coverage",
     "coverageReporters": [
       "text",
       "html"
