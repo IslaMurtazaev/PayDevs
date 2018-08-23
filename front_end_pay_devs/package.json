@@ -27,10 +27,13 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "jest",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "babel-jest": "^23.4.2",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
     "enzyme": "^3.4.4",
     "enzyme-adapter-react-16": "^1.2.0",
     "enzyme-to-json": "^3.3.4",
@@ -39,5 +42,15 @@
     "react-svg": "^5.0.17",
     "react-svg-loader": "^2.1.0",
     "react-test-renderer": "^16.4.2"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "D:/Projects/python/it_attractor/PayDevs/PayDevs/front_end_pay_devs",
+    "coverageReporters": [
+      "text",
+      "html"
+    ],
+    "setupFiles": ["./test/setup/jestsetup.js"]
+    
   }
 }
