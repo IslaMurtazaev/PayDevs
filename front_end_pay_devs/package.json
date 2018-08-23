@@ -45,12 +45,12 @@
   },
   "jest": {
     "collectCoverage": true,
-    "coverageDirectory": "./test/coverage",
+    "coverageDirectory": "./test_config/coverage",
     "coverageReporters": [
       "text",
       "html"
     ],
-    "setupFiles": ["./test/setup/jestsetup.js"]
+    "setupFiles": ["./test_config/setup/jestsetup.js"]
     
   }
 }
