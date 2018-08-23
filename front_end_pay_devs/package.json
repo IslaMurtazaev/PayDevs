@@ -37,6 +37,7 @@
     "enzyme": "^3.4.4",
     "enzyme-adapter-react-16": "^1.2.0",
     "enzyme-to-json": "^3.3.4",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^23.5.0",
     "react-addons-test-utils": "^15.6.2",
     "react-svg": "^5.0.17",
@@ -50,7 +51,14 @@
       "text",
       "html"
     ],
-    "setupFiles": ["./test_config/setup/jestsetup.js"]
-    
+    "setupFiles": [
+      "./test_config/setup/jestsetup.js"
+    ],
+    "testPathIgnorePatterns": [
+      "./test_config/setup/"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less)$": "identity-obj-proxy"
+    }
   }
 }
