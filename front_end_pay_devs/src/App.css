@@ -403,7 +403,6 @@ margin-top: -25px;
   width: 300px;
   height: 260px;
   padding-top: 20px;
-  padding-left: 25px;
   padding-left: 20px;
 
   background-color: #dbe2ec9d;
@@ -412,6 +411,8 @@ margin-top: -25px;
   margin-left: 45px;
   margin-top: 10px;
   display: inline-block;
+  white-space: nowrap;
+  overflow-x: auto;
 }
 
 .workedTime {
@@ -424,6 +425,7 @@ margin-top: -25px;
   margin-left: 45px;
   margin-top: 20px;
   display: inline-block;
+
 }
 
 h3{
@@ -443,3 +445,5 @@ h3{
 .reactLink {
   color: #ffffff;
 }
+
+
