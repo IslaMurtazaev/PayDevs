@@ -3,12 +3,12 @@
 <head>
     <title>Code coverage report for src/components/Task/TaskItem.js</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../prettify.css" />
-    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="stylesheet" href="..\..\..\prettify.css" />
+    <link rel="stylesheet" href="..\..\..\base.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../sort-arrow-sprite.png);
+            background-image: url(..\..\..\sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -16,35 +16,35 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../../../index.html">All files</a> / <a href="index.html">src/components/Task</a> TaskItem.js
+      <a href="..\..\..\index.html">All files</a> / <a href="index.html">src/components/Task</a> TaskItem.js
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">66.67% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>2/3</span>
+        <span class='fraction'>3/3</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">50% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>1/2</span>
+        <span class='fraction'>2/2</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">50% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>1/2</span>
+        <span class='fraction'>2/2</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">66.67% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>2/3</span>
+        <span class='fraction'>3/3</span>
       </div>
     </div>
     <p class="quiet">
       Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
     </p>
   </div>
-  <div class='status-line medium'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -76,18 +76,20 @@
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -109,9 +111,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { Component } from "react";
 import { Link } from "react-router-dom";
 &nbsp;
+&nbsp;
 class TaskItem extends Component {
-<span class="fstat-no" title="function not covered" >  on</span>ClickDelete(taskId) {
-<span class="cstat-no" title="statement not covered" >    this.props.onDelete(taskId);</span>
+  onClickDelete(taskId) {
+    this.props.onDelete(taskId);
   }
 &nbsp;
   render() {
@@ -119,10 +122,10 @@ class TaskItem extends Component {
 &nbsp;
     return (
       &lt;div className="tasks"&gt;
-        &lt;h4&gt;&lt;b&gt;Title:&lt;/b&gt; {task.title}&lt;/h4&gt;
-        &lt;h4 className="taskTitle"&gt;&lt;b&gt;Description:&lt;/b&gt; {task.description}&lt;/h4&gt;
-        &lt;h4&gt;&lt;b&gt;Price:&lt;/b&gt; {task.price}&lt;/h4&gt;
-        &lt;h4&gt;&lt;b&gt;{task.completed ? <span class="branch-0 cbranch-no" title="branch not covered" >"Completed" </span>: "Uncompleted"}&lt;/b&gt;&lt;/h4&gt;
+        &lt;h4 className="taskTitle"&gt;&lt;b&gt;Title:&lt;/b&gt; {task.title}&lt;/h4&gt;
+        &lt;h4 className="taskDescription"&gt;&lt;b&gt;Description:&lt;/b&gt; {task.description}&lt;/h4&gt;
+        &lt;h4 className="taskPrice"&gt;&lt;b&gt;Price:&lt;/b&gt; {task.price}&lt;/h4&gt;
+        &lt;h4 className="taskCompleted"&gt;&gt;&lt;b&gt;{task.completed ? "Completed" : "Uncompleted"}&lt;/b&gt;&lt;/h4&gt;
         &lt;Link className="reactLink" to={`/project/${projectId}/Taskly/${task.id}/update`}&gt;
           &lt;button className="updateButton btn btn-warning" type="button"&gt;
             Update
@@ -142,10 +145,10 @@ export default TaskItem;
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Aug 23 2018 16:23:54 GMT+0600 (+06)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Aug 24 2018 15:59:46 GMT+0600 (Центральная Азия (зима))
 </div>
 </div>
-<script src="../../../prettify.js"></script>
+<script src="..\..\..\prettify.js"></script>
 <script>
 window.onload = function () {
         if (typeof prettyPrint === 'function') {
@@ -153,7 +156,7 @@ window.onload = function () {
         }
 };
 </script>
-<script src="../../../sorter.js"></script>
-<script src="../../../block-navigation.js"></script>
+<script src="..\..\..\sorter.js"></script>
+<script src="..\..\..\block-navigation.js"></script>
 </body>
 </html>
