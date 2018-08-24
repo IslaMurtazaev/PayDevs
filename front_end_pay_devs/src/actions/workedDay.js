@@ -48,7 +48,7 @@ function update(projectId, monthPaymentId, workedDayId, values) {
       dispatch({ type: workedDayActionTypes.UPDATE_WORKED_DAY, workedDay });
       history.push(
         `/project/${projectId}/Monthly/${monthPaymentId}/workedDay`
-      ).catch(error => handleError(error));
-    });
+      )
+    }).catch(error => handleError(error));;
   };
 }

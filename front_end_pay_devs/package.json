@@ -40,9 +40,11 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^23.5.0",
     "react-addons-test-utils": "^15.6.2",
+    "react-router-enzyme-context": "^1.2.0",
     "react-svg": "^5.0.17",
     "react-svg-loader": "^2.1.0",
-    "react-test-renderer": "^16.4.2"
+    "react-test-renderer": "^16.4.2",
+    "redux-mock-store": "^1.5.3"
   },
   "jest": {
     "collectCoverage": true,
@@ -58,7 +60,8 @@
       "./test_config/setup/"
     ],
     "moduleNameMapper": {
-      "\\.(css|less)$": "identity-obj-proxy"
+      "\\.(css|less)$": "identity-obj-proxy",
+      "\\.(png|jpg)$": "./test_config/mocks/fileMock"
     }
   }
 }
