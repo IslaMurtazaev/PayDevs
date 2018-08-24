@@ -30,7 +30,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       workedDayActions.update(
         +ownProps.match.params.id,
         +ownProps.match.params.monthPaymentId,
-        values.id,
+        +ownProps.match.params.workedDayId,
         values
       )
     )

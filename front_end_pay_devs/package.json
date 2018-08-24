@@ -48,7 +48,8 @@
     "react-router-enzyme-context": "^1.2.0",
     "react-svg": "^5.0.17",
     "react-svg-loader": "^2.1.0",
-    "react-test-renderer": "^16.4.2"
+    "react-test-renderer": "^16.4.2",
+    "redux-mock-store": "^1.5.3"
   },
   "jest": {
     "collectCoverage": true,
@@ -65,7 +66,7 @@
     ],
     "moduleNameMapper": {
       "\\.(css|less)$": "identity-obj-proxy",
-      "\\.(jpg|jpeg|png|svg)$": "./src/__mock__/fileMock.js"
+      "\\.(png|jpg)$": "./test_config/mocks/fileMock"
     }
   }
 }
