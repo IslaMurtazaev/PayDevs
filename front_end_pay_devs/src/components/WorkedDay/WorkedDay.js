@@ -17,7 +17,7 @@ const WorkedDay = props => {
        >
         <button className="updateButton btn btn-warning" type="button">Update</button>
        </Link>
-       <button type="button" className="btn btn-danger" onClick={props.removeWorkedDay}>Delete</button>
+       <button type="button" className="deleteButton btn btn-danger" onClick={props.removeWorkedDay}>Delete</button>
       </div>
     </div> 
   );

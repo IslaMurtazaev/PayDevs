@@ -20,7 +20,7 @@ class TaskItem extends Component {
             Update
           </button>
         </Link>
-        <button type="button" className="btn btn-danger"
+        <button type="button" className="deleteButton btn btn-danger"
          onClick={this.onClickDelete.bind(this, task.id)}>Delete</button>
         </div>
     );

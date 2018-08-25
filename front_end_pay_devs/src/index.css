@@ -1,5 +1,453 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+
+
+h2{
+    height: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 40px;
+    margin-left: 410px;
+    color: rgb(36, 36, 53);
+    padding-block-start: 1px;
+    padding-left: 3%;
+    padding-block-end: 5px;
+    text-shadow: 1px 1px 3px;
+  
+  }
+
+h1 {
+    font-size: 100%;
+    width: 40%;
+    margin-left: 30%;    
+    margin-top: 3%
 }
+  
+  
+  .authHeader {
+    font-size: 280%;
+    font-weight: bold;
+    margin-top: 4%;
+    margin-bottom: 20px;
+    margin-left: 35%;
+    color: rgb(36, 36, 53);
+    padding-left: 3%;
+    padding-bottom: 1%;
+    text-shadow: 1px 1px 3px;
+  }
+  
+  body {
+    padding-block-end: 2%;
+    background-image: radial-gradient(rgb(95, 184, 243), 
+    rgb(73, 73, 71));
+    background-size: 100%;
+    background-attachment: fixed;
+    width: 100%;
+  }
+  
+  .signUpForm {
+    margin-left: 29%;
+    margin-top: 50px;
+    border-radius: 5px;
+    background-color: #dbe2ec;
+    padding-top: 1%;
+    padding-left: 4%;
+    padding-right: 5%;
+    height: 340px;
+    width: 390px;
+    box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.322), 0 40px 40px 0 rgba(0, 0, 0, 0.199);
+  }
+  
+    .loginForm {
+    margin-left: 27%;
+    margin-top: 50px;
+    border-radius: 5px;
+    background-color: #dbe2ec;
+    padding-top: 1%;
+    padding-left: 4%;
+    padding-right: 3%;
+    height: 280px;
+    width: 390px;
+    box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.2), 0 40px 40px 0 rgba(0, 0, 0, 0.19);
+  }
+  
+  input:hover {
+    border: 2px solid rgba(121, 192, 243, 0.582);
+    border-radius: 4px;
+  }
+  
+  input {
+    padding-left: 1%;
+    padding-right: 2%;
+  }
+  
+  
+  .link {
+    position: relative;
+    text-decoration: none;
+    font-size: 120%;
+    height: 5%;
+    color: white;
+    background-color: rgb(59, 137, 240);
+    width: 10%;
+    padding: 0.5% 0.5%;
+    margin-left: 1%;
+    text-align: center;
+    display: inline-block;
+    border-radius: 5px;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.19);
+  }
+  
+  
+  
+  
+  label {
+    padding-top: 5%;
+    margin-right: 20%;
+  }
+  
+  .navbar {
+    margin-left: 0px;
+    margin-top: -0.01%;;
+    background-color:  #e7ecf0cc;
+    padding-left: 2%;
+    width: 100%;
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.247), 0 10px 10px 0 rgba(0, 0, 0, 0.19);
+  }
+  
+  .paydevs {
+    padding-right: 53%; 
+    font-size: 250%;
+    font-family: "Times New Roman", Times, serif;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.842);
+    text-shadow: 1px 1px 1px rgba(24, 23, 23, 0.849);
+    text-decoration: none;
+    color: inherit;
+    padding-block-end: 0.01%;
+    padding-block-start: 1%;
+  }
+  
+  a:hover {
+    color: rgba(0, 0, 0, 0.733);
+    text-shadow: 0px 0px 1px rgba(24, 23, 23, 0.849);
+    text-decoration: none;
+  }
+  
+  
+  img {
+    margin-block-end: 0.1%;
+    margin-top: -1%;
+    padding-right: 1%;
+  }
+  
+  span {
+    font-size: 140%;
+    margin-right: 1%;
+    margin-left: 1%;
+  }
+  
+  .projectLink {
+    color: rgba(8, 12, 15, 0.87);
+    font-size: 220%;
+  }
+  
+  .user {
+    height: 70px;
+  }
+  
+  .username {
+    margin-left: 40%;
+    font-size: 300%;
+    padding-block-start: 1%;
+    font-weight: 200;
+    color: rgba(15, 15, 39, 0.842);
+    font-family: Arial, Helvetica, sans-serif;
+    text-shadow: 1px 1px 1px;
+  
+    
+  }
+  
+  .email {
+    margin-left: 40%;
+    font-weight: 200;
+    color: rgba(7, 7, 26, 0.829);
+    font-size: 20px;
+  }
+  
+  
+  
+  
+  ul li a {
+    display: inline;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 900;
+  }
+  
+  
+   .projectList {
+    width: 84.5%;
+    margin-left: 7%;
+    padding-block-start: 1%;
+    border-radius: 4px;
+    border-block-start: 1px solid rgba(5, 55, 99, 0.63);
+    background-color:#dbe2ec;
+    box-shadow: 0 1px 20px 0 rgba(0, 0, 0, 0.438), 0 5px 1px 0 rgba(0, 0, 0, 0.288);
+    border-top-right-radius: 0px;
+  }
+  
+  .projectInfo {
+    border-block-end: 1px solid rgba(0, 0, 0, 0.425);
+    box-shadow:  0px 1px #0a1d3334;
+    width: 96%;
+  }
+  
+  p {
+    font-size: 100%;
+    text-align: left;
+  }
+  
+  .newProjectLink {
+    font-size: 160%;
+    text-decoration: none;
+    color: white;
+    background-color: rgba(13, 96, 138, 0.993);
+    width: 12.8%;
+    padding: 0.5% 1%;
+    text-align: center;
+    display: inline-block;
+    margin-left: 78.6%;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    margin-top: 2%;
+  }
+  
+  h1 {
+    color: rgba(0, 0, 0, 0.719);
+    text-align: center;
+    padding-block-start: 20px;
+    padding-block-end: 10px;
+    text-shadow: 1px 1px 1px;
+    font-size: 40px;
+  }
+  
+  .container {
+    margin-top: 25px;
+    margin-left: 2%;
+    margin-right: 5%;
+
+  }
+  
+  
+  
+  
+  .form-control {
+    width: 100%;
+    }
+
+  .day {
+    width: 120%;
+  }
+  
+  .form-group {
+    position: relative;
+    left: 26%;
+    margin-top: 1%;
+    border-radius: 5px;
+    background-color: #dbe2ec;
+    padding-left: 4%;
+    padding-right: 6%;
+    height: 80%;
+    width: 50%;
+    box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2), 0 10px 10px 0 rgba(0, 0, 0, 0.19);
+  }
+  
+  .dateTime {
+    margin: 10px;
+  }
+  
+  .btn  {
+  margin-left: 1%;
+  margin-bottom: 5%;
+  margin-top: 7%;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.568);
+  width: 20%;
+  font-size: 100%;
+  overflow: hidden; 
+}
+  
+  .projectTitle {
+    margin-left: 25%;
+    padding-top: 1%;
+    text-decoration:  underline dotted rgba(168, 172, 175, 0.212);
+  }
+  
+  .properties {
+    background-color: rgba(250, 235, 215, 0.507);
+    width: 65%;
+    border-radius: 5px;
+    padding: 1% 2%;
+    box-shadow: 1px 1px 1px ;
+    height: 60%;
+    margin-left: 15%;
+    white-space: nowrap;
+    overflow-x: auto;
+  }
+  
+  .property {
+    font-weight: 800;
+    padding: 2%;
+  }
+  
+  .btn-group {
+  flex-direction: row;
+  margin-left: 53%;
+  width: 43.5%;
+  overflow: hidden;
+  }
+
+  .updateButton, .deleteButton{
+    width: 33%;
+    height: 30px;
+    font-size: 110%;
+  }
+
+  .submit {
+    width: 55%;
+    margin-top: 20px;
+    margin-left: 0%;
+    padding-top: 1%;
+    padding-left: 4%;
+  }
+  
+  .session {
+    border-block-start: 4px dotted #3a3c3fd0;
+    margin-left: 3%;
+    margin-right: 5%;
+    margin-top: 4%;
+    
+  
+  }
+  
+  
+  
+  .rate {
+    color: rgba(10, 33, 138, 0.897);
+    padding-top: 15px;
+    font-weight: 700;
+  }
+  
+  .removeRate {
+    margin-left: 1px;
+    margin-top: 2px;
+    border: 1px solid rgba(247, 54, 54, 0.952);
+    background-color: rgba(247, 54, 54, 0.952);
+    color: rgba(233, 227, 227, 0.952);
+    box-shadow: 0px 0px 0px 0px;
+  }
+  
+  .rate-form {
+    height: 100px;
+    width: 100px;
+  }
+  
+  .task-form {
+    margin-left: 29%;
+    margin-top: 3%;
+    border-radius: 5px;
+    background-color: #dbe2ec;
+    padding-left: 4%;
+    padding-right: 6%;
+    height: 365px;
+    width: 400px;
+    box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2), 0 10px 10px 0 rgba(0, 0, 0, 0.19);
+  }
+  
+  .taskHeader {
+    font-weight: 800;
+    color: rgba(24, 24, 26, 0.664);
+    text-shadow: 1px  0px rgba(0, 0, 0, 0.719);
+  }
+  
+  .worked-day-form {
+    margin-left: 28%;
+    margin-top: 2%;
+    border-radius: 6px;
+    background-color: #dbe2ec;
+    padding-left: 4%;
+    padding-right: 2%;
+    height: 140px;
+    width: 400px;
+    box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2), 0 10px 10px 0 rgba(0, 0, 0, 0.19);
+  }
+  
+  .worked-time-form {
+    margin-left: 25%;
+    top: 15px;
+    margin-top: 35px;
+    border-radius: 5px;
+    background-color: #dbe2ec;
+    padding-left: 4%;
+    padding-right: 6%;
+    height: 300px;
+    width: 50%;
+    box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2), 0 10px 10px 0 rgba(0, 0, 0, 0.19);
+  }
+  
+  .worked {
+    width: 250px;
+    height: 16%;
+    padding-left: 2%;
+    background-color: #dbe2ec9d;
+    border-radius: 6px;
+    margin-top: 2%;
+    padding-top: 1%;
+    margin-left: 3.2%;
+    display: inline-block;
+  }
+  
+  .tasks {
+    width: 310px;
+    height: 260px;
+    padding-top: 2%;
+    padding-left: 2%;
+    background-color: #dbe2ec9d;
+    border-radius: 6px;
+    margin-bottom: 2%;
+    margin-left: 3%;
+    margin-top: 10px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow-x: auto;
+  }
+  
+  .workedTime {
+    width: 350px;
+    padding-top: 10px;
+    padding-left: 2%;
+    background-color: #dbe2ec9d;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    margin-left: 4%;
+    margin-top: 20px;
+    display: inline-block;
+  
+  }
+  
+  h3{
+    margin-left: 38%;
+    margin-top: 4%;
+  }
+  
+  .rateHeader {
+    font-weight: 800;
+    color: rgba(1, 1, 12, 0.829);
+    margin-left: 0%;
+  }
+  
+
+  
+  .reactLink {
+    color: #ffffff;
+  }
+  
+  

@@ -44,7 +44,7 @@ const TasklyInput = ({ values, errors, touched, setValues }) => {
         <Field name="completed" type="checkbox" checked={values.completed} />
       </label>
       <div />
-      <button className="btn btn-primary form-control" type="submit">
+      <button className="submit btn btn-primary form-control" type="submit">
         submit
       </button>
     </Form>

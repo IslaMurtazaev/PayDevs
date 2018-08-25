@@ -10,11 +10,10 @@ const WorkedDayInput = ({ values, errors, touched }) => {
       <div>
         <label>
           Date:
-          <Field className="form-control" name="day" type="date" />
+          <Field className=" day form-control" name="day" type="date" />
         </label>
-      </div>
 
-      <label>
+        <label>
         Paid:
         <Field
           className="form-control"
@@ -22,9 +21,10 @@ const WorkedDayInput = ({ values, errors, touched }) => {
           type="checkbox"
           checked={values.paid}
         />
-      </label>
+        </label>
+      </div>
 
-      <button className="btn btn-primary form-control" type="submit">
+      <button className="submit btn btn-primary form-control" type="submit">
         submit
       </button>
     </Form>

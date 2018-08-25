@@ -54,7 +54,7 @@ class ProjectItem extends Component {
         <h4><span className="property">Status:</span>{project.status ? "" : "not"} active</h4>
         </div>
 
-        <div  className="btn-group-horizontal">
+        <div  className="btn-group">
 
         <button type = "button" className="btn btn-success btn-lg"
           onClick={() => this.props.getTotal(project.id)}>
@@ -63,13 +63,13 @@ class ProjectItem extends Component {
         
         <Link to={`${history.location.pathname}/update`}>
           <button type = "button" className="btn btn-warning btn-lg">
-            Update project
+            Update
           </button>
         </Link>
 
           <button type="button" className="btn btn-danger btn-lg"
             onClick={() => this.props.removeProject(project.id)}>
-            Delete project
+            Delete
           </button>
           </div>
           

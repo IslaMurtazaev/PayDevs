@@ -22,7 +22,7 @@ const MonthPaymentInput = ({ errors, touched }) => {
         </label>
       </div>
 
-      <button className="btn btn-primary form-control" type="submit">
+      <button className="submit btn btn-primary form-control" type="submit">
         submit
       </button>
     </Form>
