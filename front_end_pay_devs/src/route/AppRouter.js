@@ -24,24 +24,24 @@ class AppRouter extends Component {
   render() {
     return (
       <Router history={history}>
-      <div>
-        <NavBar />
-        <Switch>
-          <PrivateRoute exact path="/" component={ProjectPage} />
-          <Route path="/login" component={LoginUser} />
-          <Route path="/sign_up" component={SignUp} />
-          <PrivateRoute path="/project/create" component={CreateProjectForm} />
-          <PrivateRoute path="/project/:id/Taskly/:taskId/update" component={UpdateTaskForm}/>
-          <PrivateRoute path="/project/:id/Monthly/:monthPaymentId/workedDay/:workedDayId/update" component={UpdateWorkedDayForm} />
-          <PrivateRoute path="/project/:id/Monthly/:monthPaymentId/workedDay" component={WorkedDays} />
-          <PrivateRoute path="/project/:id/Hourly/:hourPaymentId/update" component={UpdateHourlyForm} />
-          <PrivateRoute path="/project/:id/Hourly/:hourPaymentId/workTime/:workTimeId/update" component={UpdateWorkTimeForm} />
-          <PrivateRoute path="/project/:id/Hourly/:hourPaymentId/workTime" component={WorkTimes} />
-          <PrivateRoute path="/project/:id/update" component={UpdateProjectForm} />
-          <PrivateRoute path="/project/:id" component={ProjectItem} />
-          <Route component={NotFound} />
-        </Switch>
-          </div>
+        <div>
+          <NavBar />
+          <Switch>
+            <PrivateRoute exact path="/" component={ProjectPage} />
+            <Route path="/login" component={LoginUser} />
+            <Route path="/sign_up" component={SignUp} />
+            <PrivateRoute path="/project/create" component={CreateProjectForm} />
+            <PrivateRoute path="/project/:id/Taskly/:taskId/update" component={UpdateTaskForm}/>
+            <PrivateRoute path="/project/:id/Monthly/:monthPaymentId/workedDay/:workedDayId/update" component={UpdateWorkedDayForm} />
+            <PrivateRoute path="/project/:id/Monthly/:monthPaymentId/workedDay" component={WorkedDays} />
+            <PrivateRoute path="/project/:id/Hourly/:hourPaymentId/update" component={UpdateHourlyForm} />
+            <PrivateRoute path="/project/:id/Hourly/:hourPaymentId/workTime/:workTimeId/update" component={UpdateWorkTimeForm} />
+            <PrivateRoute path="/project/:id/Hourly/:hourPaymentId/workTime" component={WorkTimes} />
+            <PrivateRoute path="/project/:id/update" component={UpdateProjectForm} />
+            <PrivateRoute path="/project/:id" component={ProjectItem} />
+            <Route component={NotFound} />
+          </Switch>
+        </div>
       </Router>
     );
   }

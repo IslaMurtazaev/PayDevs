@@ -27,11 +27,46 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "jest",
+    "test:watch": "npm test -- --watch",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0-rc.2",
+    "@babel/preset-env": "^7.0.0-rc.2",
+    "@babel/register": "^7.0.0-rc.2",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.4.2",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "enzyme": "^3.4.4",
+    "enzyme-adapter-react-16": "^1.2.0",
+    "enzyme-to-json": "^3.3.4",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^23.5.0",
+    "react-addons-test-utils": "^15.6.2",
+    "react-router-enzyme-context": "^1.2.0",
     "react-svg": "^5.0.17",
-    "react-svg-loader": "^2.1.0"
+    "react-svg-loader": "^2.1.0",
+    "react-test-renderer": "^16.4.2",
+    "redux-mock-store": "^1.5.3"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "./test_config/coverage",
+    "coverageReporters": [
+      "text",
+      "html"
+    ],
+    "setupFiles": [
+      "./test_config/setup/jestsetup.js"
+    ],
+    "testPathIgnorePatterns": [
+      "./test_config/setup/"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less)$": "identity-obj-proxy",
+      "\\.(png|jpg)$": "./test_config/mocks/fileMock"
+    }
   }
 }

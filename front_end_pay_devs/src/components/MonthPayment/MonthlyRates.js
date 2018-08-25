@@ -19,6 +19,7 @@ class MonthRates extends Component {
             <MonthRate
               key={monthPayment.id}
               monthPayment={monthPayment}
+              projectId={this.props.projectId}
               onRemove={monthPaymentId =>
                 this.props.removeMonthPayment(monthPaymentId)
               }
@@ -26,6 +27,7 @@ class MonthRates extends Component {
           ))}
         </div>
 
+        <hr />
 
         <CreateMonthPaymentForm projectId={this.props.projectId}  />
       </div>

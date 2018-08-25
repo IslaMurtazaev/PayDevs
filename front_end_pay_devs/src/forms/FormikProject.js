@@ -5,9 +5,11 @@ import DateTimePicker from "react-datetime-picker";
 
 const ProjectInput = ({ values, errors, touched, setFieldValue }) => {
   return (
-    <Form className="form-group" >
+    <Form className="form-group">
       <label>Title: </label>
-      <div>{touched.title && errors.title && <p>{errors.title}</p>}</div>
+      <div className="validation-error">
+        {touched.title && errors.title && <p>{errors.title}</p>}
+      </div>
       <Field
         name="title"
         type="text"
@@ -24,7 +26,7 @@ const ProjectInput = ({ values, errors, touched, setFieldValue }) => {
       />
 
       <label>Start-date: </label>
-      <div>
+      <div className="validation-error">
         {touched.start_date && errors.start_date && <p>{errors.start_date}</p>}
       </div>
       <div>
@@ -37,7 +39,7 @@ const ProjectInput = ({ values, errors, touched, setFieldValue }) => {
       </div>
 
       <label>End-date: </label>
-      <div>
+      <div className="validation-error">
         {touched.end_date && errors.end_date && <p>{errors.end_date}</p>}
       </div>
       <div>

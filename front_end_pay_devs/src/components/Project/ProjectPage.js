@@ -14,33 +14,29 @@ class ProjectPage extends Component {
 
     return (
       <div>
-        {/* <div className="logoutLink">
-          <img src={logo} />          
-          <span className="paydevs1">PayDevs</span>        
-
-          {user && <Link className="link" to="/login">Logout</Link>}
-        </div> */}
         <div className="user">
-        {user && <div className="username"> {user.username}</div>}
-        {user && <div className="email">{user.email}</div>}
+          {user && <div className="username"> {user.username}</div>}
+          {user && <div className="email">{user.email}</div>}
         </div>
-        <Link className="newProjectLink" to="/project/create">New Project</Link>
-       <div className="projectList">
+        <Link className="newProjectLink" to="/project/create">
+          New Project
+        </Link>
+        <div className="projectList">
           {projects.map(project => (
             <ul>
               <div className="projectInfo">
-            <li key={project.id}>
-              <Link className="projectLink" to={`/project/${project.id}`}>{project.title}
-              </Link><p>{new Date(project.start_date).toDateString()}</p>
-            </li> </div>
-            </ul>  
-                      
+                <li key={project.id}>
+                  <Link className="projectLink" to={`/project/${project.id}`}>
+                    {project.title}
+                  </Link>
+                  <p>{new Date(project.start_date).toDateString()}</p>
+                </li>
+              </div>
+            </ul>
           ))}
-
         </div>
-               
-       </div>
-);
+      </div>
+    );
   }
 }
 
