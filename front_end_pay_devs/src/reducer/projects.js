@@ -1,8 +1,8 @@
-import { ProjectConstants } from "../constants/project";
+import { projectActionTypes } from "../constants/project";
 
 export function project(state = {}, action) {
   switch (action.type) {
-    case ProjectConstants.GET_PROJECT:
+    case projectActionTypes.GET:
       return action.project
     default:
       return state;
@@ -11,13 +11,13 @@ export function project(state = {}, action) {
 
 export function projects(state = [], action) {
   switch (action.type) {
-    case ProjectConstants.ADD_ALL_PROJECTS:
+    case projectActionTypes.ADD_ALL:
       return [...action.projects];
-    case ProjectConstants.CLEAR_ALL_PROJECTS:
+    case projectActionTypes.CLEAR_ALL:
       return [];
-    case ProjectConstants.CREATE_PROJECT:
+    case projectActionTypes.CREATE:
       return state.concat([action.project]);
-    case ProjectConstants.UPDATE_PROJECT:
+    case projectActionTypes.UPDATE:
       return state.map(
         project => project.id === action.project.id ? action.project : project
       );   

@@ -1,5 +1,5 @@
 import { task, tasks } from "../task";
-import { TaskConstants } from "../../constants/task";
+import { taskActionTypes } from "../../constants/task";
 
 describe("task reducer", () => {
   it("has a default state", () => {
@@ -9,12 +9,12 @@ describe("task reducer", () => {
     expect(task(undefined, action)).toEqual(defaultState);
   });
 
-  it("triggers CREATE_TASK", () => {
+  it("triggers CREATE", () => {
     const createdTask = {
       title: "Finish Unit tests"
     };
     const action = {
-      type: TaskConstants.CREATE_TASK,
+      type: taskActionTypes.CREATE,
       task: createdTask
     };
 
@@ -30,14 +30,14 @@ describe("tasks reducer", () => {
     expect(tasks(undefined, action)).toEqual(defaultState);
   });
 
-  it("triggers ADD_ALL_TASKS", () => {
+  it("triggers ADD_ALL", () => {
     const retrievedTasks = [
       { title: "Finish Unit tests" },
       { title: "Finish Integration tests" },
       { title: "Finish UI tests" }
     ];
     const action = {
-      type: TaskConstants.ADD_ALL_TASKS,
+      type: taskActionTypes.ADD_ALL,
       tasks: retrievedTasks
     };
 
@@ -46,15 +46,15 @@ describe("tasks reducer", () => {
     expect(result).toEqual(retrievedTasks);
   });
 
-  it("triggers DELETE_TASK", () => {
+  it("triggers REMOVE", () => {
     const state = [
       { id: 1, title: "Finish Unit tests" },
       { id: 2, title: "Finish Integration tests" },
       { id: 3, title: "Finish UI tests" }
     ];
     const action = {
-      type: TaskConstants.DELETE_TASK,
-      task: { id: 1, title: "Finish Unit tests" }
+      type: taskActionTypes.REMOVE,
+      taskId: 1
     };
 
     let result = tasks(state, action);
@@ -64,14 +64,14 @@ describe("tasks reducer", () => {
     ]);
   });
 
-  it("triggers CREATE_TASK", () => {
+  it("triggers CREATE", () => {
     const state = [
       { id: 2, title: "Finish Integration tests" },
       { id: 3, title: "Finish UI tests" }
     ];
     const createdTask = { id: 4, title: "Learn how to use Selenium" };
     const action = {
-      type: TaskConstants.CREATE_TASK,
+      type: taskActionTypes.CREATE,
       task: createdTask
     };
 
@@ -83,7 +83,7 @@ describe("tasks reducer", () => {
     ]);
   });
 
-  it("triggers UPDATE_TASK", () => {
+  it("triggers UPDATE", () => {
     const state = [
       { id: 2, title: "Finish Integration tests" },
       { id: 3, title: "Finish UI tests" },
@@ -94,7 +94,7 @@ describe("tasks reducer", () => {
       title: "Present PayDevs to Nikita"
     };
     const action = {
-      type: TaskConstants.UPDATE_TASK,
+      type: taskActionTypes.UPDATE,
       task: updatedTask
     };
 

@@ -1,5 +1,5 @@
 import { hourPayment, hourPayments } from "../hourPayment";
-import { HourPaymentConstants } from "../../constants/hourPayment";
+import { hourPaymentActionTypes } from "../../constants/hourPayment";
 
 describe("hourPayment reducer", () => {
   it("has a default state", () => {
@@ -12,7 +12,7 @@ describe("hourPayment reducer", () => {
   it("triggers CREATE", () => {
     const createdHourPayment = { rate: 20 };
     const action = {
-      type: HourPaymentConstants.CREATE,
+      type: hourPaymentActionTypes.CREATE,
       hourPayment: createdHourPayment
     };
 
@@ -35,7 +35,7 @@ describe("hourPayments reducer", () => {
       { rate: 30 }
     ];
     const action = {
-      type: HourPaymentConstants.ADD_ALL,
+      type: hourPaymentActionTypes.ADD_ALL,
       hourPayments: retrievedHourPayments
     };
 
@@ -48,7 +48,7 @@ describe("hourPayments reducer", () => {
     const state = [{ rate: 10 }, { rate: 20 }, { rate: 30 }];
     const createdHourPayment = { rate: 40 };
     const action = {
-      type: HourPaymentConstants.CREATE,
+      type: hourPaymentActionTypes.CREATE,
       hourPayment: createdHourPayment
     };
 
@@ -71,7 +71,7 @@ describe("hourPayments reducer", () => {
     const removedHourPaymentId = 1;
 
     const action = {
-      type: HourPaymentConstants.REMOVE,
+      type: hourPaymentActionTypes.REMOVE,
       hourPaymentId: removedHourPaymentId
     };
 

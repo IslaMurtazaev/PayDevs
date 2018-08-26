@@ -1,10 +1,10 @@
-import { TaskConstants } from "../constants/task";
+import { taskActionTypes } from "../constants/task";
 
 const initialStateTask = {};
 
 export function task(state = initialStateTask, action) {
   switch (action.type) {
-    case TaskConstants.CREATE_TASK:
+    case taskActionTypes.CREATE:
       return action.task;
     default:
       return state;
@@ -15,14 +15,14 @@ const initialStateTasks = [];
 
 export function tasks(state = initialStateTasks, action) {
   switch (action.type) {
-    case TaskConstants.CREATE_TASK:
+    case taskActionTypes.CREATE:
       return [...state, action.task];
-    case TaskConstants.UPDATE_TASK:
+    case taskActionTypes.UPDATE:
       return state.map(task => task.id !== action.task.id ? task : action.task);
-    case TaskConstants.ADD_ALL_TASKS:
+    case taskActionTypes.ADD_ALL:
       return [...action.tasks];
-    case TaskConstants.DELETE_TASK:
-      return state.filter(task => task.id !== action.task.id);
+    case taskActionTypes.REMOVE:
+      return state.filter(task => task.id !== action.taskId);
     default:
       return state;
   }

@@ -1,5 +1,5 @@
 import monthPayments from "../monthPayments";
-import monthPaymentConstants from "../../constants/monthPayment";
+import { monthPaymentActionTypes } from "../../constants/monthPayment";
 
 describe("monthPayments reducer", () => {
   it("has a default state", () => {
@@ -16,7 +16,7 @@ describe("monthPayments reducer", () => {
       { rate: 300 }
     ];
     const action = {
-      type: monthPaymentConstants.ADD_ALL,
+      type: monthPaymentActionTypes.ADD_ALL,
       monthPayments: retrievedMonthPayments
     };
 
@@ -33,7 +33,7 @@ describe("monthPayments reducer", () => {
     ];
     const createdMonthPayment = { rate: 400 };
     const action = {
-      type: monthPaymentConstants.CREATE,
+      type: monthPaymentActionTypes.CREATE,
       monthPayment: createdMonthPayment
     };
 
@@ -56,7 +56,7 @@ describe("monthPayments reducer", () => {
     const removedMonthPaymentId = 1  
 
     const action = {
-      type: monthPaymentConstants.REMOVE,
+      type: monthPaymentActionTypes.REMOVE,
       monthPaymentId: removedMonthPaymentId
     };
 

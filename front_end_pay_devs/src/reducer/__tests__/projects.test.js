@@ -1,5 +1,5 @@
 import { project, projects } from "../../reducer/projects";
-import { ProjectConstants } from "../../constants/project";
+import { projectActionTypes } from "../../constants/project";
 
 describe("project reducer", () => {
   it("has a default state", () => {
@@ -9,7 +9,7 @@ describe("project reducer", () => {
     expect(project(undefined, action)).toEqual(defaultState);
   });
 
-  it("triggers GET_PROJECT", () => {
+  it("triggers GET", () => {
     const retrievedProject = {
       title: "PayDevs",
       description: "blablabla",
@@ -19,7 +19,7 @@ describe("project reducer", () => {
       status: true
     };
     const action = {
-      type: ProjectConstants.GET_PROJECT,
+      type: projectActionTypes.GET,
       project: retrievedProject
     };
 
@@ -35,14 +35,14 @@ describe("projects reducer", () => {
     expect(projects(undefined, action)).toEqual(defaultState);
   });
 
-  it("triggers ADD_ALL_PROJECTS", () => {
+  it("triggers ADD_ALL", () => {
     const retrievedProjects = [
       { title: "PayDevs" },
       { title: "PayDevs2" },
       { title: "PayDevs3" }
     ];
     const action = {
-      type: ProjectConstants.ADD_ALL_PROJECTS,
+      type: projectActionTypes.ADD_ALL,
       projects: retrievedProjects
     };
 
@@ -51,19 +51,19 @@ describe("projects reducer", () => {
     expect(result).toEqual(retrievedProjects);
   });
 
-  it("triggers CLEAR_ALL_PROJECTS", () => {
+  it("triggers CLEAR_ALL", () => {
     const state = [
       { title: "PayDevs" },
       { title: "PayDevs2" },
       { title: "PayDevs3" }
     ];
-    const action = { type: ProjectConstants.CLEAR_ALL_PROJECTS };
+    const action = { type: projectActionTypes.CLEAR_ALL };
 
     let result = projects(state, action);
     expect(result).toEqual([]);
   });
 
-  it("triggers CREATE_PROJECT", () => {
+  it("triggers CREATE", () => {
     const state = [
       { title: "PayDevs" },
       { title: "PayDevs2" },
@@ -71,7 +71,7 @@ describe("projects reducer", () => {
     ];
     const createdProject = { title: "PayDevs4" };
     const action = {
-      type: ProjectConstants.CREATE_PROJECT,
+      type: projectActionTypes.CREATE,
       project: createdProject
     };
 
@@ -84,7 +84,7 @@ describe("projects reducer", () => {
     ]);
   });
 
-  it("triggers UPDATE_PROJECT", () => {
+  it("triggers UPDATE", () => {
     const state = [
       { id: 1, title: "PayDevs", description: "1st project" },
       { id: 2, title: "PayDevs2", description: "second project" },
@@ -96,7 +96,7 @@ describe("projects reducer", () => {
       description: "first project"
     };
     const action = {
-      type: ProjectConstants.UPDATE_PROJECT,
+      type: projectActionTypes.UPDATE,
       project: updatedProject
     };
 

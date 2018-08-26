@@ -1,5 +1,5 @@
 import { workTimeService } from "../service/workTime";
-import { WorkTimeConstants } from "../constants/workTime";
+import { workTimeActionTypes } from "../constants/workTime";
 import { history } from "../index";
 import { handleError } from "../service/helpers";
 
@@ -15,7 +15,7 @@ function create(values) {
     workTimeService
       .create(values)
       .then(workTime => {
-        dispatch({ type: WorkTimeConstants.CREATE, workTime });
+        dispatch({ type: workTimeActionTypes.CREATE, workTime });
       })
       .catch(error => handleError(error));
   };
@@ -24,7 +24,7 @@ function create(values) {
 function getAll(hourPaymentId) {
   return dispatch => {
     workTimeService.getAll(hourPaymentId).then(workTimes => {
-      dispatch({ type: WorkTimeConstants.ADD_ALL, workTimes });
+      dispatch({ type: workTimeActionTypes.ADD_ALL, workTimes });
     });
   };
 }
@@ -34,7 +34,7 @@ function update(projectId, hourPaymentId, workTimeId, values) {
     workTimeService
       .update(projectId, hourPaymentId, workTimeId, values)
       .then(workTime => {
-        dispatch({ type: WorkTimeConstants.UPDATE, workTime });
+        dispatch({ type: workTimeActionTypes.UPDATE, workTime });
         history.push(`/project/${projectId}/Hourly/${hourPaymentId}/workTime`);
       })
       .catch(error => handleError(error));
@@ -46,7 +46,7 @@ function remove(workTimeId) {
     workTimeService
       .remove(workTimeId)
       .then(workTime => {
-        dispatch({ type: WorkTimeConstants.REMOVE, workTimeId });
+        dispatch({ type: workTimeActionTypes.REMOVE, workTimeId });
       })
       .catch(error => handleError(error));
   };

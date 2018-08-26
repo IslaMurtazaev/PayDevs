@@ -1,5 +1,5 @@
 import workedDays from "../workedDays";
-import actionTypes from "../../constants/workedDay";
+import { workedDayActionTypes } from "../../constants/workedDay";
 
 describe("workedDay reducer", () => {
   it("has a default state", () => {
@@ -12,7 +12,7 @@ describe("workedDay reducer", () => {
   it("triggers ADD_ALL", () => {
     const retrievedWorkedDays = [{ id: 1 }, { id: 2 }, { id: 3 }];
     const action = {
-      type: actionTypes.ADD_ALL_WORKED_DAYS,
+      type: workedDayActionTypes.ADD_ALL,
       workedDays: retrievedWorkedDays
     };
 
@@ -25,7 +25,7 @@ describe("workedDay reducer", () => {
     const state = [{ id: 1 }, { id: 2 }, { id: 3 }];
     const createdWorkedDay = { id: 4 };
     const action = {
-      type: actionTypes.CREATE_WORKED_DAY,
+      type: workedDayActionTypes.CREATE,
       workedDay: createdWorkedDay
     };
 
@@ -42,7 +42,7 @@ describe("workedDay reducer", () => {
     ];
     const updatedWorkedDay = { id: 1, paid: true };
     const action = {
-      type: actionTypes.UPDATE_WORKED_DAY,
+      type: workedDayActionTypes.UPDATE,
       workedDay: updatedWorkedDay
     };
 
@@ -65,7 +65,7 @@ describe("workedDay reducer", () => {
     const removedWorkedDayId = 1
 
     const action = {
-      type: actionTypes.REMOVE_WORKED_DAY,
+      type: workedDayActionTypes.REMOVE,
       workedDayId: removedWorkedDayId
     };
 

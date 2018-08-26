@@ -1,5 +1,5 @@
 import { workTime, workTimes } from "../workTime";
-import { WorkTimeConstants } from "../../constants/workTime";
+import { workTimeActionTypes } from "../../constants/workTime";
 
 describe("workTime reducer", () => {
   it("has a default state", () => {
@@ -14,7 +14,7 @@ describe("workTime reducer", () => {
       paid: false
     };
     const action = {
-      type: WorkTimeConstants.CREATE,
+      type: workTimeActionTypes.CREATE,
       workTime: createdWorkTime
     };
 
@@ -33,7 +33,7 @@ describe("workedDay reducer", () => {
   it("triggers ADD_ALL", () => {
     const retrievedWorkTime = [{ id: 1 }, { id: 2 }, { id: 3 }];
     const action = {
-      type: WorkTimeConstants.ADD_ALL,
+      type: workTimeActionTypes.ADD_ALL,
       workTimes: retrievedWorkTime
     };
 
@@ -46,7 +46,7 @@ describe("workedDay reducer", () => {
     const state = [{ id: 1 }, { id: 2 }, { id: 3 }];
     const createdWorkTime = { id: 4 };
     const action = {
-      type: WorkTimeConstants.CREATE,
+      type: workTimeActionTypes.CREATE,
       workTime: createdWorkTime
     };
 
@@ -63,7 +63,7 @@ describe("workedDay reducer", () => {
     ];
     const updatedWorkTime = { id: 1, paid: true };
     const action = {
-      type: WorkTimeConstants.UPDATE,
+      type: workTimeActionTypes.UPDATE,
       workTime: updatedWorkTime
     };
 
@@ -86,7 +86,7 @@ describe("workedDay reducer", () => {
     const removedWorkTimeId = 1;
 
     const action = {
-      type: WorkTimeConstants.REMOVE,
+      type: workTimeActionTypes.REMOVE,
       workTimeId: removedWorkTimeId
     };
 

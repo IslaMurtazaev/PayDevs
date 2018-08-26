@@ -1,5 +1,5 @@
 import { hourPaymentService } from "../service/hourPayment";
-import { HourPaymentConstants } from "../constants/hourPayment";
+import { hourPaymentActionTypes } from "../constants/hourPayment";
 import { history } from "../index";
 import { handleError } from "../service/helpers";
 
@@ -13,7 +13,7 @@ export const hourPaymentActions = {
 function getAll(projectId) {
   return dispatch => {
     hourPaymentService.getAll(projectId).then(hourPayments => {
-      dispatch({ type: HourPaymentConstants.ADD_ALL, hourPayments });
+      dispatch({ type: hourPaymentActionTypes.ADD_ALL, hourPayments });
     });
   };
 }
@@ -23,7 +23,7 @@ function create(hourPayment) {
     hourPaymentService
       .create(hourPayment)
       .then(hourPayment => {
-        dispatch({ type: HourPaymentConstants.CREATE, hourPayment });
+        dispatch({ type: hourPaymentActionTypes.CREATE, hourPayment });
       })
       .catch(error => handleError(error));
   };
@@ -34,7 +34,7 @@ function remove(hourPaymentId) {
     hourPaymentService
       .remove(hourPaymentId)
       .then(hourPayment => {
-        dispatch({ type: HourPaymentConstants.REMOVE, hourPaymentId });
+        dispatch({ type: hourPaymentActionTypes.REMOVE, hourPaymentId });
       })
       .catch(error => handleError(error));
   };
@@ -45,7 +45,7 @@ function update(values) {
     hourPaymentService
       .update(values)
       .then(hourPayment => {
-        dispatch({ type: HourPaymentConstants.CREATE, hourPayment });
+        dispatch({ type: hourPaymentActionTypes.CREATE, hourPayment });
         history.push(`/project/${values.projectId}`);
       })
       .catch(error => handleError(error));
