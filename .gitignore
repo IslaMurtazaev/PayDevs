@@ -124,7 +124,7 @@ front_end_pay_devs/test
 front_end_pay_devs/node_modules
 
 # testing
-front_end_pay_devs/coverage
+front_end_pay_devs/test_config
 
 # production
 front_end_pay_devs/build

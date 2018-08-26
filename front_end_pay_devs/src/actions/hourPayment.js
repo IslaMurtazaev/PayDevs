@@ -1,7 +1,7 @@
 import { hourPaymentService } from "../service/hourPayment";
-import { HourPaymentConstant } from "../constants/hourPayment";
+import { HourPaymentConstants } from "../constants/hourPayment";
 import { history } from "../index";
-import {handleError} from "../service/helpers"
+import { handleError } from "../service/helpers";
 
 export const hourPaymentActions = {
   getAll,
@@ -13,7 +13,7 @@ export const hourPaymentActions = {
 function getAll(projectId) {
   return dispatch => {
     hourPaymentService.getAll(projectId).then(hourPayments => {
-      dispatch({ type: HourPaymentConstant.GET_ALL, hourPayments });
+      dispatch({ type: HourPaymentConstants.ADD_ALL, hourPayments });
     });
   };
 }
@@ -23,18 +23,20 @@ function create(hourPayment) {
     hourPaymentService
       .create(hourPayment)
       .then(hourPayment => {
-        dispatch({ type: HourPaymentConstant.CREATE, hourPayment });
-      }).catch(error => handleError(error));
-      // .catch(error => {
-      // });
+        dispatch({ type: HourPaymentConstants.CREATE, hourPayment });
+      })
+      .catch(error => handleError(error));
   };
 }
 
-function remove(hourId) {
+function remove(hourPaymentId) {
   return dispatch => {
-    hourPaymentService.remove(hourId).then(hourPayment => {
-      dispatch({ type: HourPaymentConstant.DELETE, hourPayment });
-    }).catch(error => handleError(error));
+    hourPaymentService
+      .remove(hourPaymentId)
+      .then(hourPayment => {
+        dispatch({ type: HourPaymentConstants.REMOVE, hourPaymentId });
+      })
+      .catch(error => handleError(error));
   };
 }
 
@@ -43,8 +45,9 @@ function update(values) {
     hourPaymentService
       .update(values)
       .then(hourPayment => {
-        dispatch({ type: HourPaymentConstant.CREATE, hourPayment });
+        dispatch({ type: HourPaymentConstants.CREATE, hourPayment });
         history.push(`/project/${values.projectId}`);
-      }).catch(error => handleError(error));
+      })
+      .catch(error => handleError(error));
   };
 }

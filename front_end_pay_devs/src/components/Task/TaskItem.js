@@ -15,7 +15,8 @@ class TaskItem extends Component {
         <h4 className="taskTitle"><b>Title:</b> {task.title}</h4>
         <h4 className="taskDescription"><b>Description:</b> {task.description}</h4>
         <h4 className="taskPrice"><b>Price:</b> {task.price}</h4>
-        <h4 className="taskCompleted">><b>{task.completed ? "Completed" : "Uncompleted"}</b></h4>
+        <h4 className="taskPaid">{task.paid ? "" : "not"} <b>paid</b></h4>
+        <h4 className="taskCompleted"><b>{task.completed ? "Completed" : "Uncompleted"}</b></h4>
         <Link className="reactLink" to={`/project/${projectId}/Taskly/${task.id}/update`}>
           <button className="updateButton btn btn-warning" type="button">
             Update

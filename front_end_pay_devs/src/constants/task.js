@@ -1,6 +1,6 @@
-export const TaskConstant = {
+export const TaskConstants = {
     CREATE_TASK: "CREATE_TASK",
-    GET_ALL_TASK: "GET_ALL_TASK",
+    ADD_ALL_TASKS: "ADD_ALL_TASKS",
     DELETE_TASK: "DELETE_TASK",
     UPDATE_TASK: "UPDATE_TASK"
 }

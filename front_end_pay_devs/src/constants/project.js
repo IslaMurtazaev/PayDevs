@@ -1,4 +1,4 @@
-export const ProjectConstant = {
+export const ProjectConstants = {
     GET_PROJECT: "GET_PROJECT",
     ADD_ALL_PROJECTS: "ADD_ALL_PROJECTS",
     CLEAR_ALL_PROJECTS: "CLEAR_ALL_PROJECTS",
