@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { tasklyActions } from "../../actions/taskly";
+import { tasklyActions } from "../../actions/task";
 import TaskItem from "./TaskItem";
 import CreateTask from "./CreateTask";
 
@@ -28,6 +28,7 @@ class Tasks extends Component {
           ))}
         </div>
 
+        <hr />
 
         <CreateTask projectId={projectId} />
       </div>

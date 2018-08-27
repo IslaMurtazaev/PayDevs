@@ -13,23 +13,18 @@ export const hourPaymentService = {
 function create(hourPayment) {
   const headres = authHeader();
   const fetch_url = `${BASE_URL}${hourPayment.projectId}/hour_payment/create/`;
-  return axios({
-    method: "post",
-    url: fetch_url,
-    headers: headres,
-    data: hourPayment
-  }).then(res => {
+  return axios.post( fetch_url, hourPayment,
+    {headers: headres}
+  ).then(res => {
     return res.data;
   });
 }
 
 function getAll(projectId) {
   let headers = authHeader();
-  return axios({
-    method: "get",
-    url: `${BASE_URL}${projectId}/hour_payment/all/`,
-    headers: headers
-  }).then(res => {
+  return axios.get(`${BASE_URL}${projectId}/hour_payment/all/`,
+    {headers: headers}
+  ).then(res => {
     let projects = res.data;
     return projects;
   });
@@ -37,11 +32,9 @@ function getAll(projectId) {
 
 function remove(hourId) {
   let headers = authHeader();
-  return axios({
-    method: "delete",
-    url: `${BASE_URL}hour_payment/${hourId}/delete`,
-    headers: headers
-  }).then(res => {
+  return axios.delete(`${BASE_URL}hour_payment/${hourId}/delete`,
+    {headers: headers}
+  ).then(res => {
     let task = res.data;
     return task;
   });
@@ -52,12 +45,9 @@ function update(values) {
   const fetch_url = `${BASE_URL}${values.projectId}/hour_payment/${
     values.id
   }/update/`;
-  return axios({
-    method: "put",
-    url: fetch_url,
-    headers: headres,
-    data: values
-  }).then(res => {
+  return axios.put(fetch_url, values,
+    {headers: headres},
+  ).then(res => {
     return res.data;
   });
 }

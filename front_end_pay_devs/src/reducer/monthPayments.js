@@ -1,4 +1,4 @@
-import monthPaymentActionTypes from "../constants/monthPayment";
+import { monthPaymentActionTypes } from "../constants/monthPayment";
 
 const initialState = [];
 

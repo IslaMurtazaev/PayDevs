@@ -14,12 +14,8 @@ const BASE_URL = "http://127.0.0.1:8000/api/project/";
 function create(task, projectId) {
 const headres = authHeader();
 const fetch_url = `${BASE_URL}${projectId}/task/create/`;
-return axios({
-    method: "post",
-    url: fetch_url,
-    headers: headres,
-    data: task
-}).then(res => {
+return axios.post( fetch_url,  task, {headers: headres},
+).then(res => {
     return res.data;
 });
 }
@@ -27,11 +23,10 @@ return axios({
 
 function getAll(projectId) {
   let headers = authHeader();
-  return axios({
-    method: "get",
-    url: `${BASE_URL}${projectId}/task/all/`,
+  return axios.get(`${BASE_URL}${projectId}/task/all/`,{
     headers: headers
-  }).then(res => {
+    }
+  ).then(res => {
     let projects = res.data;
     return projects;
   });
@@ -39,11 +34,9 @@ function getAll(projectId) {
 
 function remove(taskId) {
     let headers = authHeader();
-    return axios({
-      method: "delete",
-      url: `${BASE_URL}task/${taskId}/delete`,
-      headers: headers
-    }).then(res => {
+    return axios.delete(`${BASE_URL}task/${taskId}/delete`,
+      {headers: headers}
+    ).then(res => {
       let task = res.data;
       return task ;
     });
@@ -53,12 +46,7 @@ function remove(taskId) {
    
     const headres = authHeader();
   const fetch_url = `${BASE_URL}${values.projectId}/task/${values.id}/update/`;
-  return axios({
-      method: "put",
-      url: fetch_url,
-      headers: headres,
-      data: values
-  }).then(res => {
+  return axios.put(fetch_url, values, {headers: headres}).then(res => {
       return res.data;
   });
   }

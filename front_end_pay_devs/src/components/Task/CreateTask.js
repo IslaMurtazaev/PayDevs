@@ -1,6 +1,6 @@
 import React from "react";
 import FormikTaskly from "../../forms/FormikTask";
-import { tasklyActions } from "../../actions/taskly";
+import { tasklyActions } from "../../actions/task";
 import { connect } from "react-redux";
 
 const CreateTaskForm = props => {

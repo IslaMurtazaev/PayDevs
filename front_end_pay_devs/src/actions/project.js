@@ -1,8 +1,7 @@
 import { projectService } from "../service/project";
-import { ProjectConstant } from "../constants/project";
+import { projectActionTypes } from "../constants/project";
 import { history } from "../index";
-import {handleError} from "../service/helpers"
-
+import { handleError } from "../service/helpers";
 
 export const projectActions = {
   get,
@@ -17,7 +16,7 @@ export const projectActions = {
 function get(projectId) {
   return dispatch => {
     projectService.get(projectId).then(project => {
-      dispatch({ type: ProjectConstant.GET_PROJECT, project });
+      dispatch({ type: projectActionTypes.GET, project });
     });
   };
 }
@@ -25,21 +24,24 @@ function get(projectId) {
 function getAll() {
   return dispatch => {
     projectService.get_all().then(projects => {
-      dispatch({ type: ProjectConstant.ADD_ALL_PROJECTS, projects });
+      dispatch({ type: projectActionTypes.ADD_ALL, projects });
     });
   };
 }
 
 function clearAll() {
-  return { type: ProjectConstant.CLEAR_ALL_PROJECTS };
+  return { type: projectActionTypes.CLEAR_ALL };
 }
 
 function remove(id) {
   return dispatch => {
-    projectService.remove(id).then(() => {
-      dispatch({ type: ProjectConstant.DELETE_PROJECT });
-      history.push("/");
-    }).catch(error => handleError(error));
+    projectService
+      .remove(id)
+      .then(() => {
+        dispatch({ type: projectActionTypes.REMOVE, id });
+        history.push("/");
+      })
+      .catch(error => handleError(error));
   };
 }
 
@@ -48,7 +50,7 @@ function create(project) {
     projectService
       .create(project)
       .then(project => {
-        dispatch({ type: ProjectConstant.CREATE_PROJECT, project });
+        dispatch({ type: projectActionTypes.CREATE, project });
         history.push(`/project/${project.id}`);
       })
       .catch(error => handleError(error));
@@ -60,7 +62,7 @@ function update(project) {
     projectService
       .update(project)
       .then(project => {
-        dispatch({ type: ProjectConstant.UPDATE_PROJECT, project });
+        dispatch({ type: projectActionTypes.UPDATE, project });
         history.push(`/project/${project.id}`);
       })
       .catch(error => handleError(error));
@@ -72,7 +74,7 @@ function getTotal(id) {
   return dispatch => {
     projectService.getTotal(id).then(data => {
       FileDownload(data, "total.pdf");
-      dispatch({ type: ProjectConstant.GET_TOTAL });
+      dispatch({ type: projectActionTypes.GET_TOTAL });
       history.push(`/project/${id}`);
     });
   };

@@ -1,6 +1,6 @@
-export const TaskConstant = {
-    CREATE_TASK: "CREATE_TASK",
-    GET_ALL_TASK: "GET_ALL_TASK",
-    DELETE_TASK: "DELETE_TASK",
-    UPDATE_TASK: "UPDATE_TASK"
+export const taskActionTypes = {
+    CREATE: "CREATE_TASK",
+    ADD_ALL: "ADD_ALL_TASKS",
+    REMOVE: "REMOVE_TASK",
+    UPDATE: "UPDATE_TASK"
 }

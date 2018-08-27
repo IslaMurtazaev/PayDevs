@@ -75,7 +75,7 @@ class ProjectItem extends Component {
             Total
           </button>
 
-          <Link to={`project/${project.id}/update`}>
+          <Link to={`${project.id}/update`}>
             <button type="button" className="btn btn-warning btn-lg">
               Update project
             </button>

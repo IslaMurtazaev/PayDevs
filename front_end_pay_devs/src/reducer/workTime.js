@@ -1,13 +1,10 @@
-
-import { workTimeConstant } from "../constants/workTime"
+import { workTimeActionTypes } from "../constants/workTime";
 
 const initialStateHour = {};
 
 export function workTime(state = initialStateHour, action) {
-  switch(action.type) {
-    case workTimeConstant.CREATE:
-      return action.workTime;
-    case workTimeConstant.GET:
+  switch (action.type) {
+    case workTimeActionTypes.CREATE:
       return action.workTime;
     default:
       return state;
@@ -17,13 +14,18 @@ export function workTime(state = initialStateHour, action) {
 const initialStateworkTimes = [];
 
 export function workTimes(state = initialStateworkTimes, action) {
-  switch(action.type) {
-    case workTimeConstant.GET_ALL:
+  switch (action.type) {
+    case workTimeActionTypes.ADD_ALL:
       return action.workTimes;
-    case workTimeConstant.REMOVE:
-      return state.filter(workTime=>workTime.id !== action.workTime.id);
-    case workTimeConstant.CREATE:
+    case workTimeActionTypes.CREATE:
       return [...state, action.workTime];
+    case workTimeActionTypes.UPDATE:
+      return state.map(
+        workTime =>
+          workTime.id !== action.workTime.id ? workTime : action.workTime
+      );
+    case workTimeActionTypes.REMOVE:
+      return state.filter(workTime => workTime.id !== action.workTimeId);
     default:
       return state;
   }

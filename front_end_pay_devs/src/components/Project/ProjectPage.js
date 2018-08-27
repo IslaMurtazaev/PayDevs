@@ -22,18 +22,18 @@ class ProjectPage extends Component {
           New Project
         </Link>
         <div className="projectList">
-          {projects.map(project => (
-            <ul>
-              <div className="projectInfo">
+        <ul>
+          {projects.map(project => (   
                 <li key={project.id}>
-                  <Link className="projectLink" to={`/project/${project.id}`}>
-                    {project.title}
-                  </Link>
-                  <p>{new Date(project.start_date).toDateString()}</p>
+                <div className="projectInfo">
+                    <Link className="projectLink" to={`/project/${project.id}`}>
+                      {project.title}
+                    </Link>
+                    <p>{new Date(project.start_date).toDateString()}</p>
+                  </div>
                 </li>
-              </div>
-            </ul>
           ))}
+          </ul>
         </div>
       </div>
     );

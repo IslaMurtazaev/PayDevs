@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import FormikTaskly from "../../forms/FormikTask";
-import { tasklyActions } from "../../actions/taskly";
+import { tasklyActions } from "../../actions/task";
 import { Redirect } from "react-router-dom";
 
 const UpdateTaskForm = props => {
