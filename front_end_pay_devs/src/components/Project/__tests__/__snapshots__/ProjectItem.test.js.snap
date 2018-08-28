@@ -1,0 +1,104 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ProjectItem /> matches previous snap 1`] = `
+<div
+  className="container"
+>
+  <h1
+    className="projectTitle"
+  >
+    PayDevs
+  </h1>
+  <div
+    className="properties"
+  >
+    <h4
+      className="projectDescription"
+    >
+      <span
+        className="property"
+      >
+        Description: 
+      </span>
+      blablabla
+    </h4>
+    <h4
+      className="projectStartDate"
+    >
+      <span
+        className="property"
+      >
+        Start date: 
+      </span>
+      Fri Aug 24 2018
+    </h4>
+    <h4
+      className="projectEndDate"
+    >
+      <span
+        className="property"
+      >
+        End date: 
+      </span>
+      Sun Sep 30 2018
+    </h4>
+    <h4
+      className="projectTypeOfPayment"
+    >
+      <span
+        className="property"
+      >
+        Type of payment:
+      </span>
+       
+      Monthly
+    </h4>
+    <h4
+      className="projectStatus"
+    >
+      <span
+        className="property"
+      >
+        Status:
+      </span>
+       active
+    </h4>
+  </div>
+  <div
+    className="btn-group-horizontal"
+  >
+    <button
+      className="btn btn-success btn-lg"
+      onClick={[Function]}
+      type="button"
+    >
+      Total
+    </button>
+    <Link
+      replace={false}
+      to="1/update"
+    >
+      <button
+        className="btn btn-warning btn-lg"
+        type="button"
+      >
+        Update project
+      </button>
+    </Link>
+    <button
+      className="removeProject btn btn-danger btn-lg"
+      onClick={[Function]}
+      type="button"
+    >
+      Delete project
+    </button>
+  </div>
+  <div
+    className="session"
+  >
+    <Connect(MonthRates)
+      projectId={1}
+    />
+  </div>
+</div>
+`;

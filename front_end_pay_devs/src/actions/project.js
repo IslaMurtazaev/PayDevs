@@ -75,7 +75,6 @@ function getTotal(id) {
     projectService.getTotal(id).then(data => {
       FileDownload(data, "total.pdf");
       dispatch({ type: projectActionTypes.GET_TOTAL });
-      history.push(`/project/${id}`);
     });
   };
 }

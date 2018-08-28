@@ -58,11 +58,14 @@
       "text",
       "html"
     ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
     "setupFiles": [
       "./test_config/setup/jestsetup.js"
     ],
     "testPathIgnorePatterns": [
-      "./test_config/setup/"
+      "./test_config/"
     ],
     "moduleNameMapper": {
       "\\.(css|less)$": "identity-obj-proxy",

@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MonthRate /> matches previous snapshot 1`] = `
+<div>
+  <Link
+    replace={false}
+    to="/project/undefined/Monthly/1/workedDay"
+  >
+    <span
+      className="rate"
+    >
+      150
+      /per day
+    </span>
+  </Link>
+  <button
+    className="removeRate"
+    onClick={[Function]}
+  >
+    X
+  </button>
+</div>
+`;

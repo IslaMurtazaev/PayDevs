@@ -2,6 +2,7 @@ import React from "react";
 import TaskItem from "../TaskItem";
 import { shallow, mount } from "enzyme";
 import ReactRouterEnzymeContext from "react-router-enzyme-context";
+import toJson from "enzyme-to-json";
 
 describe("<TaskItem />", () => {
   it("renders 1 <TaskItem />", () => {
@@ -37,7 +38,6 @@ describe("<TaskItem />", () => {
     expect(component.find(".taskCompleted").text()).toBe(
       task.completed ? "Completed" : "Uncompleted"
     );
-    // console.log(component.find("Link").text());
   });
 
   it("renders mount <TaskItem /> click onDelete", () => {
@@ -56,4 +56,14 @@ describe("<TaskItem />", () => {
     component.find(".btn-danger").simulate("click");
     expect(onDeleteSpy).toBeCalledWith(1);
   });
+
+  it("matches previous snapshot", () => {
+    const task = {
+      id: 1,
+      title: "Task number 1",
+      description: "Test a ",
+      price: 500
+    };
+    expect(toJson(shallow(<TaskItem task={task} />))).toMatchSnapshot();
+  })
 });

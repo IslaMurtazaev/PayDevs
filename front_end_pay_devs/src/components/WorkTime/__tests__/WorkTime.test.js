@@ -1,5 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
+import toJson from "enzyme-to-json";
 
 import WorkTime from "../WorkTime";
 
@@ -61,4 +62,8 @@ describe("<WorkTime />", () => {
     workTimeComponent.find(".btn-danger").simulate("click");
     expect(onRemoveSpy).toBeCalledWith(workTime.id);
   });
+
+  it("matches previous snapshot", () => {
+    expect(toJson(shallow(<WorkTime workTime={workTime} />))).toMatchSnapshot();
+  })
 });

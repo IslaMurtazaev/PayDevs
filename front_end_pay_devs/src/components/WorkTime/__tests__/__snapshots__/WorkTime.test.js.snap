@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<WorkTime /> matches previous snapshot 1`] = `
+<div
+  className="workedTime"
+>
+  <h4
+    className="start_work"
+  >
+    <b>
+      Start Work:
+    </b>
+     
+    2018-8-24 06:00:00
+  </h4>
+  <h4
+    className="end_work"
+  >
+    <b>
+      End Work:
+    </b>
+     
+    2018-9-30 16:00:00
+  </h4>
+  <h4
+    className="paid"
+  >
+    <Component />
+    <b>
+      paid
+    </b>
+  </h4>
+  <div
+    className="button-group-horizontal"
+  >
+    <Link
+      replace={false}
+      to="/project/undefined/Hourly/undefined/workTime/1/update"
+    >
+      <button
+        className="updateButton btn btn-warning"
+        type="button"
+      >
+        Update
+      </button>
+    </Link>
+    <button
+      className="btn btn-danger"
+      onClick={[Function]}
+      type="button"
+    >
+      Delete
+    </button>
+  </div>
+</div>
+`;

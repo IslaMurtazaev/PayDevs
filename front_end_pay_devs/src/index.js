@@ -24,6 +24,6 @@ ReactDOM.render(
     (<Provider store={store}>
         <AppRouter/>
     </Provider>),
-     document.getElementById('root')
+     document.getElementById('root') || document.createElement('div') // for testing purposes
 );
 registerServiceWorker();
