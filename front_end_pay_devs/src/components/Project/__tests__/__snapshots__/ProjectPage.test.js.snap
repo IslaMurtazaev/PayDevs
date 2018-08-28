@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ProjectItem /> matches previous snap 1`] = `
+<div>
+  <div
+    className="user"
+  >
+    <div
+      className="username"
+    >
+      IslaMurtazaev
+    </div>
+    <div
+      className="email"
+    >
+      islam.muratazaev@gmail.com
+    </div>
+  </div>
+  <Link
+    className="newProjectLink"
+    replace={false}
+    to="/project/create"
+  >
+    New Project
+  </Link>
+  <div
+    className="projectList"
+  >
+    <ul>
+      <li
+        key="1"
+      >
+        <div
+          className="projectInfo"
+        >
+          <Link
+            className="projectLink"
+            replace={false}
+            to="/project/1"
+          >
+            PayDevs
+          </Link>
+          <p>
+            Fri Aug 24 2018
+          </p>
+        </div>
+      </li>
+      <li
+        key="2"
+      >
+        <div
+          className="projectInfo"
+        >
+          <Link
+            className="projectLink"
+            replace={false}
+            to="/project/2"
+          >
+            PayDevs2
+          </Link>
+          <p>
+            Fri Aug 24 2018
+          </p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+`;

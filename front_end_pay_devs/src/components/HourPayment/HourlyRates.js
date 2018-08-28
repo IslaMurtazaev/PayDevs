@@ -5,9 +5,10 @@ import { hourPaymentActions } from "../../actions/hourPayment";
 import HourlyRate from "./HourlyRate";
 import CreateHourPayment from "./CreateHourPayment";
 
-class HourPayments extends Component {
+class HourlyRates extends Component {
   componentDidMount() {
-    this.props.getAllHourPayments(this.props.projectId);
+    if (!this.props.hourPayments.length) 
+      this.props.getAllHourPayments(this.props.projectId);
   }
 
   render() {
@@ -57,4 +58,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(HourPayments);
+)(HourlyRates);

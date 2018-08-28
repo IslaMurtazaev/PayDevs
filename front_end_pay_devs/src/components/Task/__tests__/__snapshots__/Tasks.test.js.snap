@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Tasks /> matches previous snapshot 1`] = `
+<div>
+  <h3
+    className="taskHeader"
+  >
+    Your tasks
+  </h3>
+  <div>
+    <TaskItem
+      key="1"
+      onDelete={[Function]}
+      task={
+        Object {
+          "completed": true,
+          "description": "desc1",
+          "id": 1,
+          "paid": true,
+          "price": 15,
+          "title": "Write Unit Tests",
+        }
+      }
+    />
+    <TaskItem
+      key="2"
+      onDelete={[Function]}
+      task={
+        Object {
+          "completed": false,
+          "description": "desc2",
+          "id": 2,
+          "paid": true,
+          "price": 20,
+          "title": "Write Integraion Tests",
+        }
+      }
+    />
+    <TaskItem
+      key="3"
+      onDelete={[Function]}
+      task={
+        Object {
+          "completed": true,
+          "description": "desc3",
+          "id": 3,
+          "paid": false,
+          "price": 22,
+          "title": "Write UI Tests",
+        }
+      }
+    />
+    <TaskItem
+      key="3"
+      onDelete={[Function]}
+      task={
+        Object {
+          "completed": false,
+          "description": "desc4",
+          "id": 3,
+          "paid": false,
+          "price": 30,
+          "title": "Present the project",
+        }
+      }
+    />
+  </div>
+  <hr />
+  <Connect(CreateTaskForm) />
+</div>
+`;

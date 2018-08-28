@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const MonthRate = props => {
+const MonthlyRate = props => {
   return (
     <div>
       <Link
@@ -24,4 +24,4 @@ const MonthRate = props => {
   );
 };
 
-export default MonthRate;
+export default MonthlyRate;

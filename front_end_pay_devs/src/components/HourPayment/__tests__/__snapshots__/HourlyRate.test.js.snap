@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<HourlyRate /> matches previous snapshot 1`] = `
+<div>
+  <Link
+    replace={false}
+    to="/login/Hourly/1/workTime"
+  >
+    <span
+      className="rate"
+    >
+      15
+      /per hour
+    </span>
+  </Link>
+  <button
+    className="removeRate"
+    onClick={[Function]}
+  >
+    X
+  </button>
+</div>
+`;

@@ -7,13 +7,17 @@ import CreateWorkedDayForm from "./CreateWorkedDayForm";
 
 class WorkedDays extends Component {
   componentDidMount() {
-    this.props.getAllWorkedDays();
+    if (!this.props.workedDays.length) this.props.getAllWorkedDays();
   }
 
   render() {
     return (
       <div>
-        {this.props.workedDays.length > 0 && <h3><b>Your Worked Days</b></h3>}
+        {this.props.workedDays.length > 0 && (
+          <h3 className="workedDaysHeader">
+            <b>Your Worked Days</b>
+          </h3>
+        )}
         <div>
           {this.props.workedDays.map(workedDay => (
             <WorkedDay
@@ -21,11 +25,17 @@ class WorkedDays extends Component {
               workedDay={workedDay}
               projectId={+this.props.match.params.id}
               monthPaymentId={+this.props.match.params.monthPaymentId}
+              onRemove={this.props.removeWorkedDay}
             />
           ))}
         </div>
 
-        <CreateWorkedDayForm projectId={+this.props.match.params.id} monthPaymentId={+this.props.match.params.monthPaymentId} />
+        <hr />
+
+        <CreateWorkedDayForm
+          projectId={+this.props.match.params.id}
+          monthPaymentId={+this.props.match.params.monthPaymentId}
+        />
       </div>
     );
   }
@@ -39,7 +49,9 @@ const mapStateToProps = state => {
 
 const mapDispatchersToProps = (dispatch, ownProps) => ({
   getAllWorkedDays: () =>
-    dispatch(workedDayActions.getAll(+ownProps.match.params.monthPaymentId))
+    dispatch(workedDayActions.getAll(+ownProps.match.params.monthPaymentId)),
+  removeWorkedDay: workedDayId =>
+    dispatch(workedDayActions.remove(workedDayId))
 });
 
 export default connect(
