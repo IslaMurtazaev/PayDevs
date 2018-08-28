@@ -27,8 +27,8 @@ function getAll(projectId) {
     headers: headers
     }
   ).then(res => {
-    let projects = res.data;
-    return projects;
+    let tasks = res.data;
+    return tasks;
   });
 }
 

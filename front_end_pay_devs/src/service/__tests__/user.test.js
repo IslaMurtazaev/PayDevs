@@ -1,4 +1,6 @@
-jest.mock("../__mocks__/axios")
+// jest.mock("../axios")
+// import mockAxios from "axios"
+
 import {UserService} from "../user";
 
 
@@ -42,8 +44,11 @@ describe('User sevice  ', () => {
             const passworrd = 'qwert12345'
             const data =  await UserService.login(username, passworrd);
             let user = localStorage.getItem('user')
-            
             expect(JSON.parse(user)).toEqual(data)
+            UserService.logout()
+            let userLogout = localStorage.getItem('user')
+            expect(userLogout).toBeNull();
+            
         });
     })
   });

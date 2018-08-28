@@ -34,7 +34,7 @@ function getAll(monthPaymentId) {
 function remove(workedDayId) {
   let headers = authHeader();
   return axios.delete( `${API_URL}project/worked_day/${workedDayId}/delete/`,
-    {headers: headers});
+    {headers: headers}).then(res => res.data);
 }
 
 function update(projectId, monthPaymentId, workedDayId, values) {

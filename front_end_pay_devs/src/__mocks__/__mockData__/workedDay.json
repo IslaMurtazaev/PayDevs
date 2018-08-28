@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "day": "2018-08-01",
+        "paid": false,
+        "monthPaymentId": 1
+    },
+    {
+        "id": 2,
+        "day": "2018-08-02",
+        "paid": false,
+        "monthPaymentId": 1
+    },
+    {
+        "id": 3,
+        "day": "2018-08-02",
+        "paid": false,
+        "monthPaymentId": 2
+    }
+]

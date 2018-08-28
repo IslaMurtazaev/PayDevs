@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "title": "Task one",
+        "description": "Task one description",
+        "price": 1000,
+        "paid": false,
+        "completed": true,
+        "projectId": 1
+    },
+    {   "id": 2,
+        "title": "Task two",
+        "description": "Task two description",
+        "price": 500,
+        "paid": false,
+        "completed": true,
+        "projectId": 1
+    }
+
+]

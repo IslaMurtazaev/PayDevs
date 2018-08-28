@@ -6,6 +6,18 @@ export default {
         });
     
     }),
+    put: jest.fn((url) => {
+        return Promise.resolve({
+            data: {}
+        });
+    
+    }),
+    delete: jest.fn((url) => {
+        return Promise.resolve({
+            data: {}
+        });
+    
+    }),
     post: jest.fn((url, data) => {
         var parser = document.createElement('a');
         parser.href = url;
@@ -15,8 +27,8 @@ export default {
         if(pathList.indexOf('users') !== -1){
             return userAxiosRender(pathList, data);
         }
-        let user = JSON.parse(data)
-        return Promise.resolve({ data: {username: user.username, password: user.password} })
+        console.log(url)
+        return Promise.resolve({ data: {} })
           
     }),
     create: jest.fn(function () {

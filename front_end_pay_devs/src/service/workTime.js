@@ -23,7 +23,7 @@ function create(values) {
 
 function getAll(hourPaymentId) {
   let headers = authHeader();
-  return axios(`${API_URL}project/hour_payment/${hourPaymentId}/work_time/all`,
+  return axios.get(`${API_URL}project/hour_payment/${hourPaymentId}/work_time/all`,
     {headers: headers}).then(res => {
     let projects = res.data;
     return projects;

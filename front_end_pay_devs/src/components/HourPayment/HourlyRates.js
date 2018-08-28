@@ -12,7 +12,7 @@ class HourPayments extends Component {
 
   render() {
     const { hourPayments, projectId, removeHourPayment } = this.props;
-
+    
     return (
       <div>
         {hourPayments.length > 0 && (

@@ -12,7 +12,7 @@ class WorkTimes extends Component {
 
   render() {
     const { workTimes } = this.props;
-
+    console.log(workTimes)
     return (
       <div>
         {workTimes.length > 0 && <h3><b>Your Worked Hours</b></h3>}
