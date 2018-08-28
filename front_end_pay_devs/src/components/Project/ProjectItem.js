@@ -3,12 +3,13 @@ import { connect } from "react-redux";
 import { projectActions } from "../../actions/project";
 import { Link } from "react-router-dom";
 import Tasks from "../../components/Task/Tasks";
-import HourPayments from "../../components/HourPayment/HourlyRates";
-import MonthRates from "../MonthPayment/MonthlyRates";
+import HourlyRates from "../../components/HourPayment/HourlyRates";
+import MonthlyRates from "../MonthPayment/MonthlyRates";
 
 class ProjectItem extends Component {
   componentDidMount() {
-    if (!this.props.project.title) this.props.getProject();
+    if (this.props.project.id !== +this.props.match.params.id)
+      this.props.getProject();
   }
 
   render() {
@@ -19,11 +20,11 @@ class ProjectItem extends Component {
     switch (project.type_of_payment) {
       case "M_P":
         type_of_payment = "Monthly";
-        sessionsType = <MonthRates projectId={project.id} />;
+        sessionsType = <MonthlyRates projectId={project.id} />;
         break;
       case "H_P":
         type_of_payment = "Hourly";
-        sessionsType = <HourPayments projectId={project.id} />;
+        sessionsType = <HourlyRates projectId={project.id} />;
         break;
       case "T_P":
         type_of_payment = "Taskly";

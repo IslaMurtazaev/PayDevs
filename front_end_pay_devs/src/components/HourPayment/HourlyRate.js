@@ -2,8 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { history } from "../../index";
 
-const HourPaymnetRate = props => {
+const HourlyRate = props => {
   const { hourPayment, onRemove } = props;
+
   return (
     <div>
       <Link
@@ -11,12 +12,14 @@ const HourPaymnetRate = props => {
       >
         <span className="rate">
           {hourPayment.rate}
-          /per hour _____
+          /per hour
         </span>
       </Link>
-      <button className="removeRate" onClick={() => onRemove(hourPayment.id)}>X</button>
+      <button className="removeRate" onClick={() => onRemove(hourPayment.id)}>
+        X
+      </button>
     </div>
   );
 };
 
-export default HourPaymnetRate;
+export default HourlyRate;

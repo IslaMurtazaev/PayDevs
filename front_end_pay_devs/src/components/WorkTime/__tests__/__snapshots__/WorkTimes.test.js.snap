@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<WorkTimes /> matches previous snapshot 1`] = `
+<div>
+  <h3
+    className="workedHoursHeader"
+  >
+    <b>
+      Your Worked Hours
+    </b>
+  </h3>
+  <div>
+    <WorkTimeItem
+      hourPaymentId={1}
+      key="1"
+      onRemove={[Function]}
+      projectId={1}
+      workTime={
+        Object {
+          "end_date": "1999-09-24T00:00:00.000Z",
+          "id": 1,
+          "paid": true,
+          "start_date": "1999-08-24T00:00:00.000Z",
+        }
+      }
+    />
+    <WorkTimeItem
+      hourPaymentId={1}
+      key="2"
+      onRemove={[Function]}
+      projectId={1}
+      workTime={
+        Object {
+          "end_date": "2018-09-24T00:00:00.000Z",
+          "id": 2,
+          "paid": false,
+          "start_date": "2018-08-30T10:00:00.000Z",
+        }
+      }
+    />
+  </div>
+  <h3>
+    <b>
+      Create a new Work Time
+    </b>
+  </h3>
+  <WithFormik(WorkInput)
+    hourPaymentId={1}
+    onSubmit={[Function]}
+    projectId={1}
+  />
+</div>
+`;

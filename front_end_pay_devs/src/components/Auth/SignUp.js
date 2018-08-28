@@ -31,7 +31,6 @@ class SignUp extends Component {
     }
   }
 
-  
   render() {
     const { username, password, email } = this.state;
     const error = this.props.error;
@@ -39,43 +38,41 @@ class SignUp extends Component {
       <div>
         <h2 className="authHeader">Sign Up</h2>
         <div className="signUpForm">
-        <form name="form" onSubmit={this.handleSubmit}>
-          {error && <div>{error.error.message}</div>}
-          <div>
-            <label htmlFor="username">Username: </label>
-            <input
-              type="text"
-              className="form-control"
-              name="username"
-              value={username}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div>
-            <label htmlFor="email">Email: </label>
-            <input
-              type="email"
-              className="form-control"
-              name="email"
-              value={email}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div>
-            <label htmlFor="password">Password: </label>
-            <input
-              type="password"
-              className="form-control"
-              name="password"
-              value={password}
-              onChange={this.handleChange}
-            />
-           </div>
+          <form name="form" onSubmit={this.handleSubmit}>
+            {error && <div>{error.error.message}</div>}
+            <div>
+              <label htmlFor="username">Username: </label>
+              <input
+                type="text"
+                className="form-control"
+                name="username"
+                value={username}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="email">Email: </label>
+              <input
+                type="email"
+                className="form-control"
+                name="email"
+                value={email}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="password">Password: </label>
+              <input
+                type="password"
+                className="form-control"
+                name="password"
+                value={password}
+                onChange={this.handleChange}
+              />
+            </div>
             <button className="btn btn-primary">Sign Up</button>
-
           </form>
-        </div> 
-
+        </div>
       </div>
     );
   }

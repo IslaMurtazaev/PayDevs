@@ -20,7 +20,7 @@ describe("<ProjectItem />", () => {
   const mockStore = configureStore();
 
   let store = mockStore(initialState);
-  let container = shallow(<ProjectItem store={store} />).dive();
+  let container = shallow(<ProjectItem store={store} match={ {params: {id: 1}} } />).dive();
 
   it("renders projectTitle based on props", () => {
     expect(container.find(".projectTitle").text()).toBe("PayDevs");

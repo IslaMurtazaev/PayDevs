@@ -11,7 +11,7 @@ class TaskItem extends Component {
     const { task, projectId } = this.props;
 
     return (
-      <div className="tasks">
+      <div className="tasks"> 
         <h4 className="taskTitle"><b>Title:</b> {task.title}</h4>
         <h4 className="taskDescription"><b>Description:</b> {task.description}</h4>
         <h4 className="taskPrice"><b>Price:</b> {task.price}</h4>

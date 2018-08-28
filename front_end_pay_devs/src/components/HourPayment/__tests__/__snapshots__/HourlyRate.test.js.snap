@@ -1,16 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<MonthRate /> matches previous snapshot 1`] = `
+exports[`<HourlyRate /> matches previous snapshot 1`] = `
 <div>
   <Link
     replace={false}
-    to="/project/undefined/Monthly/1/workedDay"
+    to="/login/Hourly/1/workTime"
   >
     <span
       className="rate"
     >
-      150
-      /per day
+      15
+      /per hour
     </span>
   </Link>
   <button

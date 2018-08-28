@@ -7,15 +7,20 @@ import FormikWorkTime from "../../forms/FormikWorkTime";
 
 class WorkTimes extends Component {
   componentDidMount() {
-    this.props.getAllWorkTimes(this.props.match.params.hourPaymentId);
+    if (!this.props.workTimes.length)
+      this.props.getAllWorkTimes(this.props.match.params.hourPaymentId);
   }
 
   render() {
-    const { workTimes } = this.props;
+    const { workTimes, createWorkTime, removeWorkTime } = this.props;
 
     return (
       <div>
-        {workTimes.length > 0 && <h3><b>Your Worked Hours</b></h3>}
+        {workTimes.length > 0 && (
+          <h3 className="workedHoursHeader">
+            <b>Your Worked Hours</b>
+          </h3>
+        )}
         <div>
           {workTimes.map(workTime => (
             <WorkTime
@@ -23,15 +28,16 @@ class WorkTimes extends Component {
               workTime={workTime}
               projectId={+this.props.match.params.id}
               hourPaymentId={+this.props.match.params.hourPaymentId}
-              onRemove={this.props.removeWorkTime}
+              onRemove={removeWorkTime}
             />
           ))}
         </div>
 
-
-        <h3><b>Create a new Work Time</b></h3>
-     <FormikWorkTime
-          onSubmit={this.props.createWorkTime}
+        <h3>
+          <b>Create a new Work Time</b>
+        </h3>
+        <FormikWorkTime
+          onSubmit={createWorkTime}
           projectId={+this.props.match.params.id}
           hourPaymentId={+this.props.match.params.hourPaymentId}
         />

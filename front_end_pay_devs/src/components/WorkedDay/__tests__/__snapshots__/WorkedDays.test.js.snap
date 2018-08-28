@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<WorkedDays /> matches previous snapshot 1`] = `
+<div>
+  <h3
+    className="workedDaysHeader"
+  >
+    <b>
+      Your Worked Days
+    </b>
+  </h3>
+  <div>
+    <WorkedDay
+      key="1"
+      monthPaymentId={1}
+      onRemove={[Function]}
+      projectId={1}
+      workedDay={
+        Object {
+          "date": "02-08-1999",
+          "id": 1,
+          "paid": true,
+        }
+      }
+    />
+    <WorkedDay
+      key="2"
+      monthPaymentId={1}
+      onRemove={[Function]}
+      projectId={1}
+      workedDay={
+        Object {
+          "date": "02-08-2018",
+          "id": 2,
+          "paid": false,
+        }
+      }
+    />
+  </div>
+  <hr />
+  <Connect(CreateWorkedDayForm)
+    monthPaymentId={1}
+    projectId={1}
+  />
+</div>
+`;

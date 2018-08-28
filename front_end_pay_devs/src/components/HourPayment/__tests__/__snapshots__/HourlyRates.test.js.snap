@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<HourlyRates /> matches previous snapshot 1`] = `
+<div>
+  <h3
+    className="rateHeader"
+  >
+    Select one of your current rates:
+  </h3>
+  <div>
+    <HourlyRate
+      hourPayment={
+        Object {
+          "id": 1,
+          "rate": 15,
+        }
+      }
+      key="1"
+      onRemove={[Function]}
+    />
+    <HourlyRate
+      hourPayment={
+        Object {
+          "id": 2,
+          "rate": 20,
+        }
+      }
+      key="2"
+      onRemove={[Function]}
+    />
+    <HourlyRate
+      hourPayment={
+        Object {
+          "id": 3,
+          "rate": 22,
+        }
+      }
+      key="3"
+      onRemove={[Function]}
+    />
+  </div>
+  <hr />
+  <Connect(CreateHourPayment) />
+</div>
+`;

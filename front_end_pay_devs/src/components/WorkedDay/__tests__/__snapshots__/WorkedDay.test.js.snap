@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<WorkedDay /> matches previous snapshot 1`] = `
+<div
+  className="worked"
+>
+  <h4
+    className="date"
+  >
+    <b>
+      Date:
+    </b>
+     
+    2018-08-24
+  </h4>
+  <h4
+    className="paid"
+  >
+    <Component />
+    <b>
+      paid
+    </b>
+  </h4>
+  <div
+    className="button-group-horizontal"
+  >
+    <Link
+      replace={false}
+      to="/project/undefined/Monthly/undefined/workedDay/1/update"
+    >
+      <button
+        className="updateButton btn btn-warning"
+        type="button"
+      >
+        Update
+      </button>
+    </Link>
+    <button
+      className="btn btn-danger"
+      onClick={[Function]}
+      type="button"
+    >
+      Delete
+    </button>
+  </div>
+</div>
+`;

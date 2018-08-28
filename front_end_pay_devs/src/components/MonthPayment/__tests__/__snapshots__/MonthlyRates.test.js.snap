@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MonthlyRates /> matches previous snapshot 1`] = `
+<div>
+  <h3
+    className="rateHeader"
+  >
+    Select one of your current rates:
+  </h3>
+  <div>
+    <MonthlyRate
+      key="1"
+      monthPayment={
+        Object {
+          "id": 1,
+          "rate": 150,
+        }
+      }
+      onRemove={[Function]}
+    />
+    <MonthlyRate
+      key="2"
+      monthPayment={
+        Object {
+          "id": 2,
+          "rate": 200,
+        }
+      }
+      onRemove={[Function]}
+    />
+    <MonthlyRate
+      key="3"
+      monthPayment={
+        Object {
+          "id": 3,
+          "rate": 220,
+        }
+      }
+      onRemove={[Function]}
+    />
+  </div>
+  <hr />
+  <Connect(CreateMonthPaymentForm) />
+</div>
+`;

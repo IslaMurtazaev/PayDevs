@@ -15,10 +15,8 @@ class LoginUser extends Component {
   }
 
   handleSubmit(values) {
-
     if (values.username && values.password) {
       this.props.onLoginUser(values.username, values.password);
-      console.log(values)
       this.setState({ password_req: false, user_req: false });
     } else if (!values.username) {
       this.setState({ user_req: true });
@@ -33,30 +31,32 @@ class LoginUser extends Component {
 
     return (
       <div>
-         
         <h2 className="authHeader">Login</h2>
-        <Form className="loginForm"
+        <Form
+          className="loginForm"
           model="login.user_form"
           onSubmit={val => this.handleSubmit(val)}
           name="myForm"
         >
           {error && <div>{error.message}</div>}
           <div>
-            <label>Username</label><br/>
+            <label>Username</label>
+            <br />
             <Control.text model="login.user_form.username" />
             {user_req && <div className="help-block">Username is required</div>}
           </div>
           <div>
-            <label>Password</label><br/>
-            <Control.password model="login.user_form.password" /><br/>
+            <label>Password</label>
+            <br />
+            <Control.password model="login.user_form.password" />
+            <br />
             {password_req && (
               <div className="help-block">Username is required</div>
             )}
             <button className="btn btn-primary">Login</button>
           </div>
         </Form>
-     
-        </div>
+      </div>
     );
   }
 }

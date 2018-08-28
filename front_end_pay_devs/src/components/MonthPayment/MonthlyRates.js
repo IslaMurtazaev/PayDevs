@@ -2,26 +2,31 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import monthPaymentActions from "../../actions/monthPayment";
-import MonthRate from "./MonthlyRate";
+import MonthlyRate from "./MonthlyRate";
 import CreateMonthPaymentForm from "./CreateMonthPaymentForm";
 
-class MonthRates extends Component {
+class MonthlyRates extends Component {
   componentDidMount() {
-    this.props.getAllMonthPayments(this.props.projectId);
+    if (!this.props.monthPayments.length)
+      this.props.getAllMonthPayments(this.props.projectId);
   }
 
   render() {
+    const { monthPayments, projectId, removeMonthPayment } = this.props;
+
     return (
       <div>
-        {this.props.monthPayments.length > 0 && <h3 className="rateHeader">Select one of your current rates:</h3>}
+        {monthPayments.length > 0 && (
+          <h3 className="rateHeader">Select one of your current rates:</h3>
+        )}
         <div>
-          {this.props.monthPayments.map(monthPayment => (
-            <MonthRate
+          {monthPayments.map(monthPayment => (
+            <MonthlyRate
               key={monthPayment.id}
               monthPayment={monthPayment}
-              projectId={this.props.projectId}
+              projectId={projectId}
               onRemove={monthPaymentId =>
-                this.props.removeMonthPayment(monthPaymentId)
+                removeMonthPayment(monthPaymentId)
               }
             />
           ))}
@@ -29,7 +34,7 @@ class MonthRates extends Component {
 
         <hr />
 
-        <CreateMonthPaymentForm projectId={this.props.projectId}  />
+        <CreateMonthPaymentForm projectId={projectId} />
       </div>
     );
   }
@@ -51,4 +56,4 @@ const mapDispatchersToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchersToProps
-)(MonthRates);
+)(MonthlyRates);

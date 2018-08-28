@@ -26,7 +26,44 @@ exports[`<ProjectItem /> matches previous snap 1`] = `
   <div
     className="projectList"
   >
-    <ul />
+    <ul>
+      <li
+        key="1"
+      >
+        <div
+          className="projectInfo"
+        >
+          <Link
+            className="projectLink"
+            replace={false}
+            to="/project/1"
+          >
+            PayDevs
+          </Link>
+          <p>
+            Fri Aug 24 2018
+          </p>
+        </div>
+      </li>
+      <li
+        key="2"
+      >
+        <div
+          className="projectInfo"
+        >
+          <Link
+            className="projectLink"
+            replace={false}
+            to="/project/2"
+          >
+            PayDevs2
+          </Link>
+          <p>
+            Fri Aug 24 2018
+          </p>
+        </div>
+      </li>
+    </ul>
   </div>
 </div>
 `;

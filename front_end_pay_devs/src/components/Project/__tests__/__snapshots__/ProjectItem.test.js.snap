@@ -96,7 +96,7 @@ exports[`<ProjectItem /> matches previous snap 1`] = `
   <div
     className="session"
   >
-    <Connect(MonthRates)
+    <Connect(MonthlyRates)
       projectId={1}
     />
   </div>
