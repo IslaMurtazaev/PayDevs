@@ -11,7 +11,6 @@ class ProjectPage extends Component {
   render() {
     const { user } = this.props.user; // why we are wrapping user inside a user?
     const { projects } = this.props;
-
     return (
       <div>
         <div className="user">

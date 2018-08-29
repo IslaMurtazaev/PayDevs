@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "projectId": 1,
+        "rate": 500
+    },
+    {
+        "id": 2,
+        "projectId": 1,
+        "rate": 100
+    },
+    {
+        "id": 3,
+        "projectId": 2,
+        "rate": 100
+    },
+    {
+        "id": 4,
+        "projectId": 2,
+        "rate": 1000
+    }
+]

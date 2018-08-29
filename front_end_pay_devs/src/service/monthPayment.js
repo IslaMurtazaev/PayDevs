@@ -34,5 +34,5 @@ function remove(monthPaymentId) {
   return axios.delete(
     `${BASE_URL}month_payment/${monthPaymentId}/delete/`,
     {headers: headers},
-  )
+  ).then(res=>res.data)
 }

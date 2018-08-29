@@ -13,6 +13,7 @@ class MonthlyRates extends Component {
 
   render() {
     const { monthPayments, projectId, removeMonthPayment } = this.props;
+    
 
     return (
       <div>

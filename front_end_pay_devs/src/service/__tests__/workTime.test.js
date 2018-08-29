@@ -167,7 +167,7 @@ describe('Worked Time', async () => {
                 const urlList = url.split("/")
                 urlList.pop()
                 const workTimeId = urlList.pop()
-                console.log(url, workTimeId)
+                
                 
                 if (err) reject(err)
               
@@ -178,7 +178,7 @@ describe('Worked Time', async () => {
         )
 
         const data =  await workTimeService.remove(workTime.id);
-        console.log(data)
+       
 
         expect(data).toEqual(workTime);
         expect(mockAxios.delete).toHaveBeenCalledTimes(1);

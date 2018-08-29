@@ -19,6 +19,8 @@ export function projects(state = [], action) {
       return [];
     case projectActionTypes.CREATE:
       return state.concat([action.project]);
+    case projectActionTypes.REMOVE:
+      return state.filter(project => project.id !== action.id)
     case projectActionTypes.UPDATE:
       return state.map(
         project => (project.id === action.project.id ? action.project : project)
