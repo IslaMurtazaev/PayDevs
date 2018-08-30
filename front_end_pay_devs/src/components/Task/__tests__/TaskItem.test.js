@@ -29,10 +29,12 @@ describe("<TaskItem />", () => {
       price: 500,
       completed: true
     };
-    const component = mount(<TaskItem task={task} />, options.get());
+    const component = shallow(<TaskItem task={task} />);
     expect(component.find("h4")).toHaveLength(5);
     expect(component.find(".taskTitle").text()).toBe(`Title: ${task.title}`);
-    expect(component.find(".taskDescription").text()).toBe(`Description: ${task.description}`);
+    expect(component.find(".taskDescription").text()).toBe(
+      `Description: ${task.description}`
+    );
     expect(component.find(".taskPaid").text()).toBe("not paid");
     expect(component.find(".taskPrice").text()).toBe(`Price: ${task.price}`);
     expect(component.find(".taskCompleted").text()).toBe(
@@ -49,10 +51,7 @@ describe("<TaskItem />", () => {
       description: "Test a ",
       price: 500
     };
-    const component = mount(
-      <TaskItem task={task} onDelete={onDeleteSpy} />,
-      options.get()
-    );
+    const component = shallow(<TaskItem task={task} onDelete={onDeleteSpy} />);
     component.find(".btn-danger").simulate("click");
     expect(onDeleteSpy).toBeCalledWith(1);
   });
@@ -65,5 +64,5 @@ describe("<TaskItem />", () => {
       price: 500
     };
     expect(toJson(shallow(<TaskItem task={task} />))).toMatchSnapshot();
-  })
+  });
 });

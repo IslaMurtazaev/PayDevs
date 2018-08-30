@@ -2,6 +2,7 @@ import React from "react";
 import { shallow } from "enzyme";
 import configureStore from "redux-mock-store";
 import toJson from "enzyme-to-json"
+jest.mock("../../../index.js", () => require("history"));
 
 import ProjectPage from "../ProjectPage";
 

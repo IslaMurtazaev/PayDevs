@@ -4,7 +4,7 @@ exports[`<HourlyRate /> matches previous snapshot 1`] = `
 <div>
   <Link
     replace={false}
-    to="/login/Hourly/1/workTime"
+    to="testing_url/Hourly/1/workTime"
   >
     <span
       className="rate"

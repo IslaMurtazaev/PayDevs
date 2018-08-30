@@ -1,6 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 import toJson from "enzyme-to-json";
+jest.mock("../../../index.js", () => require("history"));
 
 import HourlyRate from "../HourlyRate";
 

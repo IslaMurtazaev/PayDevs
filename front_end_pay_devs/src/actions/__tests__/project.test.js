@@ -7,6 +7,7 @@ import { projectActions } from "../../actions/project";
 import { projectActionTypes } from "../../constants/project";
 import { projectService } from "../../service/project";
 jest.mock("../../service/project.js");
+jest.mock("../../index.js", () => require("history"));
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);

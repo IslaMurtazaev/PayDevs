@@ -5,6 +5,7 @@ import workTimeActions from "../workTime";
 import { workTimeActionTypes } from "../../constants/workTime";
 import { workTimeService } from "../../service/workTime";
 jest.mock("../../service/workTime.js");
+jest.mock("../../index.js", () => require("history"));
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
