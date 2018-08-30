@@ -14,8 +14,8 @@ function getAll(projectId) {
   return axios.get( `${BASE_URL}${projectId}/month_payment/all/`,
     {headers: headers}
   ).then(res => {
-    let month_payments = res.data;
-    return month_payments;
+    let monthPayments = res.data;
+    return monthPayments;
   });
 }
 
@@ -24,8 +24,8 @@ function create(projectId, values) {
   return axios.post(`${BASE_URL}${projectId}/month_payment/create/`, values,
     {headers: headers}
   ).then(res => {
-    let month_payment = res.data;
-    return month_payment;
+    let monthPayment = res.data;
+    return monthPayment;
   });
 }
 

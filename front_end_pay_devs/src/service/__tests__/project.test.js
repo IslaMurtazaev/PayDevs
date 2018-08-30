@@ -1,5 +1,6 @@
 import mockAxios from "axios";
 import {projectService} from '../project';
+jest.mock("../helpers", () => require("helpers"))
 const fs = require('fs');
 
 const BASE_URL = "http://127.0.0.1:8000/api/";
@@ -200,7 +201,7 @@ describe('Project', async () => {
                 urlList.pop()
                 const projectId = urlList.pop()
                 if (err) reject(err)
-                console.log(url)           
+                           
                 resolve({ data: JSON.parse(data).filter(project => 
                     project.id === +projectId ).pop() })
             })

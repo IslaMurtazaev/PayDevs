@@ -2,7 +2,7 @@
 // import mockAxios from "axios"
 
 import {UserService} from "../user";
-
+jest.mock("../helpers", () => require("helpers"))
 
 describe('User sevice  ', () => {
     describe('Login User', () => {

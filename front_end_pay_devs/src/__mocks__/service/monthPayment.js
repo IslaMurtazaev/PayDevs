@@ -1,22 +1,22 @@
-export const taskService = {
+export default {
     getAll: jest.fn(() => {
         return Promise.resolve({
-            tasks: {}
+            monthPayments: {}
         });
     }),
     create: jest.fn(() => {
         return Promise.resolve({
-            tasks: {}
+            monthPayment: {}
         });
     }),
     update: jest.fn(() => {
         return Promise.resolve({
-            task: {}
+            monthPayment: {}
         });
     }),
     remove: jest.fn(() => {
         return Promise.resolve({
-            taskId: {}
+            monthPaymentId: {}
         });
     })
 }

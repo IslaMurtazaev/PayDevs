@@ -11,7 +11,7 @@ export default {
 };
 
 function create(projectId, monthPaymentId, values) {
-  return dispatch => {
+  return dispatch => 
     workedDayService
       .create(projectId, monthPaymentId, values)
       .then(workedDay => {
@@ -21,30 +21,28 @@ function create(projectId, monthPaymentId, values) {
         );
       })
       .catch(error => handleError(error));
-  };
+  
 }
 
 function getAll(monthPaymentId) {
-  return dispatch => {
+  return dispatch => 
     workedDayService.getAll(monthPaymentId).then(workedDays => {
       dispatch({ type: workedDayActionTypes.ADD_ALL, workedDays });
     });
-  };
 }
 
 function remove(workedDayId) {
-  return dispatch => {
+  return dispatch => 
     workedDayService
       .remove(workedDayId)
       .then(response => {
         dispatch({ type: workedDayActionTypes.REMOVE, workedDayId });
       })
       .catch(error => handleError(error));
-  };
 }
 
 function update(projectId, monthPaymentId, workedDayId, values) {
-  return dispatch => {
+  return dispatch => 
     workedDayService
       .update(projectId, monthPaymentId, workedDayId, values)
       .then(workedDay => {
@@ -54,5 +52,4 @@ function update(projectId, monthPaymentId, workedDayId, values) {
         );
       })
       .catch(error => handleError(error));
-  };
 }

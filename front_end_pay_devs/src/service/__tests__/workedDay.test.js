@@ -1,5 +1,6 @@
 import mockAxios from "axios"
 import workedDayService from '../workedDay'
+jest.mock("../helpers", () => require("helpers"))
 const fs = require('fs')
 
 const BASE_URL = "http://127.0.0.1:8000/api/"

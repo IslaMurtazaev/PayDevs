@@ -1,1 +1,1 @@
-export const authHeader = jest.fn()
+export const authHeader = jest.fn(() => ({}))

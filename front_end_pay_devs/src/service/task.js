@@ -45,8 +45,9 @@ function remove(taskId) {
   function update(values){
    
     const headres = authHeader();
-  const fetch_url = `${BASE_URL}${values.projectId}/task/${values.id}/update/`;
-  return axios.put(fetch_url, values, {headers: headres}).then(res => {
-      return res.data;
-  });
+    const fetch_url = `${BASE_URL}${values.projectId}/task/${values.id}/update/`;
+    return axios.put(fetch_url, values, {headers: headres}).then(res => {
+        let task = res.data
+        return task;
+    });
   }

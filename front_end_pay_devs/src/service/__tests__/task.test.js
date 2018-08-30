@@ -1,7 +1,6 @@
 import mockAxios from "axios"
 import {taskService} from '../task'
-import { authHeader } from "../../__mocks__/helpers";
-// import { task } from "../../__mocks__/helpers";
+jest.mock("../helpers", () => require("helpers"))
 const fs = require('fs')
 
 
@@ -32,9 +31,7 @@ describe('Task', async () => {
             }
         ]
         
-        authHeader.mockImplementationOnce(()=>{
-            return {'Authorization': "__TOKEN__"}
-        })
+        
         mockAxios.get.mockImplementationOnce(()=>
         new Promise((resolve, reject) => {
             fs.readFile("./src/__mocks__/__mockData__/task.json", 'utf8', (err, data) => {

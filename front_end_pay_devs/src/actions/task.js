@@ -11,41 +11,40 @@ export const tasklyActions = {
 };
 
 function create(task, projectId) {
-  return dispatch => {
+  return dispatch => 
     taskService
       .create(task, projectId)
-      .then(task => {
-        dispatch({ type: taskActionTypes.CREATE, task });
-      })
+      .then(task => 
+        dispatch({ type: taskActionTypes.CREATE, task })
+      )
       .catch(error => handleError(error));
-  };
+  
 }
 
 function getAll(projectId) {
-  return dispatch => {
+  return dispatch => 
     taskService
       .getAll(projectId)
-      .then(tasks => {
-
-        dispatch({ type: taskActionTypes.ADD_ALL, tasks });
-      })
+      .then(tasks => 
+        dispatch({ type: taskActionTypes.ADD_ALL, tasks })
+      )
       .catch(error => handleError(error));
-  };
+  
 }
 
 function remove(taskId) {
-  return dispatch => {
+  return dispatch => 
     taskService
       .remove(taskId)
       .then(task => {
         dispatch({ type: taskActionTypes.REMOVE, taskId });
       })
       .catch(error => handleError(error));
-  };
+  
 }
 
 function update(values) {
-  return dispatch => {
+  return dispatch => 
     taskService
       .update(values)
       .then(task => {
@@ -53,5 +52,5 @@ function update(values) {
         history.push(`/project/${values.projectId}`);
       })
       .catch(error => handleError(error));
-  };
+  
 }

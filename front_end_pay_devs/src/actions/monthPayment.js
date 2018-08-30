@@ -9,15 +9,14 @@ export default {
 };
 
 function getAll(projectId) {
-  return dispatch => {
+  return dispatch => 
     monthPaymentService.getAll(projectId).then(monthPayments => {
       dispatch({ type: monthPaymentActionTypes.ADD_ALL, monthPayments });
     });
-  };
 }
 
 function create(projectId, values) {
-  return dispatch => {
+  return dispatch => 
     monthPaymentService
       .create(projectId, values)
       .then(monthPayment => {
@@ -26,16 +25,14 @@ function create(projectId, values) {
       .catch(error => {
         handleError(error);
       });
-  };
 }
 
 function remove(monthPaymentId) {
-  return dispatch => {
+  return dispatch => 
     monthPaymentService
       .remove(monthPaymentId)
       .then(response => {
         dispatch({ type: monthPaymentActionTypes.REMOVE, monthPaymentId });
       })
       .catch(error => handleError(error));
-  };
 }
