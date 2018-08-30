@@ -15,7 +15,6 @@ describe('actions Task', async () => {
     it('should create an action to add a todo', async () => {
 
       taskService.getAll.mockImplementationOnce((id) =>{
-        console.log(id)
           return Promise.resolve({
             task: ["task"] 
         })
@@ -23,7 +22,6 @@ describe('actions Task', async () => {
       const store = mockStore({})
       store.dispatch(tasklyActions.getAll(1))
       expect(taskService.getAll).toHaveBeenCalledTimes(1);
-      console.log(store.getActions())
       
       
     });
