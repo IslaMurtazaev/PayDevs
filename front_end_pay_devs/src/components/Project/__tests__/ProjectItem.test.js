@@ -54,6 +54,15 @@ describe("<ProjectItem />", () => {
     expect(container.find(".projectStatus").text()).toBe("Status: active");
   });
 
+  it("renders three buttons", () => {
+    expect(container.find("button")).toHaveLength(3);
+  })
+
+  // it("dispatches right action on .removeProject", () => {
+  //   container.find(".removeProject").simulate("click");
+  //   const actions = store.getActions();
+  //   expect(actions).toEqual([ { type: 'REMOVE_PROJECT', projectId: 1 } ]);
+  // })
   // it("renders buttons and connects then correctly", () => {
   //   const removeProjectSpy = jest.fn();
   //   container = shallow(<ProjectItem store={store} removeProject={removeProjectSpy} />).dive();

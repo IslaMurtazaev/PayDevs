@@ -11,26 +11,24 @@ export default {
 };
 
 function create(values) {
-  return dispatch => {
+  return dispatch =>
     workTimeService
       .create(values)
       .then(workTime => {
         dispatch({ type: workTimeActionTypes.CREATE, workTime });
       })
       .catch(error => handleError(error));
-  };
 }
 
 function getAll(hourPaymentId) {
-  return dispatch => {
+  return dispatch =>
     workTimeService.getAll(hourPaymentId).then(workTimes => {
       dispatch({ type: workTimeActionTypes.ADD_ALL, workTimes });
     });
-  };
 }
 
 function update(projectId, hourPaymentId, workTimeId, values) {
-  return dispatch => {
+  return dispatch =>
     workTimeService
       .update(projectId, hourPaymentId, workTimeId, values)
       .then(workTime => {
@@ -38,16 +36,14 @@ function update(projectId, hourPaymentId, workTimeId, values) {
         history.push(`/project/${projectId}/Hourly/${hourPaymentId}/workTime`);
       })
       .catch(error => handleError(error));
-  };
 }
 
 function remove(workTimeId) {
-  return dispatch => {
+  return dispatch =>
     workTimeService
       .remove(workTimeId)
       .then(workTime => {
         dispatch({ type: workTimeActionTypes.REMOVE, workTimeId });
       })
       .catch(error => handleError(error));
-  };
 }

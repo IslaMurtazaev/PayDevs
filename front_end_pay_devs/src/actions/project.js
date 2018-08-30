@@ -14,19 +14,17 @@ export const projectActions = {
 };
 
 function get(projectId) {
-  return dispatch => 
+  return dispatch =>
     projectService.get(projectId).then(project => {
       dispatch({ type: projectActionTypes.GET, project });
     });
-  
 }
 
 function getAll() {
-  return dispatch => 
-    projectService.get_all().then(projects => {
+  return dispatch =>
+    projectService.getAll().then(projects => {
       dispatch({ type: projectActionTypes.ADD_ALL, projects });
     });
-  
 }
 
 function clearAll() {
@@ -34,7 +32,7 @@ function clearAll() {
 }
 
 function remove(id) {
-  return dispatch => 
+  return dispatch =>
     projectService
       .remove(id)
       .then(() => {
@@ -45,7 +43,7 @@ function remove(id) {
 }
 
 function create(project) {
-  return dispatch => 
+  return dispatch =>
     projectService
       .create(project)
       .then(project => {
@@ -56,7 +54,7 @@ function create(project) {
 }
 
 function update(project) {
-  return dispatch => 
+  return dispatch =>
     projectService
       .update(project)
       .then(project => {
@@ -64,12 +62,11 @@ function update(project) {
         history.push(`/project/${project.id}`);
       })
       .catch(error => handleError(error));
-  
 }
 
 const FileDownload = require("react-file-download");
 function getTotal(id) {
-  return dispatch => 
+  return dispatch =>
     projectService.getTotal(id).then(data => {
       FileDownload(data, "total.pdf");
       dispatch({ type: projectActionTypes.GET_TOTAL });
