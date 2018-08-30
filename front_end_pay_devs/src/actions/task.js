@@ -26,6 +26,7 @@ function getAll(projectId) {
     taskService
       .getAll(projectId)
       .then(tasks => {
+
         dispatch({ type: taskActionTypes.ADD_ALL, tasks });
       })
       .catch(error => handleError(error));

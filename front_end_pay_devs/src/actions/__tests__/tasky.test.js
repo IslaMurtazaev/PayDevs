@@ -1,14 +1,30 @@
-// import {tasklyActions} from "../task";
-import {taskActionTypes} from "../../constants/task"
+import {tasklyActions} from "../task";
+// import {taskActionTypes} from "../../constants/task"
+
+import {taskService} from "service/task"
+jest.mock("../../service/task", () => require('service/task'))
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 
 
-describe('actions Task', () => {
-    it('should create an action to add a todo', () => {
-      const text = 'Finish docs'
-      const expectedAction = {
-        type: taskActionTypes.CREATE_TASK,
-        text
-      }
-      // expect(tasklyActions.create(1, 2)).toEqual(expectedAction)
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
+
+
+describe('actions Task', async () => {
+    it('should create an action to add a todo', async () => {
+
+      taskService.getAll.mockImplementationOnce((id) =>{
+        console.log(id)
+          return Promise.resolve({
+            task: ["task"] 
+        })
+      })
+      const store = mockStore({})
+      store.dispatch(tasklyActions.getAll(1))
+      expect(taskService.getAll).toHaveBeenCalledTimes(1);
+      console.log(store.getActions())
+      
+      
     });
   });
