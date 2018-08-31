@@ -7,28 +7,29 @@ import HourlyRates from "../../components/HourPayment/HourlyRates";
 import MonthlyRates from "../MonthPayment/MonthlyRates";
 
 class ProjectItem extends Component {
-  componentDidMount() {
+  componentWillMount() {
     if (this.props.project.id !== +this.props.match.params.id)
       this.props.getProject();
   }
 
   render() {
     let { project, getTotal, removeProject } = this.props;
+    let projectId = +this.props.match.params.id;
 
     let sessionsType;
     let type_of_payment;
     switch (project.type_of_payment) {
       case "M_P":
         type_of_payment = "Monthly";
-        sessionsType = <MonthlyRates projectId={project.id} />;
+        sessionsType = <MonthlyRates projectId={projectId} />;
         break;
       case "H_P":
         type_of_payment = "Hourly";
-        sessionsType = <HourlyRates projectId={project.id} />;
+        sessionsType = <HourlyRates projectId={projectId} />;
         break;
       case "T_P":
         type_of_payment = "Taskly";
-        sessionsType = <Tasks projectId={project.id} />;
+        sessionsType = <Tasks projectId={projectId} />;
         break;
       default:
         break;
@@ -69,12 +70,12 @@ class ProjectItem extends Component {
           <button
             type="button"
             className="btn btn-success btn-lg"
-            onClick={() => getTotal(project.id)}
+            onClick={() => getTotal(projectId)}
           >
             Total
           </button>
 
-          <Link to={`${project.id}/update`}>
+          <Link to={`${projectId}/update`}>
             <button type="button" className="btn btn-warning btn-lg">
               Update project
             </button>
@@ -83,7 +84,7 @@ class ProjectItem extends Component {
           <button
             type="button"
             className="removeProject btn btn-danger btn-lg"
-            onClick={() => removeProject(project.id)}
+            onClick={() => removeProject(projectId)}
           >
             Delete project
           </button>

@@ -6,9 +6,12 @@ import WorkTime from "./WorkTime";
 import FormikWorkTime from "../../forms/FormikWorkTime";
 
 class WorkTimes extends Component {
-  componentDidMount() {
-    if (!this.props.workTimes.length)
-      this.props.getAllWorkTimes(this.props.match.params.hourPaymentId);
+  componentWillMount() {
+    let { workTimes, getAllWorkTimes } = this.props;
+    let hourPaymentId = +this.props.match.params.hourPaymentId;
+
+    if (!workTimes.length || workTimes[0].hourPaymentId !== hourPaymentId)
+      getAllWorkTimes(hourPaymentId);
   }
 
   render() {

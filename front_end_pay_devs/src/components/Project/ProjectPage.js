@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { projectActions } from "../../actions/project";
 
 class ProjectPage extends Component {
-  componentDidMount() {
+  componentWillMount() {
     if (!this.props.projects.length) this.props.getAllProjects();
   }
 

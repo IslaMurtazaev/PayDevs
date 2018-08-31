@@ -6,9 +6,10 @@ import TaskItem from "./TaskItem";
 import CreateTask from "./CreateTask";
 
 class Tasks extends Component {
-  componentDidMount() {
-    console.log(this.props.projectId)
-    this.props.getAllTasks(this.props.projectId);
+  componentWillMount() {
+    let { tasks, projectId, getAllTasks } = this.props;
+    if (!tasks.length || tasks[0].projectId !== projectId)
+      getAllTasks(projectId);
   }
 
   render() {
@@ -28,8 +29,6 @@ class Tasks extends Component {
             />
           ))}
         </div>
-
-        <hr />
 
         <CreateTask projectId={projectId} />
       </div>

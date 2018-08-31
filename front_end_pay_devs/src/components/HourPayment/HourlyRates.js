@@ -6,14 +6,15 @@ import HourlyRate from "./HourlyRate";
 import CreateHourPayment from "./CreateHourPayment";
 
 class HourlyRates extends Component {
-  componentDidMount() {
-    if (!this.props.hourPayments.length) 
-      this.props.getAllHourPayments(this.props.projectId);
+  componentWillMount() {
+    let { hourPayments, projectId, getAllHourPayments } = this.props;
+    if (!hourPayments.length || hourPayments[0].projectId !== projectId)
+      getAllHourPayments(projectId);
   }
 
   render() {
     const { hourPayments, projectId, removeHourPayment } = this.props;
-    
+
     return (
       <div>
         {hourPayments.length > 0 && (
@@ -29,8 +30,6 @@ class HourlyRates extends Component {
             />
           ))}
         </div>
-
-        <hr />
 
         <CreateHourPayment projectId={projectId} />
       </div>

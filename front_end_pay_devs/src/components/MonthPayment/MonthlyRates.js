@@ -6,14 +6,14 @@ import MonthlyRate from "./MonthlyRate";
 import CreateMonthPaymentForm from "./CreateMonthPaymentForm";
 
 class MonthlyRates extends Component {
-  componentDidMount() {
-    if (!this.props.monthPayments.length)
-      this.props.getAllMonthPayments(this.props.projectId);
+  componentWillMount() {
+    let { monthPayments, projectId, getAllMonthPayments } = this.props;
+    if (!monthPayments.length || monthPayments[0].projectId !== projectId)
+      getAllMonthPayments(projectId);
   }
 
   render() {
     const { monthPayments, projectId, removeMonthPayment } = this.props;
-    
 
     return (
       <div>
@@ -26,14 +26,10 @@ class MonthlyRates extends Component {
               key={monthPayment.id}
               monthPayment={monthPayment}
               projectId={projectId}
-              onRemove={monthPaymentId =>
-                removeMonthPayment(monthPaymentId)
-              }
+              onRemove={monthPaymentId => removeMonthPayment(monthPaymentId)}
             />
           ))}
         </div>
-
-        <hr />
 
         <CreateMonthPaymentForm projectId={projectId} />
       </div>
