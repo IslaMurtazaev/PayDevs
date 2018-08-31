@@ -32,9 +32,7 @@ describe("workTime's action creators", () => {
       }
     ];
 
-    workTimeService.getAll.mockReturnValue(
-      Promise.resolve(fetchedWorkTimes)
-    );
+    workTimeService.getAll.mockReturnValue(Promise.resolve(fetchedWorkTimes));
 
     const expectedActions = [
       {
@@ -58,9 +56,7 @@ describe("workTime's action creators", () => {
       paid: true
     };
 
-    workTimeService.create.mockReturnValue(
-      Promise.resolve(createdWorkTime)
-    );
+    workTimeService.create.mockReturnValue(Promise.resolve(createdWorkTime));
 
     const expectedActions = [
       {
@@ -69,13 +65,11 @@ describe("workTime's action creators", () => {
       }
     ];
 
-    return store
-      .dispatch(workTimeActions.create(createdWorkTime))
-      .then(() => {
-        expect(workTimeService.create).toHaveBeenCalled();
-        expect(workTimeService.create).toBeCalledWith(createdWorkTime);
-        expect(store.getActions()).toEqual(expectedActions);
-      });
+    return store.dispatch(workTimeActions.create(createdWorkTime)).then(() => {
+      expect(workTimeService.create).toHaveBeenCalled();
+      expect(workTimeService.create).toBeCalledWith(createdWorkTime);
+      expect(store.getActions()).toEqual(expectedActions);
+    });
   });
 
   it("creates UPDATE_WORK_TIME action after new workTime is updated", () => {
@@ -86,9 +80,7 @@ describe("workTime's action creators", () => {
       paid: true
     };
 
-    workTimeService.update.mockReturnValue(
-      Promise.resolve(updatedWorkTime)
-    );
+    workTimeService.update.mockReturnValue(Promise.resolve(updatedWorkTime));
 
     const expectedActions = [
       {
@@ -109,9 +101,7 @@ describe("workTime's action creators", () => {
   it("creates REMOVE_WORK_TIME action after removing workTime", () => {
     const removedWorkTimeId = 1;
 
-    workTimeService.remove.mockReturnValue(
-      Promise.resolve(removedWorkTimeId)
-    );
+    workTimeService.remove.mockReturnValue(Promise.resolve(removedWorkTimeId));
 
     const expectedActions = [
       {

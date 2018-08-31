@@ -1,7 +1,7 @@
 export const history = {
     push: jest.fn(),
     location: {
-        pathname: "testing_url"
+        pathname: "testing"
     }
 }
 

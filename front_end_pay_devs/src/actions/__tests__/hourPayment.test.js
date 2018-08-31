@@ -12,8 +12,8 @@ const store = mockStore({ hourPayments: [] });
 
 describe("hourPayment's action creators", () => {
   afterEach(() => {
-    store.clearActions()
-  })
+    store.clearActions();
+  });
 
   it("creates ADD_ALL_HOUR_PAYMENTS action after fetching is done", () => {
     const fetchedHourPayments = [
@@ -63,11 +63,13 @@ describe("hourPayment's action creators", () => {
       }
     ];
 
-    return store.dispatch(hourPaymentActions.create(createdHourPayment)).then(() => {
-      expect(hourPaymentService.create).toHaveBeenCalled();
-      expect(hourPaymentService.create).toBeCalledWith(createdHourPayment);
-      expect(store.getActions()).toEqual(expectedActions);
-    });
+    return store
+      .dispatch(hourPaymentActions.create(createdHourPayment))
+      .then(() => {
+        expect(hourPaymentService.create).toHaveBeenCalled();
+        expect(hourPaymentService.create).toBeCalledWith(createdHourPayment);
+        expect(store.getActions()).toEqual(expectedActions);
+      });
   });
 
   it("creates REMOVE_HOUR_PAYMENT action after removing hourPayment", () => {
@@ -84,10 +86,12 @@ describe("hourPayment's action creators", () => {
       }
     ];
 
-    return store.dispatch(hourPaymentActions.remove(removedHourPaymentId)).then(() => {
-      expect(hourPaymentService.remove).toHaveBeenCalled();
-      expect(hourPaymentService.remove).toBeCalledWith(removedHourPaymentId);
-      expect(store.getActions()).toEqual(expectedActions);
-    });
+    return store
+      .dispatch(hourPaymentActions.remove(removedHourPaymentId))
+      .then(() => {
+        expect(hourPaymentService.remove).toHaveBeenCalled();
+        expect(hourPaymentService.remove).toBeCalledWith(removedHourPaymentId);
+        expect(store.getActions()).toEqual(expectedActions);
+      });
   });
 });

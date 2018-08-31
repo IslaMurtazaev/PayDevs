@@ -39,7 +39,6 @@ exports[`<MonthlyRates /> matches previous snapshot 1`] = `
       onRemove={[Function]}
     />
   </div>
-  <hr />
   <Connect(CreateMonthPaymentForm) />
 </div>
 `;

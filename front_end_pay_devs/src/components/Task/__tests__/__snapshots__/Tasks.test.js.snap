@@ -65,7 +65,6 @@ exports[`<Tasks /> matches previous snapshot 1`] = `
       }
     />
   </div>
-  <hr />
   <Connect(CreateTaskForm) />
 </div>
 `;

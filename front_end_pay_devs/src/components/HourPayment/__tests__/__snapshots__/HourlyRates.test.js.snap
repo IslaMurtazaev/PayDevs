@@ -39,7 +39,6 @@ exports[`<HourlyRates /> matches previous snapshot 1`] = `
       onRemove={[Function]}
     />
   </div>
-  <hr />
   <Connect(CreateHourPayment) />
 </div>
 `;

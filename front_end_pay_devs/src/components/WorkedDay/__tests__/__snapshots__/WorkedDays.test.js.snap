@@ -19,6 +19,7 @@ exports[`<WorkedDays /> matches previous snapshot 1`] = `
         Object {
           "date": "02-08-1999",
           "id": 1,
+          "monthPaymentId": 1,
           "paid": true,
         }
       }
@@ -32,12 +33,12 @@ exports[`<WorkedDays /> matches previous snapshot 1`] = `
         Object {
           "date": "02-08-2018",
           "id": 2,
+          "monthPaymentId": 1,
           "paid": false,
         }
       }
     />
   </div>
-  <hr />
   <Connect(CreateWorkedDayForm)
     monthPaymentId={1}
     projectId={1}
