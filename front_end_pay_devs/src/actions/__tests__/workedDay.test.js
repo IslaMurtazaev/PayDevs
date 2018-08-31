@@ -114,7 +114,6 @@ describe('actions Worked Day', () => {
 
         return store.dispatch(workedDayActions.remove(workedDay.id)).then(() => {
             const action = store.getActions()
-            console.log(action)
             expect(action.length).toBe(1)
             expect(action).toContainEqual(expectedAction)
             expect(workedDayService.remove).toHaveBeenCalledTimes(1);   

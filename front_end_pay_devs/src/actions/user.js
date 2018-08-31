@@ -9,7 +9,7 @@ export const userActions = {
 };
 
 function authentication(username, password) {
-  return dispatch => {
+  return dispatch => 
     UserService.login(username, password).then(
       user => {
         dispatch({ type: userActionTypes.LOGIN_USER, user });
@@ -24,11 +24,10 @@ function authentication(username, password) {
         else dispatch({ type: userActionTypes.LOGIN_ERROR, error: error });
       }
     );
-  };
 }
 
 function sign_up(username, email, password) {
-  return dispatch => {
+  return dispatch => 
     UserService.create_user(username, email, password).then(
       user => {
         dispatch({ type: userActionTypes.LOGIN_USER, user });
@@ -43,12 +42,10 @@ function sign_up(username, email, password) {
         else dispatch({ type: userActionTypes.LOGIN_ERROR, error: error });
       }
     );
-  };
 }
 
 function logout() {
   UserService.logout();
-  return dispatch => {
+  return dispatch => 
     dispatch({ type: userActionTypes.LOGOUT });
-  };
 }

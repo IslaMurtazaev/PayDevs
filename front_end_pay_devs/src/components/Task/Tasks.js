@@ -7,7 +7,8 @@ import CreateTask from "./CreateTask";
 
 class Tasks extends Component {
   componentDidMount() {
-    if (!this.props.tasks.length) this.props.getAllTasks(this.props.projectId);
+    console.log(this.props.projectId)
+    this.props.getAllTasks(this.props.projectId);
   }
 
   render() {
