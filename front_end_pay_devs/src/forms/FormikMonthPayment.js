@@ -41,7 +41,7 @@ const FormikMonthPayment = withFormik({
   }),
   handleSubmit(values, { props, resetForm }) {
     props.onSubmit(values.projectId, values);
-    resetForm();
+    if (!values.id) resetForm();
   }
 })(MonthPaymentInput);
 
