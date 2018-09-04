@@ -76,7 +76,7 @@ class ProjectItem extends Component {
           </button>
 
           <Link to={`${projectId}/update`}>
-            <button type="button" className="btn btn-warning btn-lg">
+            <button type="button" className="updateProject btn btn-warning btn-lg">
               Update project
             </button>
           </Link>

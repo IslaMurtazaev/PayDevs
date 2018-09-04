@@ -3,12 +3,12 @@ import { userActionTypes } from "../constants/user";
 import { history } from "../index";
 
 export const userActions = {
-  authentication,
+  authenticate,
   logout,
   sign_up
 };
 
-function authentication(username, password) {
+function authenticate(username, password) {
   return dispatch => 
     UserService.login(username, password).then(
       user => {

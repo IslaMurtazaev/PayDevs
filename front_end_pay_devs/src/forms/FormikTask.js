@@ -2,7 +2,7 @@ import React from "react";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 
-const TasklyInput = ({ values, errors, touched, setValues }) => {
+const TasklyInput = ({ values, errors, touched }) => {
   return (
     <Form className="task-form">
       <label>Title: </label>
@@ -10,7 +10,7 @@ const TasklyInput = ({ values, errors, touched, setValues }) => {
       <Field
         name="title"
         type="text"
-        className="form-control"
+        className="titleInput form-control"
         placeholder="title..."
       />
       <div />
@@ -19,7 +19,7 @@ const TasklyInput = ({ values, errors, touched, setValues }) => {
       <Field
         name="description"
         type="text"
-        className="form-control"
+        className="descriptionInput form-control"
         placeholder={"description..."}
       />
       <div />
@@ -28,20 +28,29 @@ const TasklyInput = ({ values, errors, touched, setValues }) => {
       <Field
         name="price"
         type="number"
-        className="form-control"
+        className="priceInput form-control"
         placeholder={"price..."}
       />
 
       <div />
       <label>
-        {" "}
         Paid:
-        <Field name="paid" type="checkbox" checked={values.paid} />
+        <Field
+          name="paid"
+          type="checkbox"
+          className="paidCheckbox"
+          checked={values.paid}
+        />
       </label>
       <div />
       <label>
         Completed:
-        <Field name="completed" type="checkbox" checked={values.completed} />
+        <Field
+          name="completed"
+          type="checkbox"
+          className="completedCheckbox"
+          checked={values.completed}
+        />
       </label>
       <div />
       <button className="btn btn-primary form-control" type="submit">
@@ -64,7 +73,7 @@ const FormikTaskly = withFormik({
     return {
       title: title || "",
       description: description || "",
-      price: price || 0,
+      price: price || "",
       paid: paid || false,
       completed: completed || false,
       projectId: projectId,

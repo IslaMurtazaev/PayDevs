@@ -13,7 +13,7 @@ const ProjectInput = ({ values, errors, touched, setFieldValue }) => {
       <Field
         name="title"
         type="text"
-        className="form-control"
+        className="titleInput form-control"
         placeholder="title..."
       />
 
@@ -21,7 +21,7 @@ const ProjectInput = ({ values, errors, touched, setFieldValue }) => {
       <Field
         name="description"
         type="text"
-        className="form-control"
+        className="descriptionInput form-control"
         placeholder="description..."
       />
 
@@ -52,7 +52,7 @@ const ProjectInput = ({ values, errors, touched, setFieldValue }) => {
       </div>
 
       <label>Type of payment: </label>
-      <Field component="select" name="type_of_payment" className="form-control">
+      <Field component="select" name="type_of_payment" className="typeOfPaymentSelect form-control">
         <option value="M_P">Monthly</option>
         <option value="H_P">Hourly</option>
         <option value="T_P">Taskly</option>
@@ -60,7 +60,7 @@ const ProjectInput = ({ values, errors, touched, setFieldValue }) => {
 
       <label>
         Active:
-        <Field name="status" type="checkbox" checked={values.status} />
+        <Field name="status" type="checkbox" className="statusCheckbox" checked={values.status} />
       </label>
 
       <button className="btn btn-primary form-control" type="submit">
