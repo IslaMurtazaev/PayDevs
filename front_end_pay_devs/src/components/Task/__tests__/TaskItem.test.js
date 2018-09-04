@@ -1,7 +1,6 @@
 import React from "react";
 import TaskItem from "../TaskItem";
-import { shallow, mount } from "enzyme";
-import ReactRouterEnzymeContext from "react-router-enzyme-context";
+import { shallow } from "enzyme";
 import toJson from "enzyme-to-json";
 
 describe("<TaskItem />", () => {
@@ -20,7 +19,6 @@ describe("<TaskItem />", () => {
   });
 
   it("renders mount <TaskItem /> h4 count", () => {
-    const options = new ReactRouterEnzymeContext();
     const task = {
       id: 1,
       title: "Task number 1",
@@ -30,7 +28,8 @@ describe("<TaskItem />", () => {
       completed: true
     };
     const component = shallow(<TaskItem task={task} />);
-    expect(component.find("h4")).toHaveLength(5);
+    expect(component.find("h4")).toHaveLength(1);
+    expect(component.find("h5")).toHaveLength(4);
     expect(component.find(".taskTitle").text()).toBe(`Title: ${task.title}`);
     expect(component.find(".taskDescription").text()).toBe(
       `Description: ${task.description}`
@@ -44,7 +43,6 @@ describe("<TaskItem />", () => {
 
   it("renders mount <TaskItem /> click onDelete", () => {
     const onDeleteSpy = jest.fn();
-    const options = new ReactRouterEnzymeContext();
     const task = {
       id: 1,
       title: "Task number 1",

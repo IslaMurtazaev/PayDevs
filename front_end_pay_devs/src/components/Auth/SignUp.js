@@ -8,7 +8,8 @@ class SignUp extends Component {
     this.state = {
       username: "",
       email: "",
-      password: ""
+      password: "",
+      submitted: false
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -32,7 +33,7 @@ class SignUp extends Component {
   }
 
   render() {
-    const { username, password, email } = this.state;
+    const { username, password, email, submitted } = this.state;
     const error = this.props.error;
     return (
       <div>
@@ -42,6 +43,7 @@ class SignUp extends Component {
             {error && <div>{error.error.message}</div>}
             <div>
               <label htmlFor="username">Username: </label>
+              {submitted && !username && <div className="help-block">Username is required</div>}
               <input
                 type="text"
                 className="usernameInput form-control"
@@ -52,6 +54,7 @@ class SignUp extends Component {
             </div>
             <div>
               <label htmlFor="email">Email: </label>
+              {submitted && !email && <div className="help-block">Email is required</div>}
               <input
                 type="email"
                 className="emailInput form-control"
@@ -62,6 +65,7 @@ class SignUp extends Component {
             </div>
             <div>
               <label htmlFor="password">Password: </label>
+              {submitted && !password && <div className="help-block">Password is required</div>}
               <input
                 type="password"
                 className="passwordInput form-control"

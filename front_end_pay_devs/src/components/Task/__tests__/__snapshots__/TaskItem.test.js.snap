@@ -13,7 +13,7 @@ exports[`<TaskItem /> matches previous snapshot 1`] = `
      
     Task number 1
   </h4>
-  <h4
+  <h5
     className="taskDescription"
   >
     <b>
@@ -21,8 +21,8 @@ exports[`<TaskItem /> matches previous snapshot 1`] = `
     </b>
      
     Test a 
-  </h4>
-  <h4
+  </h5>
+  <h5
     className="taskPrice"
   >
     <b>
@@ -30,8 +30,8 @@ exports[`<TaskItem /> matches previous snapshot 1`] = `
     </b>
      
     500
-  </h4>
-  <h4
+  </h5>
+  <h5
     className="taskPaid"
   >
     not
@@ -39,14 +39,14 @@ exports[`<TaskItem /> matches previous snapshot 1`] = `
     <b>
       paid
     </b>
-  </h4>
-  <h4
+  </h5>
+  <h5
     className="taskCompleted"
   >
     <b>
       Uncompleted
     </b>
-  </h4>
+  </h5>
   <Link
     className="reactLink"
     replace={false}
