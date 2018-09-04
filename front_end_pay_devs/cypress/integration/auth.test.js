@@ -33,14 +33,12 @@ describe("Login", () => {
       .should("have.value", password)
       .type("{enter}")
       .should(() => {
-        let { id, ...userWithoutId } = JSON.parse(localStorage.getItem("user"));
-        expect(userWithoutId).to.eql({
+        let { id, token,  ...user } = JSON.parse(localStorage.getItem("user"));
+        expect(user).to.eql({
           email: email,
           is_active: true,
           username: username,
           is_staff: false,
-          token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo2fQ.l6IRINJ5PTS65UVmvdXkZCc9qQgoZU_Qco3xbjM7tBk"
         });
       });
     cy.url().should("eq", `${baseUrl}`);
@@ -65,14 +63,12 @@ describe("Login", () => {
     cy.get(".loginForm")
       .submit()
       .should(() => {
-        let { id, ...userWithoutId } = JSON.parse(localStorage.getItem("user"));
-        expect(userWithoutId).to.eql({
+        let { id, token, ...user } = JSON.parse(localStorage.getItem("user"));
+        expect(user).to.eql({
           email: email,
           is_active: true,
           username: username,
           is_staff: false,
-          token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo2fQ.l6IRINJ5PTS65UVmvdXkZCc9qQgoZU_Qco3xbjM7tBk"
         });
       });
     cy.url().should("eq", `${baseUrl}`);
