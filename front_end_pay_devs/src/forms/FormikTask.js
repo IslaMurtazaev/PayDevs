@@ -76,7 +76,7 @@ const FormikTaskly = withFormik({
   }),
   handleSubmit(values, { props, resetForm }) {
     props.onSubmit(values);
-    resetForm();
+    if (!values.id) resetForm();
   }
 })(TasklyInput);
 
