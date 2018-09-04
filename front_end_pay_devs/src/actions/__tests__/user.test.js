@@ -29,7 +29,7 @@ describe("actions Worked Day", () => {
     const store = mockStore({});
 
     return store
-      .dispatch(userActions.authentication(user.username, user.password))
+      .dispatch(userActions.authenticate(user.username, user.password))
       .then(() => {
         const action = store.getActions();
         expect(action.length).toBe(1);

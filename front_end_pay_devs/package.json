@@ -31,7 +31,7 @@
     "eject": "react-scripts eject",
     "test": "jest",
     "test:watch": "npm test -- --watch",
-    "cypress:open": "cypress open"
+    "cypress": "cypress open"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-rc.2",
@@ -68,7 +68,8 @@
       "./test_config/setup/jestsetup.js"
     ],
     "testPathIgnorePatterns": [
-      "./test_config/"
+      "./test_config/",
+      "./cypress"
     ],
     "moduleNameMapper": {
       "\\.(css|less)$": "identity-obj-proxy",

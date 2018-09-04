@@ -79,7 +79,7 @@ exports[`<ProjectItem /> matches previous snap 1`] = `
       to="1/update"
     >
       <button
-        className="btn btn-warning btn-lg"
+        className="updateProject btn btn-warning btn-lg"
         type="button"
       >
         Update project
