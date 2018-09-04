@@ -44,7 +44,7 @@ class SignUp extends Component {
               <label htmlFor="username">Username: </label>
               <input
                 type="text"
-                className="form-control"
+                className="usernameInput form-control"
                 name="username"
                 value={username}
                 onChange={this.handleChange}
@@ -54,7 +54,7 @@ class SignUp extends Component {
               <label htmlFor="email">Email: </label>
               <input
                 type="email"
-                className="form-control"
+                className="emailInput form-control"
                 name="email"
                 value={email}
                 onChange={this.handleChange}
@@ -64,7 +64,7 @@ class SignUp extends Component {
               <label htmlFor="password">Password: </label>
               <input
                 type="password"
-                className="form-control"
+                className="passwordInput form-control"
                 name="password"
                 value={password}
                 onChange={this.handleChange}

@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 const CreateTaskForm = props => {
   return (
     <div>
-      <h3 className="taskHeader"> Create a new Task</h3>
+      <h3 className="taskHeader">Create a new Task</h3>
       <FormikTaskly onSubmit={props.createTaskly} />
     </div>
   );
@@ -19,7 +19,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state, ownProps) => { // TODO: Find out if this is really neccessary
   let project = state.projects.find(
     project => project.id === ownProps.projectId
   );

@@ -5,11 +5,13 @@ import { projectActions } from "../../actions/project";
 
 class ProjectPage extends Component {
   componentWillMount() {
-    if (!this.props.projects.length) this.props.getAllProjects();
+    const userId = this.props.user.id;
+    const { projects, getAllProjects } = this.props;
+    if (!projects.length || userId !== projects[0].user_id) getAllProjects();
   }
 
   render() {
-    const { user } = this.props.user; // why we are wrapping user inside a user?
+    const { user } = this.props.user;
     const { projects } = this.props;
     return (
       <div>

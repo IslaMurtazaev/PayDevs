@@ -9,7 +9,7 @@ export default function user(state = initialState, action) {
       return { user: action.user };
     case userActionTypes.LOGIN_ERROR:
       return { error: action.error };
-    default: 
+    default:
       return state;
   }
 }

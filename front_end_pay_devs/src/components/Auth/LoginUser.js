@@ -42,16 +42,16 @@ class LoginUser extends Component {
           <div>
             <label>Username</label>
             <br />
-            <Control.text model="login.user_form.username" />
+            <Control.text className="usernameInput" model="login.user_form.username" />
             {user_req && <div className="help-block">Username is required</div>}
           </div>
           <div>
             <label>Password</label>
             <br />
-            <Control.password model="login.user_form.password" />
+            <Control.password className="passwordInput" model="login.user_form.password" />
             <br />
             {password_req && (
-              <div className="help-block">Username is required</div>
+              <div className="help-block">Password is required</div>
             )}
             <button className="btn btn-primary">Login</button>
           </div>
@@ -68,7 +68,7 @@ export default connect(
   }),
   dispatch => ({
     onLoginUser: (username, password) => {
-      dispatch(userActions.authentication(username, password));
+      dispatch(userActions.authenticate(username, password));
     },
     onLogOutUser: () => {
       dispatch(userActions.logout());
