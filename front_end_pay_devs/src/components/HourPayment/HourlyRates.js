@@ -16,7 +16,7 @@ class HourlyRates extends Component {
     const { hourPayments, projectId, removeHourPayment } = this.props;
 
     return (
-      <div>
+      <div className="hourlyRates">
         {hourPayments.length > 0 && (
           <h3 className="rateHeader">Select one of your current rates:</h3>
         )}

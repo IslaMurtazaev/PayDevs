@@ -10,11 +10,11 @@ const HourPaymentInput = ({ errors, touched }) => {
       <Field
         name="rate"
         type="number"
-        className="form-control"
+        className="form-control rateHourPaymnet"
         placeholder={"rate..."}
       />
       <div />
-      <button className="btn btn-primary form-control" type="submit">
+      <button className="btn btn-primary form-control newRateHourPayment" type="submit">
         submit
       </button>
     </Form>

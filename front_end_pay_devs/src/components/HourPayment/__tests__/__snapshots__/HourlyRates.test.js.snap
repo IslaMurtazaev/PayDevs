@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<HourlyRates /> matches previous snapshot 1`] = `
-<div>
+<div
+  className="hourlyRates"
+>
   <h3
     className="rateHeader"
   >
