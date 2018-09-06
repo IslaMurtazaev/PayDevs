@@ -34,7 +34,6 @@ class LoginUser extends Component {
     return (
       <div>
          
-        <h2 className="authHeader">Login</h2>
         <Form className="loginForm"
           model="login.user_form"
           onSubmit={val => this.handleSubmit(val)}

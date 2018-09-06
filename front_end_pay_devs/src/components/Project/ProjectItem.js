@@ -78,13 +78,6 @@ class ProjectItem extends Component {
             Update
             </button>
           </Link>
-          <button
-            type="button"
-            className="btn btn-success btn-lg"
-            onClick={() => this.props.getTotal(project.id)}
-          >
-            Total
-          </button>
 
           <button type="button" className="btn btn-danger btn-lg"
             onClick={() => this.props.removeProject(project.id)}>

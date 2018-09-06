@@ -12,18 +12,6 @@ h2 {
   text-shadow: 1px 1px 3px;
 }
 
-.authHeader {
-  height: 20px;
-  font-size: 40px;
-  font-weight: bold;
-  margin-top: 40px;
-  margin-left: 470px;
-  color: rgb(36, 36, 53);
-  padding-block-start: 1px;
-  padding-left: 3%;
-  padding-block-end: 5px;
-  text-shadow: 1px 1px 3px;
-}
 
 body {
   padding-block-end: 2%;
@@ -39,30 +27,51 @@ button {
   border-radius: 5px;
 }
 
+@media(max-width:800px){
+  img {
+    display: none;
+  }
+  .link{
+    margin-left: 40%;
+  }
+}
+
+.btn-group-justified{
+  width: 400px;
+  margin-left: 35%;
+  margin-top: 5%;
+  margin-bottom: -3.3%;
+  border: 5px;
+}
+
+.btn-default{
+  font-size: 30px;
+  font-weight: 550;
+}
+
 .signUpForm {
-  margin-left: 27%;
-  margin-top: 55px;
+
+  margin-left: 35%;
   border-radius: 5px;
   background-color: #dbe2ec;
   padding-top: 1%;
   padding-left: 4%;
   padding-right: 5%;
-  height: 370px;
-  width: 500px;
+  height: 340px;
+  width: 400px;
   box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.322),
     0 40px 40px 0 rgba(0, 0, 0, 0.199);
 }
 
 .loginForm {
   margin-left: 35%;
-  margin-top: 55px;
   border-radius: 5px;
   background-color: #dbe2ec;
   padding-top: 1%;
   padding-left: 4%;
   padding-right: 3%;
-  height: 260px;
-  width: 300px;
+  height: 340px;
+  width: 400px;
   box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.2),
     0 40px 40px 0 rgba(0, 0, 0, 0.19);
 }
@@ -79,16 +88,15 @@ input {
 
 .link {
   text-decoration: none;
-  font-size: 17px;
-  color: white;
-  background-color: rgb(59, 137, 240);
+  font-size: 23px;
+  color: rgb(248, 244, 244);
   width: 100px;
-  padding: 5px 2px;
+  padding: 4px 15px;
   text-align: center;
-  display: inline-block;
   border-radius: 5px;
-  margin-left: 2px;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.19);
+  margin-left: 65%;
+  background-color: rgba(70, 156, 226, 0.925);
+  box-shadow: 1px 1px 2px 0.3px rgba(32, 32, 32, 0.575);
 }
 
 label {
@@ -96,12 +104,10 @@ label {
 }
 
 .navbar {
-  margin-left: 0px;
   margin-top: -40;
   background-color: #e7ecf0cc;
-  padding-top: 0%;
-  padding-left: 4%;
-  padding-right: 0%;
+  padding-left: 3%;
+  padding-right: 0.2%;
   height: 70px;
   width: 100%;
   box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.247),
@@ -109,29 +115,19 @@ label {
 }
 
 .paydevs {
-  padding-right: 570px;
   font-size: 45px;
   font-family: "Times New Roman", Times, serif;
   font-weight: 700;
   text-shadow: 1px 1px 1px;
-}
-
-.paydevs1 {
-  padding-right: 700px;
-  font-size: 45px;
-  font-family: "Times New Roman", Times, serif;
-  font-weight: 700;
-  color: rgba(0, 0, 0, 0.842);
-  text-shadow: 1px 1px 1px rgba(24, 23, 23, 0.849);
+  color: rgba(43, 41, 41, 0.897);
   text-decoration: none;
-  color: inherit;
 }
 
 a:hover {
-  color: rgba(0, 0, 0, 0.733);
-  text-shadow: 0px 0px 1px rgba(24, 23, 23, 0.849);
+  color: rgb(5, 61, 99);
   text-decoration: none;
 }
+
 
 img {
   padding-block-end: 2%;
@@ -141,12 +137,6 @@ img {
 span {
   font-size: 18px;
   padding-right: 15px;
-}
-
-.join {
-  font-size: 18px;
-  padding-right: 11px;
-  padding-left: 148px;
 }
 
 .projectLink {
@@ -237,7 +227,7 @@ h1 {
 }
 
 .form-control {
-  width: 400px;
+  width: 98%;
 }
 
 .form-group {
@@ -278,7 +268,7 @@ h1 {
   padding: 5px 20px;
   box-shadow: 1px 1px 1px;
   height: 200px;
-  margin-left: 245px;
+  margin-left: 23%;
   white-space: nowrap;
   overflow-x: auto;
   text-overflow: clip;

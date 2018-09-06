@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Router, Route, Switch } from "react-router-dom";
 
-import LoginUser from "../components/Auth/LoginUser";
+import Parent from "../components/Auth/Parent";
 import ProjectPage from "../components/Project/ProjectPage";
 import SignUp from "../components/Auth/SignUp";
 import ProjectItem from "../components/Project/ProjectItem";
@@ -28,8 +28,7 @@ class AppRouter extends Component {
           <NavBar />
           <Switch>
             <PrivateRoute exact path="/" component={ProjectPage} />
-            <Route path="/login" component={LoginUser} />
-            <Route path="/sign_up" component={SignUp} />
+            <Route path="/login" component={Parent} />
             <PrivateRoute path="/project/create" component={CreateProjectForm} />
             <PrivateRoute path="/project/:id/Taskly/:taskId/update" component={UpdateTaskForm}/>
             <PrivateRoute path="/project/:id/Monthly/:monthPaymentId/workedDay/:workedDayId/update" component={UpdateWorkedDayForm} />

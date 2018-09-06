@@ -37,12 +37,11 @@ class SignUp extends Component {
     const error = this.props.error;
     return (
       <div>
-        <h2 className="authHeader">Sign Up</h2>
         <div className="signUpForm">
         <form name="form" onSubmit={this.handleSubmit}>
           {error && <div>{error.error.message}</div>}
           <div>
-            <label htmlFor="username">Username: </label>
+            <label htmlFor="username">Username </label>
             <input
               type="text"
               className="form-control"
@@ -52,7 +51,7 @@ class SignUp extends Component {
             />
           </div>
           <div>
-            <label htmlFor="email">Email: </label>
+            <label htmlFor="email">Email </label>
             <input
               type="email"
               className="form-control"
@@ -62,7 +61,7 @@ class SignUp extends Component {
             />
           </div>
           <div>
-            <label htmlFor="password">Password: </label>
+            <label htmlFor="password">Password </label>
             <input
               type="password"
               className="form-control"

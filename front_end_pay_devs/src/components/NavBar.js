@@ -1,31 +1,29 @@
 import React from "react";
 import logo from "./icons/favicon.png";
 import { Link } from "react-router-dom";
-import { authHeader } from "../service/helpers";
+import {PrivateRoute} from '../route/PrivateRoute'
+
 
 const NavBar = () => {
 
   return (
     <div className="navbar">
+    
+
       <img src={logo} />
-      <span>
+      <span >
         <Link className="paydevs" to="/">
           PayDevs
         </Link>
       </span>
-      {authHeader() ? (
-        <Link className="link" to="/sign_up">
-          Sign up
-        </Link>
-      ) : (
-        <Link className="link" to="/login">
-          Login
-        </Link>
-      )}
+      
+      <span>
+       { PrivateRoute ?    
       <Link className="link" to="/login">
-        Logout
-      </Link>
-      {}
+          Logout
+      </Link> : null }
+      </span>
+    
     </div>
   );
 };
