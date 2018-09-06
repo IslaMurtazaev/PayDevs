@@ -13,7 +13,7 @@ export const projectService = {
 const BASE_URL = "http://127.0.0.1:8000/api/project/";
 
 function get(projectId) {
-  let headers = authHeader();
+  const headers = authHeader();
   return axios
     .get(`${BASE_URL}${projectId}/`, { headers: headers })
     .then(res => {
@@ -23,7 +23,7 @@ function get(projectId) {
 }
 
 function getAll() {
-  let headers = authHeader();
+  const headers = authHeader();
   return axios.get(`${BASE_URL}all`, { headers: headers }).then(res => {
     let projects = res.data;
     return projects;
@@ -31,7 +31,7 @@ function getAll() {
 }
 
 function remove(id) {
-  let headers = authHeader();
+  const headers = authHeader();
   return axios
     .delete(`${BASE_URL}${id}/delete`, {
       headers: headers

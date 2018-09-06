@@ -39,13 +39,14 @@ class CreateProjectInteractor:
         self.field_validator.validate_type_of_payment(self.type_of_payment)
         start_date = self.field_validator.validate_datetime_format(self.start_date)
         end_date = self.field_validator.validate_datetime_format(self.end_date)
-        project = self.project_entity.create(user_id=self.logged_id,
-                                              title=self.title,
-                                              description=self.description,
-                                              start_date=start_date,
-                                              end_date=end_date,
-                                              status=self.status,
-                                              type_of_payment=self.type_of_payment)
+        project = self.project_entity.create(
+            user_id=self.logged_id,
+            title=self.title,
+            description=self.description,
+            start_date=start_date,
+            end_date=end_date,
+            status=self.status,
+            type_of_payment=self.type_of_payment)
         return self.project_repo.create(project)
 
 

@@ -1,7 +1,7 @@
 const baseUrl = "http://localhost:3000/";
 
 describe("project", () => {
-  let project = {
+  let projectTaskly = {
     id: 1,
     title: "Alpha bravo charlie",
     description: "Launch rocket to the Moon",
@@ -10,24 +10,53 @@ describe("project", () => {
     end_date: "2018-09-03T10:25:13.779Z",
     status: false
   };
-
-  let projects = [project];
-
-  let tasks = [];
+  let projectMonthly = {
+    id: 2,
+    title: "Internship in IT-Attractor",
+    description: "The best place to have practice",
+    type_of_payment: "M_P",
+    start_date: "2018-06-18T08:00:00.000Z",
+    end_date: "2018-09-07T10:25:13.779Z",
+    status: true
+  };
+  let projectHourly = {
+    id: 3,
+    title: "TopTal",
+    description: "Top talanted guys",
+    type_of_payment: "H_P",
+    start_date: "2018-06-18T08:00:00.000Z",
+    end_date: "2018-09-07T10:25:13.779Z",
+    status: true
+  };
+  let projects = [];
 
   beforeEach(() => {
     cy.login();
     cy.server();
     cy.route("GET", "http://127.0.0.1:8000/api/project/all", projects);
-    cy.route("GET", `http://127.0.0.1:8000/api/project/${project.id}`, project);
     cy.route(
       "GET",
-      `http://127.0.0.1:8000/api/project/${project.id}/task/all`,
-      tasks
+      `http://127.0.0.1:8000/api/project/${projectTaskly.id}`,
+      projectTaskly
+    );
+    cy.route(
+      "GET",
+      `http://127.0.0.1:8000/api/project/${projectMonthly.id}`,
+      projectMonthly
+    );
+    cy.route(
+      "GET",
+      `http://127.0.0.1:8000/api/project/${projectHourly.id}`,
+      projectHourly
+    );
+    cy.route(
+      "GET",
+      `http://127.0.0.1:8000/api/project/${projectTaskly.id}/task/all`,
+      []
     );
   });
 
-  it("creates new project", () => {
+  it("creates new taskly project", () => {
     cy.visit(baseUrl);
 
     cy.get(".newProjectLink")
@@ -36,49 +65,154 @@ describe("project", () => {
       .should("eq", `${baseUrl}project/create`);
 
     cy.get(".titleInput")
-      .type(project.title)
-      .should("have.value", project.title);
+      .type(projectTaskly.title)
+      .should("have.value", projectTaskly.title);
     cy.get(".descriptionInput")
-      .type(project.description)
-      .should("have.value", project.description);
+      .type(projectTaskly.description)
+      .should("have.value", projectTaskly.description);
     cy.get(".typeOfPaymentSelect")
       .select("Taskly")
-      .should("have.value", project.type_of_payment);
+      .should("have.value", projectTaskly.type_of_payment);
     cy.get(".statusCheckbox")
       .uncheck({ force: true })
       .should("not.be.checked");
 
-    cy.route("POST", "http://127.0.0.1:8000/api/project/create", project);
+    cy.route("POST", "http://127.0.0.1:8000/api/project/create", projectTaskly);
 
     cy.get(".form-group").submit();
-    cy.url().should("eq", `${baseUrl}project/${project.id}`);
+    projects.push(projectTaskly);
+    cy.url().should("eq", `${baseUrl}project/${projectTaskly.id}`);
 
-    cy.get(".projectTitle").should("contain", project.title);
-    cy.get(".projectDescription").should("contain", project.description);
+    cy.get(".projectTitle").should("contain", projectTaskly.title);
+    cy.get(".projectDescription").should("contain", projectTaskly.description);
     cy.get(".projectStartDate").should(
       "contain",
-      new Date(project.start_date).toDateString()
+      new Date(projectTaskly.start_date).toDateString()
     );
     cy.get(".projectEndDate").should(
       "contain",
-      new Date(project.end_date).toDateString()
+      new Date(projectTaskly.end_date).toDateString()
     );
     cy.get(".projectTypeOfPayment").should("contain", "Taskly");
     cy.get(".projectStatus").should("contain", "not active");
+
+    cy.visit(baseUrl);
+    cy.get(".projectList ul li")
+      .its("length")
+      .should("eq", 1);
+    cy.get(".projectList").should("contain", projectTaskly.title);
+  });
+
+  it("creates new monthly project", () => {
+    cy.visit(baseUrl);
+
+    cy.get(".newProjectLink")
+      .click({ force: true })
+      .url()
+      .should("eq", `${baseUrl}project/create`);
+
+    cy.get(".titleInput")
+      .type(projectMonthly.title)
+      .should("have.value", projectMonthly.title);
+    cy.get(".descriptionInput")
+      .type(projectMonthly.description)
+      .should("have.value", projectMonthly.description);
+    cy.get(".typeOfPaymentSelect")
+      .select("Monthly")
+      .should("have.value", projectMonthly.type_of_payment);
+    cy.get(".statusCheckbox")
+      .check({ force: true })
+      .should("be.checked");
+
+    cy.route(
+      "POST",
+      "http://127.0.0.1:8000/api/project/create",
+      projectMonthly
+    );
+
+    cy.get(".form-group").submit();
+    projects.push(projectMonthly);
+    cy.url().should("eq", `${baseUrl}project/${projectMonthly.id}`);
+
+    cy.get(".projectTitle").should("contain", projectMonthly.title);
+    cy.get(".projectDescription").should("contain", projectMonthly.description);
+    cy.get(".projectStartDate").should(
+      "contain",
+      new Date(projectMonthly.start_date).toDateString()
+    );
+    cy.get(".projectEndDate").should(
+      "contain",
+      new Date(projectMonthly.end_date).toDateString()
+    );
+    cy.get(".projectTypeOfPayment").should("contain", "Monthly");
+    cy.get(".projectStatus").should("not.contain", "not");
+
+    cy.visit(baseUrl);
+    cy.get(".projectList ul li")
+      .its("length")
+      .should("eq", 2);
+    cy.get(".projectList").should("contain", projectMonthly.title);
+  });
+
+  it("creates new hourly project", () => {
+    cy.visit(baseUrl);
+
+    cy.get(".newProjectLink")
+      .click({ force: true })
+      .url()
+      .should("eq", `${baseUrl}project/create`);
+
+    cy.get(".titleInput")
+      .type(projectHourly.title)
+      .should("have.value", projectHourly.title);
+    cy.get(".descriptionInput")
+      .type(projectHourly.description)
+      .should("have.value", projectHourly.description);
+    cy.get(".typeOfPaymentSelect")
+      .select("Hourly")
+      .should("have.value", projectHourly.type_of_payment);
+    cy.get(".statusCheckbox")
+      .check({ force: true })
+      .should("be.checked");
+
+    cy.route("POST", "http://127.0.0.1:8000/api/project/create", projectHourly);
+
+    cy.get(".form-group").submit();
+    projects.push(projectHourly);
+    cy.url().should("eq", `${baseUrl}project/${projectHourly.id}`);
+
+    cy.get(".projectTitle").should("contain", projectHourly.title);
+    cy.get(".projectDescription").should("contain", projectHourly.description);
+    cy.get(".projectStartDate").should(
+      "contain",
+      new Date(projectHourly.start_date).toDateString()
+    );
+    cy.get(".projectEndDate").should(
+      "contain",
+      new Date(projectHourly.end_date).toDateString()
+    );
+    cy.get(".projectTypeOfPayment").should("contain", "Hourly");
+    cy.get(".projectStatus").should("not.contain", "not");
+
+    cy.visit(baseUrl);
+    cy.get(".projectList ul li")
+      .its("length")
+      .should("eq", 3);
+    cy.get(".projectList").should("contain", projectHourly.title);
   });
 
   it("updates project", () => {
-    cy.visit(`${baseUrl}project/${project.id}`);
+    cy.visit(`${baseUrl}project/${projectTaskly.id}`);
 
     cy.get(".updateProject").click();
 
-    cy.url().should("eq", `${baseUrl}project/${project.id}/update`);
+    cy.url().should("eq", `${baseUrl}project/${projectTaskly.id}/update`);
 
-    cy.get(".titleInput").should("have.value", project.title);
-    cy.get(".descriptionInput").should("have.value", project.description);
+    cy.get(".titleInput").should("have.value", projectTaskly.title);
+    cy.get(".descriptionInput").should("have.value", projectTaskly.description);
     cy.get(".typeOfPaymentSelect").should(
       "have.value",
-      project.type_of_payment
+      projectTaskly.type_of_payment
     );
     cy.get(".statusCheckbox").should("not.be.checked");
 
@@ -111,7 +245,7 @@ describe("project", () => {
     );
 
     cy.get(".form-group").submit();
-    cy.url().should("eq", `${baseUrl}project/${project.id}`);
+    cy.url().should("eq", `${baseUrl}project/${projectTaskly.id}`);
 
     cy.get(".projectTitle").should("contain", updatedProject.title);
     cy.get(".projectDescription").should("contain", updatedProject.description);
@@ -124,109 +258,41 @@ describe("project", () => {
       new Date(updatedProject.end_date).toDateString()
     );
     cy.get(".projectTypeOfPayment").should("contain", "Taskly");
-    cy.get(".projectStatus").should("contain", "active");
+    cy.get(".projectStatus").should("not.contain", "not");
 
-    project = updatedProject;
+    projectTaskly = updatedProject;
+    projects[0] = projectTaskly;
   });
 
-  it("creates new task", () => {
-    cy.visit(`${baseUrl}project/${project.id}`);
-
-    const task = {
-      id: 0,
-      projectId: 0,
-      title: "finish these damn tests",
-      description: "why it has to be so long?",
-      price: 100000,
-      paid: true,
-      completed: true
+  it("deletes project", () => {
+    let projectToDelete = {
+      title: "Delete me",
+      description: "Sun is going down",
+      type_of_payment: "T_P",
+      start_date: "1999-08-02T10:00:00.000Z",
+      end_date: "2018-09-03T10:25:13.779Z",
+      status: false
     };
 
-    cy.get(".titleInput")
-      .type(task.title)
-      .should("have.value", task.title);
-    cy.get(".descriptionInput")
-      .type(task.description)
-      .should("have.value", task.description);
-    cy.get(".priceInput")
-      .type(task.price)
-      .should("have.value", task.price.toString());
-    cy.get(".paidCheckbox")
-      .check({ force: true })
-      .should("be.checked");
-    cy.get(".completedCheckbox")
-      .check({ force: true })
-      .should("be.checked");
+    cy.server({ enable: false });
 
-    cy.route(
-      "POST",
-      `http://127.0.0.1:8000/api/project/${project.id}/task/create`,
-      task
-    );
+    cy.visit(`${baseUrl}project/create`);
+    cy.get(".titleInput").type(projectToDelete.title);
+    cy.get(".descriptionInput").type(projectToDelete.description);
 
-    cy.get(".task-form")
-      .submit()
-      .then(() => {
-        tasks.push(task);
-      });
+    cy.get(".form-group").submit();
 
-    cy.get(".taskTitle").should("contain", task.title);
-    cy.get(".taskDescription").should("contain", task.description);
-    cy.get(".taskPrice").should("contain", task.price);
-    cy.get(".taskPaid").should("contain", "paid");
-    cy.get(".taskCompleted").should("contain", "Completed");
-  });
+    cy.visit(baseUrl);
+    cy.get(".projectList ul li")
+      .its("length")
+      .should("eq", 1);
+    cy.get(".projectList").should("contain", projectToDelete.title);
 
-  // it("updates task", () => {
-  //   cy.get(".updateButton").click();
-  // })
+    cy.get(".projectLink").click();
+    cy.get(".removeProject").click();
 
-  it("creates second task", () => {
-    cy.visit(`${baseUrl}project/${project.id}`);
-
-    const task = {
-      id: 1,
-      projectId: 0,
-      title: "read clean code",
-      description: "the only pleasure after long day",
-      price: 1000000,
-      paid: false,
-      completed: false
-    };
-
-    cy.get(".titleInput")
-      .type(task.title)
-      .should("have.value", task.title);
-    cy.get(".descriptionInput")
-      .type(task.description)
-      .should("have.value", task.description);
-    cy.get(".priceInput")
-      .type(task.price)
-      .should("have.value", task.price.toString());
-    cy.get(".paidCheckbox")
-      .check({ force: true })
-      .should("be.checked");
-    cy.get(".completedCheckbox")
-      .check({ force: true })
-      .should("be.checked");
-
-    cy.route(
-      "POST",
-      `http://127.0.0.1:8000/api/project/${project.id}/task/create`,
-      task
-    );
-
-    cy.get(".task-form")
-      .submit()
-      .then(() => {
-        tasks.push(task);
-      });
-
-    cy.get(".taskTitle").should("contain", task.title);
-    cy.get(".taskDescription").should("contain", task.description);
-    cy.get(".taskPrice").should("contain", task.price);
-    cy.get(".taskPaid").should("contain", "not paid");
-    cy.get(".taskCompleted").should("contain", "Uncompleted");
+    cy.url().should("eq", baseUrl);
+    cy.get(".projectList").should("not.contain", projectToDelete.title);
   });
 });
 
