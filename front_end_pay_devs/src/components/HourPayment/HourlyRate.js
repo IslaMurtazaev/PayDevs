@@ -9,6 +9,7 @@ const HourlyRate = props => {
     <div>
       <Link
         to={`${history.location.pathname}/Hourly/${hourPayment.id}/workTime`}
+        className="workTimes"
       >
         <span className="rate">
           {hourPayment.rate}

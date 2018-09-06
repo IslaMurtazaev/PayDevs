@@ -13,13 +13,15 @@ const WorkTimeItem = props => {
         <b>End Work:</b> {new Date(workTime.end_work).toLocaleString()}
       </h4>
       <h4 className="paid">
-        {workTime.paid || "not "}<b>paid</b>
+        {workTime.paid || "not "}
+        <b>paid</b>
       </h4>
       <div className="button-group-horizontal">
-        <Link 
+        <Link
           to={`/project/${projectId}/Hourly/${hourPaymentId}/workTime/${
             workTime.id
           }/update`}
+          className="updateWorkTime"
         >
           <button className="updateButton btn btn-warning" type="button">
             Update
@@ -27,7 +29,7 @@ const WorkTimeItem = props => {
         </Link>
         <button
           type="button"
-          className="btn btn-danger"
+          className="btn btn-danger removeWorkTime"
           onClick={() => onRemove(workTime.id)}
         >
           Delete

@@ -32,7 +32,7 @@ const WorkInput = ({ values, errors, touched, setFieldValue }) => {
       </div>
       <label>
         Paid:
-        <Field name="paid" type="checkbox" checked={values.paid} />
+        <Field name="paid" type="checkbox" checked={values.paid} className="workTimePaid"/>
       </label>
 
       <button className="btn btn-primary form-control" type="submit">
