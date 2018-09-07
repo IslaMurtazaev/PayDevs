@@ -27,12 +27,12 @@ describe("Login", () => {
 
     cy.get(".usernameInput").clear();
     cy.get(".loginForm").submit();
-    cy.get(".help-block").should("contain", "Username is required");
+    cy.get(".validation-error").should("contain", "Username is required");
 
     cy.get(".usernameInput").type(username);
     cy.get(".passwordInput").clear();
     cy.get(".loginForm").submit();
-    cy.get(".help-block").should("contain", "Password is required");
+    cy.get(".validation-error").should("contain", "Password is required");
 
     cy.get(".passwordInput").type(password);
     cy.get(".loginForm")

@@ -43,7 +43,7 @@ class SignUp extends Component {
             {error && <div>{error.error.message}</div>}
             <div>
               <label htmlFor="username">Username: </label>
-              {submitted && !username && <div className="help-block">Username is required</div>}
+              {submitted && !username && <div className="validation-error">Username is required</div>}
               <input
                 type="text"
                 className="usernameInput form-control"
@@ -54,7 +54,7 @@ class SignUp extends Component {
             </div>
             <div>
               <label htmlFor="email">Email: </label>
-              {submitted && !email && <div className="help-block">Email is required</div>}
+              {submitted && !email && <div className="validation-error">Email is required</div>}
               <input
                 type="email"
                 className="emailInput form-control"
@@ -65,7 +65,7 @@ class SignUp extends Component {
             </div>
             <div>
               <label htmlFor="password">Password: </label>
-              {submitted && !password && <div className="help-block">Password is required</div>}
+              {submitted && !password && <div className="validation-error">Password is required</div>}
               <input
                 type="password"
                 className="passwordInput form-control"

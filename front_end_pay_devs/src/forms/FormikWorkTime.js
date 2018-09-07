@@ -1,13 +1,14 @@
 import React from "react";
 import { withFormik, Form, Field } from "formik";
+import * as Yup from "yup";
 import DateTimePicker from "react-datetime-picker";
 
 const WorkInput = ({ values, errors, touched, setFieldValue }) => {
   return (
     <Form className="worked-time-form" >
       <label>Start-work: </label>
-      <div>
-        {touched.start_date && errors.start_date && <p>{errors.start_date}</p>}
+      <div className="validation-error">
+        {touched.start_work && errors.start_work && <p>{errors.start_work}</p>}
       </div>
       <div>
         <DateTimePicker
@@ -19,8 +20,8 @@ const WorkInput = ({ values, errors, touched, setFieldValue }) => {
       </div>
 
       <label>End-work: </label>
-      <div>
-        {touched.end_date && errors.end_date && <p>{errors.end_date}</p>}
+      <div className="validation-error">
+        {touched.end_work && errors.end_work && <p>{errors.end_work}</p>}
       </div>
       <div>
         <DateTimePicker
@@ -60,6 +61,10 @@ const FormikProject = withFormik({
       paid: paid
     };
   },
+  validationSchema: Yup.object().shape({
+    start_work: Yup.date("Invalid date"),
+    end_work: Yup.date("Invalid date")
+  }),
   handleSubmit(values, { props, resetForm }) {
     props.onSubmit(values);
     if (!values.id) resetForm();

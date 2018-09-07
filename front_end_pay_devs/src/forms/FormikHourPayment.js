@@ -1,20 +1,22 @@
 import React from "react";
 import { withFormik, Form, Field } from "formik";
+import * as Yup from "yup";
 
 const HourPaymentInput = ({ errors, touched }) => {
   return (
     <Form className="rate-form">
-      <div>{touched.rate && errors.rate && <p>{errors.rate}</p>}</div>
-      <label> New rate: </label>
-      <div />
+      <label>New rate: </label>
+      <div className="validation-error">{touched.rate && errors.rate && <p>{errors.rate}</p>}</div>
       <Field
         name="rate"
         type="number"
         className="form-control rateHourPaymnet"
         placeholder={"rate..."}
       />
-      <div />
-      <button className="btn btn-primary form-control newRateHourPayment" type="submit">
+      <button
+        className="btn btn-primary form-control newRateHourPayment"
+        type="submit"
+      >
         submit
       </button>
     </Form>
@@ -22,16 +24,18 @@ const HourPaymentInput = ({ errors, touched }) => {
 };
 
 const FormikHourPayment = withFormik({
-  mapPropsToValues({ id, projectId, rate }) {
+  mapPropsToValues({ projectId, rate }) {
     return {
       rate: rate || 0,
-      projectId: projectId,
-      id: id
+      projectId: projectId
     };
   },
+  validationSchema: Yup.object().shape({
+    rate: Yup.number().positive().required("Rate is required")
+  }),
   handleSubmit(values, { props, resetForm }) {
     props.onSubmit(values);
-    if (!values.id) resetForm();
+    resetForm();
   }
 })(HourPaymentInput);
 

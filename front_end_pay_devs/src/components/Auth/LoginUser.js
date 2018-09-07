@@ -39,7 +39,7 @@ class LoginUser extends Component {
           onSubmit={val => this.handleSubmit(val)}
           name="myForm"
         >
-          {error && error.error && <div>{error.error.message}</div>}
+          {error && error.error && <div className="validation-error">{error.error.message}</div>}
           <div>
             <label>Username</label>
             <br />
@@ -47,7 +47,7 @@ class LoginUser extends Component {
               className="usernameInput"
               model="login.user_form.username"
             />
-            {user_req && <div className="help-block">Username is required</div>}
+            {user_req && <div className="validation-error">Username is required</div>}
           </div>
           <div>
             <label>Password</label>
@@ -58,7 +58,7 @@ class LoginUser extends Component {
             />
             <br />
             {password_req && (
-              <div className="help-block">Password is required</div>
+              <div className="validation-error">Password is required</div>
             )}
             <button className="btn btn-primary">Login</button>
           </div>

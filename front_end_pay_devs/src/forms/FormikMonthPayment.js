@@ -5,18 +5,18 @@ import * as Yup from "yup";
 const MonthPaymentInput = ({ errors, touched }) => {
   return (
     <Form className="rate-form">
-      <div>
+      <label>
+      <div className="validation-error">
         {touched.rate && errors.rate && <p>error.rate</p>}
-        <label>
-          New rate:
-          <Field
-            name="rate"
-            type="number"
-            className="form-control rateMonthPaymnet"
-            placeholder={"rate..."}
-          />
-        </label>
       </div>
+        New rate:
+        <Field
+          name="rate"
+          type="number"
+          className="form-control rateMonthPaymnet"
+          placeholder={"rate..."}
+        />
+      </label>
 
       <button
         className="btn btn-primary form-control newRateMonthPayment"
@@ -29,18 +29,18 @@ const MonthPaymentInput = ({ errors, touched }) => {
 };
 
 const FormikMonthPayment = withFormik({
-  mapPropsToValues({ id, rate, projectId }) {
+  mapPropsToValues({ rate, projectId }) {
     return {
       rate: rate || 0,
       projectId: projectId || null
     };
   },
   validationSchema: Yup.object().shape({
-    rate: Yup.number().required("Rate is required")
+    rate: Yup.number().positive().required("Rate is required")
   }),
   handleSubmit(values, { props, resetForm }) {
     props.onSubmit(values.projectId, values);
-    if (!values.id) resetForm();
+    resetForm();
   }
 })(MonthPaymentInput);
 
