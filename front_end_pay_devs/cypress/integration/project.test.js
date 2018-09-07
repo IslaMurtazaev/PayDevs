@@ -1,6 +1,6 @@
 const baseUrl = "http://localhost:3000/";
 
-describe("project", () => {
+describe("Project", () => {
   let projectTaskly = {
     id: 1,
     title: "Alpha bravo charlie",

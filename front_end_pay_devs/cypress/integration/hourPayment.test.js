@@ -1,4 +1,5 @@
 const baseUrl = "http://localhost:3000/";
+
 describe("Hour Payment", () => {
   let project = {
     id: 1,
@@ -9,13 +10,10 @@ describe("Hour Payment", () => {
     end_date: "2018-09-03T10:25:13.779Z",
     status: false
   };
-  const projects = [project];
 
   beforeEach(() => {
     cy.login();
-    // cy.create_project(project);
     cy.server();
-    // cy.route("GET", `http://127.0.0.1:8000/api/project/all`, projects);
   });
 
   it("create and remoute hour payment", () => {
