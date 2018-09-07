@@ -216,18 +216,6 @@ describe("project", () => {
     );
     cy.get(".statusCheckbox").should("not.be.checked");
 
-    cy.get(".titleInput")
-      .clear()
-      .type("Alpha Bravo Whiskey")
-      .should("have.value", "Alpha Bravo Whiskey");
-    cy.get(".descriptionInput")
-      .clear()
-      .type("Colonize Mars")
-      .should("have.value", "Colonize Mars");
-    cy.get(".statusCheckbox")
-      .check({ force: true })
-      .should("be.checked");
-
     let updatedProject = {
       id: 1,
       title: "Alpha Bravo Whiskey",
@@ -237,6 +225,18 @@ describe("project", () => {
       end_date: "2018-09-03T10:25:13.779Z",
       status: true
     };
+
+    cy.get(".titleInput")
+      .clear()
+      .type(updatedProject.title)
+      .should("have.value", updatedProject.title);
+    cy.get(".descriptionInput")
+      .clear()
+      .type(updatedProject.description)
+      .should("have.value", updatedProject.description);
+    cy.get(".statusCheckbox")
+      .check({ force: true })
+      .should("be.checked");
 
     cy.route(
       "PUT",

@@ -7,6 +7,7 @@ import { Redirect } from "react-router-dom";
 const UpdateTaskForm = props => {
   const task = props.task;
   if (!Object.keys(task).length) return <Redirect from="/project/:id" to="/" />;
+  console.log("task", task);
   return (
     <div>
       <h1>Update Project</h1>

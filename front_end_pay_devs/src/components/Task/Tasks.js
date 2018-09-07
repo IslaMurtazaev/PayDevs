@@ -19,7 +19,7 @@ class Tasks extends Component {
       <div>
         {tasks.length > 0 && <h3 className="taskHeader">Your tasks</h3>}
 
-        <div>
+        <div className="tasks">
           {tasks.map(task => (
             <TaskItem
               key={task.id}

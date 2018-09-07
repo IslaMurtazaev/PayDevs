@@ -11,7 +11,7 @@ class TaskItem extends Component {
     const { task, projectId } = this.props;
 
     return (
-      <div className="tasks"> 
+      <div className="task"> 
         <h4 className="taskTitle"><b>Title:</b> {task.title}</h4>
         <h5 className="taskDescription"><b>Description:</b> {task.description}</h5>
         <h5 className="taskPrice"><b>Price:</b> {task.price}</h5>
@@ -22,7 +22,7 @@ class TaskItem extends Component {
             Update
           </button>
         </Link>
-        <button type="button" className="btn btn-danger"
+        <button type="button" className="removeButton btn btn-danger"
          onClick={this.onClickDelete.bind(this, task.id)}>Delete</button>
         </div>
     );

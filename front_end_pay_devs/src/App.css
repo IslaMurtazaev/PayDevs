@@ -387,7 +387,7 @@ h1 {
   display: inline-block;
 }
 
-.tasks {
+.task {
   display: flex;
   flex-direction: column;
   flex-direction: row;
@@ -402,7 +402,7 @@ h1 {
   display: inline-block;
 }
 
-.tasks h4 h3 {
+.task h4 h3 {
   width: 300px;
 }
 
