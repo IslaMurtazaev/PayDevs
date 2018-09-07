@@ -10,14 +10,15 @@ const WorkedDayInput = ({ values, errors, touched }) => {
       <div>
         <label>
           Date:
-          <Field className="form-control" name="day" type="date" />
+          <Field className="form-control dayWokedDay" name="day" type="date" 
+          />
         </label>
       </div>
 
       <label>
         Paid:
         <Field
-          className="form-control"
+          className="form-control workDayPaid"
           name="paid"
           type="checkbox"
           checked={values.paid}

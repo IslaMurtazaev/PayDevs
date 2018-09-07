@@ -10,7 +10,8 @@ const WorkedDay = props => {
         <b>Date:</b> {workedDay.day}
       </h4>
       <h4 className="paid">
-        {workedDay.paid || "not "}<b>paid</b>
+        {workedDay.paid || "not "}
+        <b>paid</b>
       </h4>
       <div className="button-group-horizontal">
         <Link
@@ -18,13 +19,16 @@ const WorkedDay = props => {
             workedDay.id
           }/update`}
         >
-          <button className="updateButton btn btn-warning" type="button">
+          <button
+            className="updateButton btn btn-warning updateWorkedDay"
+            type="button"
+          >
             Update
           </button>
         </Link>
         <button
           type="button"
-          className="btn btn-danger"
+          className="btn btn-danger removeWorkDay"
           onClick={() => onRemove(workedDay.id)}
         >
           Delete
