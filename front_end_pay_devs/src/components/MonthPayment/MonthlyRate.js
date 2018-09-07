@@ -8,7 +8,6 @@ const MonthlyRate = props => {
         to={`/project/${props.projectId}/Monthly/${
           props.monthPayment.id
         }/workedDay`}
-        className=""
       >
         <span className="rate">
           {props.monthPayment.rate}

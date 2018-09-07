@@ -3,9 +3,6 @@ import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 
 const MonthPaymentInput = ({ errors, touched }) => {
-
-
-
   return (
     <Form className="rate-form">
       <div>
@@ -15,14 +12,16 @@ const MonthPaymentInput = ({ errors, touched }) => {
           <Field
             name="rate"
             type="number"
-            className="form-control"
-            
+            className="form-control rateMonthPaymnet"
             placeholder={"rate..."}
           />
         </label>
       </div>
 
-      <button className="btn btn-primary form-control" type="submit">
+      <button
+        className="btn btn-primary form-control newRateMonthPayment"
+        type="submit"
+      >
         submit
       </button>
     </Form>

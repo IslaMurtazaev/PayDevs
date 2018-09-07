@@ -16,7 +16,7 @@ class MonthlyRates extends Component {
     const { monthPayments, projectId, removeMonthPayment } = this.props;
 
     return (
-      <div>
+      <div className="monthlyRates">
         {monthPayments.length > 0 && (
           <h3 className="rateHeader">Select one of your current rates:</h3>
         )}
