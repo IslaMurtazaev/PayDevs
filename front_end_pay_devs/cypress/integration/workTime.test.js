@@ -15,7 +15,7 @@ describe("Work Time", () => {
     cy.server();
   });
 
-  it("Create Work Time", () => {
+  it("creates work time", () => {
     const rate = "5000";
     cy.visit(baseUrl);
 
@@ -57,7 +57,7 @@ describe("Work Time", () => {
     // cy.get(".removeProject").click({ force: true });
   });
 
-  it("Update workTime ", () => {
+  it("updates work time ", () => {
     cy.visit(baseUrl);
     cy.get(".projectLink").click({ force: true });
     cy.get(".workTimes").click({ force: true });
@@ -69,7 +69,7 @@ describe("Work Time", () => {
     cy.get(".paid").should("contain", "not paid");
   });
 
-  it("remove work time", () => {
+  it("removes work time", () => {
     cy.visit(baseUrl);
     cy.get(".projectLink").click({ force: true });
     cy.get(".workTimes").click({ force: true });

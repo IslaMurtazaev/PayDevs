@@ -3,6 +3,7 @@
 exports[`<HourlyRate /> matches previous snapshot 1`] = `
 <div>
   <Link
+    className="workTimes"
     replace={false}
     to="testing/Hourly/1/workTime"
   >

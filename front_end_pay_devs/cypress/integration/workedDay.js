@@ -1,5 +1,5 @@
 const baseUrl = "http://localhost:3000/";
-describe("Work Time", () => {
+describe("Work Day", () => {
   let project = {
     id: 1,
     title: "Alpha bravo charlie",
@@ -14,7 +14,7 @@ describe("Work Time", () => {
     cy.login();
     cy.server();
   });
-  it("Create Work Day", () => {
+  it("creates work day", () => {
     const rate = "5000";
     cy.visit(baseUrl);
 
@@ -55,7 +55,7 @@ describe("Work Time", () => {
     cy.get(".paid").should("contain", "paid");
   });
 
-  it("Update workedDay ", () => {
+  it("updates work day", () => {
     cy.visit(baseUrl);
     cy.get(".projectLink").click({ force: true });
     cy.get(".workDays").click({ force: true });
@@ -67,7 +67,7 @@ describe("Work Time", () => {
     cy.get(".paid").should("contain", "not paid");
   });
 
-  it("remove work time", () => {
+  it("removes work day", () => {
     cy.visit(baseUrl);
     cy.get(".projectLink").click({ force: true });
     cy.get(".workDays").click({ force: true });

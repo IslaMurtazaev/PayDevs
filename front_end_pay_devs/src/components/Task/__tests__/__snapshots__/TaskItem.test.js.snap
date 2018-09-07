@@ -2,7 +2,7 @@
 
 exports[`<TaskItem /> matches previous snapshot 1`] = `
 <div
-  className="tasks"
+  className="task"
 >
   <h4
     className="taskTitle"
@@ -60,7 +60,7 @@ exports[`<TaskItem /> matches previous snapshot 1`] = `
     </button>
   </Link>
   <button
-    className="btn btn-danger"
+    className="removeButton btn btn-danger"
     onClick={[Function]}
     type="button"
   >

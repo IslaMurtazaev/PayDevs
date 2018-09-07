@@ -3,6 +3,7 @@
 exports[`<MonthlyRate /> matches previous snapshot 1`] = `
 <div>
   <Link
+    className="workDays"
     replace={false}
     to="/project/undefined/Monthly/1/workedDay"
   >

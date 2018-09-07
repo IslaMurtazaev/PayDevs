@@ -29,14 +29,14 @@ exports[`<WorkedDay /> matches previous snapshot 1`] = `
       to="/project/undefined/Monthly/undefined/workedDay/1/update"
     >
       <button
-        className="updateButton btn btn-warning"
+        className="updateButton btn btn-warning updateWorkedDay"
         type="button"
       >
         Update
       </button>
     </Link>
     <button
-      className="btn btn-danger"
+      className="btn btn-danger removeWorkDay"
       onClick={[Function]}
       type="button"
     >

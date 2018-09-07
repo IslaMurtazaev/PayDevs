@@ -34,6 +34,7 @@ exports[`<WorkTime /> matches previous snapshot 1`] = `
     className="button-group-horizontal"
   >
     <Link
+      className="updateWorkTime"
       replace={false}
       to="/project/undefined/Hourly/undefined/workTime/1/update"
     >
@@ -45,7 +46,7 @@ exports[`<WorkTime /> matches previous snapshot 1`] = `
       </button>
     </Link>
     <button
-      className="btn btn-danger"
+      className="btn btn-danger removeWorkTime"
       onClick={[Function]}
       type="button"
     >

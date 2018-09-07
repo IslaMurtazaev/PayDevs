@@ -7,7 +7,9 @@ exports[`<Tasks /> matches previous snapshot 1`] = `
   >
     Your tasks
   </h3>
-  <div>
+  <div
+    className="tasks"
+  >
     <TaskItem
       key="1"
       onDelete={[Function]}
