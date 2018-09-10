@@ -28,7 +28,6 @@ class LoginUser extends Component {
   render() {
     const { user_req, password_req } = this.state;
     const error = this.props.error;
-    console.log(error);
 
     return (
       <div>
