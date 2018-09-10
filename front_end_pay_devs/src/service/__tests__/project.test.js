@@ -1,9 +1,8 @@
 import mockAxios from "axios";
 import { projectService } from "../project";
 const fs = require("fs");
-jest.mock("../helpers", () => require("helpers"))
 
-const BASE_URL = "http://127.0.0.1:8000/api/";
+const BASE_URL = "/api/";
 
 describe("Project", async () => {
   it("test function getAll", async () => {
@@ -53,9 +52,7 @@ describe("Project", async () => {
 
     expect(data).toEqual(projects);
     expect(mockAxios.get).toHaveBeenCalledTimes(1);
-    expect(mockAxios.get).toHaveBeenCalledWith(`${BASE_URL}project/all`, {
-      headers: {}
-    });
+    expect(mockAxios.get).toHaveBeenCalledWith(`${BASE_URL}project/all`);
   });
 
   it("test function create", async () => {
@@ -92,20 +89,16 @@ describe("Project", async () => {
     const data = await projectService.create(project);
     expect(data).toEqual(project);
     expect(mockAxios.post).toHaveBeenCalledTimes(1);
-    expect(mockAxios.post).toHaveBeenCalledWith(
-      `${BASE_URL}project/create`,
-      {
-        id: 1,
-        user_id: 1,
-        title: "Project web  Task Payment",
-        description: "logic web sites",
-        start_date: "2017-12-20T04:00:00.000000Z",
-        end_date: "2018-08-27T11:48:07.601329Z",
-        status: true,
-        type_of_payment: "T_P"
-      },
-      { headers: {} }
-    );
+    expect(mockAxios.post).toHaveBeenCalledWith(`${BASE_URL}project/create`, {
+      id: 1,
+      user_id: 1,
+      title: "Project web  Task Payment",
+      description: "logic web sites",
+      start_date: "2017-12-20T04:00:00.000000Z",
+      end_date: "2018-08-27T11:48:07.601329Z",
+      status: true,
+      type_of_payment: "T_P"
+    });
   });
 
   it("test function Update", async () => {
@@ -128,7 +121,6 @@ describe("Project", async () => {
             (err, data) => {
               const urlList = url.split("/");
               urlList.pop();
-              urlList.pop();
               const projectId = urlList.pop();
               if (err) reject(err);
               resolve({
@@ -145,7 +137,7 @@ describe("Project", async () => {
     expect(data).toEqual(project);
     expect(mockAxios.put).toHaveBeenCalledTimes(1);
     expect(mockAxios.put).toHaveBeenCalledWith(
-      `${BASE_URL}project/${project.id}/update/`,
+      `${BASE_URL}project/${project.id}/update`,
       {
         id: 1,
         user_id: 1,
@@ -155,8 +147,7 @@ describe("Project", async () => {
         end_date: "2018-08-27T11:48:07.601329Z",
         status: true,
         type_of_payment: "T_P"
-      },
-      { headers: {} }
+      }
     );
   });
 
@@ -198,10 +189,7 @@ describe("Project", async () => {
     expect(mockAxios.delete).toHaveBeenCalledTimes(1);
 
     expect(mockAxios.delete).toHaveBeenCalledWith(
-      `${BASE_URL}project/${project.id}/delete`,
-      {
-        headers: {}
-      }
+      `${BASE_URL}project/${project.id}/delete`
     );
   });
   it("test function Get", async () => {
@@ -223,7 +211,6 @@ describe("Project", async () => {
             "utf8",
             (err, data) => {
               const urlList = url.split("/");
-              urlList.pop();
               const projectId = urlList.pop();
               if (err) reject(err);
               resolve({
@@ -241,10 +228,7 @@ describe("Project", async () => {
     expect(mockAxios.get).toHaveBeenCalledTimes(2);
 
     expect(mockAxios.get).toHaveBeenCalledWith(
-      `${BASE_URL}project/${project.id}/`,
-      {
-        headers: {}
-      }
+      `${BASE_URL}project/${project.id}`
     );
   });
 });

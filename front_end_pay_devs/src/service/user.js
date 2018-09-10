@@ -9,7 +9,7 @@ export const UserService = {
 function login(username, password) {
   return axios
     .post(
-      "http://127.0.0.1:8000/api/users/login",
+      "/api/users/login",
       JSON.stringify({ username, password })
     )
     .then(res => {
@@ -22,7 +22,7 @@ function login(username, password) {
 function create_user(username, email, password) {
   return axios
     .post(
-      "http://127.0.0.1:8000/api/users/create",
+      "/api/users/create",
       JSON.stringify({ username, email, password })
     )
     .then(res => {

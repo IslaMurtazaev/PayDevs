@@ -1,5 +1,4 @@
 import axios from "axios";
-import { authHeader } from "./helpers";
 
 export const taskService = {
   create,
@@ -8,22 +7,18 @@ export const taskService = {
   update
 };
 
-const BASE_URL = "http://127.0.0.1:8000/api/project/";
+const BASE_URL = "/api/project/";
 
 function create(task, projectId) {
-  const headres = authHeader();
-  const fetch_url = `${BASE_URL}${projectId}/task/create/`;
-  return axios.post(fetch_url, task, { headers: headres }).then(res => {
+  const fetch_url = `${BASE_URL}${projectId}/task/create`;
+  return axios.post(fetch_url, task).then(res => {
     return res.data;
   });
 }
 
 function getAll(projectId) {
-  let headers = authHeader();
   return axios
-    .get(`${BASE_URL}${projectId}/task/all/`, {
-      headers: headers
-    })
+    .get(`${BASE_URL}${projectId}/task/all`)
     .then(res => {
       let tasks = res.data;
       return tasks;
@@ -31,9 +26,8 @@ function getAll(projectId) {
 }
 
 function remove(taskId) {
-  let headers = authHeader();
   return axios
-    .delete(`${BASE_URL}task/${taskId}/delete`, { headers: headers })
+    .delete(`${BASE_URL}task/${taskId}/delete`)
     .then(res => {
       let task = res.data;
       return task;
@@ -41,9 +35,8 @@ function remove(taskId) {
 }
 
 function update(values) {
-  const headres = authHeader();
-  const fetch_url = `${BASE_URL}${values.projectId}/task/${values.id}/update/`;
-  return axios.put(fetch_url, values, { headers: headres }).then(res => {
+  const fetch_url = `${BASE_URL}${values.projectId}/task/${values.id}/update`;
+  return axios.put(fetch_url, values).then(res => {
     let task = res.data;
     return task;
   });

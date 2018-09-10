@@ -1,11 +1,10 @@
 import mockAxios from "axios"
 import {taskService} from '../task'
-jest.mock("../helpers", () => require("helpers"))
 const fs = require('fs')
 
 
 
-const BASE_URL = "http://127.0.0.1:8000/api/"
+const BASE_URL = "/api/"
 
 describe('Task', async () => {
     it('test function getAll', async () => {
@@ -45,10 +44,7 @@ describe('Task', async () => {
         expect(data).toEqual(tasks);
         expect(mockAxios.get).toHaveBeenCalledTimes(1);
         expect(mockAxios.get).toHaveBeenCalledWith(
-            `${BASE_URL}project/1/task/all/`,
-            {
-                "headers": {}
-            }
+            `${BASE_URL}project/1/task/all`
         )
     })
 
@@ -80,7 +76,7 @@ describe('Task', async () => {
         expect(mockAxios.post).toHaveBeenCalledTimes(1);
         
         expect(mockAxios.post).toHaveBeenCalledWith(
-            `${BASE_URL}project/1/task/create/`,
+            `${BASE_URL}project/1/task/create`,
             {   "id": 1,
                 "completed": true,
                 "description": "Task one description", 
@@ -88,9 +84,6 @@ describe('Task', async () => {
                 "price": 1000, 
                 "projectId": 1, 
                 "title": "Task one"
-            },
-            {
-                "headers": {}
             }
             
         )
@@ -123,7 +116,7 @@ describe('Task', async () => {
         expect(mockAxios.put).toHaveBeenCalledTimes(1);
         
         expect(mockAxios.put).toHaveBeenCalledWith(
-            `${BASE_URL}project/1/task/1/update/`,
+            `${BASE_URL}project/1/task/1/update`,
             {   "id": 1,
                 "completed": true,
                 "description": "Task one description", 
@@ -131,9 +124,6 @@ describe('Task', async () => {
                 "price": 1000, 
                 "projectId": 1, 
                 "title": "Task one"
-            },
-            {
-                "headers": {}
             }
             
         )
@@ -173,7 +163,7 @@ describe('Task', async () => {
         expect(mockAxios.put).toHaveBeenCalledTimes(1);
         
         expect(mockAxios.put).toHaveBeenCalledWith(
-            `${BASE_URL}project/1/task/1/update/`,
+            `${BASE_URL}project/1/task/1/update`,
             {   "id": 1,
                 "completed": true,
                 "description": "Task one description", 
@@ -181,9 +171,6 @@ describe('Task', async () => {
                 "price": 1000, 
                 "projectId": 1, 
                 "title": "Task one"
-            },
-            {
-                "headers": {}
             }
             
         )
