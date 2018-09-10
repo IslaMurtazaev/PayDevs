@@ -6,7 +6,7 @@ const TasklyInput = ({ values, errors, touched }) => {
   return (
     <Form className="task-form">
       <label>Title: </label>
-      <div>{touched.title && errors.title && <p>{errors.title}</p>}</div>
+      <div className="validation-error">{touched.title && errors.title && <p>{errors.title}</p>}</div>
       <Field
         name="title"
         type="text"
@@ -24,6 +24,7 @@ const TasklyInput = ({ values, errors, touched }) => {
       />
       <div />
       <label>Price: </label>
+      <div className="validation-error">{touched.price && errors.price && <p>{errors.price}</p>}</div>
       <div />
       <Field
         name="price"
@@ -81,7 +82,8 @@ const FormikTaskly = withFormik({
     };
   },
   validationSchema: Yup.object().shape({
-    title: Yup.string().required("Title is required")
+    title: Yup.string().required("Title is required"),
+    price: Yup.number().positive().required("Price is required")
   }),
   handleSubmit(values, { props, resetForm }) {
     props.onSubmit(values);

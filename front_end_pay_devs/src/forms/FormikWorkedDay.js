@@ -5,13 +5,13 @@ import * as Yup from "yup";
 const WorkedDayInput = ({ values, errors, touched }) => {
   return (
     <Form className="worked-day-form">
-      <div>{touched.day && errors.day && <p>{errors.day}</p>}</div>
-
       <div>
         <label>
           Date:
-          <Field className="form-control dayWokedDay" name="day" type="date" 
-          />
+          <div className="validation-error">
+            {touched.day && errors.day && <p>{errors.day}</p>}
+          </div>
+          <Field className="form-control dayWokedDay" name="day" type="date" />
         </label>
       </div>
 

@@ -1,4 +1,5 @@
 PayDevs/__pycache__
+PayDevs/secrets.py
 account/migrations
 project/migrations
 .vscode/
