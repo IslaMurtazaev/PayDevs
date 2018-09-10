@@ -40,30 +40,31 @@ class ProjectItem extends Component {
         <h1 className="projectTitle">{project.title}</h1>
         <div className="properties">
           {project.description ? (
-            <h4 className="projectDescription">
+            <p className="projectDescription">
               <span className="property">Description: </span>
               {project.description}
-            </h4>
+            </p>
           ) : null}
           {project.start_date ? (
-            <h4 className="projectStartDate">
+            <p className="projectStartDate">
               <span className="property">Start date: </span>
               {new Date(project.start_date).toDateString()}
-            </h4>
+            </p>
           ) : null}
           {project.end_date ? (
-            <h4 className="projectEndDate">
+            <p className="projectEndDate">
               <span className="property">End date: </span>
               {new Date(project.end_date).toDateString()}
-            </h4>
+            </p>
           ) : null}
-          <h4 className="projectTypeOfPayment">
-            <span className="property">Type of payment:</span> {type_of_payment}
-          </h4>
-          <h4 className="projectStatus">
+          <p className="projectTypeOfPayment">
+            <span className="property">Type of payment:</span>
+            {type_of_payment} 
+          </p>
+          <p className="projectStatus">
             <span className="property">Status:</span>
             {project.status ? "" : "not"} active
-          </h4>
+          </p>
         </div>
 
         <div className="btn-group-horizontal">
