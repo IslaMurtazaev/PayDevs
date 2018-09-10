@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { userActions } from "../../actions/user";
 
 class SignUp extends Component {
   constructor(props) {
@@ -82,14 +80,4 @@ class SignUp extends Component {
   }
 }
 
-export default connect(
-  state => ({
-    user: state.user,
-    error: state.user.error
-  }),
-  dispatch => ({
-    onSignUpUser: (username, email, password) => {
-      dispatch(userActions.sign_up(username, email, password));
-    }
-  })
-)(SignUp);
+export default SignUp;

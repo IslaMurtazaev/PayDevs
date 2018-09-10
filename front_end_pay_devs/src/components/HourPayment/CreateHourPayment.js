@@ -3,21 +3,18 @@ import { connect } from "react-redux";
 import FormikHourPayment from "../../forms/FormikHourPayment";
 import { hourPaymentActions } from "../../actions/hourPayment";
 
-
 const CreateHourPayment = props => {
   return (
-    <div>
-      <FormikHourPayment
-        projectId={props.projectId}
-        onSubmit={props.createHourPayment}
-      />
-    </div>
+    <FormikHourPayment
+      projectId={props.projectId}
+      onSubmit={props.createHourPayment}
+    />
   );
 };
 
 const mapStateToProps = state => {
   return {
-    hourPayment: state.hourPayment,
+    hourPayment: state.hourPayment
   };
 };
 

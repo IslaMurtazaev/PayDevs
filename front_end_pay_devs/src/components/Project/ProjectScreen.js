@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { projectActions } from "../../actions/project";
 import { Link } from "react-router-dom";
+
 import Tasks from "../../components/Task/Tasks";
 import HourlyRates from "../../components/HourPayment/HourlyRates";
 import MonthlyRates from "../MonthPayment/MonthlyRates";
 
-class ProjectItem extends Component {
+class ProjectScreen extends Component {
   componentWillMount() {
     if (this.props.project.id !== +this.props.match.params.id)
       this.props.getProject();
@@ -58,7 +57,7 @@ class ProjectItem extends Component {
             </p>
           ) : null}
           <p className="projectTypeOfPayment">
-            <span className="property">Type of payment:</span>
+            <span className="property">Type of payment: </span>
             {type_of_payment} 
           </p>
           <p className="projectStatus">
@@ -97,25 +96,4 @@ class ProjectItem extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => ({
-  project: state.project
-    ? state.project
-    : state.projects.find(project => project.id === +ownProps.match.params.id)
-});
-
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  removeProject: id => {
-    dispatch(projectActions.remove(id));
-  },
-  getTotal: id => {
-    dispatch(projectActions.getTotal(id));
-  },
-  getProject: () => {
-    dispatch(projectActions.get(+ownProps.match.params.id));
-  }
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ProjectItem);
+export default ProjectScreen;

@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { userActions } from "../../actions/user";
 import { Form, Control } from "react-redux-form";
+import { Redirect } from "react-router-dom";
 
-class LoginUser extends Component {
+class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,7 +10,6 @@ class LoginUser extends Component {
       password_req: false,
       redirectToNewPage: false
     };
-    this.props.onLogOutUser();
   }
 
   handleSubmit(values) {
@@ -26,6 +24,10 @@ class LoginUser extends Component {
   }
 
   render() {
+    if (localStorage.getItem("user")) {
+      return <Redirect to="/" from="/login" />;
+    }
+
     const { user_req, password_req } = this.state;
     const error = this.props.error;
 
@@ -38,7 +40,10 @@ class LoginUser extends Component {
           onSubmit={val => this.handleSubmit(val)}
           name="myForm"
         >
-          {error && error.error && <div className="validation-error">{error.error.message}</div>}
+          {error &&
+            error.error && (
+              <div className="validation-error">{error.error.message}</div>
+            )}
           <div>
             <label>Username</label>
             <br />
@@ -46,7 +51,9 @@ class LoginUser extends Component {
               className="usernameInput"
               model="login.user_form.username"
             />
-            {user_req && <div className="validation-error">Username is required</div>}
+            {user_req && (
+              <div className="validation-error">Username is required</div>
+            )}
           </div>
           <div>
             <label>Password</label>
@@ -67,17 +74,4 @@ class LoginUser extends Component {
   }
 }
 
-export default connect(
-  state => ({
-    user: state.user,
-    error: state.user.error
-  }),
-  dispatch => ({
-    onLoginUser: (username, password) => {
-      dispatch(userActions.authenticate(username, password));
-    },
-    onLogOutUser: () => {
-      dispatch(userActions.logout());
-    }
-  })
-)(LoginUser);
+export default LoginScreen;

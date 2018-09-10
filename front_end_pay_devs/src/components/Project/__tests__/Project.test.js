@@ -4,9 +4,9 @@ import configureStore from "redux-mock-store";
 import toJson from "enzyme-to-json";
 jest.mock("../../../index.js", () => require("history"));
 
-import ProjectItem from "../ProjectItem";
+import Project from "../Project";
 
-describe("<ProjectItem />", () => {
+describe("<Project />", () => {
   const initialState = {
     project: {
       id: 1,
@@ -21,7 +21,7 @@ describe("<ProjectItem />", () => {
   const mockStore = configureStore();
 
   let store = mockStore(initialState);
-  let container = shallow(<ProjectItem store={store} match={ {params: {id: 1}} } />).dive();
+  let container = shallow(<Project store={store} match={ {params: {id: 1}} } />).dive();
 
   it("renders projectTitle based on props", () => {
     expect(container.find(".projectTitle").text()).toBe("PayDevs");

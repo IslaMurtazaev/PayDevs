@@ -6,9 +6,12 @@ import monthPaymentActions from "../../actions/monthPayment";
 
 const CreateMonthPaymentForm = props => {
   return (
-    <div>
-      <FormikMonthPayment projectId={props.projectId} onSubmit={(projectId, values) => props.createMonthPayment(projectId, values)} />
-    </div>
+    <FormikMonthPayment
+      projectId={props.projectId}
+      onSubmit={(projectId, values) =>
+        props.createMonthPayment(projectId, values)
+      }
+    />
   );
 };
 

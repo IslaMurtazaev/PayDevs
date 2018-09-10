@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<ProjectItem /> matches previous snap 1`] = `
+exports[`<Project /> matches previous snap 1`] = `
 <div
   className="container"
 >
@@ -12,7 +12,7 @@ exports[`<ProjectItem /> matches previous snap 1`] = `
   <div
     className="properties"
   >
-    <h4
+    <p
       className="projectDescription"
     >
       <span
@@ -21,8 +21,8 @@ exports[`<ProjectItem /> matches previous snap 1`] = `
         Description: 
       </span>
       blablabla
-    </h4>
-    <h4
+    </p>
+    <p
       className="projectStartDate"
     >
       <span
@@ -31,8 +31,8 @@ exports[`<ProjectItem /> matches previous snap 1`] = `
         Start date: 
       </span>
       Fri Aug 24 2018
-    </h4>
-    <h4
+    </p>
+    <p
       className="projectEndDate"
     >
       <span
@@ -41,19 +41,18 @@ exports[`<ProjectItem /> matches previous snap 1`] = `
         End date: 
       </span>
       Sun Sep 30 2018
-    </h4>
-    <h4
+    </p>
+    <p
       className="projectTypeOfPayment"
     >
       <span
         className="property"
       >
-        Type of payment:
+        Type of payment: 
       </span>
-       
       Monthly
-    </h4>
-    <h4
+    </p>
+    <p
       className="projectStatus"
     >
       <span
@@ -62,7 +61,7 @@ exports[`<ProjectItem /> matches previous snap 1`] = `
         Status:
       </span>
        active
-    </h4>
+    </p>
   </div>
   <div
     className="btn-group-horizontal"
@@ -96,7 +95,7 @@ exports[`<ProjectItem /> matches previous snap 1`] = `
   <div
     className="session"
   >
-    <Connect(MonthlyRates)
+    <Connect(MonthlyRatesScreen)
       projectId={1}
     />
   </div>

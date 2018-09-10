@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Router, Route, Switch } from "react-router-dom";
 
-import LoginUser from "../components/Auth/LoginUser";
+import Login from "../components/Auth/Login/Login";
+import SignUp from "../components/Auth/SignUp/SignUp";
 import ProjectPage from "../components/Project/ProjectPage";
-import SignUp from "../components/Auth/SignUp";
-import ProjectItem from "../components/Project/ProjectItem";
+import ProjectItem from "../components/Project/Project";
 import { PrivateRoute } from "./PrivateRoute";
 
 import { history } from "../index";
@@ -28,7 +28,7 @@ class AppRouter extends Component {
           <NavBar />
           <Switch>
             <PrivateRoute exact path="/" component={ProjectPage} />
-            <Route path="/login" component={LoginUser} />
+            <Route path="/login" component={Login} />
             <Route path="/sign_up" component={SignUp} />
             <PrivateRoute path="/project/create" component={CreateProjectForm} />
             <PrivateRoute path="/project/:id/Taskly/:taskId/update" component={UpdateTaskForm}/>
