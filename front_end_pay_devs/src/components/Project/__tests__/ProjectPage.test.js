@@ -1,12 +1,11 @@
 import React from "react";
 import { shallow } from "enzyme";
-import configureStore from "redux-mock-store";
-import toJson from "enzyme-to-json"
+import toJson from "enzyme-to-json";
 jest.mock("../../../index.js", () => require("history"));
 
-import ProjectPage from "../ProjectPage";
+import ProjectPageScreen from "../ProjectPageScreen";
 
-describe("<ProjectItem />", () => {
+describe("<ProjectPage />", () => {
   const initialState = {
     user: {
       user: {
@@ -35,20 +34,39 @@ describe("<ProjectItem />", () => {
       }
     ]
   };
-  const mockStore = configureStore();
 
-  let store = mockStore(initialState);
-  let container = shallow(<ProjectPage store={store} />).dive();
+  let component = shallow(
+    <ProjectPageScreen
+      user={initialState.user}
+      projects={initialState.projects}
+      getAllProjects={() => []}
+    />
+  );
+  
+  it("calls getAllProjects automatically", () => {
+    let getAllProjectsSpy = jest.fn().mockReturnValue([]);
 
-  it("renders username based on props", () => {
-    expect(container.find(".username").text()).toBe("IslaMurtazaev");
+    component = shallow(
+      <ProjectPageScreen
+        user={initialState.user}
+        projects={initialState.projects}
+        getAllProjects={getAllProjectsSpy}
+      />
+    );
+
+    expect(getAllProjectsSpy).toBeCalledTimes(1);
   });
 
-  it("renders email based on props", () => {
-    expect(container.find(".email").text()).toBe("islam.muratazaev@gmail.com");
+  it("renders projects based on props", () => {
+    expect(component.find(".projectInfo")).toHaveLength(2);
+  })
+
+  it("renders userInfo based on props", () => {
+    expect(component.find(".username").text()).toBe("IslaMurtazaev");
+    expect(component.find(".email").text()).toBe("islam.muratazaev@gmail.com");
   });
 
   it("matches previous snap", () => {
-    expect(toJson(container)).toMatchSnapshot();
-  })
+    expect(toJson(component)).toMatchSnapshot();
+  });
 });

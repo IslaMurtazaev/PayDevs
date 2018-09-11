@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<ProjectItem /> matches previous snap 1`] = `
+exports[`<ProjectPage /> matches previous snap 1`] = `
 <div>
   <div
     className="user"

@@ -31,17 +31,17 @@ class SignUp extends Component {
   }
 
   render() {
-    const { username, password, email, submitted } = this.state;
-    const error = this.props.error;
+    const { username, password, email } = this.state;
+
     return (
       <div>
         <h2 className="authHeader">Sign Up</h2>
         <div className="signUpForm">
           <form name="form" onSubmit={this.handleSubmit}>
-            {error && <div>{error.error.message}</div>}
+            {this.validateForm()}
             <div>
               <label htmlFor="username">Username: </label>
-              {submitted && !username && <div className="validation-error">Username is required</div>}
+              {this.validateUsername()}
               <input
                 type="text"
                 className="usernameInput form-control"
@@ -52,7 +52,7 @@ class SignUp extends Component {
             </div>
             <div>
               <label htmlFor="email">Email: </label>
-              {submitted && !email && <div className="validation-error">Email is required</div>}
+              {this.validateEmail()}
               <input
                 type="email"
                 className="emailInput form-control"
@@ -63,7 +63,7 @@ class SignUp extends Component {
             </div>
             <div>
               <label htmlFor="password">Password: </label>
-              {submitted && !password && <div className="validation-error">Password is required</div>}
+              {this.validatePassword()}
               <input
                 type="password"
                 className="passwordInput form-control"
@@ -76,6 +76,39 @@ class SignUp extends Component {
           </form>
         </div>
       </div>
+    );
+  }
+
+  validateForm() {
+    const error = this.props.error;
+
+    return error && <div className="validation-error">{error.error.message}</div>;
+  }
+
+  validateUsername() {
+    const { username, submitted } = this.state;
+
+    return (
+      submitted &&
+      !username && <div className="validation-error">Username is required</div>
+    );
+  }
+
+  validateEmail() {
+    const { email, submitted } = this.state;
+
+    return (
+      submitted &&
+      !email && <div className="validation-error">Email is required</div>
+    );
+  }
+
+  validatePassword() {
+    const { password, submitted } = this.state;
+
+    return (
+      submitted &&
+      !password && <div className="validation-error">Password is required</div>
     );
   }
 }

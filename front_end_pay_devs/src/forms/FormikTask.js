@@ -1,65 +1,82 @@
-import React from "react";
+import React, { Component } from "react";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 
-const TasklyInput = ({ values, errors, touched }) => {
-  return (
-    <Form className="task-form">
-      <label>Title: </label>
-      <div className="validation-error">{touched.title && errors.title && <p>{errors.title}</p>}</div>
-      <Field
-        name="title"
-        type="text"
-        className="titleInput form-control"
-        placeholder="title..."
-      />
-      <div />
-      <label>Description: </label>
-      <div />
-      <Field
-        name="description"
-        type="text"
-        className="descriptionInput form-control"
-        placeholder={"description..."}
-      />
-      <div />
-      <label>Price: </label>
-      <div className="validation-error">{touched.price && errors.price && <p>{errors.price}</p>}</div>
-      <div />
-      <Field
-        name="price"
-        type="number"
-        className="priceInput form-control"
-        placeholder={"price..."}
-      />
+class TasklyInput extends Component {
+  render() {
+    let { values } = this.props;
 
-      <div />
-      <label>
-        Paid:
+    return (
+      <Form className="task-form">
+        <label>Title: </label>
+        {this.checkValidation("title")}
         <Field
-          name="paid"
-          type="checkbox"
-          className="paidCheckbox"
-          checked={values.paid}
+          name="title"
+          type="text"
+          className="titleInput form-control"
+          placeholder="title..."
         />
-      </label>
-      <div />
-      <label>
-        Completed:
+        <div />
+
+        <label>Description: </label>
+        <div />
         <Field
-          name="completed"
-          type="checkbox"
-          className="completedCheckbox"
-          checked={values.completed}
+          name="description"
+          type="text"
+          className="descriptionInput form-control"
+          placeholder={"description..."}
         />
-      </label>
-      <div />
-      <button className="btn btn-primary form-control" type="submit">
-        submit
-      </button>
-    </Form>
-  );
-};
+        <div />
+
+        <label>Price: </label>
+        {this.checkValidation("price")}
+        <div />
+        <Field
+          name="price"
+          type="number"
+          className="priceInput form-control"
+          placeholder={"price..."}
+        />
+        <div />
+
+        <label>
+          Paid:
+          <Field
+            name="paid"
+            type="checkbox"
+            className="paidCheckbox"
+            checked={values.paid}
+          />
+        </label>
+        <div />
+        
+        <label>
+          Completed:
+          <Field
+            name="completed"
+            type="checkbox"
+            className="completedCheckbox"
+            checked={values.completed}
+          />
+        </label>
+        <div />
+        <button className="btn btn-primary form-control" type="submit">
+          submit
+        </button>
+      </Form>
+    );
+  }
+
+  checkValidation(attr) {
+    const { errors, touched } = this.props;
+
+    return (
+      <div className="validation-error">
+        {touched[attr] && errors[attr] && <p>{errors[attr]}</p>}
+      </div>
+    );
+  }
+}
 
 const FormikTaskly = withFormik({
   mapPropsToValues({
@@ -83,7 +100,9 @@ const FormikTaskly = withFormik({
   },
   validationSchema: Yup.object().shape({
     title: Yup.string().required("Title is required"),
-    price: Yup.number().positive().required("Price is required")
+    price: Yup.number()
+      .positive()
+      .required("Price is required")
   }),
   handleSubmit(values, { props, resetForm }) {
     props.onSubmit(values);

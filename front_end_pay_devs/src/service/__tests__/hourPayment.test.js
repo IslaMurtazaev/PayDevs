@@ -19,7 +19,6 @@ describe("Hour Payment", async () => {
           urlList.pop();
           urlList.pop();
           const projectId = urlList.pop();
-          console.log(url, projectId);
           fs.readFile(
             "./src/__mocks__/__mockData__/hourPayment.json",
             "utf8",

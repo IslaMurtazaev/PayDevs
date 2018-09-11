@@ -1,35 +1,47 @@
-import React from "react";
+import React, { Component } from "react";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 
-const WorkedDayInput = ({ values, errors, touched }) => {
-  return (
-    <Form className="worked-day-form">
-      <div>
+class WorkedDayInput extends Component {
+  render() {
+    let { values } = this.props;
+
+    return (
+      <Form className="worked-day-form">
+        <div>
+          <label>
+            Date:
+            {this.checkValidation("day")}
+            <Field className="form-control dayWokedDay" name="day" type="date" />
+          </label>
+        </div>
+  
         <label>
-          Date:
-          <div className="validation-error">
-            {touched.day && errors.day && <p>{errors.day}</p>}
-          </div>
-          <Field className="form-control dayWokedDay" name="day" type="date" />
+          Paid:
+          <Field
+            className="form-control workDayPaid"
+            name="paid"
+            type="checkbox"
+            checked={values.paid}
+          />
         </label>
+  
+        <button className="btn btn-primary form-control" type="submit">
+          submit
+        </button>
+      </Form>
+    );
+  }
+
+  checkValidation(attr) {
+    const { errors, touched } = this.props;
+
+    return (
+      <div className="validation-error">
+        {touched[attr] && errors[attr] && <p>{errors[attr]}</p>}
       </div>
-
-      <label>
-        Paid:
-        <Field
-          className="form-control workDayPaid"
-          name="paid"
-          type="checkbox"
-          checked={values.paid}
-        />
-      </label>
-
-      <button className="btn btn-primary form-control" type="submit">
-        submit
-      </button>
-    </Form>
-  );
+    );
+  }
 };
 
 const FormikWorkedDay = withFormik({

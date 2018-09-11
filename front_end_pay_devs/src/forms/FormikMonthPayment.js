@@ -1,32 +1,42 @@
-import React from "react";
+import React, { Component } from "react";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 
-const MonthPaymentInput = ({ errors, touched }) => {
-  return (
-    <Form className="rate-form">
-      <label>
-      <div className="validation-error">
-        {touched.rate && errors.rate && <p>error.rate</p>}
-      </div>
-        New rate:
-        <Field
-          name="rate"
-          type="number"
-          className="form-control rateMonthPaymnet"
-          placeholder={"rate..."}
-        />
-      </label>
+class MonthPaymentInput extends Component {
+  render() {
+    return (
+      <Form className="rate-form">
+        <label>
+          {this.checkValidation("rate")}
+          New rate:
+          <Field
+            name="rate"
+            type="number"
+            className="form-control rateMonthPaymnet"
+            placeholder={"rate..."}
+          />
+        </label>
 
-      <button
-        className="btn btn-primary form-control newRateMonthPayment"
-        type="submit"
-      >
-        submit
-      </button>
-    </Form>
-  );
-};
+        <button
+          className="btn btn-primary form-control newRateMonthPayment"
+          type="submit"
+        >
+          submit
+        </button>
+      </Form>
+    );
+  }
+
+  checkValidation(attr) {
+    const { errors, touched } = this.props;
+
+    return (
+      <div className="validation-error">
+        {touched[attr] && errors[attr] && <p>{errors[attr]}</p>}
+      </div>
+    );
+  }
+}
 
 const FormikMonthPayment = withFormik({
   mapPropsToValues({ rate, projectId }) {
@@ -36,7 +46,9 @@ const FormikMonthPayment = withFormik({
     };
   },
   validationSchema: Yup.object().shape({
-    rate: Yup.number().positive().required("Rate is required")
+    rate: Yup.number()
+      .positive()
+      .required("Rate is required")
   }),
   handleSubmit(values, { props, resetForm }) {
     props.onSubmit(values.projectId, values);

@@ -28,9 +28,6 @@ class LoginScreen extends Component {
       return <Redirect to="/" from="/login" />;
     }
 
-    const { user_req, password_req } = this.state;
-    const error = this.props.error;
-
     return (
       <div>
         <h2 className="authHeader">Login</h2>
@@ -40,10 +37,7 @@ class LoginScreen extends Component {
           onSubmit={val => this.handleSubmit(val)}
           name="myForm"
         >
-          {error &&
-            error.error && (
-              <div className="validation-error">{error.error.message}</div>
-            )}
+          {this.validateForm()}
           <div>
             <label>Username</label>
             <br />
@@ -51,9 +45,7 @@ class LoginScreen extends Component {
               className="usernameInput"
               model="login.user_form.username"
             />
-            {user_req && (
-              <div className="validation-error">Username is required</div>
-            )}
+            {this.validateUsername()}
           </div>
           <div>
             <label>Password</label>
@@ -63,13 +55,38 @@ class LoginScreen extends Component {
               model="login.user_form.password"
             />
             <br />
-            {password_req && (
-              <div className="validation-error">Password is required</div>
-            )}
+            {this.validatePassword()}
             <button className="btn btn-primary">Login</button>
           </div>
         </Form>
       </div>
+    );
+  }
+
+  validateForm() {
+    const error = this.props.error;
+
+    return (
+      error &&
+      error.error && (
+        <div className="validation-error">{error.error.message}</div>
+      )
+    );
+  }
+
+  validateUsername() {
+    return (
+      this.state.user_req && (
+        <div className="validation-error">Username is required</div>
+      )
+    );
+  }
+
+  validatePassword() {
+    return (
+      this.state.password_req && (
+        <div className="validation-error">Password is required</div>
+      )
     );
   }
 }

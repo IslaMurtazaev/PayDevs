@@ -3,14 +3,13 @@ import { Link } from "react-router-dom";
 
 class ProjectPageScreen extends Component {
   componentWillMount() {
-    const userId = this.props.user.id;
-    const { projects, getAllProjects } = this.props;
-    if (!projects.length || userId !== projects[0].user_id) getAllProjects();
+    this.props.getAllProjects();
   }
 
   render() {
     const { user } = this.props.user;
     const { projects } = this.props;
+
     return (
       <div>
         <div className="user">
