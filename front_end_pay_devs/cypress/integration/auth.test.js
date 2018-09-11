@@ -43,7 +43,7 @@ describe("Login", () => {
           email: email,
           is_active: true,
           username: username,
-          is_staff: false,
+          is_staff: false
         });
       });
     cy.url().should("eq", `${baseUrl}`);
@@ -60,12 +60,12 @@ describe("Login", () => {
       .should("have.value", password)
       .type("{enter}")
       .should(() => {
-        let { id, token,  ...user } = JSON.parse(localStorage.getItem("user"));
+        let { id, token, ...user } = JSON.parse(localStorage.getItem("user"));
         expect(user).to.eql({
           email: email,
           is_active: true,
           username: username,
-          is_staff: false,
+          is_staff: false
         });
       });
     cy.url().should("eq", `${baseUrl}`);

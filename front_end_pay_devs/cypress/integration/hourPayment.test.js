@@ -71,22 +71,12 @@ describe("Hour Payment", () => {
 Cypress.Commands.add("login", () => {
   cy.request({
     method: "POST",
-    url: "http://127.0.0.1:8000/api/users/login",
+    url: "http://localhost:8000/api/users/login",
     body: JSON.stringify({
       username: "MonkeyTester",
       password: "qwerty123"
     })
   }).then(resp => {
     window.localStorage.setItem("user", JSON.stringify(resp.body));
-  });
-});
-
-Cypress.Commands.add("create_project", project => {
-  const userLocalStorage = JSON.parse(window.localStorage.getItem("user"));
-  cy.request({
-    method: "POST",
-    url: "http://127.0.0.1:8000/api/project/create",
-    body: JSON.stringify(project),
-    headers: { Authorization: userLocalStorage.token }
   });
 });

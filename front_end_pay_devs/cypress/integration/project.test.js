@@ -33,27 +33,11 @@ describe("Project", () => {
   beforeEach(() => {
     cy.login();
     cy.server();
-    cy.route("GET", "http://127.0.0.1:8000/api/project/all", projects);
-    cy.route(
-      "GET",
-      `http://127.0.0.1:8000/api/project/${projectTaskly.id}`,
-      projectTaskly
-    );
-    cy.route(
-      "GET",
-      `http://127.0.0.1:8000/api/project/${projectMonthly.id}`,
-      projectMonthly
-    );
-    cy.route(
-      "GET",
-      `http://127.0.0.1:8000/api/project/${projectHourly.id}`,
-      projectHourly
-    );
-    cy.route(
-      "GET",
-      `http://127.0.0.1:8000/api/project/${projectTaskly.id}/task/all`,
-      []
-    );
+    cy.route("GET", `api/project/all`, projects);
+    cy.route("GET", `api/project/${projectTaskly.id}`, projectTaskly);
+    cy.route("GET", `api/project/${projectMonthly.id}`, projectMonthly);
+    cy.route("GET", `api/project/${projectHourly.id}`, projectHourly);
+    cy.route("GET", `api/project/${projectTaskly.id}/task/all`, []);
   });
 
   it("creates new taskly project", () => {
@@ -77,7 +61,7 @@ describe("Project", () => {
       .uncheck({ force: true })
       .should("not.be.checked");
 
-    cy.route("POST", "http://127.0.0.1:8000/api/project/create", projectTaskly);
+    cy.route("POST", "api/project/create", projectTaskly);
 
     cy.get(".form-group").submit();
     projects.push(projectTaskly);
@@ -124,11 +108,7 @@ describe("Project", () => {
       .check({ force: true })
       .should("be.checked");
 
-    cy.route(
-      "POST",
-      "http://127.0.0.1:8000/api/project/create",
-      projectMonthly
-    );
+    cy.route("POST", "api/project/create", projectMonthly);
 
     cy.get(".form-group").submit();
     projects.push(projectMonthly);
@@ -175,7 +155,7 @@ describe("Project", () => {
       .check({ force: true })
       .should("be.checked");
 
-    cy.route("POST", "http://127.0.0.1:8000/api/project/create", projectHourly);
+    cy.route("POST", "api/project/create", projectHourly);
 
     cy.get(".form-group").submit();
     projects.push(projectHourly);
@@ -238,11 +218,7 @@ describe("Project", () => {
       .check({ force: true })
       .should("be.checked");
 
-    cy.route(
-      "PUT",
-      "http://127.0.0.1:8000/api/project/1/update/",
-      updatedProject
-    );
+    cy.route("PUT", "api/project/1/update", updatedProject);
 
     cy.get(".form-group").submit();
     cy.url().should("eq", `${baseUrl}project/${projectTaskly.id}`);
@@ -299,7 +275,7 @@ describe("Project", () => {
 Cypress.Commands.add("login", () => {
   cy.request({
     method: "POST",
-    url: "http://127.0.0.1:8000/api/users/login",
+    url: "http://localhost:8000/api/users/login",
     body: JSON.stringify({
       username: "MonkeyTester",
       password: "qwerty123"

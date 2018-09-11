@@ -35,17 +35,9 @@ describe("Task", () => {
   beforeEach(() => {
     cy.login();
     cy.server();
-    cy.route("GET", "http://127.0.0.1:8000/api/project/all", projects);
-    cy.route(
-      "GET",
-      `http://127.0.0.1:8000/api/project/${projectTaskly.id}`,
-      projectTaskly
-    );
-    cy.route(
-      "GET",
-      `http://127.0.0.1:8000/api/project/${projectTaskly.id}/task/all`,
-      tasks
-    );
+    cy.route("GET", "api/project/all", projects);
+    cy.route("GET", `api/project/${projectTaskly.id}`, projectTaskly);
+    cy.route("GET", `api/project/${projectTaskly.id}/task/all`, tasks);
   });
 
   it("creates new task", () => {
@@ -67,11 +59,7 @@ describe("Task", () => {
       .uncheck({ force: true })
       .should("not.be.checked");
 
-    cy.route(
-      "POST",
-      `http://127.0.0.1:8000/api/project/${projectTaskly.id}/task/create`,
-      task1
-    );
+    cy.route("POST", `api/project/${projectTaskly.id}/task/create`, task1);
 
     cy.get(".task-form")
       .submit()
@@ -105,11 +93,7 @@ describe("Task", () => {
       .check({ force: true })
       .should("be.checked");
 
-    cy.route(
-      "POST",
-      `http://127.0.0.1:8000/api/project/${projectTaskly.id}/task/create`,
-      task2
-    );
+    cy.route("POST", `api/project/${projectTaskly.id}/task/create`, task2);
 
     cy.get(".task-form")
       .submit()
@@ -165,9 +149,7 @@ describe("Task", () => {
 
     cy.route(
       "PUT",
-      `http://127.0.0.1:8000/api/project/${projectTaskly.id}/task/${
-        task1.id
-      }/update/`,
+      `api/project/${projectTaskly.id}/task/${task1.id}/update`,
       updatedTask
     );
 
@@ -186,25 +168,27 @@ describe("Task", () => {
 
   it("deletes task", () => {
     cy.visit(`${baseUrl}project/${projectTaskly.id}`);
-    cy.get(".task").its("length").should("eq", 2)
+    cy.get(".task")
+      .its("length")
+      .should("eq", 2);
     cy.get(".tasks").should("contain", task2.title);
 
-    cy.route(
-      "DELETE",
-      `http://127.0.0.1:8000/api/project/task/${task2.id}/delete`,
-      task2
-    );
-    cy.get(".removeButton").last().click();
+    cy.route("DELETE", `api/project/task/${task2.id}/delete`, task2);
+    cy.get(".removeButton")
+      .last()
+      .click();
 
     cy.get(".tasks").should("not.contain", task2.title);
-    cy.get(".task").its("length").should("eq", 1)
+    cy.get(".task")
+      .its("length")
+      .should("eq", 1);
   });
 });
 
 Cypress.Commands.add("login", () => {
   cy.request({
     method: "POST",
-    url: "http://127.0.0.1:8000/api/users/login",
+    url: "http://localhost:8000/api/users/login",
     body: JSON.stringify({
       username: "MonkeyTester",
       password: "qwerty123"

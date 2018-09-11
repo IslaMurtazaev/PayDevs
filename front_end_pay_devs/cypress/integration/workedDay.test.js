@@ -85,7 +85,7 @@ describe("Work Day", () => {
 Cypress.Commands.add("login", () => {
   cy.request({
     method: "POST",
-    url: "http://127.0.0.1:8000/api/users/login",
+    url: "http://localhost:8000/api/users/login",
     body: JSON.stringify({
       username: "MonkeyTester",
       password: "qwerty123"

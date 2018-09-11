@@ -15,9 +15,7 @@ import AppRouter from "./route/AppRouter";
 import axios from "axios";
 import { authHeader } from "./service/helpers";
 
-axios.defaults.headers = {
-  ...authHeader()
-};
+axios.defaults.headers = authHeader();
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
 
@@ -27,6 +25,6 @@ ReactDOM.render(
   <Provider store={store}>
     <AppRouter />
   </Provider>,
-  document.getElementById("root") || document.createElement("div") // for testing purposes
+  document.getElementById("root")
 );
 registerServiceWorker();
