@@ -9,26 +9,22 @@ class SignUp extends Component {
       password: "",
       submitted: false
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(e) {
+  handleChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
-  }
+  };
 
-  handleSubmit(e) {
+  handleSubmit = e => {
     e.preventDefault();
 
     this.setState({ submitted: true });
     const { username, email, password } = this.state;
     if (username && email && password) {
       this.props.onSignUpUser(username, email, password);
-      this.setState({ username: "", email: "", password: "" });
     }
-  }
+  };
 
   render() {
     const { username, password, email } = this.state;
@@ -80,9 +76,16 @@ class SignUp extends Component {
   }
 
   validateForm() {
+    const submitted = this.state.submitted;
     const error = this.props.error;
 
-    return error && <div className="validation-error">{error.error.message}</div>;
+    return (
+      submitted &&
+      error &&
+      error.error.message !== "Entity not found" && (
+        <div className="validation-error">{error.error.message}</div>
+      )
+    );
   }
 
   validateUsername() {
