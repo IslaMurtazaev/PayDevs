@@ -18,7 +18,7 @@ class WorkTimes extends Component {
     return (
       <div>
         {workTimes.length > 0 && (
-          <h3 className="workedHoursHeader">
+          <h3 className="header">
             <b>Your Worked Hours</b>
           </h3>
         )}
@@ -34,7 +34,7 @@ class WorkTimes extends Component {
           ))}
         </div>
 
-        <h3>
+        <h3 className="header">
           <b>Create a new Work Time</b>
         </h3>
         <FormikWorkTime

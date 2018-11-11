@@ -7,7 +7,7 @@ import workedDayActions from "../actions/workedDay";
 const CreateWorkedDayForm = props => {
   return (
     <div>
-      <h3><b>New Worked Day</b></h3>
+      <h3 className="header"><b>New Worked Day</b></h3>
     <FormikWorkedDay onSubmit={props.createWorkedDay} />
     </div>
   );

@@ -40,7 +40,7 @@ class TasklyInput extends Component {
         <div />
 
         <label>
-          Paid:
+          Paid:{" "}
           <Field
             name="paid"
             type="checkbox"
@@ -51,7 +51,7 @@ class TasklyInput extends Component {
         <div />
         
         <label>
-          Completed:
+          Completed:{" "}
           <Field
             name="completed"
             type="checkbox"

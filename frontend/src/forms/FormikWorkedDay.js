@@ -17,15 +17,14 @@ class WorkedDayInput extends Component {
         </div>
   
         <label>
-          Paid:
+          Paid:{" "}
           <Field
-            className="form-control workDayPaid"
+            className="workDayPaid"
             name="paid"
             type="checkbox"
             checked={values.paid}
           />
         </label>
-  
         <button className="btn btn-primary form-control" type="submit">
           submit
         </button>

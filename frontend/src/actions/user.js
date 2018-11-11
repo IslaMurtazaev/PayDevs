@@ -13,6 +13,7 @@ function authenticate(username, password) {
     UserService.login(username, password).then(
       user => {
         dispatch({ type: userActionTypes.LOGIN_USER, user });
+        history.push("/");
       },
       error => {
         if (error.response)

@@ -6,7 +6,7 @@ const initialState = user_ ? { loggedIn: true, user: user_ } : {};
 export default function user(state = initialState, action) {
   switch (action.type) {
     case userActionTypes.LOGIN_USER:
-      return { user: action.user, error: undefined };
+      return { user: action.user };
     case userActionTypes.LOGIN_ERROR:
       return { error: action.error };
     default:

@@ -16,7 +16,7 @@ class WorkedDays extends Component {
     return (
       <div>
         {this.props.workedDays.length > 0 && (
-          <h3 className="workedDaysHeader">
+          <h3 className="header">
             <b>Your Worked Days</b>
           </h3>
         )}
