@@ -1,17 +1,33 @@
-Задача
-Создать систему для вычисления стоимости разработческих услуг (тарификация - почасовая, помесячная, позадачная).
+### Tech assignment
+Task: Create a system for calculating the cost of development services (billing - hourly, monthly, task).
 
-Как залогиненный пользователь я могу:
-Создать проект - название и описание.
-Задать рейт своих услуг в час для созданного проекта.
-Указать свою тарифную ставку для созданного проекта (способ начисления оплаты - почасовая, помесячная, позадачная). Если тарифная ставка почасовая, то счет на оплату могу выставить в любой момент, после указания времени и даты окончания работ. Если тарифная ставка помесячная, то счет на оплату могу выставить только за предыдущие месяцы. Если тарифная ставка позадачная, то счет на оплату могу выставить только после указания, что задача выполнена.
-Указать время и дату начала работы над созданным проектом.
-Указать время и дату окончания работы над созданным проектом.
-Создать счет на оплату по созданному проекту, в котором будет указываться название проекта, тарифная ставка, отработанный период времени и автоматически вычисляться стоимость услуг на основании отработанных часов и установленного рейта. 
-Сохранять  счет на оплату в PDF формате.
+As a logged in user, I can:
+Create a project - name and description.
+Set the rate of its services per hour for the created project.
+Specify your tariff rate for the created project (the method of charging is hourly, monthly, recurring). If the tariff rate is hourly, then I can issue an invoice for payment at any time, after specifying the time and date of completion of work. If the monthly tariff rate, then I can issue an invoice for payment only for the previous months. If the tariff rate is backward, then I can issue an invoice for payment only after indicating that the task has been completed.
+Specify the time and date of commencement of work on the created project.
+Specify the time and date of completion of work on the created project.
+Create an invoice for the created project, which will indicate the project name, tariff rate, the time worked out and automatically calculate the cost of services based on the hours worked and the established rate.
+Save invoice for payment in PDF format.
+
+#### Setup instructions
+
+##### Set up backend
+* ```cd backend/```
+* ```python3 -m venv ./venv```
+* ```source venv/bin/activate```
+* ```pip install -r requirements.txt```
+* ```python manage.py migrate```
+
+##### Install frontend dependencies
+* ```cd frontend/```
+* ```npm install```
 
 
+#### Start servers
 
-Технические подробности
+Start backend
+* ```python manage.py runserver```
 
-Одним из основных технических требований к системе является отсутствие логики во вью классах (чтобы не было расчетов во вьюшках).
+Start frontend
+* ```npm start```
