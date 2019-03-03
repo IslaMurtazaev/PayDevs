@@ -1,5 +1,4 @@
 import axios from "axios";
-import { history } from "../index";
 
 export const UserService = {
   login,
@@ -17,7 +16,7 @@ function login(username, password) {
       let user = res.data;
       if (user.token) localStorage.setItem("user", JSON.stringify(user));
       return res.data;
-    }).then(() => history.push("/"));
+    })
 }
 
 function create_user(username, email, password) {

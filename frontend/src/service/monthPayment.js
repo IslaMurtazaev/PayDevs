@@ -1,4 +1,5 @@
 import axios from "axios";
+import { authHeader } from "./helpers"
 
 export default {
   getAll,
@@ -9,7 +10,7 @@ export default {
 const BASE_URL = "/api/project/";
 
 function getAll(projectId) {
-  return axios.get(`${BASE_URL}${projectId}/month_payment/all`).then(res => {
+  return axios.get(`${BASE_URL}${projectId}/month_payment/all`, { headers: authHeader() }).then(res => {
     let monthPayments = res.data;
     return monthPayments;
   });
@@ -17,7 +18,7 @@ function getAll(projectId) {
 
 function create(projectId, values) {
   return axios
-    .post(`${BASE_URL}${projectId}/month_payment/create`, values)
+    .post(`${BASE_URL}${projectId}/month_payment/create`, values, { headers: authHeader() })
     .then(res => {
       let monthPayment = res.data;
       return monthPayment;
@@ -26,6 +27,6 @@ function create(projectId, values) {
 
 function remove(monthPaymentId) {
   return axios
-    .delete(`${BASE_URL}month_payment/${monthPaymentId}/delete`)
+    .delete(`${BASE_URL}month_payment/${monthPaymentId}/delete`, { headers: authHeader() })
     .then(res => res.data);
 }

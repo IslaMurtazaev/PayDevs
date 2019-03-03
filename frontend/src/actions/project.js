@@ -21,10 +21,17 @@ function get(projectId) {
 }
 
 function getAll() {
-  return dispatch =>
-    projectService.getAll().then(projects => {
-      dispatch({ type: projectActionTypes.ADD_ALL, projects });
-    });
+  return dispatch => {
+    dispatch({ type: projectActionTypes.GET_ALL });
+    projectService
+      .getAll()
+      .then(projects => {
+        dispatch({ type: projectActionTypes.GET_ALL_SUCCESS, projects });
+      })
+      .catch(errors => {
+        dispatch({ type: projectActionTypes.GET_ALL_FAILURE, errors });
+      });
+  };
 }
 
 function clearAll() {

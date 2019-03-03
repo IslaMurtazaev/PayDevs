@@ -10,7 +10,7 @@ const UpdateTaskForm = props => {
   
   return (
     <div>
-      <h1>Update Project</h1>
+      <h1>Update Task</h1>
       <FormikTaskly
         id={task.id}
         projectId={task.project_id}

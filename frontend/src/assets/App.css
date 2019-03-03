@@ -2,27 +2,26 @@ h2 {
   height: 20px;
   font-size: 30px;
   font-weight: bold;
-  margin-top: 40px;
-  margin-left: 410px;
   color: rgb(36, 36, 53);
-  padding-block-start: 1px;
-  padding-left: 3%;
-  padding-block-end: 5px;
   text-shadow: 1px 1px 3px;
 }
 
 .authHeader {
-  display: flex;
-  flex-direction: column;
-  min-height: 20px;
   font-size: 40px;
+  margin-right: 10%;
   font-weight: bold;
+  text-align: center;
   margin-top: 40px;
-  margin-left: 470px;
   color: rgb(36, 36, 53);
-  padding-block-start: 1px;
-  padding-left: 3%;
-  padding-block-end: 5px;
+  text-shadow: 1px 1px 3px;
+}
+
+.header {
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 1%;
+  color: rgb(36, 36, 53);
   text-shadow: 1px 1px 3px;
 }
 
@@ -59,7 +58,7 @@ body {
   border-radius: 5px;
   background-color: #dbe2ec;
   padding-top: 1%;
-  padding-left: 4%;
+  padding-left: 3%;
   padding-right: 3%;
   box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.2),
     0 40px 40px 0 rgba(0, 0, 0, 0.19);
@@ -68,11 +67,6 @@ body {
 input:hover {
   border: 2px solid rgba(121, 192, 243, 0.582);
   border-radius: 4px;
-}
-
-input {
-  padding-left: 1px;
-  padding-right: 35px;
 }
 
 .link {
@@ -114,15 +108,9 @@ label {
   text-shadow: 1px 1px 1px;
 }
 
-.paydevs1 {
-  padding-right: 700px;
-  font-size: 45px;
+.navbarPaydevs {
+  font-size: 2.5em;
   font-family: "Times New Roman", Times, serif;
-  font-weight: 700;
-  color: rgba(0, 0, 0, 0.842);
-  text-shadow: 1px 1px 1px rgba(24, 23, 23, 0.849);
-  text-decoration: none;
-  color: inherit;
 }
 
 a:hover {
@@ -272,13 +260,15 @@ h1 {
 }
 
 .properties {
+  display: flex;
+  flex-direction: column;
   background-color: rgba(250, 235, 215, 0.507);
+  min-height: 200px;
   width: 600px;
   border-radius: 5px;
-  padding: 5px 20px;
+  padding: 10px 20px;
   box-shadow: 1px 1px 1px;
-  height: 200px;
-  margin-left: 245px;
+  margin-left: 20%;
   white-space: nowrap;
   overflow-x: auto;
 }
@@ -291,7 +281,7 @@ h1 {
 .btn-group-horizontal {
   flex-direction: row;
   margin-left: 35%;
-  margin-top: -25px;
+  margin-top: -50px;
 }
 
 .session {
@@ -323,14 +313,15 @@ h1 {
 }
 
 .task-form {
-  margin-left: 300px;
-  left: 0px;
+  display: flex;
+  flex-direction: column;
+  min-height: 460px;
+  margin-left: 25%;
   margin-top: 30px;
   border-radius: 5px;
   background-color: #dbe2ec;
   padding-left: 4%;
   padding-right: 6%;
-  height: 460px;
   width: 530px;
   box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2),
     0 10px 10px 0 rgba(0, 0, 0, 0.19);
@@ -344,27 +335,27 @@ h1 {
 }
 
 .worked-day-form {
-  margin-left: 300px;
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+  margin: auto;
+  padding: 1%;
   border-radius: 6px;
   background-color: #dbe2ec;
-  padding-left: 4%;
-  padding-right: 6%;
-  height: 265px;
-  width: 530px;
+  width: 35%;
   box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2),
     0 10px 10px 0 rgba(0, 0, 0, 0.19);
 }
 
 .worked-time-form {
-  margin-left: 330px;
-  top: 15px;
-  margin-top: 35px;
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+  margin-left: 30%;
   border-radius: 5px;
   background-color: #dbe2ec;
   padding-left: 4%;
   padding-right: 6%;
-  height: 365px;
   width: 530px;
   box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2),
     0 10px 10px 0 rgba(0, 0, 0, 0.19);
@@ -414,17 +405,22 @@ h1 {
   display: inline-block;
 }
 
-h3 {
-  padding-left: 430px;
+.logout {
+  margin: 10px;
 }
 
 .rateHeader {
   font-weight: 800;
   color: rgba(1, 1, 12, 0.829);
-  margin-left: -430px;
+}
+
+.btn {
+  color: #ffff;
+  box-shadow: none;
 }
 
 .updateButton {
+  color: #ffff;
   margin-right: 1px;
 }
 

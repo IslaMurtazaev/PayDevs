@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 const CreateTaskForm = props => {
   return (
     <div>
-      <h3 className="taskHeader">Create a new Task</h3>
+      <h3 className="header">Create a new Task</h3>
       <FormikTaskly onSubmit={props.createTaskly} />
     </div>
   );

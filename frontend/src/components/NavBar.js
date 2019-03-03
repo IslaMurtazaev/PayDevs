@@ -13,16 +13,16 @@ const NavBar = () => {
 
   return (
     <div className="navbar">
-      <img alt="PayDev logo" src={logo} />
-      <span>
-        <Link className="paydevs1" to="/">
-          PayDevs
-        </Link>
-      </span>
+        <div>
+          <Link to="/">
+            <img alt="PayDev logo" src={logo} />
+            <strong className="navbarPaydevs">PayDevs</strong>
+          </Link>
+        </div>
 
       {isLogged() ? (
         <a href="/login">
-          <button className="logout link" onClick={logOut}>
+          <button className="btn logout link" onClick={logOut}>
             Logout
           </button>
         </a>

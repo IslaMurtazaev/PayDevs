@@ -15,7 +15,7 @@ class Tasks extends Component {
 
     return (
       <div>
-        {tasks.length > 0 && <h3 className="taskHeader">Your tasks</h3>}
+        {tasks.length > 0 && <h3 className="header">Your tasks</h3>}
 
         <div className="tasks">
           {tasks.map(task => (

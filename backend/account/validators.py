@@ -78,7 +78,7 @@ def validate(value, user=None, validators=None):
 
 
 class MinimumLengthValidator:
-    def __init__(self, min_len=8):
+    def __init__(self, min_len=6):
         self.min_len = min_len
 
     def validate(self, password, user=None):
@@ -90,7 +90,7 @@ class MinimumLengthValidator:
 class UserAttributeSimilarityValidator:
     DEFAULT_USER_ATTRIBUTES = ('username', 'password', 'email', 'first_name', 'last_name')
 
-    def __init__(self, user_attrs=DEFAULT_USER_ATTRIBUTES, max_similarity=0.7):
+    def __init__(self, user_attrs=DEFAULT_USER_ATTRIBUTES, max_similarity=0.9):
         self.user_attrs = user_attrs
         self.max_similarity = max_similarity
 

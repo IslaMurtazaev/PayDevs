@@ -10,9 +10,14 @@ class Login extends Component {
       password_req: false,
       redirectToNewPage: false
     };
-  } 
+  }
 
   handleSubmit(values) {
+    this.setState({
+      user_req: false,
+      password_req: false,
+      redirectToNewPage: false
+    });
     if (values.username && values.password) {
       this.props.onLoginUser(values.username, values.password);
       this.setState({ password_req: false, user_req: false });
@@ -24,7 +29,7 @@ class Login extends Component {
   }
 
   render() {
-    if (!! this.props.user.loggedIn) {
+    if (!!this.props.user.loggedIn) {
       return <Redirect to="/" from="/login" />;
     }
 
@@ -69,7 +74,9 @@ class Login extends Component {
     return (
       error &&
       error.error && (
-        <div className="validation-error">{error.error.message}</div>
+        <div className="validation-error">
+          Incorrect username or/and password
+        </div>
       )
     );
   }
