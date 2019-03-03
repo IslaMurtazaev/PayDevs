@@ -15,7 +15,3 @@ export function handleError(error) {
     alert(error.response.data.error.message);
   }
 }
-
-export function configAxios() {
-  return { headers: authHeader() };
-}

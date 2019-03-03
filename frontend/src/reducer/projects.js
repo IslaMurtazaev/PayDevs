@@ -13,7 +13,7 @@ export function project(state = {}, action) {
 
 export function projects(state = [], action) {
   switch (action.type) {
-    case projectActionTypes.ADD_ALL:
+    case projectActionTypes.GET_ALL_SUCCESS:
       return [...action.projects];
     case projectActionTypes.CLEAR_ALL:
       return [];
